@@ -238,14 +238,15 @@ def _extract_hard_facts(data: Any, idx: int) -> HardFacts:
 
 def _clean_info(infos: List[Info]) -> None:
     for info in infos:
-        if 'Legal Seat' in info.main_info.address.city:
+        if info.main_info.address.city is not None and 'Legal Seat' in info.main_info.address.city:
             info.main_info.address.city = 'Düsseldorf'
-        if 'BP 2541' in info.main_info.address.street:
+        if info.main_info.address.street is not None and 'BP 2541' in info.main_info.address.street:
             info.main_info.address.city = 'Lyon'
-        if 'Holds status' in info.main_info.address.street:
+        if info.main_info.address.street is not None and 'Holds status' in info.main_info.address.street:
             info.main_info.address.street = None
-        if 'Council of Europe' in info.main_info.address.street:
+        if info.main_info.address.street is not None and 'Council of Europe' in info.main_info.address.street:
             info.main_info.address.street = None
+
 
 
 
