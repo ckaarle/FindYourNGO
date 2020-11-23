@@ -14,6 +14,8 @@ def parse() -> List[Info]:
 
         return infos
 
+    # TODO: split accreditations where there are multiple
+
 
 def _extract_info(data: List[Any]) -> List[Info]:
     infos = []
