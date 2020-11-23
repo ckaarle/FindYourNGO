@@ -1,22 +1,24 @@
 import time
-from typing import List
+from typing import List, Tuple, Optional
 
 from selenium import webdriver
 from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
-from european_council.MainPageInfo import Name, Address, ContactInfo, Representative, MainPageInfo
+from european_council.crawler.MainPageInfo import Name, Address, ContactInfo, Representative, MainPageInfo, DetailPageInfo, \
+    HardFacts, SoftFacts
 
 URL = 'http://coe-ngo.org/#/ingos'
 
 
-def crawl() -> None:
+def crawl() -> Tuple[MainPageInfo, DetailPageInfo]:
     driver = _get_driver()
     driver.get(URL)
 
-    _crawl_main_page(driver)
+    main_page_info = _crawl_main_page(driver)
+    detail_page_infos = _crawl_detail_page(driver)
 
-    # TODO crawl detail pages
+    return main_page_info, detail_page_infos
 
 
 def _get_driver() -> WebDriver:
@@ -28,7 +30,7 @@ def _get_driver() -> WebDriver:
     return driver
 
 
-def _crawl_main_page(driver):
+def _crawl_main_page(driver) -> List[MainPageInfo]:
     rows: List[WebElement] = _get_table_rows(driver)
 
     extracted_information = []
@@ -42,7 +44,7 @@ def _crawl_main_page(driver):
     run_sanity_checks(extracted_information)
 
     extracted_information = clean_up(extracted_information)
-    # TODO clean up
+    return extracted_information
 
 
 def _get_table_rows(driver: WebDriver) -> List[WebElement]:
@@ -60,13 +62,12 @@ def filter_empty_cols(cols: List[WebElement]) -> List[WebElement]:
 def extract_information(cols: List[WebElement]) -> MainPageInfo:
     idx: int = extract_idx(cols[0])
     name: Name = extract_name(cols[0])
-    link: WebElement = extract_detail_link(cols[0])
     # cols[1] is name in French
     address: Address = extract_address(cols[2])
     contact: ContactInfo = extract_contact_information(cols[3])
     representative: Representative = extract_representative(cols[4])
 
-    return MainPageInfo(idx, name, link, address, contact, representative)
+    return MainPageInfo(idx, name, address, contact, representative)
 
 
 def extract_idx(col: WebElement) -> int:
@@ -85,11 +86,6 @@ def extract_acronym(text: str) -> str:
     idx_closing_bracket = text.rfind(')')
 
     return text[idx_opening_bracket + 1 : idx_closing_bracket].strip()
-
-
-def extract_detail_link(col: WebElement) -> WebElement:
-    # TODO
-    return None
 
 
 def extract_address(col: WebElement) -> Address:
@@ -283,6 +279,195 @@ def clean_up(infos: List[MainPageInfo]) -> List[MainPageInfo]:
         if info.idx == 313:
             info.address.detail_address = '1200 Harger Road, Suite 330 IL 60523'
             info.address.city = 'Oak Brook'
+
+    return infos
+
+
+def _crawl_detail_page(driver: WebDriver) -> List[DetailPageInfo]:
+    detail_pages_infos = []
+
+    for idx in range(1, 315):
+        driver.get(URL)
+
+        rows: List[WebElement] = _get_table_rows(driver)
+        for row in rows:
+            cols = row.find_elements_by_tag_name('td')
+
+            row_idx: int = extract_idx(cols[0])
+            if row_idx == idx:
+                link_element = cols[0].find_element_by_tag_name('a')
+                link_element.click()
+
+                detail_page_info = _extract_detail_info(driver, idx)
+                detail_pages_infos.append(detail_page_info)
+                break
+
+    _clean_detail_pages(detail_pages_infos)
+    return detail_pages_infos
+
+
+def _extract_detail_info(driver: WebDriver, idx: int) -> DetailPageInfo:
+    hard_facts = _extract_hard_facts(driver, idx)
+    soft_facts = _extract_soft_facts(driver)
+
+    return DetailPageInfo(idx, hard_facts, soft_facts)
+
+
+def _extract_hard_facts(driver: WebDriver, idx: int) -> HardFacts:
+    hard_fact_element = driver.find_elements_by_tag_name('div')[12]
+
+    website = hard_fact_element.find_elements_by_tag_name('span')[1].text.strip()
+
+    president_element = hard_fact_element.find_elements_by_class_name('row')[4]
+    president_name = president_element.find_element_by_tag_name('h4').text.strip()
+
+    founding_year, staff_number, members_number, languages = _extract_quick_facts(driver, idx)
+
+    return HardFacts(website, president_name, founding_year, staff_number, members_number, languages)
+
+
+def _extract_quick_facts(driver: WebDriver, idx: int) -> Tuple[Optional[int], Optional[int], Optional[int], List[str]]:
+    founding_year = None
+    staff_number = None
+    members_number = None
+    languages: List[str] = []
+
+    possible_quick_facts_elements = driver.find_elements_by_class_name('ng-scope')
+    likely_quick_facts_elements = [p for p in possible_quick_facts_elements if p.find_elements_by_tag_name('strong')]
+
+    founded = [l for l in likely_quick_facts_elements if l.text.startswith('Founded')]
+    staff = [l for l in likely_quick_facts_elements if l.text.strip().endswith('staff')]
+    members = [l for l in likely_quick_facts_elements if l.text.strip().endswith('members')]
+    working_languages = [l for l in likely_quick_facts_elements if l.text.startswith('Working languages')]
+
+    if founded:
+        founding_year = int(founded[0].find_element_by_tag_name('strong').text.strip())
+
+    if staff:
+        staff_string = staff[0].find_element_by_tag_name('strong').text.strip()
+        staff_string = staff_string.replace(' ', '')
+        try:
+            staff_number = int(staff_string)
+        except:
+            if staff_string == '6fulltime+2interns':
+                staff_number = 6
+            if staff_string == '2.8':
+                staff_number = 3
+            if staff_string == '3employeesand7volunteers':
+                staff_number = 3
+            if staff_string == '5employees':
+                staff_number = 5
+            print(f'SKIPPING STAFF ({idx}) - {staff_string}')
+
+    if members:
+        members_string = members[0].find_element_by_tag_name('strong').text.strip()
+        members_string = members_string.replace(' ', '')
+        members_string = members_string.replace('+', '')
+        try:
+            members_number = int(members_string)
+        except:
+            if members_string == '384organisations':
+                members_number = 384
+            if members_string == '50delegations':
+                members_number = 50
+            if members_string == '120,000':
+                members_number = 120000
+            if members_string == 'Around35':
+                members_number = 35
+            if members_string == 'about5000':
+                members_number = 5000
+            if members_string == '46nationaluniversitysportsgoverningbodies':
+                members_number = 46
+            if members_string == 'around1000membersin34branches':
+                members_number = 1000
+            if members_string == '44associations':
+                members_number = 44
+            if members_string == 'approx.700':
+                members_number = 700
+            if members_string == '5,000,000':
+                members_number = 5000000
+            if members_string == '250associations':
+                members_number = 250
+            if members_string == '28memberorganisations':
+                members_number = 28
+
+    if working_languages:
+        languages = working_languages[0].find_element_by_tag_name('strong').text.strip()
+
+    return founding_year, staff_number, members_number, languages
+
+
+def _extract_soft_facts(driver: WebDriver) -> SoftFacts:
+    elements = driver.find_elements_by_tag_name('div')
+    soft_facts_elements = elements[36]
+    soft_facts_list = soft_facts_elements.find_elements_by_tag_name('p')
+
+    aims = soft_facts_list[0].text.strip()
+    activities = soft_facts_list[1].text.strip()
+    accreditations = soft_facts_list[3].text.strip()
+    areas_of_competence = _split_into_areas(soft_facts_list[7].text.strip())
+    geographical_representation = _split_into_countries(soft_facts_list[8].text.strip())
+
+    return SoftFacts(aims, activities, accreditations, areas_of_competence, geographical_representation)
+
+
+def _split_into_areas(areas: str) -> List[str]:
+    if not areas:
+        return []
+
+    areas = areas.replace('[', '')
+    areas = areas.replace(']', '')
+    areas = areas.replace('\"', '')
+    splitted = areas.split(',')
+
+    return [s.strip() for s in splitted if s]
+
+
+def _split_into_countries(country_list: str) -> List[str]:
+    if not country_list:
+        return []
+
+    splitted = country_list.split(',')
+    return [s.strip() for s in splitted if s]
+
+
+def _clean_detail_pages(infos: List[DetailPageInfo]) -> None:
+    for idx, info in enumerate(infos):
+        if info.hard_facts.founding_year < 1800:
+            info.hard_facts.founding_year = None
+
+        if idx == 7:
+            info.hard_facts.members = 0
+        if idx == 18:
+            info.hard_facts.founding_year = 1999
+        if idx == 40:
+            info.soft_facts.accreditations = ''
+        if idx == 53:
+            info.soft_facts.accreditations = ''
+        if idx == 56:
+            info.hard_facts.members = 0
+        if idx == 102:
+            info.hard_facts.president = ''
+            info.soft_facts.accreditations = ''
+        if idx == 134:
+            info.soft_facts.accreditations = ''
+        if idx == 150:
+            info.hard_facts.members = 0
+        if idx == 201:
+            info.hard_facts.members = 7000
+        if idx == 207:
+            info.soft_facts.accreditations = ''
+        if idx == 234:
+            info.hard_facts.president = ''
+            info.soft_facts.accreditations = ''
+            info.soft_facts.activities = ''
+            info.soft_facts.aims = ''
+        if idx == 251:
+            info.soft_facts.accreditations = ''
+        if idx == 310:
+            info.soft_facts.accreditations = ''
+            info.soft_facts.activities = ''
+            info.soft_facts.aims = ''
 
 
 if __name__ == '__main__':
