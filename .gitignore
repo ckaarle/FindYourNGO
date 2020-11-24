@@ -2,3 +2,6 @@
 Crawler/.idea
 Crawler/european_council/parser/__pycache__
 Backend/findyourngo/.idea
+Crawler/ngo_advisor/__pycache__
+Crawler/ngo_advisor/parser_functions/__pycache__
+*.log
