@@ -18,3 +18,7 @@ The data will then be persisted into this volume.
 ## Access Postgres DB from outside of docker
 Postgres in docker is mapped to port 5433 (not the default 5432, since this can clash with local installations of postgres). Open the database menu in PyCharm, click on '+', 'PostgreSQL', enter correct port, username (postgres) and password (postgres). Use the 'test connection' button to make sure it actually works.
 Alternatively, you can also connect via pgAdmin.
+
+
+# Typing
+Install the MyPy-Plugin and run its scan. Examples for how to type python code can be found in /Backend/data/import/european_council.
