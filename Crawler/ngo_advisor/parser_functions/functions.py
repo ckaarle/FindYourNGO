@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Optional
 
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -74,8 +74,10 @@ def parse_hq_location(field: WebElement) -> Tuple[City, Country]:
     print(f'--------------- HQ Location could not be parsed')
 
 
-def parse_hq_mailing_address(field: WebElement) -> Any: # street | city postcode | country OR ... | country    OR Strasse <br> P.O. Box <br> post code <br> country
+def parse_hq_mailing_address(field: WebElement) -> Optional[str]:
     print(f'++++++++++++ unparsed: {field.text}')
+    div = field.find_element_by_tag_name('div')
+    address = div.text.strip()
     # 40 Worth Street, Suite 303 New York, NY, 10013, USA
     # 158 Jan Smuts Avenue Building, Rosebank, Johannesburg | South Africa
     # 14/16 Boulevard Douaumont | CS 80060 75854 PARIS CEDEX 17 | France
@@ -89,7 +91,25 @@ def parse_hq_mailing_address(field: WebElement) -> Any: # street | city postcode
     # Avenida Reforma 12-01 zona 10. Edificio Reforma Montúfar, Nivel 17, oficina 17-01 Ciudad de Guatemala | Guatemara
     # 10 Fawcett St, Suite 204 | Cambridge, MA 02138 | USA
     # 1904 Harbor Boulevard #831, Costa Mesa, CA 92627 ÷ USA
-    pass # TODO
+    country = None
+    try:
+        parts = address.split('|')
+        country = parts[-1].strip()
+    except:
+        try:
+            parts = address.split('\n')
+            country = parts[-1].strip()
+        except:
+            try:
+                parts = address.split(',')
+                country = parts[-1].strip()
+            except:
+                try:
+                    parts = address.split('÷')
+                    country = parts[-1].strip()
+                except:
+                    pass
+    return country
 
 
 def parse_sectors_of_activity(field: WebElement) -> List[str]:
@@ -130,6 +150,10 @@ def parse_primary_contact(field: WebElement) -> Any: # email <br> phone number -
     # +1 (949) 202-4681
     pass # TODO
 
+# splitten nach \n
+# wenn @ drin, email
+# wenn mehr als eine Zahl, dann telefon
+
 
 def parse_representative(field: WebElement) -> Any: # Titel Firstname Lastname <br> job title <br> email <br> phone number
     print(f'++++++++++++ unparsed: {field.text}')
@@ -140,6 +164,9 @@ def parse_representative(field: WebElement) -> Any: # Titel Firstname Lastname <
     # Tel + 33 (0)1 42 65 61 40
     # """
     pass # TODO
+
+# analog oben
+# plus: erste zeile nach ' ' splitten, 3 Elemente (titel, vorname, nachname)
 
 
 def parse_membership_based(field: WebElement) -> bool:
@@ -163,13 +190,15 @@ def parse_accreditation(field: WebElement) -> bool:
 
 
 def parse_yearly_income(field: WebElement) -> Any: # EUR XXX, $XXX
-    print(f'++++++++++++ unparsed: {field.text}')
-    pass # TODO
+    div = field.find_element_by_tag_name('div')
+    income = div.text.strip()
+    return income
 
 
 def parse_surplus_deficit(field: WebElement) -> Any: # EUR +xxx
-    print(f'++++++++++++ unparsed: {field.text}')
-    pass # TODO
+    div = field.find_element_by_tag_name('div')
+    surplus_deficit = div.text.strip()
+    return surplus_deficit
 
 
 def parse_legal_status(field: WebElement) -> str:

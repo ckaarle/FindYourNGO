@@ -5,3 +5,6 @@ Backend/findyourngo/.idea
 Crawler/ngo_advisor/__pycache__
 Crawler/ngo_advisor/parser_functions/__pycache__
 *.log
+Backend/.idea
+Backend/findyourngo/__pycache__
+Backend/findyourngo/restapi/__pycache__

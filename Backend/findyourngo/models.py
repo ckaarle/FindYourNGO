@@ -6,25 +6,25 @@ from django.db import models
 
 
 class NgoBranch(models.Model):
-    country = models.CharField(max_length=200) # TODO this is essentially a very fancy enum?
+    country = models.CharField(max_length=200)
 
 
 class NgoTopic(models.Model):
-    topic = models.CharField(max_length=200) # TODO this is essentially a very fancy enum?
+    topic = models.CharField(max_length=200)
 
 
 class NgoAccreditation(models.Model):
-    accreditation = models.CharField(max_length=200) # TODO this is essentially a very fancy enum?
+    accreditation = models.CharField(max_length=200)
 
 
-class NgoDataSource(models.Model):  # TODO this is essentially a very fancy enum?
+class NgoDataSource(models.Model):
     credible = models.BooleanField()
     source = models.CharField(max_length=200)
 
 
 class NgoMetaData(models.Model):
     last_updated = models.DateField(null=True)
-    info_source = models.ManyToManyField(NgoDataSource) # note: this does not ensure that there is always at least one data source!
+    info_source = models.ManyToManyField(NgoDataSource)
 
 
 class NgoAddress(models.Model):
@@ -52,18 +52,20 @@ class NgoStats(models.Model):
     founding_year = models.IntegerField(null=True)
     staff_number = models.IntegerField(null=True)
     member_number = models.IntegerField(null=True)
-    working_languages = models.CharField(max_length=400) # TODO store as string or list or reference to language table?
+    working_languages = models.CharField(max_length=400)
     funding = models.CharField(max_length=200)
     president_first_name = models.CharField(max_length=200)
     president_last_name = models.CharField(max_length=200)
+    type_of_organization = models.CharField(max_length=200)
+    yearly_income = models.CharField(max_length=200)
 
 
 class Ngo(models.Model):
-    name = models.CharField(max_length=200) # TODO: unique?
-    acronym = models.CharField(max_length=50) # TODO: unique?
+    name = models.CharField(max_length=200)
+    acronym = models.CharField(max_length=50)
 
-    aim = models.TextField() # TODO: should we even keep this?
-    activities = models.TextField() # TODO: should we even keep this?
+    aim = models.TextField()
+    activities = models.TextField()
 
     branches = models.ManyToManyField(NgoBranch)
     topics = models.ManyToManyField(NgoTopic)
