@@ -15,7 +15,7 @@ class NgoTopic(models.Model):
 
 
 class NgoAccreditation(models.Model):
-    accreditation = models.CharField(max_length=200)
+    accreditation = models.TextField()
 
 
 class NgoDataSource(models.Model):

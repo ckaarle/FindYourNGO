@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework import permissions
+
+from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.restapi.serializers import UserSerializer, GroupSerializer
 
 
@@ -20,3 +23,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+def dataImport(request):
+    run_initial_data_import()
+    return HttpResponse('Data import finished. Please refer to the backend console output for logs.')

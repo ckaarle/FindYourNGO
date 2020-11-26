@@ -1,11 +1,11 @@
 import urllib.request, json
 from typing import List, Any, Optional
 
-from european_council.parser.MainPageInfo import MainPageInfo, DetailPageInfo, Address, ContactInfo, Representative, \
-    Name, HardFacts, SoftFacts, Info
+from findyourngo.data_import.InfoClasses import Info, MainPageInfo, Name, Address, ContactInfo, Representative, \
+    DetailPageInfo, SoftFacts, HardFacts
 
 
-def parse() -> List[Info]:
+def parse_european_council() -> List[Info]:
     with urllib.request.urlopen("http://coe-ngo.org/ingo") as url:
         data = json.loads(url.read().decode())
 
@@ -13,8 +13,6 @@ def parse() -> List[Info]:
         _clean_info(infos)
 
         return infos
-
-    # TODO: split accreditations where there are multiple
 
 
 def _extract_info(data: List[Any]) -> List[Info]:
@@ -187,7 +185,6 @@ def _extract_hard_facts(data: Any, idx: int) -> HardFacts:
             elif staff_string == '5employees':
                 staff_number = 5
             else:
-                print(f'SKIPPING STAFF ({idx}) - {staff_string}')
                 staff_number = None
 
     if not 'nbMembers' in data:
@@ -225,7 +222,6 @@ def _extract_hard_facts(data: Any, idx: int) -> HardFacts:
             elif members_string == '28memberorganisations':
                 members_number = 28
             else:
-                print(f'SKIPPING MEMBERS ({idx}) - {members_string}')
                 members_number = None
 
     if not 'workLang' in data:
@@ -249,9 +245,6 @@ def _clean_info(infos: List[Info]) -> None:
         if info.main_info.address.street is not None and 'Council of Europe' in info.main_info.address.street:
             info.main_info.address.street = None
 
-        if info.detail_info.soft_facts.accreditations is not None and info.detail_info.soft_facts.accreditations != '':
-            print(info.detail_info.soft_facts.accreditations)
-
 
 if __name__ == '__main__':
-    parse()
+    parse_european_council()
