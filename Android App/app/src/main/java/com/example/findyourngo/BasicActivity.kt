@@ -2,15 +2,12 @@ package com.example.findyourngo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_basic.*
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import java.io.IOException
-
 
 class BasicActivity : AppCompatActivity() {
     // https://stackoverflow.com/questions/45219379/how-to-make-an-api-request-in-kotlin
