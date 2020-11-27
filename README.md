@@ -5,6 +5,18 @@ RestAPI guide: https://www.django-rest-framework.org/tutorial/quickstart/
 django-admin can be used inside the cli with docker-compose exec web /bin/bash
 
 
+# Setup Guide
+- start docker containers
+- start console in server container
+	- python manage.py makemigrations
+	- python manage.py migrate
+		- this updates the database's schemes
+- go to localhost:8000/dataImport
+	- this imports the data if the database is currently empty (meaning once it is imported, it doesn't do anything)
+
+
+To clean the database, go to localhost:8000/clearDatabase.
+
 
 # Postgres
 

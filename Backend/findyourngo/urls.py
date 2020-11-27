@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
+    path('clearDatabase', views.clearDatabase, name='clearDatabase'),
 ]

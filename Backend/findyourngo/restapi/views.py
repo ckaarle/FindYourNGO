@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User, Group
+from django.db import connection, transaction
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework import permissions
 
 from findyourngo.data_import.data_importer import run_initial_data_import
+from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers import UserSerializer, GroupSerializer
 
 
@@ -26,5 +28,15 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    run_initial_data_import()
-    return HttpResponse('Data import finished. Please refer to the backend console output for logs.')
+    initial_import_necessary = run_initial_data_import()
+    if initial_import_necessary:
+        return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
+    else:
+        return HttpResponse('Data import not necessary')
+
+
+def clearDatabase(request):
+    cursor = connection.cursor()
+    cursor.execute(delete_all_query)
+    transaction.commit()
+    return HttpResponse('Database has been cleared')

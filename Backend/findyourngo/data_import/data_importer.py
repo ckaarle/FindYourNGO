@@ -269,10 +269,10 @@ def convert_to_model_classes(infos: List[Info], data_source: str, source_credibl
         print(f'IMPORT info # {idx} FINISHED')
 
 
-def run_initial_data_import() -> None:
+def run_initial_data_import() -> bool:
     print('TRYING TO IMPORT DATA')
     if database_not_empty():
-        return
+        return False
     print('STARTING THE DATA IMPORT')
     european_council_info = parse_european_council()
 
@@ -280,6 +280,7 @@ def run_initial_data_import() -> None:
     convert_to_model_classes(european_council_info, 'European Council', True)
 
     print('DATA IMPORT FINISHED')
+    return True
 
 
 def database_not_empty() -> bool:
