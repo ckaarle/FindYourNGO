@@ -19,7 +19,8 @@
         android:usesCleartextTraffic="true" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +29,7 @@
         </activity>
         <activity
             android:name=".BasicActivity"
-            android:label="@string/title_activity_basic"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_basic">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
