@@ -22,4 +22,10 @@
         android:name="com.example.findyourngo.ui.favourites.FavouritesFragment"
         android:label="@string/title_favourites"
         tools:layout="@layout/fragment_favourites" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.findyourngo.ui.searchbar.SearchBarFragment"
+        android:label="@string/title_favourites"
+        tools:layout="@layout/fragment_favourites" />
 </navigation>

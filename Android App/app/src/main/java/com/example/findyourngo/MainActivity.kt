@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.findyourngo.ui.favourites.FavouritesFragment
 import com.example.findyourngo.ui.maps.MapsFragment
 import com.example.findyourngo.ui.overview.OverviewFragment
+import com.example.findyourngo.ui.searchbar.SearchBarFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -45,10 +46,18 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 return@OnNavigationItemSelectedListener true
             }
+            /*
             R.id.navigation_favourites -> {
                 val fragment = FavouritesFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.container, fragment, fragment.javaClass.getSimpleName())
                         .commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            */
+            R.id.navigation_search -> {
+                val fragment = SearchBarFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.container, fragment, fragment.javaClass.getSimpleName())
+                    .commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
