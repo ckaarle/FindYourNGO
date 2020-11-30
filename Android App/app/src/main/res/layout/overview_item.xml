@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toTopOf="@id/overview_item_info_siteofoperation"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Name"/>
+            android:text="@string/overview_item_name"/>
         <TextView
             android:id="@+id/overview_item_info_siteofoperation"
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/overview_item_info_name"
             android:textSize="14sp"
-            android:text="Site of operation"/>
+            android:text="@string/overview_item_siteOfOperation"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +77,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/overview_item_trustworthiness_rating_amountofrates"
                 android:textSize="12sp"
-                android:text="0"/>
+                android:text="@string/overview_item_defaultValue"/>
             <TextView
                 android:id="@+id/overview_item_trustworthiness_rating_amountofrates"
                 android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/overview_item_trustworthiness_rating_ratevalue"
                 android:textSize="12sp"
-                android:text="(0)"/>
+                android:text="@string/overview_item_defaultValue"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
