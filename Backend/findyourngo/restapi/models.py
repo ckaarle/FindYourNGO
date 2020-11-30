@@ -49,6 +49,10 @@ class NgoContact(models.Model):
     representative = models.ForeignKey(NgoRepresentative, null=True, on_delete=models.SET_NULL)
 
 
+class NgoType(models.Model):
+    type = models.CharField(max_length=200)
+
+
 class NgoStats(models.Model):
     founding_year = models.IntegerField(null=True)
     staff_number = models.IntegerField(null=True)
@@ -57,7 +61,7 @@ class NgoStats(models.Model):
     funding = models.CharField(max_length=200)
     president_first_name = models.CharField(max_length=200)
     president_last_name = models.CharField(max_length=200)
-    type_of_organization = models.CharField(max_length=200)
+    type_of_organization = models.ManyToManyField(NgoType)
     yearly_income = models.CharField(max_length=200)
 
 
