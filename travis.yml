@@ -2,4 +2,4 @@ install:
   - pip install -r Backend/requirements.txt
 language: python
 script:
-    - pytest
+  - pytest
