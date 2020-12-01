@@ -76,7 +76,7 @@ Since the score has to be scaled into the range [0..5], use the following [formu
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
 
-TW_score = ((TW_score_raw - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub>)) * (t<sub>max</sub> - t<sub>min</sub>) + t<sub>min</sub>
+TW_score = [(TW_score_raw - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub>)] * (t<sub>max</sub> - t<sub>min</sub>) + t<sub>min</sub>
 
 
 ## When will the score be calculated?
