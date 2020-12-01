@@ -7,8 +7,8 @@ class Name:
     name: str
     acronym: str
     funding: Optional[str]
-    type_of_organization: str = ''
-    yearly_income: str = ''
+    type_of_organization: Optional[List[str]] = None
+    yearly_income: Optional[str] = ''
 
 
 @dataclass
