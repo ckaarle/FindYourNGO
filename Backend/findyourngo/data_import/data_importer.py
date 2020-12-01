@@ -697,6 +697,11 @@ def run_initial_data_import() -> bool:
     already_imported_entries = len(european_council_info)
     for idx, info in enumerate(ngo_advisor_info):
         print(f'Current idx: {idx}')
+
+        if info.main_info.name.type_of_organization is not None and ('social_enterprise' in info.main_info.name.type_of_organization or 'corporation' in info.main_info.name.type_of_organization \
+            or 'academic_institution' in info.main_info.name.type_of_organization):
+            print('Skipping because NGO type is weird')
+            continue
         try:
             print(f'Trying to find NGO {info.main_info.name.name.upper()} in database ...')
             info_match = Ngo.objects.get(name=info.main_info.name.name.upper()) # Achtung Name noch nicht upper()

@@ -4,13 +4,12 @@ from typing import List, Tuple, Dict, Any, Optional
 
 from selenium import webdriver
 from selenium.common.exceptions import ElementClickInterceptedException
-from selenium.webdriver import ActionChains
 from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
-from ngo_advisor.InfoClasses import MainPageInfo, DetailPageInfo, HardFacts, SoftFacts, Representative, \
+from findyourngo.data_import.InfoClasses import MainPageInfo, DetailPageInfo, HardFacts, SoftFacts, Representative, \
     ContactInfo, Address, Name, Info
-from ngo_advisor.parser_functions.functions import parse_organization_name, parse_website_url, \
+from findyourngo.data_import.ngo_advisor.parser_functions.functions import parse_organization_name, parse_website_url, \
     parse_type_of_organization, parse_year_founded, parse_hq_location, parse_hq_country, \
     parse_sectors_of_activity, parse_countries_where_active, parse_primary_contact, parse_representative, \
     parse_membership_based, parse_total_members, parse_accreditation, parse_yearly_income, parse_surplus_deficit, \
@@ -305,7 +304,7 @@ def deserialize(filename: str) -> List[Info]:
 if __name__ == '__main__':
     infos = crawl_ngo_advisor()
 
-    filename = 'ngoadvisor_pickled_01'
+    filename = 'ngoadvisor_pickled'
     _serialize(infos, filename)
 
     # serializing test
