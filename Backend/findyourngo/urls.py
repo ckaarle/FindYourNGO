@@ -29,6 +29,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
-    url(r'ngos', ngo_controller.ngo_list)
+    url(r'^ngos', ngo_controller.ngo_list),
+    url(r'^ngos/(?P<pk>[0-9]+)$', ngo_controller.ngo_detail),
 ]
 
