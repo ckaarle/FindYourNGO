@@ -1,7 +1,6 @@
-FROM node:10
+FROM node:14
 RUN npm install -g @angular/cli
 COPY package.json ./
 RUN npm install
-WORKDIR ./app
-#ENTRYPOINT ng serve
-ENTRYPOINT tail -f /dev/null
+WORKDIR /home/node/app/src
+ENTRYPOINT ng serve --host 0.0.0.0
