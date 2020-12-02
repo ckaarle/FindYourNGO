@@ -20,6 +20,15 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  node:
+    build: ./frontend
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./frontend:/home/node/app/src
+    ports:
+      - "80:4200"
+
 volumes:
   findyourngovolume:
     external: True
