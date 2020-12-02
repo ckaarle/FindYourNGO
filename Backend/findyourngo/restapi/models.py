@@ -80,3 +80,4 @@ class Ngo(models.Model):
     contact = models.ForeignKey(NgoContact, null=True, on_delete=models.SET_NULL)
 
     meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT) # meta data should not be deleted if a ngo is referencing them (we need the data source)
+
