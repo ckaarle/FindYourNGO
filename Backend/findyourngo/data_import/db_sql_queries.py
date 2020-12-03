@@ -12,6 +12,7 @@ delete_all_query = '''
     DELETE FROM restapi_ngometadata_info_source;
     DELETE FROM restapi_ngodatasource;
     DELETE FROM restapi_ngometadata;
+    DELETE FROM restapi_ngotwscore;
     DELETE FROM restapi_ngorepresentative;
     DELETE FROM restapi_ngostats_type_of_organization;
     DELETE FROM restapi_ngostats;

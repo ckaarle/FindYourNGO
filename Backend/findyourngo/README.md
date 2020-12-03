@@ -27,11 +27,12 @@ Storing these individual factors enables offering a detailed history of the trus
 
 
 ## What additional features could potentially be used in the future?
+- use more of the accreditations listed in the database
 - query [UN ECOSOC](https://esango.un.org/civilsociety/displayConsultativeStatusSearch.do?method=search&sessionCheck=false)
 for more accreditation information (also lists other accreditations)
 - user ratings
 - reported scandals
-- NGO size (members, staff)
+- NGO size (members, staff; could disadvantage smaller NGOs)
 - age of NGO
 
 ## What are the requirements to currently receive an optimal trustworthiness score? 
@@ -39,6 +40,18 @@ for more accreditation information (also lists other accreditations)
 - listed by one credible source
 - listed by all data sources
 - ECOSOC accredited
+
+
+## What is the current score distribution?
+| Score | # NGOs |
+| ----- | ------: |
+| 0 | 687 |
+| 1 | 0 |
+| 2 | 0 |
+| 3 | 0 |
+| 4 | 279 |
+| 5 | 35 |
+
 
 ## How is the score calculated?
 
@@ -58,11 +71,11 @@ Further considerations:
 
 The following factors will be used:
 
-| Factor                | Value                        | Reasoning |
-| --------------------- | ----------------------------- | -------- |
-| # data sources        | 1 per source | |
-| one credible source   | (# data sources overall) * 2 + 1  | one credible source > all (less) credible sources combined + ECOSOC |
-| ECOSOC                | # data sources overall | ECOSOC does not hold as much meaning without a credible source |
+| Factor                | Value                        | current max. value |Reasoning |
+| --------------------- | ----------------------------- | -------- | --------- |
+| # data sources        | 0.5 per source | 1 | |
+| one credible source   | (# data sources overall) * 2 + 1  | 5 | one credible source > all (less) credible sources combined + ECOSOC |
+| ECOSOC                | # data sources overall | 2 | ECOSOC does not hold as much meaning without a credible source |
 
 
 score_raw(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC(NGO)
@@ -71,8 +84,8 @@ Since the score has to be scaled into the range [0..5], use the following [formu
 
 | Variable | Value | Description |
 | -------- | ----- | ----------- |
-| r<sub>min</sub> | 1 | min. value of raw TW score (i.e. one data source and nothing else) |
-| r <sub>max</sub> | 7 | max. value of raw TW score |
+| r<sub>min</sub> | 0.5 | min. value of raw TW score (i.e. one data source and nothing else) |
+| r <sub>max</sub> | 8 | max. value of raw TW score |
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
 
@@ -80,5 +93,9 @@ TW_score = [(TW_score_raw - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub
 
 
 ## When will the score be calculated?
-The score will be calculated automatically every time a `NgoTWScore` object is saved to the database. This 
-ensures that the total trustworthiness score is always up-to-date with its factors.
+During the initial data import, the score will be calculated. There also exists a URL to recalculate the score for all
+ NGOs in the database if necessary (e.g. if the score calculation was modified). There is currently no feature that would 
+ automatically recalculate the score, for example when an object is saved to the database. Instead, use the `TWCalculator`
+ to calculate the new trustworthiness score after changes to the NGO's data were made.
+ It is possible to include a recalculation of the tw score into the `save`-method of database objects. This should be 
+ discussed further.
