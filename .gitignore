@@ -1,4 +1,4 @@
-﻿Crawler/european_council/__pycache__
+Crawler/european_council/__pycache__
 Crawler/.idea
 Crawler/european_council/parser/__pycache__
 Backend/findyourngo/.idea
@@ -12,3 +12,7 @@ Backend/findyourngo/restapi/migrations/__pycache__
 Backend/findyourngo/data_import/__pycache__
 Backend/findyourngo/data_import/european_council/__pycache__
 .mypy_cache
+Backend/findyourngo/data_import/ngo_advisor/__pycache__
+Backend/findyourngo/data_import/ngo_advisor/parser_functions/__pycache__
+Backend/__pycache__
+Backend/findyourngo/tests/__pycache__
