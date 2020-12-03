@@ -1,5 +1,11 @@
 # FindYourNGO
 
+## Quick Start
+- check setup guide to get up the database
+- run docker-compose up (-d) in the root folder
+- localhost:8000 should be usable immediately (this is where the API lives)
+- localhost (:80) will take a while to run
+
 Refer to https://docs.docker.com/compose/django/ for a quick overview of how the infrastructure was built.
 
 RestAPI guide: https://www.django-rest-framework.org/tutorial/quickstart/
