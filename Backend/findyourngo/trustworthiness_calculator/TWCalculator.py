@@ -49,10 +49,10 @@ class TWCalculator:
         return self._restrict_to_allowed_score_range(raw_score)
 
     def _restrict_to_allowed_score_range(self, raw_score: float) -> TWScore:
-        temp1 = (raw_score - RAW_SCORE_MIN_VALUE) / (RAW_SCORE_MAX_VALUE - RAW_SCORE_MIN_VALUE)
-        temp2 = TW_MAX_VALUE - TW_MIN_VALUE
+        raw_score_scaled_around_zero = (raw_score - RAW_SCORE_MIN_VALUE) / (RAW_SCORE_MAX_VALUE - RAW_SCORE_MIN_VALUE)
+        range_of_target_interval = TW_MAX_VALUE - TW_MIN_VALUE
 
-        score = temp1 * temp2 + TW_MIN_VALUE
+        score = raw_score_scaled_around_zero * range_of_target_interval + TW_MIN_VALUE
 
         return self._round(score)
 
