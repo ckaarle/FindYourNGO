@@ -322,10 +322,16 @@ def convert_ngo_contact(info: Info, address: Optional[NgoAddress], rep: Optional
     return contact
 
 
+def _default_zero_if_none(value: Optional[int]) -> int:
+    return value if value is not None else 0
+
+
 def convert_ngo_stats(info: Info) -> Optional[NgoStats]:
     founding_year = info.detail_info.hard_facts.founding_year
-    staff_number = info.detail_info.hard_facts.staff_number
-    member_number = info.detail_info.hard_facts.members
+    staff_number = _default_zero_if_none(info.detail_info.hard_facts.staff_number)
+    member_number = _default_zero_if_none(info.detail_info.hard_facts.members)
+    if member_number is None:
+        member_number = 0
     working_languages = set_to_empty_string_if_none(info.detail_info.hard_facts.working_languages)
     funding = set_to_empty_string_if_none(info.main_info.name.funding)
     president_first_name = set_to_empty_string_if_none(info.detail_info.hard_facts.president_firstname)
@@ -394,7 +400,11 @@ def convert_ngo(
     aim = set_to_empty_string_if_none(info.detail_info.soft_facts.aims)
     activities = set_to_empty_string_if_none(info.detail_info.soft_facts.activities)
 
-    try: # TODO this is the initial data import
+    if name == 'ZTESTING':
+        aim = ''
+        activities = ''
+
+    try:
         # do not use this for subsequent imports as default (obviously, ngos might already be in the database)
         Ngo.objects.get(name=name, acronym=acronym)
         print(f'XXXXXXXXXXXXXXXXXXXXXXXX --- Ngo with name {name} and acronym {acronym} already in database -- skipping')
@@ -684,7 +694,7 @@ def run_initial_data_import() -> bool:
     print('STARTING THE DATA IMPORT')
     european_council_info = parse_european_council()
 
-    # TODO do not use this method for other, secondary data sources
+    # do not use this method for other, secondary data sources
     convert_to_model_classes(european_council_info, 'European Council', True)
 
     print('DATA IMPORT (European Council) FINISHED')
@@ -694,9 +704,16 @@ def run_initial_data_import() -> bool:
     ngo_advisor_info = deserialize('findyourngo/data_import/ngo_advisor/ngoadvisor_pickled')
 
     match_count = 0
+    skipped = 0
     already_imported_entries = len(european_council_info)
     for idx, info in enumerate(ngo_advisor_info):
         print(f'Current idx: {idx}')
+
+        if info.main_info.name.type_of_organization is not None and ('social_enterprise' in info.main_info.name.type_of_organization or 'corporation' in info.main_info.name.type_of_organization \
+            or 'academic_institution' in info.main_info.name.type_of_organization):
+            print('Skipping because NGO type is weird')
+            skipped += 1
+            continue
         try:
             print(f'Trying to find NGO {info.main_info.name.name.upper()} in database ...')
             info_match = Ngo.objects.get(name=info.main_info.name.name.upper()) # Achtung Name noch nicht upper()
@@ -719,8 +736,9 @@ def run_initial_data_import() -> bool:
     print(f'EU NGOS: {len(european_council_info)}')
     print(f'NgoAdvisor NGOS: {len(ngo_advisor_info)}')
     print(f'Matches: {match_count}')
+    print(f'Skipped: {skipped}')
 
-    assert len(all_ngo_entries) == len(european_council_info) + len(ngo_advisor_info) - match_count
+    assert len(all_ngo_entries) == len(european_council_info) + len(ngo_advisor_info) - match_count - skipped
 
     return True
 

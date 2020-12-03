@@ -55,8 +55,8 @@ class NgoType(models.Model):
 
 class NgoStats(models.Model):
     founding_year = models.IntegerField(null=True)
-    staff_number = models.IntegerField(null=True)
-    member_number = models.IntegerField(null=True)
+    staff_number = models.IntegerField(default=0)
+    member_number = models.IntegerField(default=0)
     working_languages = models.CharField(max_length=400)
     funding = models.CharField(max_length=200)
     president_first_name = models.CharField(max_length=200)

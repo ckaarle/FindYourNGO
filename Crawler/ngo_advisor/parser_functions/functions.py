@@ -35,10 +35,7 @@ def parse_type_of_organization(field: WebElement) -> List[str]:
 
         result = []
         for type in all_types:
-            if 'social_enterprise' in type:
-                pass
-            else:
-                result.append(type)
+            result.append(type)
 
         return result
     except:
