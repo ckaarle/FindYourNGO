@@ -472,7 +472,6 @@ def convert_to_model_classes(infos: List[Info], data_source: str, source_credibl
         ngo = convert_ngo(info, branch, topic, accreditation, meta_data, contact, stats)
         after = Ngo.objects.all()
 
-        print(f'Before {len_before} - after {len(after)}')
         assert len_before + 1 == len(after)
         print(f'IMPORT info # {idx} FINISHED')
 

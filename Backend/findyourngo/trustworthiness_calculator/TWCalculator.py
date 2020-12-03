@@ -10,7 +10,7 @@ from findyourngo.type_variables import TWScore
 class TWCalculator:
 
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
-        return self._round(len(meta_data.info_source.all()) / 2)
+        return self._round(len(meta_data.info_source.all()) / 1)
 
     def calculate_data_source_credibility_score(self, meta_data: NgoMetaData) -> TWScore:
         if meta_data.info_source.filter(credible=True):

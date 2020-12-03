@@ -48,9 +48,9 @@ for more accreditation information (also lists other accreditations)
 | 0 | 687 |
 | 1 | 0 |
 | 2 | 0 |
-| 3 | 0 |
-| 4 | 279 |
-| 5 | 35 |
+| 3 | 269 |
+| 4 | 44 |
+| 5 | 1 |
 
 
 ## How is the score calculated?
@@ -73,7 +73,7 @@ The following factors will be used:
 
 | Factor                | Value                        | current max. value |Reasoning |
 | --------------------- | ----------------------------- | -------- | --------- |
-| # data sources        | 0.5 per source | 1 | |
+| # data sources        | 1 per source | 2 | |
 | one credible source   | (# data sources overall) * 2 + 1  | 5 | one credible source > all (less) credible sources combined + ECOSOC |
 | ECOSOC                | # data sources overall | 2 | ECOSOC does not hold as much meaning without a credible source |
 
@@ -84,8 +84,8 @@ Since the score has to be scaled into the range [0..5], use the following [formu
 
 | Variable | Value | Description |
 | -------- | ----- | ----------- |
-| r<sub>min</sub> | 0.5 | min. value of raw TW score (i.e. one data source and nothing else) |
-| r <sub>max</sub> | 8 | max. value of raw TW score |
+| r<sub>min</sub> | 1 | min. value of raw TW score (i.e. one data source and nothing else) |
+| r <sub>max</sub> | 9 | max. value of raw TW score |
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
 
