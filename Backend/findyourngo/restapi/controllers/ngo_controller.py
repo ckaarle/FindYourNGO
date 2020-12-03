@@ -18,11 +18,6 @@ def ngo_list(request):
         ngo_serializer = NgoSerializer(ngos, many=True)
         return JsonResponse(ngo_serializer.data, safe=False)
 
-    elif request.method == 'DELETE':
-        count = Ngo.objects.all().delete()
-        return JsonResponse({'message': '{} Ngos were deleted successfully!'.format(count[0])},
-                            status=status.HTTP_204_NO_CONTENT)
-
     elif request.method == 'POST':
         ngo_data = JSONParser().parse(request)
         ngo_serializer = NgoSerializer(data=ngo_data)
