@@ -6,7 +6,8 @@ from rest_framework import permissions
 
 from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query
-from findyourngo.restapi.serializers import UserSerializer, GroupSerializer
+from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
