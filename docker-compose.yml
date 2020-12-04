@@ -1,0 +1,34 @@
+version: "3.8"
+   
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - findyourngovolume:/var/lib/postgresql/data
+  web:
+    build: ./Backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./Backend:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  node:
+    build: ./Frontend
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./Frontend:/home/node/app/src
+    ports:
+      - "80:4200"
+
+volumes:
+  findyourngovolume:
+    external: True
