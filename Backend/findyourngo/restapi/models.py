@@ -69,10 +69,10 @@ class NgoStats(models.Model):
 
 
 class NgoTWScore(models.Model):
-    total_tw_score = models.IntegerField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
-    number_data_sources_score = models.IntegerField(default=1)
-    credible_source_score = models.IntegerField(default=0)
-    ecosoc_score = models.IntegerField(default=0)
+    total_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    number_data_sources_score = models.FloatField(default=1)
+    credible_source_score = models.FloatField(default=0)
+    ecosoc_score = models.FloatField(default=0)
 
 
 class Ngo(models.Model):

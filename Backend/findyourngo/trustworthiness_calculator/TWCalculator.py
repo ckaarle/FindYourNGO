@@ -10,7 +10,7 @@ from findyourngo.type_variables import TWScore
 class TWCalculator:
 
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
-        return self._round(len(meta_data.info_source.all()) / 1)
+        return len(meta_data.info_source.all()) / 1
 
     def calculate_data_source_credibility_score(self, meta_data: NgoMetaData) -> TWScore:
         if meta_data.info_source.filter(credible=True):
@@ -62,5 +62,5 @@ class TWCalculator:
     # why is this function necessary when the python-native round() function exists?
     # since Python 3, this function implements banker's rounding:
     # round(0.5) == 0, round(1.5) == 2
-    def _round(self, value: float) -> int:
-        return int(decimal.Decimal(value).quantize(1, rounding=decimal.ROUND_HALF_UP))
+    def _round(self, value: float) -> float:
+        return float(decimal.Decimal(value).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_HALF_UP))
