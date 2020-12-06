@@ -1,1 +1,101 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+
+/* Styling variables */
+:root {
+  //colors
+  --primary-color: #FFC107;
+  --secondary-color: #C62828;
+
+  --primary-contrast-bw: #424242; //use this for text on primary color background
+  --secondary-contrast-bw: #ffffff; //use this for text on secondary color background
+
+  --threshold-neutral: #9e9e9e; //use this for neutral values
+  --threshold-positive: #69f0ae; //use this for positive values
+  --threshold-negative: #c62828; //use this for negative values
+
+  --background-color: #ffffff;
+  --background-contrast-color: #424242;
+  --background-contrast-color-20: rgba(48, 48, 48, .2);
+  --background-contrast-color-10: rgba(48, 48, 48, .1);
+  --background-contrast-color-05: rgba(48, 48, 48, .05);
+
+  //font
+  --font-size-big: 22px !important;
+  --font-size-medium: 15px !important;
+  --font-size-normal: 13px !important;
+  --font-size-small: 10px !important;
+
+  //line heights
+  --line-height-big: 24px;
+  --line-height-normal: 15px;
+  --line-height-small: 13px;
+
+  //opacities
+  --opacity-normal: 0.8;
+  --opacity-strong: 0.4;
+}
+
+
+/* Custom theming */
+$custom-typography: mat-typography-config(
+  $font-family: "Roboto, Helvetiva Neue, sans-serif",
+  $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 700), //h1
+  $title: mat-typography-level(var(--font-size-medium), var(--line-height-big), 500), //h2
+  $body-1: mat-typography-level(var(--font-size-normal), var(--font-size-normal), 300), //text-body
+);
+
+@include mat-core($custom-typography);
+
+$primary: mat-palette($mat-amber, 500, 700, 800);
+$accent: mat-palette($mat-red, 800, 700, 500);
+$warn: mat-palette($mat-red);
+
+$app-theme: mat-light-theme($primary, $accent, $warn);
+@include angular-material-theme($app-theme);
+
+/* Global styles */
+html, body { 
+  margin: 0;
+  height: 100%; 
+}
+
+.mat-menu-item, .mat-tab-link, .mat-toolbar {
+  opacity: 1 !important;
+  font-size: var(--font-size-medium);
+}
+
+.mat-tab-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+span, p :not(.mat-raised-button.mat-accent){
+  color: var(--primary-contrast-bw)
+}
+
+.mat-raised-button.mat-accent:not([disabled]),
+.mat-button.mat-accent:not([disabled]),
+.mat-fab.mat-accent:not([disabled]),
+.mat-mini-fab.mat-fab.mat-accent:not([disabled]) {
+  background-color: var(--secondary-color);
+  color: var(--secondary-contrast-bw);
+}
+
+.mat-icon-button.mat-accent:not([disabled]) {
+  color: var(--secondary-color)
+}
+
+@mixin mat-icon-size($size: 24px) {
+  font-size: $size;
+  height: $size;
+  width: $size;
+  line-height: $size;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  @include mat-icon-size(var(--font-size-big))
+}
+
