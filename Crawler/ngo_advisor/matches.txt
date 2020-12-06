@@ -1,0 +1,267 @@
+----------------------
+Comparing NGO AMNESTY INTERNATIONAL (EU) - (NgoAdvisor)
+Name: AMNESTY INTERNATIONAL - AMNESTY INTERNATIONAL
+Acronym: AI -
+Aim: AI’S MISSION IS TO CONDUCT RESEARCH AND GENERATE ACTION TO PREVENT AND END GRAVE ABUSES OF HUMAN RIGHTS AND TO DEMAND JUSTICE FOR THOSE WHOSE RIGHTS HAVE BEEN VIOLATED. - None
+Activities: AI WORKS TO STOP HUMAN RIGHTS ABUSES BY MOBILIZING THE PUBLIC TO PUT PRESSURE ON GOVERNMENTS, ARMED POLITICAL GROUPS, COMPANIES AND INTERGOVERNMENTAL BODIES VIA: PUBLICATION AND PROMOTION OF OUR RESEA - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Human Rights', 'Social Justice']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 1961 - 1961
+Staff: 0 - None
+Member: 0 - None
+Working languages:  - None
+Funding: PRIVATE DONATIONS - None
+Pres first name:  - None
+Pres last name:  - None
+Type: restapi.NgoType.None - ['nonprofit']
+Yearly income:  - None
+Phone number: +44-20-74135500 - None
+Email: CONTACTUS@AMNESTY.ORG - None
+Website: WWW.AMNESTY.ORG - https://www.amnesty.org/en/
+Street: 1 EASTON STREET - None
+Postcode: WC1X0DW - None
+City: LONDON - London
+Country: ALBANIA - United Kingdom
+Rep first name: RITA - None
+Rep last name: PATRICIO - None
+Rep email: RITA.PATRICIO@AMNESTY.ORG - None
+Last updated: 2020-08-25 -
+----------------------
+Match in database found for ASSOCIATION FOR THE PREVENTION OF TORTURE
+----------------------
+Comparing NGO ASSOCIATION FOR THE PREVENTION OF TORTURE (EU) - (NgoAdvisor)
+Name: ASSOCIATION FOR THE PREVENTION OF TORTURE - ASSOCIATION FOR THE PREVENTION OF TORTURE
+Acronym: APT -
+Aim: THE APT IS CONVINCED THAT THE PREVENTION OF TORTURE IS BEST ACHIEVED THROUGH THREE INTEGRATED ELEMENTS: 1. PROMOTING EFFECTIVE MONITORING AND TRANSPARENCY IN PLACES OF DEPRIVATION OF LIBERTY; 2. C - None
+Activities: THE APT IS INVOLVED IN VARIOUS SPHERES WITH A VIEW TO PREVENTING TORTURE INCLUDING: - ADVOCACY AND LOBBYING; - THE PROVISION OF LEGAL ADVICE; - CAPACITY STRENGTHENING ON PREVENTION. - None
+Branches: restapi.NgoBranch.None - ['Global']
+Topics: restapi.NgoTopic.None - ['Human Rights', 'Law and Justice']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 1977 - 1977
+Staff: 23 - None
+Member: 0 - None
+Working languages: ENGLISH, FRENCH AND SPANISH - None
+Funding: MEMBER FEES - None
+Pres first name: MARTINE - None
+Pres last name: BRUNSCHWIG GRAF - None
+Type: restapi.NgoType.None - ['nonprofit', 'association']
+Yearly income:  - None
+Phone number: 41229192170 - None
+Email: APT@APT.CH - apt@apt.ch
+Website: WWW.APT.CH - http://www.apt.ch/en
+Street: ROUTE DE FERNEY 10 - None
+Postcode: 1211 - None
+City: GENEVA - Geneva
+Country: SWITZERLAND - Switzerland
+Rep first name: EVA - None
+Rep last name: CSERGO - None
+Rep email: ECSERGO@APT.CH - None
+Last updated: 2020-01-29 -
+----------------------
+Match in database found for BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK
+----------------------
+Comparing NGO BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK (EU) - (NgoAdvisor)
+Name: BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK - BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK
+Acronym: BCSDN -
+Aim: TO EMPOWER THE CIVIL SOCIETY AND INFLUENCE EUROPEAN AND NATIONAL POLICIES TOWARDS MORE ENABLING ENVIRONMENT FOR CIVIL SOCIETY DEVELOPMENT IN ORDER TO ENSURE SUSTAINABLE AND FUNCTIONING DEMOCRACIES IN THE BALKANS.
+-INCREASE THE ROLE OF CIVIL SOCIETY BY STRENGTHENING ITS VOICE IN POLICY- AND DECISION-MAKING AT NATIONAL, REGIONAL AND EU LEVEL;
+-PROMOTE THE CIVIL DIALOGUE BETWEEN THE CIVIL SOCIETY ACTORS, STATE INSTITUTIONS AND THE EUROPEAN UNION IN ORDER TO INFLUENCE THE PUBLIC POLICIES;
+DEVELOP ADVOCACY KNOWLEDGE AND SKILLS AMONG CIVIL SOCIETY ACTORS AS A BASE FOR GREATER IMPACT; AND
+-STRENGTHEN COMMUNICATION, COORDINATION AND COOPERATION BETWEEN THE CIVIL SOCIETY ACTORS IN THE BALKAN REGION - None
+Activities: - ORGANIZATION AND PARTICIPATION ON EVENTS CONCERNING CIVIL SOCIETY POSITION, ENCOMPASSING TOPICS SUCH AS: CSO ACCOUNTABILITY, CAPACITY BUILDING OF CSOS, CIVIC ENGAGEMENT, CIVIC SPACE, AS WELL AS ENABLING ENVIRO
+NMENT FOR CSOS ON NATIONAL, REGIONAL, EU AND GLOBAL LEVEL.
+- DELIVERING PROJECTS AND ACTIVE PARTICIPATION IN ADVOCACY CAMPAIGNS TO INFLUENCE PUBLIC POLICES;
+-DELIVERY AND DISSEMINATION OF PUBLICATIONS AND REPORTS ABOUT CSOS ACCOUNTABILITY, SELF-ASSESMENT MECHANISMS, ENABLING ENVIRONMENT, SHRINKING SPACE, CSO SUSTAINABILITY, ETC.
+-ACTIVE PARTICIPATION ON COMMUNICATION CHANNELS, CREATION AND DISSEMINATION OF VARIOUS COMMUNICATION MATERIALS. - None
+Branches: restapi.NgoBranch.None - None
+Topics: restapi.NgoTopic.None - None
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 2003 - 2003
+Staff: 8 - None
+Member: 14 - None
+Working languages: ENGLISH, MACEDONIAN - None
+Funding: NON-GOVERNMENT/ DONOR FUNDED - None
+Pres first name: TINA - None
+Pres last name: DIVJAK - None
+Type: restapi.NgoType.None - ['nonprofit', 'network']
+Yearly income:  - None
+Phone number: +38926144211 - + 389 (0)2 614 42 11
+Email: EXECUTIVEOFFICE@BALKANCSD.NET - ExecutiveOffice@balkancsd.net
+Website: HTTP://WWW.BALKANCSD.NET/ - http://www.balkancsd.net/
+Street:  MACEDONIA ST 43-1/9 - None
+Postcode: 1000 - None
+City: SKOPJE - Skopje
+Country: REPUBLIC OF NORTH MACEDONIA - Macedonia
+Rep first name: ILINA - None
+Rep last name: NESIKJ - None
+Rep email: INS@BALKANCSD.NET - None
+Last updated: 2019-12-17 -
+----------------------
+Match in database found for CHILD HELPLINE INTERNATIONAL
+----------------------
+Comparing NGO CHILD HELPLINE INTERNATIONAL (EU) - (NgoAdvisor)
+Name: CHILD HELPLINE INTERNATIONAL - CHILD HELPLINE INTERNATIONAL
+Acronym:  -
+Aim:  - None
+Activities:  - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Children & Youth', 'Capacity building', 'Networking for Good', 'ICTs - Connectivity - Access', 'Human Rights']
+Accreditations: restapi.NgoAccreditation.None - None
+Match in database found for DEFENCE for CHILDREN INTERNATIONAL
+----------------------
+Comparing NGO DEFENCE FOR CHILDREN INTERNATIONAL (EU) - (NgoAdvisor)
+Name: DEFENCE FOR CHILDREN INTERNATIONAL - DEFENCE FOR CHILDREN INTERNATIONAL
+Acronym: DEI -
+Aim:  - None
+Activities:  - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Children & Youth', 'Human Rights']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 1979 - 1979
+Staff: 3 - None
+Member: 45 - None
+Working languages: ENGLISH - FRENCH - SPANISH - None
+Funding: MEMBER FEES - None
+Pres first name: RIFAT - None
+Pres last name: KASSIS - None
+Type: restapi.NgoType.None - ['nonprofit', 'alliance']
+Yearly income:  - None
+Phone number: + 41 22 734 05 58 - None
+Email:  - None
+Website: WWW.DCI-IS.ORG - http://www.defenceforchildren.org
+Street: RUE VAEMBÉ 1; P.O. BOX 88 - None
+Postcode: 1211 - None
+City: GENÈVE -
+Country: SWITZERLAND - Switzerland
+Rep first name: ALEX - None
+Rep last name: KAMAROTOS - None
+Rep email: ALEX.KAMAROTOS@DEFENCEFORCHILDREN.ORG - None
+Last updated: 2018-01-03 -
+----------------------
+Match in database found for HUMAN RIGHTS WATCH
+----------------------
+Comparing NGO HUMAN RIGHTS WATCH (EU) - (NgoAdvisor)
+Name: HUMAN RIGHTS WATCH - HUMAN RIGHTS WATCH
+Acronym: HRW -
+Aim:  - None
+Activities:  - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Human Rights']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: None - 1978
+Staff: 0 - None
+Member: 0 - None
+Working languages:  - None
+Funding:  - None
+Pres first name: JAMES F. - None
+Pres last name: HOGE JR - None
+Type: restapi.NgoType.None - ['nonprofit']
+Yearly income:  - None
+Phone number: -5201 - None
+Email:  - None
+Website: WWW.HRW.ORG - https://www.hrw.org
+Street: 350 FIFTH AVENUE, 34TH FLOOR - None
+Postcode: NY 10118-3 - None
+City: NEW YORK - New York
+Country: USA - USA
+Rep first name: PHILIPPE - None
+Rep last name: DAM - None
+Rep email: DAMP@HRW.ORG - None
+Last updated: 2018-01-03 -
+----------------------
+Match in database found for INTERNATIONAL COMMISSION OF JURISTS
+----------------------
+Comparing NGO INTERNATIONAL COMMISSION OF JURISTS (EU) - (NgoAdvisor)
+Name: INTERNATIONAL COMMISSION OF JURISTS - INTERNATIONAL COMMISSION OF JURISTS
+Acronym: ICJ -
+Aim:  - None
+Activities:  - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Human Rights', 'Law and Justice']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: None - 1952
+Staff: 0 - None
+Member: 0 - None
+Working languages:  - None
+Funding:  - None
+Pres first name:  - None
+Pres last name:  - None
+Type: restapi.NgoType.None - ['nonprofit']
+Yearly income:  - None
+Phone number:  - None
+Email:  - None
+Website:  - http://www.icj.org/
+Street:  - None
+Postcode:  - None
+City:  - Geneva
+Country: SWITZERLAND - Switzerland
+Rep first name: ERNST - None
+Rep last name: LUEBER - None
+Rep email: INFO@ICJ.ORG - None
+Last updated: 2020-04-10 -
+----------------------
+Match in database found for TRANSPARENCY INTERNATIONAL
+----------------------
+Comparing NGO TRANSPARENCY INTERNATIONAL (EU) - (NgoAdvisor)
+Name: TRANSPARENCY INTERNATIONAL - TRANSPARENCY INTERNATIONAL
+Acronym: TI -
+Aim: TRANSPARENCY INTERNATIONAL, THE GLOBAL CIVIL SOCIETY ORGANISATION LEADING THE FIGHT AGAINST CORRUPTION, BRINGS PEOPLE TOGETHER IN A POWERFUL WORLDWIDE COALITION TO END THE DEVASTATING IMPACT OF CORRUP - None
+Activities: RESEARCH AND PUBLICAIONS; PROVIDING EXPERTISE TO GOVERNMENTS, BUSINESS, INTERNATIONAL ORGANISATIONS AND CIVIL SOCIETY; RAISING AWARENESS ON ANTI-CORRUPTION RELATED TOPICS; PROJECT IMPLEMENTATION - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Law and Justice']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 1993 - 1993
+Staff: 110 - None
+Member: 100 - None
+Working languages: ENGLISH - None
+Funding: PUBLIC AND PRIVATE FUNDING - None
+Pres first name: DELIA - None
+Pres last name: FERREIRA RUBIO - None
+Type: restapi.NgoType.None - ['nonprofit']
+Yearly income:  - None
+Phone number: +49-30-3438200 - None
+Email: TI@TRANSPARENCY.ORG - None
+Website: WWW.TRANSPARENCY.ORG - http://www.transparency.org
+Street: ALT-MOABIT 96 - None
+Postcode: 10559 - None
+City: BERLIN - Berlin
+Country: GERMANY - Germany
+Rep first name: DELIA - None
+Rep last name: FERREIRA RUBIO - None
+Rep email: TI@TRANSPARENCY.ORG - None
+Last updated: 2020-03-27 -
+----------------------
+Match in database found for World Organisation Against Torture
+----------------------
+Comparing NGO WORLD ORGANISATION AGAINST TORTURE (EU) - (NgoAdvisor)
+Name: WORLD ORGANISATION AGAINST TORTURE - WORLD ORGANISATION AGAINST TORTURE
+Acronym: OMCT -
+Aim: THE OMCT WORKS WITH AROUND 200 MEMBER ORGANISATIONS WHICH CONSTITUTE ITS SOS-TORTURE NETWORK, TO END TORTURE, FIGHT IMPUNITY AND PROTECT HUMAN RIGHTS DEFENDERS WORLDWIDE. TOGETHER, WE MAKE UP THE LARGEST GLOBAL GROUP A
+CTIVELY STANDING UP TO TORTURE. HELPING LOCAL VOICES BE HEARD, WE SUPPORT OUR VITAL PARTNERS IN THE FIELD AND PROVIDE DIRECT ASSISTANCE TO VICTIMS. OMCT’S INTERNATIONAL SECRETARIAT IS BASED IN GENEVA, WITH OFFICES IN BRUSSELS AND TU
+NIS. - None
+Activities:  - None
+Branches: restapi.NgoBranch.None - ['Worldwide']
+Topics: restapi.NgoTopic.None - ['Human Rights']
+Accreditations: restapi.NgoAccreditation.None - None
+Founding year: 1985 - 1986
+Staff: 0 - None
+Member: 200 - None
+Working languages:  - None
+Funding:  - None
+Pres first name: HINA - None
+Pres last name: JILANI - None
+Type: restapi.NgoType.None - ['network']
+Yearly income:  - None
+Phone number: + 41 22 809 4939 - None
+Email: OMCT@OMCT.ORG - None
+Website: HTTPS://WWW.OMCT.ORG/ - http://www.omct.org
+Street: PO BOX 21, 8, RUE DU VIEUX-BILLARD - None
+Postcode: 1211 - None
+City: GENEVA -
+Country: SWITZERLAND - Switzerland
+Rep first name: GERALD - None
+Rep last name: STABEROCK - None
+Rep email: OMCT@OMCT.ORG - None
+Last updated: 2020-03-30 -
+----------------------

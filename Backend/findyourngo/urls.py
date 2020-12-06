@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import include, path
+from django.conf.urls import url
 from rest_framework import routers
-from findyourngo.restapi import views
+from findyourngo.restapi.controllers import views, ngo_controller
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -28,4 +29,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
+    url(r'^ngos', ngo_controller.ngo_list),
+    url(r'^ngos/(?P<pk>[0-9]+)$', ngo_controller.ngo_detail),
 ]
+

@@ -1,0 +1,56 @@
+<mat-sidenav-container>
+
+  <!-- sidenav for mobile -->
+  <mat-sidenav #sidenav class="sidenav" mode="over">
+    <mat-nav-list>
+      <div class="sidenav-head">
+        <mat-list-item class="sidenav-item" routerLink="/" (click)="sidenav.close()">
+        </mat-list-item>
+      </div>
+      <mat-accordion>
+        <mat-list-item class="sidenav-item" *ngFor="let screen of screens" [routerLink]="getRouterLink(screen)"
+          routerLinkActive="active" (click)="sidenav.close()">
+          <mat-icon color="primary">{{getScreenIcon(screen)}}</mat-icon>
+          <span class="sidenav-label">{{screen}}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </mat-accordion>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- navbar -->
+  <mat-toolbar color="primary" class="navbar">
+    <mat-toolbar-row class="navbar-row" [ngClass]="{'mobile': media?.isMobile(), 'desktop': media?.isDesktop()}">
+
+      <!-- mobile navbar -->
+      <ng-container class="mobile-navbar" *ngIf="media?.isMobile()">
+        <button mobile-menu-icon mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon class="navbar-label">menu</mat-icon>
+        </button>
+        <span class="navbar-label" (click)="sidenav.toggle()">{{ currentTitle || 'Find your NGO' }}</span>
+      </ng-container>
+
+      <!-- desktop navbar -->
+      <ng-container class="desktop-navbar" *ngIf="media?.isDesktop()">
+        <nav mat-tab-nav-bar>
+          <a mat-tab-link *ngFor="let screen of screens" (click)="activeScreen = screen"
+            [active]="activeScreen == screen" [routerLink]="getRouterLink(screen)">
+            <span class="navbar-label">{{screen}}</span>
+          </a>
+        </nav>
+      </ng-container>
+
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+
+  <!-- screen content -->
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+
+  <button class="search" routerLink="/search" mat-fab mat-accent>
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-sidenav-container>
