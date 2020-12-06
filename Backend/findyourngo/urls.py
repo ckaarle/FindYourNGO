@@ -31,5 +31,6 @@ urlpatterns = [
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
     url(r'^ngos', ngo_controller.ngo_list),
     url(r'^ngos/(?P<pk>[0-9]+)$', ngo_controller.ngo_detail),
+    path('recalculateTW', views.recalculateTW, name='recalculateTW'),
 ]
 

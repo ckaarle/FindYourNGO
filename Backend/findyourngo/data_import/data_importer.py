@@ -1,10 +1,11 @@
 import pickle
-from typing import List, Optional
+from typing import List, Optional, Iterable
 
 from findyourngo.data_import.InfoClasses import Info
 from findyourngo.data_import.european_council.parser import parse_european_council
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccreditation, NgoDataSource, NgoMetaData, \
-    NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType
+    NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore
+from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 
 
 def _invalid_country(country: str) -> bool:
@@ -409,6 +410,8 @@ def convert_ngo(
         Ngo.objects.get(name=name, acronym=acronym)
         print(f'XXXXXXXXXXXXXXXXXXXXXXXX --- Ngo with name {name} and acronym {acronym} already in database -- skipping')
     except:
+        tw_score = _get_ngo_tw_score(accreditation, meta_data)
+
         ngo = Ngo.objects.create(
             name=name,
             acronym=acronym,
@@ -417,6 +420,7 @@ def convert_ngo(
             stats=stats,
             contact=contact,
             meta_data=meta_data,
+            tw_score=tw_score,
         )
         for b in branch:
             ngo.branches.add(b.id)
@@ -428,6 +432,22 @@ def convert_ngo(
             ngo.accreditations.add(a.id)
 
     return ngo
+
+
+def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoMetaData) -> NgoTWScore:
+    tw_calculator = TWCalculator()
+    number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(meta_data)
+    credible_source_score = tw_calculator.calculate_data_source_credibility_score(meta_data)
+    ecosoc_score = tw_calculator.calculate_ecosoc_score(accreditation)
+    total_score = tw_calculator.calculate_tw_from_partial_scores(number_data_sources_score, credible_source_score,
+                                                                 ecosoc_score)
+    tw_score = NgoTWScore.objects.create(
+        number_data_sources_score=number_data_sources_score,
+        credible_source_score=credible_source_score,
+        ecosoc_score=ecosoc_score,
+        total_tw_score=total_score,
+    )
+    return tw_score
 
 
 def convert_to_model_classes(infos: List[Info], data_source: str, source_credible: bool = False, index: Optional[int] = None) -> None:
@@ -452,7 +472,6 @@ def convert_to_model_classes(infos: List[Info], data_source: str, source_credibl
         ngo = convert_ngo(info, branch, topic, accreditation, meta_data, contact, stats)
         after = Ngo.objects.all()
 
-        print(f'Before {len_before} - after {len(after)}')
         assert len_before + 1 == len(after)
         print(f'IMPORT info # {idx} FINISHED')
 
@@ -519,7 +538,22 @@ def _print_comparison(info_match: Ngo, info: Info) -> None:
     print('----------------------')
 
 
-def _update_with_ngo_advisor_info(info_match: Ngo, info: Info) -> None:
+def update_ngo_tw_score(ngo: Ngo) -> None:
+    ngo_tw_score = ngo.tw_score
+    tw_calculator = TWCalculator()
+    number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(ngo.meta_data)
+    credible_source_score = tw_calculator.calculate_data_source_credibility_score(ngo.meta_data)
+    ecosoc_score = tw_calculator.calculate_ecosoc_score(ngo.accreditations.all())
+
+    ngo_tw_score.number_data_sources_score = number_data_sources_score
+    ngo_tw_score.credible_source_score = credible_source_score
+    ngo_tw_score.ecosoc_score = ecosoc_score
+
+    ngo_tw_score.total_tw_score = tw_calculator.calculate_tw_from_ngo_tw_score(ngo_tw_score)
+    ngo_tw_score.save()
+
+
+def _update_with_ngo_advisor_info(info_match: Ngo, info: Info, source: str, credible: bool) -> None:
     if info_match.name == 'AMNESTY INTERNATIONAL':
         info_match.contact.address.country = info.main_info.address.country.strip()
         _add_all_types(info, info_match)
@@ -586,6 +620,11 @@ def _update_with_ngo_advisor_info(info_match: Ngo, info: Info) -> None:
     else:
         raise ValueError(f'Unexpected NGO match found: {info_match.name}')
 
+    data_source = convert_ngo_data_source(source, credible)[0]
+
+    info_match.meta_data.info_source.add(data_source)
+    info_match.meta_data.save()
+    update_ngo_tw_score(info_match)
     info_match.save()
 
 
@@ -721,16 +760,23 @@ def run_initial_data_import() -> bool:
             _print_comparison(info_match, info)
 
             match_count += 1
-            _update_with_ngo_advisor_info(info_match, info)
+            _update_with_ngo_advisor_info(info_match, info, 'NgoAdvisor', False)
         except:
             print('No match found, creating new entry')
             convert_to_model_classes([info], 'NgoAdvisor', False, idx + already_imported_entries)
 
     print(f'Total number of matches: {match_count}')
 
+    print(f'Updating the TW score, since it depends on # data sources, which might have changed after the initial import')
+    all_ngo_entries = Ngo.objects.all()
+
+    for ngo in all_ngo_entries:
+        update_ngo_tw_score(ngo)
+        ngo.save()
+
+
     print('DATA IMPORT (NgoAdvisor) FINISHED')
 
-    all_ngo_entries = Ngo.objects.all()
 
     print(f'All NGOS: {len(all_ngo_entries)}')
     print(f'EU NGOS: {len(european_council_info)}')

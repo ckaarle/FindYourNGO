@@ -4,10 +4,10 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from findyourngo.data_import.data_importer import run_initial_data_import
+from findyourngo.data_import.data_importer import run_initial_data_import, update_ngo_tw_score
 from findyourngo.data_import.db_sql_queries import delete_all_query
+from findyourngo.restapi.models import Ngo
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
-
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -41,3 +41,10 @@ def clearDatabase(request):
     cursor.execute(delete_all_query)
     transaction.commit()
     return HttpResponse('Database has been cleared')
+
+
+def recalculateTW(request):
+    for ngo in Ngo.objects.all():
+        update_ngo_tw_score(ngo)
+        ngo.save()
+    return HttpResponse('Trustworthiness scores have been recalculated')

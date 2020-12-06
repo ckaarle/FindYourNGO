@@ -13,7 +13,7 @@ RestAPI guide: https://www.django-rest-framework.org/tutorial/quickstart/
 django-admin can be used inside the cli with docker-compose exec web /bin/bash
 
 
-# Setup Guide
+## Setup Guide
 - start docker containers
 - start console in server container
 	- python manage.py makemigrations
@@ -22,23 +22,60 @@ django-admin can be used inside the cli with docker-compose exec web /bin/bash
 - go to localhost:8000/dataImport
 	- this imports the data if the database is currently empty (meaning once it is imported, it doesn't do anything)
 
-
 To clean the database, go to localhost:8000/clearDatabase.
 
 
-# Postgres
+### Development: Typing
+Install the MyPy-Plugin and run its scan. Examples for how to type python code can be found in /Backend/data/import/european_council.
 
-## Make Postgres Persistent
+
+### Development: Resetting the database
+In case of incompatible migrations / an out-of-date state of the database, it can be rest in the following way:
+- Clear the database first
+- execute shell in the web container
+	- python manage.py showmigrations -- lists all previously applied migrations
+	- python manage.py migrate --fake restapi zero -- undos the migrations
+	- python manage.py showmigrations -- make sure that all migrations on restapi have been set to unapplied
+- delete the migration files in the backend (make sure to not delete __init__.py)
+- execute shell in the web container
+	- python manage.py showmigrations -- make sure all restapi-migrations have disappeared from the list
+	- python manage.py makemigrations -- re-make initial migration
+	- python manage.py migrate -- apply the initial migration
+	
+
+In case this does not fix the problem, you can reset the entire database:
+- delete all model classes in models.py
+- manually drop all restapi-tables in the database (!! only the tables starting with restapi_ !!)
+- reset migrations as described above
+- run makemigrations, migrate to let it detect that the database is clean
+- put the model classes back in
+- run makemigrations, migrate again to setup the database
+
+
+### Postgres
+
+#### Make Postgres Persistent
 If you are using Windows, there might be an issue with file permissions using a local directory as a volume.
 
 Instead, manually create a docker volume via the command: docker volume create findyourngovolume
 The data will then be persisted into this volume.
 
 
-## Access Postgres DB from outside of docker
+#### Access Postgres DB from outside of docker
 Postgres in docker is mapped to port 5433 (not the default 5432, since this can clash with local installations of postgres). Open the database menu in PyCharm, click on '+', 'PostgreSQL', enter correct port, username (postgres) and password (postgres). Use the 'test connection' button to make sure it actually works.
 Alternatively, you can also connect via pgAdmin.
 
 
-# Typing
-Install the MyPy-Plugin and run its scan. Examples for how to type python code can be found in /Backend/data/import/european_council.
+## Architecture
+
+TODO
+Refer to https://docs.docker.com/compose/django/ for a quick overview of how the infrastructure was built.
+RestAPI guide: https://www.django-rest-framework.org/tutorial/quickstart/
+django-admin can be used inside the cli with docker-compose exec web /bin/bash
+
+
+### Functionality
+
+#### Trustworthiness Calculation
+Please refer to [this](./Backend/findyourngo/README.md) document.
+
