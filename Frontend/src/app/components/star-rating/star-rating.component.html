@@ -1,0 +1,4 @@
+<div class="star-rating">
+    <mat-icon class="star" *ngFor="let i of starArray; let in=index" [style.color]="in>value?'gray':'inherit'" (click)="editable? onClickItem(in): null">
+        star</mat-icon>
+</div>
