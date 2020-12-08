@@ -1,5 +1,18 @@
 .star-rating {
     display: flex;
     flex-direction: row;
-    color: var(--primary-color);
+
+    .star-container {
+        &.empty {
+            .star {
+            color: gray;
+            }
+        }
+
+        &.filled {
+            .star {
+            color: var(--primary-color)
+            }
+        }
+    }
 }

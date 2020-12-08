@@ -4,7 +4,7 @@ export interface NgoOverviewItem {
     id: number;
     name: string;
     acronym: string;
-    city: number; //TODO!
+    city: number;
     trustworthiness: number;
     amount: number;
 }

@@ -20,7 +20,6 @@ export class OverviewScreenComponent implements OnInit {
     this.overviewService.getNgoOverviewItems().subscribe(data => {
       this.overviewItems = data;
       this.overviewItems.forEach(overviewItem => {
-        overviewItem.trustworthiness = 3; //TODO: replace with trustworthiness value
         overviewItem.amount = 10; //TODO: replace with amount of votes
       })
     })
