@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact
+from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoTWScore
 
 
 class NgoOverviewItemAddressSerializer(serializers.ModelSerializer):
@@ -28,19 +28,33 @@ class NgoOverviewItemContactSerializer(serializers.ModelSerializer):
         return address_representation
 
 
+class NgoOverviewItemTWScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NgoTWScore
+        fields = ['total_tw_score']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        tw_score_representation = representation.pop('total_tw_score')
+
+        return tw_score_representation
+
+
 class NgoOverviewItemSerializer(serializers.ModelSerializer):
+    trustworthiness = NgoOverviewItemTWScoreSerializer(source="tw_score")
     city = NgoOverviewItemContactSerializer(source="contact")
 
     class Meta:
         model = Ngo
-        fields = ['id', 'name', 'acronym', 'city']
+        fields = ['id', 'name', 'acronym', 'city', 'trustworthiness']
 
     def to_internal_value(self, data):
-        address_internal = {}
+        values_internal = {}
         for key in NgoOverviewItemContactSerializer.Meta.fields:
             if key in data:
-                address_internal[key] = data.pop(key)
+                values_internal[key] = data.pop(key)
 
         internal = super().to_internal_value(data)
-        internal['city'] = address_internal
+        internal['city'] = values_internal
+        internal['trustworthiness'] = values_internal
         return internal
