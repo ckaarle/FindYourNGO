@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { OverviewService } from './services/overview.service';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
+import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     FavouritesScreenComponent,
     NgoOverviewItemComponent,
     StarRatingComponent,
+    ValueTransformerPipe,
   ],
   exports: [
     MatTabsModule,
@@ -49,11 +51,12 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     MatIconModule,
     MatListModule,
     MatExpansionModule,
-    MatCardModule,
+    MatCardModule
   ],
   providers: [
     MediaService,
-    OverviewService
+    OverviewService,
+    ValueTransformerPipe
   ]
 })
 export class SharedModule { }
