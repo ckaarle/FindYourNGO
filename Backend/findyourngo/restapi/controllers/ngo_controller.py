@@ -13,7 +13,33 @@ def ngo_list(request):
     if request.method == 'GET':
         ngos = Ngo.objects.all()
 
-        # TODO: any conditions?
+        name = request.query_params.get('name')
+        if name:
+            ngos = ngos.filter(name__icontains=name)
+            ngo_serializer = NgoSerializer(ngos, many=True)
+            return JsonResponse(ngo_serializer.data, safe=False)
+
+        operation = request.query_params.get('operation')
+        if operation:
+            ngos = ngos.filter(branches__country__contains=operation)
+
+        region = request.query_params.get('region')
+        if region:
+            pass
+            #ngos = ngos.filter(branches__country__contains=operation)
+
+        office = request.query_params.get('office')
+        if office:
+            ngos = ngos.filter(contact__address__country=office)
+
+        activity = request.query_params.get('activity')
+        if activity:
+            ngos = ngos.filter(activities__contains=activity)
+
+        trust = request.query_params.get('trust')
+        if trust:
+            pass
+            #ngos = ngos.filter(branches__country__contains=trust)
 
         ngo_serializer = NgoSerializer(ngos, many=True)
         return JsonResponse(ngo_serializer.data, safe=False)
