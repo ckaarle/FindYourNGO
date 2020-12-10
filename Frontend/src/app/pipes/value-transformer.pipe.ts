@@ -15,12 +15,18 @@ export class ValueTransformerPipe implements PipeTransform {
   }
 
   starRound(value: number) {
-    if (value % 1 < 3) {
+    if (value % 1 < .3) {
       return Math.floor(value);
-    } else if (value % 1 > 7) {
-      return Math.ceil(value);
     } else {
-      return value;
+      return Math.ceil(value);
     }
+  }
+
+  hasHalfStar(value: number) {
+    var decimals = parseFloat((value % 1).toFixed(1));
+    if (decimals <= .7 && decimals >= .3) {
+      return true;
+    }
+    return false;
   }
 }

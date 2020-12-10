@@ -15,13 +15,11 @@ export class StarRatingComponent implements OnInit {
   @Input() value: number = 0;
   @Input() editable: boolean = false;
 
-  constructor() { }
+  constructor(private valueFormatter: ValueTransformerPipe) { }
 
   ngOnInit(): void {
     this.starArray = new Array(this.MAX_AMOUNT_OF_STARS);
-    if (this.value % 1 <= .7 && this.value % 1 >= .3) {
-      this.hasHalfStar = true;
-    }
+    this.hasHalfStar = this.valueFormatter.hasHalfStar(this.value);
   }
 
   onClickItem(value: number) {

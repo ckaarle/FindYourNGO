@@ -1,6 +1,6 @@
 <div class="star-rating">
-    <div class="star-container" *ngFor="let i of starArray; let in=index" [ngClass]="{'empty': in > (value | valueTransformer: 'starRound'), 'filled': in <= (value | valueTransformer: 'starRound') }">
+    <div class="star-container" *ngFor="let i of starArray; let in=index">
         <mat-icon class="star" *ngIf="hasHalfStar && in == (value | valueTransformer: 'starRound')" (click)="editable? onClickItem(in): null">star_half</mat-icon>
-        <mat-icon class="star" *ngIf="!hasHalfStar || in != (value | valueTransformer: 'starRound')" (click)="editable? onClickItem(in): null">star</mat-icon>
+        <mat-icon class="star" *ngIf="!hasHalfStar || in != (value | valueTransformer: 'starRound')" (click)="editable? onClickItem(in): null">{{in > (value | valueTransformer: 'starRound')? 'star_outline': 'star'}}</mat-icon>
     </div>
 </div>

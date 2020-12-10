@@ -3,16 +3,8 @@
     flex-direction: row;
 
     .star-container {
-        &.empty {
-            .star {
-            color: gray;
-            }
-        }
-
-        &.filled {
-            .star {
+        .star {
             color: var(--primary-color)
-            }
         }
     }
 }
