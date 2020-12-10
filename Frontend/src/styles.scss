@@ -3,15 +3,15 @@
 /* Styling variables */
 :root {
   //colors
-  --primary-color: #FFC107;
-  --secondary-color: #C62828;
+  --primary-color: #ffc107;
+  --secondary-color: #c62828;
 
-  --primary-contrast-bw: #424242; //use this for text on primary color background
-  --secondary-contrast-bw: #ffffff; //use this for text on secondary color background
+  --primary-contrast-bw: #424242;
+  --secondary-contrast-bw: #ffffff;
 
-  --threshold-neutral: #9e9e9e; //use this for neutral values
-  --threshold-positive: #69f0ae; //use this for positive values
-  --threshold-negative: #c62828; //use this for negative values
+  --threshold-neutral: #9e9e9e;
+  --threshold-positive: #cddc39;
+  --threshold-negative: #c62828;
 
   --background-color: #ffffff;
   --background-contrast-color: #424242;
@@ -27,8 +27,9 @@
 
   //line heights
   --line-height-big: 24px;
+  --line-height-medium: 17px;
   --line-height-normal: 15px;
-  --line-height-small: 13px;
+  --line-height-small: 12px;
 
   //opacities
   --opacity-normal: 0.8;
@@ -40,8 +41,8 @@
 $custom-typography: mat-typography-config(
   $font-family: "Roboto, Helvetiva Neue, sans-serif",
   $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 700), //h1
-  $title: mat-typography-level(var(--font-size-medium), var(--line-height-big), 500), //h2
-  $body-1: mat-typography-level(var(--font-size-normal), var(--font-size-normal), 300), //text-body
+  $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
+  $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
 );
 
 @include mat-core($custom-typography);

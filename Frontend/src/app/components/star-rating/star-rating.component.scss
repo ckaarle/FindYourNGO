@@ -1,0 +1,10 @@
+.star-rating {
+    display: flex;
+    flex-direction: row;
+
+    .star-container {
+        .star {
+            color: var(--primary-color)
+        }
+    }
+}

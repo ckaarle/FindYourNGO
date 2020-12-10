@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats
+    NgoStats, NgoTWScore, NgoType
+
+
+class NgoTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NgoType
+        fields = ['type']
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -26,13 +32,7 @@ class NgoRepresentativeSerializer(serializers.ModelSerializer):
 
 
 class NgoStatsSerializer(serializers.ModelSerializer):
-    typeOfOrganization = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='type',
-        source='type_of_organization'
-    )
-
+    typeOfOrganization = NgoTypeSerializer(source="type", many=True, read_only=True)
     foundingYear = serializers.IntegerField(source='founding_year')
     staffNumber = serializers.IntegerField(source='staff_number')
     memberNumber = serializers.IntegerField(source='member_number')
@@ -46,6 +46,17 @@ class NgoStatsSerializer(serializers.ModelSerializer):
         fields = ['foundingYear', 'staffNumber', 'memberNumber', 'workingLanguages', 'funding',
                   'presidentFirstName', 'presidentLastName', 'typeOfOrganization',
                   'yearlyIncome']
+
+
+class NgoTWSerializer(serializers.ModelSerializer):
+    totalTwScore = serializers.FloatField(source='total_tw_score')
+    numberDataSourcesScore = serializers.FloatField(source='number_data_sources_score')
+    credibleSourceScore = serializers.FloatField(source='credible_source_score')
+    ecosocScore = serializers.FloatField(source='ecosoc_score')
+
+    class Meta:
+        model = NgoTWScore
+        fields = ['totalTwScore', 'numberDataSourcesScore', 'credibleSourceScore', 'ecosocScore']
 
 
 class NgoContactSerializer(serializers.ModelSerializer):
@@ -90,9 +101,9 @@ class NgoSerializer(serializers.ModelSerializer):
     stats = NgoStatsSerializer(read_only=True)
     contact = NgoContactSerializer(read_only=True)
     metaData = NgoMetaDataSerializer(source='meta_data', read_only=True)
+    twScore = NgoTWSerializer(source="tw_score", read_only=True)
 
     class Meta:
         model = Ngo
         fields = ['id', 'name', 'acronym', 'aim', 'activities', 'branches', 'topics', 'accreditations', 'stats',
-                  'contact',
-                  'metaData']
+                  'contact', 'metaData', 'twScore']

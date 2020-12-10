@@ -1,0 +1,23 @@
+<div class="ngo-overview-item">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ngoOverviewItem.name}}</mat-card-title>
+            <mat-card-subtitle>{{ngoOverviewItem.acronym}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="location">
+                <mat-icon>location_on</mat-icon>
+                <div class="city">{{ngoOverviewItem.city}}</div>
+            </div>
+            <div class="rating">
+                <star-rating
+                [value]="ngoOverviewItem.trustworthiness - 1"
+                [editable]="editableRating"></star-rating>
+                <div class="rating-values">
+                    <div class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness}}</div>
+                    <div class="rating-values-amount">( {{ngoOverviewItem.amount}} )</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
