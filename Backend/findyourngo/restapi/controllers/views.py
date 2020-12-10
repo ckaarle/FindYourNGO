@@ -7,7 +7,7 @@ from rest_framework import permissions
 from findyourngo.data_import.data_importer import run_initial_data_import, update_ngo_tw_score
 from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
-from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, CountrySerializer
+from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic
 
 
@@ -46,11 +46,6 @@ class NGOViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(branches__country__contains=country)
 
         return queryset
-
-
-class CountryViewSet(viewsets.ModelViewSet):
-    queryset = NgoBranch.objects.all().order_by('country')
-    serializer_class = CountrySerializer
 
 
 def dataImport(request):
