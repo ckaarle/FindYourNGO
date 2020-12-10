@@ -25,14 +25,14 @@ export class OverviewScreenComponent implements OnInit {
     });
   }
 
-  private processPaginatedResults(data): void {
+  private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.nextPage = data.next;
     this.previousPage = data.previous;
     this.overviewItems = data.results;
 
-    // this.overviewItems.forEach(overviewItem => {
-    //   overviewItem.amount = 10; // TODO: replace with amount of votes
-    // });
+    this.overviewItems.forEach(overviewItem => {
+      overviewItem.amount = 10; // TODO: replace with amount of votes
+    });
   }
 
   getNextPage(): void {
