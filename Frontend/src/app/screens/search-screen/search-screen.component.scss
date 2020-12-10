@@ -1,0 +1,29 @@
+form {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+select {
+  width: 600px;
+  margin-left: 24px;
+}
+
+div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+hr {
+  width:40%;
+}
+
+#flex-left {
+  justify-content: left;
+}
+
+#search {
+  width: 64px;
+  align-self: flex-end;
+}

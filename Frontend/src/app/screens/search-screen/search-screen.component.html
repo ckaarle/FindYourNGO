@@ -1,1 +1,42 @@
-<p>search-screen works!</p>
+<h1>Find your NGO</h1>
+<form [formGroup]="searchForm">
+    <div>
+        <span>Country of operation</span>
+        <select id="operation" formControlName="operation">
+            <option *ngFor="let c of countries" [ngValue]="c">{{ c }}</option>
+        </select>
+    </div>
+    <div>
+        <span>Region of operation</span>
+        <select id="region" formControlName="region">
+            <option *ngFor="let c of regions" [ngValue]="c">{{ c }}</option>
+        </select>
+    </div>
+    <div>
+        <span>Head office</span>
+        <select id="office" formControlName="office">
+            <option *ngFor="let c of countries" [ngValue]="c">{{ c }}</option>
+        </select>
+    </div>
+    <div>
+        <span>Field of activity</span>
+        <select id="topic" formControlName="topic">
+            <option *ngFor="let c of topics" [ngValue]="c">{{ c }}</option>
+        </select>
+    </div>
+    <div>
+        <span>Trustworthiness</span>
+        <select id="trust" formControlName="trust">
+            <option *ngFor="let c of trustworthiness" [ngValue]="c">{{ c }}</option>
+        </select>
+    </div>
+    <button (click)="onFormSearch()" id="search">Search</button>
+    <div><hr>or<hr></div>
+</form>
+<h1>Search for a specific institution</h1>
+<div id="flex-left">
+    <form [formGroup]="nameForm">
+        <input formControlName="name">
+    </form>
+    <button (click)="onNameSearch()"><mat-icon>search</mat-icon></button>
+</div>

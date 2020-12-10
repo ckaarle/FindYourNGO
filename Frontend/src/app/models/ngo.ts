@@ -17,3 +17,11 @@ export interface NgoOverviewItemPagination {
   total_pages: number;
   current_page: number;
 }
+
+export interface Countries {
+    countries: string[];
+}
+
+export interface Topics {
+    topics: string[];
+}
