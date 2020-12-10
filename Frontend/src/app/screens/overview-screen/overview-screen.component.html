@@ -1,5 +1,10 @@
+<div>
+  <button mat-button (click)="getNextPage()" [disabled]="!nextPage">Next</button>
+  <button mat-button (click)="getPreviousPage()" [disabled]="!previousPage">Previous</button>
+</div>
 <div class="content" fxLayout="row wrap" fxLayoutGap="16px grid">
-    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems">
-        <ngo-overview-item [ngoOverviewItem]="overviewItem" [editableRating]="false"></ngo-overview-item>
-    </div>
+  <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems">
+    <ngo-overview-item [ngoOverviewItem]="overviewItem"
+                       [editableRating]="false"></ngo-overview-item>
+  </div>
 </div>
