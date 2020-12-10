@@ -19,21 +19,23 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { OverviewService } from './services/overview.service';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatExpansionModule,
-    MatCardModule,
-    FlexLayoutModule
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatExpansionModule,
+        MatCardModule,
+        FlexLayoutModule,
+        ReactiveFormsModule
+    ],
   declarations: [
     OverviewScreenComponent,
     SearchScreenComponent,
