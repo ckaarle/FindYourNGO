@@ -14,4 +14,6 @@ export interface NgoOverviewItemPagination {
   next: string | null;
   previous: string | null;
   results: NgoOverviewItem[];
+  total_pages: number;
+  current_page: number;
 }

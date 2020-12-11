@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {OverviewService} from '../../services/overview.service';
 
+const MAX_PAGES_TO_DISPLAY = 5;
+
 @Component({
   selector: 'app-overview-screen',
   templateUrl: './overview-screen.component.html',
@@ -9,8 +11,9 @@ import {OverviewService} from '../../services/overview.service';
 })
 export class OverviewScreenComponent implements OnInit {
   overviewItems: NgoOverviewItem[] = [];
-  nextPage: string | null = null;
-  previousPage: string | null = null;
+  currentPageNumber = 1;
+  totalPages = 1;
+  surroundingPages: number[] = [];
 
   constructor(public overviewService: OverviewService) {
   }
@@ -26,8 +29,12 @@ export class OverviewScreenComponent implements OnInit {
   }
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
-    this.nextPage = data.next;
-    this.previousPage = data.previous;
+    const previousCurrentPage = this.currentPageNumber;
+    this.currentPageNumber = data.current_page;
+    this.totalPages = data.total_pages;
+
+    this.calculateSurroundingPages(previousCurrentPage);
+
     this.overviewItems = data.results;
 
     this.overviewItems.forEach(overviewItem => {
@@ -35,20 +42,51 @@ export class OverviewScreenComponent implements OnInit {
     });
   }
 
-  getNextPage(): void {
-    if (this.nextPage != null) {
-      this.overviewService.getPaginatedNgoOverviewItems(this.nextPage).subscribe((data: NgoOverviewItemPagination) => {
-        this.processPaginatedResults(data);
-      });
+  private calculateSurroundingPages(previousCurrentPage: number): void {
+    const pagesToAddToCurrentToReachMaxPagesToDisplay = MAX_PAGES_TO_DISPLAY - 1;
+
+    if (this.surroundingPages.length === 0) {
+      let currentPage = this.currentPageNumber;
+      while (this.surroundingPages.length < MAX_PAGES_TO_DISPLAY && currentPage <= this.totalPages) {
+        this.surroundingPages.push(currentPage);
+        currentPage += 1;
+      }
     }
+    else {
+      if (previousCurrentPage < this.currentPageNumber) {
+        const nextPageNumber = this.surroundingPages[this.surroundingPages.length - 1] + 1;
+
+        if (nextPageNumber <= this.totalPages &&
+            (this.surroundingPages.length < 2 || this.surroundingPages[this.surroundingPages.length - 1] === this.currentPageNumber)) {
+          this.surroundingPages.push(nextPageNumber);
+        }
+
+        if (this.surroundingPages.length > MAX_PAGES_TO_DISPLAY) {
+          this.surroundingPages.shift();
+        }
+
+      } else if (previousCurrentPage > this.currentPageNumber) {
+          const nextPageNumber = this.surroundingPages[0] - 1;
+
+          if (nextPageNumber >= 1 && this.surroundingPages[0] === this.currentPageNumber) {
+            this.surroundingPages.unshift(nextPageNumber);
+          }
+
+          if (this.surroundingPages.length > MAX_PAGES_TO_DISPLAY) {
+            this.surroundingPages.pop();
+          }
+
+      } else {
+        // nothing to do here
+      }
+    }
+
   }
 
-  getPreviousPage(): void {
-    if (this.previousPage != null) {
-      this.overviewService.getPaginatedNgoOverviewItems(this.previousPage).subscribe((data: NgoOverviewItemPagination) => {
-        this.processPaginatedResults(data);
-      });
-    }
+    getNgoOverviewItemsForPageNumber(pageNumber: number): void {
+    this.overviewService.getNgoOverviewItemsForPage(pageNumber).subscribe(data => {
+      this.processPaginatedResults(data);
+    });
   }
 
 }

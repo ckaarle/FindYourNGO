@@ -8,14 +8,23 @@ import {NgoOverviewItemPagination} from '../models/ngo';
 })
 export class OverviewService {
 
+  baseUrl = 'http://localhost:8000/ngoOverviewItems';
+  pageSignifier = '?page=';
+
   constructor(private http: HttpClient) {}
 
   getNgoOverviewItems(): Observable<NgoOverviewItemPagination> {
-    let endpoint = 'http://localhost:8000/ngoOverviewItems';
-    return this.http.get<NgoOverviewItemPagination>(endpoint); // TODO: move this to request service
+    return this.http.get<NgoOverviewItemPagination>(this.baseUrl); // TODO: move this to request service
   }
 
-  getPaginatedNgoOverviewItems(endpoint: string): Observable<NgoOverviewItemPagination> {
-    return this.http.get<NgoOverviewItemPagination>(endpoint);
+  getNgoOverviewItemsForPage(pageNumber: number): Observable<NgoOverviewItemPagination> {
+    if (pageNumber === 0) {
+      return this.getNgoOverviewItems();
+    }
+    else {
+      const url = this.baseUrl + this.pageSignifier + pageNumber.toString();
+      return this.http.get<NgoOverviewItemPagination>(url);
+    }
   }
+
 }

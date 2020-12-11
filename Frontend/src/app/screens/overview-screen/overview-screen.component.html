@@ -6,9 +6,19 @@
     </div>
   </div>
   <div class="buttonBar">
-    <button mat-button class="button" (click)="getPreviousPage()" [disabled]="!previousPage">
-      Previous
+    <button mat-button class="button"
+            (click)="getNgoOverviewItemsForPageNumber(currentPageNumber - 1)"
+            [disabled]="currentPageNumber <= 1">&lt;
     </button>
-    <button mat-button class="button" (click)="getNextPage()" [disabled]="!nextPage">Next</button>
+    <button mat-button
+            [ngClass]="{'buttonCurrent': pageNumber === currentPageNumber, 'button': pageNumber != currentPageNumber}"
+            *ngFor="let pageNumber of surroundingPages"
+            [disabled]="pageNumber === currentPageNumber"
+            (click)="getNgoOverviewItemsForPageNumber(pageNumber)">{{pageNumber}}
+    </button>
+    <button mat-button class="button"
+            (click)="getNgoOverviewItemsForPageNumber(currentPageNumber + 1)"
+            [disabled]="currentPageNumber >= totalPages">&gt;
+    </button>
   </div>
 </div>

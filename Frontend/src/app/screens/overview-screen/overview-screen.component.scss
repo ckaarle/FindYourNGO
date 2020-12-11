@@ -5,5 +5,11 @@
 }
 
 .button {
-  min-width: 5%;
+  min-width: 2%;
+}
+
+.buttonCurrent {
+  min-width: 2%;
+  border-color: var(--secondary-color);
+  border-style: solid;
 }
