@@ -21,9 +21,15 @@ hr {
 
 #flex-left {
   justify-content: left;
+  align-items: center;
 }
 
 #search {
   width: 64px;
   align-self: flex-end;
+}
+
+#search-icon {
+  border: 0;
+  background: none;
 }
