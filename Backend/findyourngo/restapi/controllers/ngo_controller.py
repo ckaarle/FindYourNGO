@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from findyourngo.filtering.NgoFilter import NgoFilter
-from findyourngo.restapi.models import Ngo
+from findyourngo.restapi.models import Ngo, NgoTopic, NgoBranch, NgoAddress, NgoType, NgoStats
 from findyourngo.restapi.serializers.filter_serializer import FilterSerializer
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
@@ -51,12 +51,15 @@ def ngo_detail(request, pk):
         return JsonResponse({'message': 'Ngo was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def ngo_filter(request):
+    if request.method == 'GET':
+        return JsonResponse(filter_object())
+
     filter_data = JSONParser().parse(request)
     filter_serializer = FilterSerializer(data=filter_data)
 
-    if filter_serializer.is_valid():
+    if filter_serializer.is_valid() and request.method == 'POST':
         filter_config = filter_serializer.create(filter_serializer.validated_data)
         filter = NgoFilter(filter_config)
         ngo_result: QuerySet = filter.apply()
@@ -66,3 +69,43 @@ def ngo_filter(request):
         return JsonResponse(result_serializer.data, safe=False)
 
     return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def filter_object(): #TODO: can this be moved to NgoFilter?
+    return {
+            'branches': {"displayName": "Branches", "values": branches(), "icon": "account_tree"},
+            'topics': {"displayName": "Topics", "values": topics(), "icon": "topic"},
+            'hasEcosoc': {"displayName": "Accreditations", "values": False, "icon": "account_balance"},
+            'isCredible': {"displayName": "Credibility", "values": False, "icon": "loyalty"},
+            'countries': {"displayName": "Countries", "values": hq_countries(), "icon": "flag"},
+            'cities': {"displayName": "Cities", "values": None, "icon": "location_on"},
+            'contactOptionPresent': {"displayName": "Contactable", "values": False, "icon": "how_to_reg"},
+            'typeOfOrganization': {"displayName": "Type of organization", "values": types_of_organization(), "icon": "corporate_fare"},
+            'workingLanguages': {"displayName": "Working languages", "values": working_languages(), "icon": "translate"},
+            'funding': {"displayName": "Funding", "values": funding(), "icon": "attach_money"},
+            'trustworthiness': {"displayName": "Trustworthiness", "values": None, "icon": "star"}
+        }
+
+def branches():
+    branches = list(map(lambda ngo_branch: ngo_branch['country'], NgoBranch.objects.all().order_by('country').values('country').distinct()))
+    return branches
+
+def topics():
+    topics = list(map(lambda ngo_topic: ngo_topic['topic'], NgoTopic.objects.all().order_by('topic').values('topic').distinct()))
+    return topics
+
+def hq_countries():
+    hq_countries = list(map(lambda ngo_hq_address: ngo_hq_address['country'], NgoAddress.objects.all().order_by('country').values('country').distinct()))
+    return hq_countries
+
+def types_of_organization():
+    types_of_organization = list(map(lambda ngo_type: ngo_type['type'], NgoType.objects.all().order_by('type').values('type').distinct()))
+    return types_of_organization
+
+def working_languages():
+    return ["English", "French", "German"]
+
+def funding():
+    funding = list(map(lambda ngo_stats: ngo_stats['funding'], NgoStats.objects.all().order_by('funding').values('funding').distinct()))
+    return funding
+
