@@ -36,12 +36,15 @@ class FilterConfig:
         self.trustworthiness_lower_bound = trustworthiness_lower_bound
 
     def _add_translations(self, languages: List[str]) -> List[str]:
-        languages = list(map(str.upper, languages))
-        languages_with_translations = []
+        if languages is None or not languages:
+            return languages
+        else:
+            languages = list(map(str.upper, languages))
+            languages_with_translations = []
 
-        for key, values in self._language_translations.items():
-            if key.upper() in languages:
-                languages_with_translations.append(key)
-                languages_with_translations.extend(values)
+            for key, values in self._language_translations.items():
+                if key.upper() in languages:
+                    languages_with_translations.append(key)
+                    languages_with_translations.extend(values)
 
-        return languages_with_translations
+            return languages_with_translations

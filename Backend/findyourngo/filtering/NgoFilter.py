@@ -12,6 +12,18 @@ class NgoFilter:
 
     def __init__(self, filter_config: FilterConfig):
         self._filter_config = filter_config
+        print(f'FILTER CONFIG: {filter_config}')
+        print(filter_config.branches_to_include)
+        print(filter_config.topics_to_include)
+        print(filter_config.use_ecosoc)
+        print(filter_config.use_credible_source)
+        print(filter_config.hq_country_to_include)
+        print(filter_config.hq_city_to_include)
+        print(filter_config.use_contact_possible)
+        print(filter_config.types_of_organization_to_include)
+        print(filter_config.working_languages_to_include)
+        print(filter_config.funding_to_include)
+        print(filter_config.trustworthiness_lower_bound)
 
     def apply(self) -> QuerySet:
         query_set = self._add_all_filters()

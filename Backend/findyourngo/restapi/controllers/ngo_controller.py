@@ -60,9 +60,12 @@ def ngo_filter(request):
     filter_serializer = FilterSerializer(data=filter_data)
 
     if filter_serializer.is_valid() and request.method == 'POST':
+        print(f'REQUEST WAS {filter_data}')
         filter_config = filter_serializer.create(filter_serializer.validated_data)
         filter = NgoFilter(filter_config)
         ngo_result: QuerySet = filter.apply()
+
+        print(f'FOUND {len(ngo_result)} RESULTS')
 
         result_serializer = NgoSerializer(ngo_result, many=True)
 
@@ -71,7 +74,7 @@ def ngo_filter(request):
     return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def filter_object(): #TODO: can this be moved to NgoFilter?
+def filter_object(): #TODO: can this be moved to NgoFilter? --> I would suggest moving it somewhere else, this is not really part of the filter logic in NgoFilter
     return {
             'branches': {"displayName": "Branches", "values": branches(), "icon": "account_tree"},
             'topics': {"displayName": "Topics", "values": topics(), "icon": "topic"},
