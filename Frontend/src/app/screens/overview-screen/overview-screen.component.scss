@@ -13,3 +13,13 @@
   border-color: var(--secondary-color);
   border-style: solid;
 }
+.content {
+    display: flex;
+    justify-content: center;
+
+    .filter-bar {
+        width: 80%;
+        min-height: fill-content;
+    }
+}
+}

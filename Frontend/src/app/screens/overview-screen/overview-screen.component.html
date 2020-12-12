@@ -1,10 +1,12 @@
 <div class="content" fxLayoutGap="16px grid">
-  <div class="content" fxLayout="row wrap" fxLayoutGap="16px grid">
-    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems">
-      <ngo-overview-item [ngoOverviewItem]="overviewItem"
-                         [editableRating]="false"></ngo-overview-item>
+    <div fxLayout="row wrap">
+	    <div class="filter-bar">
+	        <ngo-filter></ngo-filter>
+	    </div>
+	    <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems">
+	        <ngo-overview-item [ngoOverviewItem]="overviewItem" [editableRating]="false"></ngo-overview-item>
+	    </div>
     </div>
-  </div>
   <div class="buttonBar">
     <button mat-button class="button"
             (click)="getNgoOverviewItemsForPageNumber(currentPageNumber - 1)"
