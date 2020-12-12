@@ -1,13 +1,22 @@
+from typing import Any
+
 from django.http.response import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.generics import GenericAPIView
+from rest_framework.pagination import PageNumberPagination
+
 from findyourngo.restapi.models import Ngo
+from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
 from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
 
 
-@api_view(['GET'])
-def ngo_overview_item_list(request):
-    if request.method == 'GET':
-        ngo_overview_items = Ngo.objects.all()
-        ngo_overview_item_serializer = NgoOverviewItemSerializer(ngo_overview_items, many=True)
-        return JsonResponse(ngo_overview_item_serializer.data, safe=False)
+class NgoOverviewItemList(GenericAPIView):
 
+    def get(self, request: Any) -> JsonResponse:
+        paginator = NgoOverviewItemListPaginator()
+        paginator.page_size = 20
+
+        self.queryset = Ngo.objects.all().order_by('name')
+        result_page = paginator.paginate_queryset(self.queryset, request)
+
+        ngo_overview_item_serializer = NgoOverviewItemSerializer(result_page, many=True)
+        return paginator.get_paginated_response(ngo_overview_item_serializer.data)

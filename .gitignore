@@ -17,3 +17,6 @@ Backend/findyourngo/data_import/ngo_advisor/parser_functions/__pycache__
 Backend/__pycache__
 Backend/findyourngo/tests/__pycache__
 Backend/findyourngo/trustworthiness_calculator/__pycache__
+Backend/findyourngo/filtering/__pycache__
+Backend/findyourngo/restapi/controllers/__pycache__
+Backend/findyourngo/restapi/serializers/__pycache__
