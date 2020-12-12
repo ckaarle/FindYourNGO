@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
-import {OverviewService} from '../../services/overview.service';
+import { Component, OnInit } from '@angular/core';
+import { NgoOverviewItem, NgoOverviewItemPagination } from '../../models/ngo';
+import { ApiService } from '../../services/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 const MAX_PAGES_TO_DISPLAY = 5;
 
@@ -11,21 +12,25 @@ const MAX_PAGES_TO_DISPLAY = 5;
 })
 export class OverviewScreenComponent implements OnInit {
   overviewItems: NgoOverviewItem[] = [];
+  queryList: any = {};
   currentPageNumber = 1;
   totalPages = 1;
   surroundingPages: number[] = [];
 
-  constructor(public overviewService: OverviewService) {
-  }
+  constructor(
+    public apiService: ApiService,
+    public route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(
+  params => this.queryList = params);
     this.getNgoOverviewItems();
   }
 
+
   getNgoOverviewItems(): void {
-    this.overviewService.getNgoOverviewItems().subscribe(data => {
-      this.processPaginatedResults(data);
-    });
+    this.apiService.getFromApi('ngoOverviewItems', this.queryList).subscribe(
+      data => this.processPaginatedResults(data));
   }
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
@@ -84,9 +89,8 @@ export class OverviewScreenComponent implements OnInit {
   }
 
     getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-    this.overviewService.getNgoOverviewItemsForPage(pageNumber).subscribe(data => {
-      this.processPaginatedResults(data);
-    });
-  }
-
+      this.queryList['pageNumber'] = pageNumber;
+      this.apiService.getFromApi('ngoOverviewItems', this.queryList).subscribe(
+        data => this.processPaginatedResults(data));
+    }
 }

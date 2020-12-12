@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import {Countries, Topics} from '../../models/ngo';
+import { Countries, Topics } from '../../models/ngo';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-screen',
@@ -14,16 +15,11 @@ export class SearchScreenComponent {
   topics: string[] = [];
   regions: string[] = ['AFRICA', 'ASIA', 'EUROPE'];
   trustworthiness: string[] = ['1', '2', '3', '4', '5'];
-  // dummies are used to display query results after a search is called for prototyping
-  dummy1: any;
-  dummy2: any;
-
-  default = 'UK';
 
   searchForm: FormGroup;
   nameForm: FormGroup;
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private router: Router) {
     this.searchForm = new FormGroup({
       operation: new FormControl(''),
       region: new FormControl(''),
@@ -31,25 +27,20 @@ export class SearchScreenComponent {
       topic: new FormControl(''),
       trust: new FormControl(''),
     });
-    this.apiService.getFromApi('countries').subscribe(data => {
-      this.countries = (data as Countries).countries;
-    });
-    this.apiService.getFromApi('topics').subscribe(data => {
-      this.topics = (data as Topics).topics;
-    });
+    this.apiService.getFromApi('countries').subscribe(
+        (data: Countries) => this.countries = data.countries);
+    this.apiService.getFromApi('topics').subscribe(
+        (data: Topics) => this.topics = data.topics);
     this.nameForm = new FormGroup({name: new FormControl('')});
   }
 
   onFormSearch(): void {
     const queryList = this.searchForm.value;
-    this.apiService.getFromApi('ngos', queryList).subscribe(data => this.dummy1 = data);
-    console.log(this.dummy1);
+    this.router.navigate(['overview'], {queryParams: queryList});
   }
 
   onNameSearch(): void {
     const queryList = this.nameForm.value;
-    this.apiService.getFromApi('ngos', queryList).subscribe(data => this.dummy2 = data);
-    console.log(this.dummy2);
+    this.router.navigate(['overview'], {queryParams: queryList});
   }
-
 }

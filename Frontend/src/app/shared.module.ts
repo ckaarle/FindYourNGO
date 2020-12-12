@@ -16,7 +16,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { OverviewService } from './services/overview.service';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -57,7 +56,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   providers: [
     MediaService,
-    OverviewService,
     ValueTransformerPipe
   ]
 })
