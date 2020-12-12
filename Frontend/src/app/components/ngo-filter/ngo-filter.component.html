@@ -4,13 +4,21 @@
             <mat-icon>{{filterOption.value?.icon}}</mat-icon>
             <mat-form-field *ngIf="!isBoolean(filterOption.value?.values)" ngDefaultControl appearance="standard">
                 <mat-label>{{filterOption.value?.displayName}}</mat-label>
-                <input *ngIf="!(filterOption.value?.values)" matInput [type]="filterOption.key.toString() == 'trustworthiness'? 'number': 'text'" (input)="addValue(filterOption.key, $event.target.value)" placeholder="{{filterOption.value?.displayName}}"/>
+                <input *ngIf="!(filterOption.value?.values)" matInput
+                    [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
+                    (input)="addValue(filterOption.key, $event.target.value)"
+                    placeholder="{{filterOption.value?.displayName}}" />
                 <mat-select *ngIf="isStringArray(filterOption.value?.values)" multiple>
-                    <mat-option *ngFor="let optionValue of filterOption.value?.values" [value]="optionValue" (onSelectionChange)="addValue(filterOption.key, $event.source.value, true)">{{optionValue}}</mat-option>
+                    <mat-option *ngFor="let optionValue of filterOption.value?.values" [value]="optionValue"
+                        (onSelectionChange)="addValue(filterOption.key, $event.source.value, true)">{{optionValue}}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox *ngIf="isBoolean(filterOption.value?.values)" (change)="addValue(filterOption.key, $event.checked)">{{filterOption.key}}</mat-checkbox>
+            <mat-checkbox *ngIf="isBoolean(filterOption.value?.values)"
+                (change)="addValue(filterOption.key, $event.checked)">{{filterOption.key}}</mat-checkbox>
         </mat-chip>
+        <button class="filter-apply" color="primary" (click)="applyFilter()">
+            <mat-icon>filter_list</mat-icon>
+        </button>
     </mat-chip-list>
-    <button (click)="applyFilter()">Apply filters</button>
 </div>

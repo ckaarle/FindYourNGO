@@ -30,4 +30,5 @@ export interface NgoFilterOptions {
     hqCountries: {values: string[], displayName?: string, icon?: string};
     hqCities: {values: string, displayName?: string, icon?: string};
     contactOptionPresent: {values: boolean, displayName?: string, icon?: string};
+    [key: string]: any;
 }
