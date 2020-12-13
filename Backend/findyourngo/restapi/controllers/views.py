@@ -50,11 +50,12 @@ def recalculateTW(request):
     return HttpResponse('Trustworthiness scores have been recalculated')
 
 
-def country_list():
+# request is a necessary positional parameter for the framework call
+def country_list(request):
     result = list(map(lambda ngo: ngo['country'], NgoBranch.objects.all().order_by('country').values()))
     return JsonResponse({'countries': result})
 
 
-def topic_list():
+def topic_list(request):
     result = list(map(lambda ngo_topic: ngo_topic['topic'], NgoTopic.objects.all().order_by('topic').values()))
     return JsonResponse({'topics': result})

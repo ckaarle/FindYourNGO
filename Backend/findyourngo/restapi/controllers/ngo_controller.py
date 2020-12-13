@@ -66,7 +66,7 @@ def ngo_filter(ngos, query_params):  # this function should probably go somewher
 
     topic = query_params.get('topic')
     if topic:
-        ngos = ngos.filter(activities__contains=topic)
+        ngos = ngos.filter(topics__topic__contains=topic)
 
     trust = query_params.get('trust')
     if trust:
