@@ -57,8 +57,8 @@ def ngo_filter(ngos, query_params):  # this function should probably go somewher
 
     region = query_params.get('region')
     if region:
-        pass
-        # ngos = ngos.filter(branches__country__contains=operation)
+        pass  # TODO: create country region mapping
+        # ngos.filter(branches__country__REGION_MAPPING__contains=region)
 
     office = query_params.get('office')
     if office:
@@ -70,6 +70,6 @@ def ngo_filter(ngos, query_params):  # this function should probably go somewher
 
     trust = query_params.get('trust')
     if trust:
-        pass
-        # ngos = ngos.filter(branches__country__contains=trust)7
+        ngos = ngos.filter(tw_score__total_tw_score__gte=int(trust))
+
     return ngos
