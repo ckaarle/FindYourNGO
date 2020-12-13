@@ -89,8 +89,7 @@ export class OverviewScreenComponent implements OnInit {
   }
 
     getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-      this.queryList['pageNumber'] = pageNumber;
-      this.apiService.getFromApi('ngoOverviewItems', this.queryList).subscribe(
+      this.apiService.getFromApi('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
         data => this.processPaginatedResults(data));
     }
 }
