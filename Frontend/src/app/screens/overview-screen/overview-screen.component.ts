@@ -103,7 +103,7 @@ export class OverviewScreenComponent implements OnInit {
   subscribeOverviewItemChanges() {
     this.filter
       .filteredNgoOverviewItemsChanged
-      .subscribe(data => {
+      .subscribe((data: NgoOverviewItem[]) => {
         this.showFilteredNgoItems(data);
       });
   }

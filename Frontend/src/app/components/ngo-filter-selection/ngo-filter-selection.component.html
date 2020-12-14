@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <button class="filter-apply" color="primary" (click)="applyFilter()">Apply filter</button>
+    <button class="filter-apply" (click)="applyFilter()" mat-button>Apply filter</button>
 </div>
 
 <ng-template #filterOptionItem let-filterOption="filterOption" let-key="key">
@@ -49,7 +49,7 @@
         <mat-label>{{filterOption.displayName}}</mat-label>
 
         <input *ngIf="!(filterOption.values)" matInput [type]="key == 'trustworthiness'? 'number': 'text'"
-            (input)="addValue(key, $event.target.value)" placeholder="{{filterOption.displayName}}" />
+            (input)="addValue(key, $event.target?.value)" placeholder="{{filterOption.displayName}}" />
 
         <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple>
             <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"

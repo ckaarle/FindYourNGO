@@ -26,7 +26,7 @@ export class NgoFilterSelectionComponent implements OnInit {
   subscribeFilterSelection() {
     this.filter
       .selectedFiltersChanged
-      .subscribe(data => {
+      .subscribe((data: NgoFilterSelection) => {
         this.filterSelection = data;
       });
   }

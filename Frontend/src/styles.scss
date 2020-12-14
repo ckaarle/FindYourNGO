@@ -74,16 +74,34 @@ span, p :not(.mat-raised-button.mat-accent){
   color: var(--primary-contrast-bw)
 }
 
+.mat-raised-button,
+.mat-button,
+.mat-icon-button {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  height: fit-content;
+  padding: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
 .mat-raised-button.mat-accent:not([disabled]),
 .mat-button.mat-accent:not([disabled]),
 .mat-fab.mat-accent:not([disabled]),
-.mat-mini-fab.mat-fab.mat-accent:not([disabled]) {
+.mat-mini-fab.mat-fab.mat-accent:not([disabled]),
+.mat-icon-button.mat-accent:not([disabled]) {
   background-color: var(--secondary-color);
   color: var(--secondary-contrast-bw);
 }
 
-.mat-icon-button.mat-accent:not([disabled]) {
-  color: var(--secondary-color)
+.mat-raised-button:not([disabled]),
+.mat-button:not([disabled]),
+.mat-fab:not([disabled]),
+.mat-mini-fab.mat-fab:not([disabled]),
+.mat-icon-button:not([disabled]) {
+  background-color: var(--primary-color);
+  color: var(--primary-contrast-bw);
 }
 
 @mixin mat-icon-size($size: 24px) {
