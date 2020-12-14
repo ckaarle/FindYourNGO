@@ -21,7 +21,7 @@ def filter_object():
 
 
 def branches():
-    branches = list(map(lambda ngo_branch: ngo_branch['country'], NgoBranch.objects.all().filter(country__contains='wordwide').order_by('country').values('country').distinct()))
+    branches = list(map(lambda ngo_branch: ngo_branch['country'], NgoBranch.objects.all().order_by('country').values('country').distinct()))
     return branches
 
 
