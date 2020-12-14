@@ -6,6 +6,11 @@
 
 .button {
   min-width: 2%;
+  border-color: transparent;
+  border-style: solid;
+  background-color: transparent;
+  color: var(--primary-contrast-bw);
+  box-shadow: none;
 }
 
 .buttonCurrent {
@@ -13,20 +18,21 @@
   border-color: var(--secondary-color);
   border-style: solid;
 }
+
 .content {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    .filter-drawer {
-        position: absolute;
-        height: fit-content;
-        top: 64px;
-        left: 0
-    }
+  .filter-drawer {
+    position: absolute;
+    height: fit-content;
+    top: 64px;
+    left: 0
+  }
 
-    .filter-bar {
-        width: 90%;
-        margin: 16px 0;
-    }
+  .filter-bar {
+    width: 90%;
+    margin: 16px 0;
+  }
 }
-}
+

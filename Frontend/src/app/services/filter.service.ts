@@ -37,6 +37,7 @@ export class FilterService {
     return this.http.get<NgoFilterOptions>(endpoint); //TODO: move this to request service
   }
 
+
   applyFilter(filterSelection: NgoFilterSelection): Observable<NgoOverviewItem[]> {
     let endpoint = 'http://localhost:8000/ngos/filter/';
     return this.http.post<NgoOverviewItem[]>(endpoint, filterSelection); //TODO: move this to request service

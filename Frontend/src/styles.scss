@@ -39,10 +39,10 @@
 
 /* Custom theming */
 $custom-typography: mat-typography-config(
-  $font-family: "Roboto, Helvetiva Neue, sans-serif",
-  $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 700), //h1
-  $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
-  $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
+    $font-family: "Roboto, Helvetiva Neue, sans-serif",
+    $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 700), //h1
+    $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
+    $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
 );
 
 @include mat-core($custom-typography);
@@ -55,9 +55,9 @@ $app-theme: mat-light-theme($primary, $accent, $warn);
 @include angular-material-theme($app-theme);
 
 /* Global styles */
-html, body { 
+html, body {
   margin: 0;
-  height: 100%; 
+  height: 100%;
 }
 
 .mat-menu-item, .mat-tab-link, .mat-toolbar {
@@ -70,7 +70,7 @@ html, body {
   justify-content: space-between;
 }
 
-span, p :not(.mat-raised-button.mat-accent){
+span, p :not(.mat-raised-button.mat-accent) {
   color: var(--primary-contrast-bw)
 }
 
