@@ -1,9 +1,17 @@
 <div class="content" fxLayoutGap="16px grid">
     <div fxLayout="row wrap">
+	    <mat-drawer #filterSelectionDrawer class="filter-drawer" mode="over">
+	        <ngo-filter-selection [filterOptions]="filterOptions"
+	            (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
+	    </mat-drawer>
+	
 	    <div class="filter-bar">
-	        <ngo-filter></ngo-filter>
+	        <ngo-filter *ngIf="filterOptions" [filterOptions]="filterOptions"
+	            (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
 	    </div>
-	    <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems">
+	
+	    <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let overviewItem of overviewItems"
+	        (click)="filterSelectionDrawer.close()">
 	        <ngo-overview-item [ngoOverviewItem]="overviewItem" [editableRating]="false"></ngo-overview-item>
 	    </div>
     </div>

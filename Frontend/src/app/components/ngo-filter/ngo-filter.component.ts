@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { NgoFilterOptions } from 'src/app/models/ngo';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
-
-export interface NgoFilterSelection {}
 
 @Component({
   selector: 'ngo-filter',
@@ -10,21 +8,24 @@ export interface NgoFilterSelection {}
   styleUrls: ['./ngo-filter.component.scss']
 })
 export class NgoFilterComponent implements OnInit {
-  filtersAvailable: boolean = false;
-  filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  filterUpdated: boolean = false;
   filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
 
   constructor(private filter: FilterService) { }
 
   ngOnInit(): void {
-    this.getFilterOptions();
+    this.subscribeFilterSelection();
   }
 
-  getFilterOptions() {
-    this.filter.getNgoFilterOptions().subscribe(data => {
-      this.filterOptions = data;
-      this.filtersAvailable = true;
-    })
+  subscribeFilterSelection() {
+    this.filter
+      .selectedFiltersChanged
+      .subscribe(data => {
+        this.filterSelection = data;
+      });
   }
 
   isStringArray(value: any): boolean {
@@ -35,7 +36,11 @@ export class NgoFilterComponent implements OnInit {
     return typeof value === 'boolean';
   }
 
-  addValue(keyOption: any, value: any, multiple: boolean = false) { //WiP
+  checkIfFilterSet(key: string) {
+    return key in this.filterSelection;
+  }
+
+  addValue(keyOption: any, value: any, multiple: boolean = false) {
     if (this.filterSelection[keyOption] && multiple) {
       this.filterSelection[keyOption].push(value);
     } else {
@@ -45,13 +50,18 @@ export class NgoFilterComponent implements OnInit {
         this.filterSelection[keyOption] = value;
       }
     }
+    this.filterUpdated = true;
   }
 
-  applyFilter() { //WiP
-    console.log("FilterSelection: ", this.filterSelection);
+  openFilterSelection() {
+    this.openFilterSelectionDrawer.emit(true)
+  }
+
+  applyFilter() {
     this.filter.applyFilter(this.filterSelection).subscribe(data => {
-      console.log("FilteredNgoItems: ", data); //TODO: display result
+      this.filter.displayFilteredNgoItems(data);
+      this.filter.editSelectedFilters(this.filterSelection);
+      this.filterUpdated = false;
     });
   }
-
 }

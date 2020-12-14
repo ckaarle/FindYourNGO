@@ -17,8 +17,15 @@
     display: flex;
     justify-content: center;
 
+    .filter-drawer {
+        position: absolute;
+        width: 500px;
+        top: 64px;
+        left: 0
+    }
+
     .filter-bar {
-        width: 80%;
+        width: 90%;
         margin: 16px 0;
     }
 }

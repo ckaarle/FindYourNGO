@@ -27,8 +27,13 @@ export interface NgoFilterOptions {
     hasEcosoc: {values: boolean, displayName?: string, icon?: string};
     isCredible: {values: boolean, displayName?: string, icon?: string};
     trustworthiness: {values: number, displayName?: string, icon?: string};
-    hqCountries: {values: string[], displayName?: string, icon?: string};
-    hqCities: {values: string, displayName?: string, icon?: string};
+    countries: {values: string[], displayName?: string, icon?: string};
+    cities: {values: string, displayName?: string, icon?: string};
     contactOptionPresent: {values: boolean, displayName?: string, icon?: string};
     [key: string]: any;
 }
+
+export interface NgoFilterSelection {
+    [keyOption: string]: any;
+}
+ 

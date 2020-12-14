@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {OverviewService} from '../../services/overview.service';
+import { FilterService } from 'src/app/services/filter.service';
+import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection, NgoOverviewItemPagination } from '../../models/ngo';
 
 const MAX_PAGES_TO_DISPLAY = 5;
 
@@ -15,11 +16,15 @@ export class OverviewScreenComponent implements OnInit {
   totalPages = 1;
   surroundingPages: number[] = [];
 
-  constructor(public overviewService: OverviewService) {
-  }
+  filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
+
+  constructor(private overviewService: OverviewService, private filter: FilterService) { }
 
   ngOnInit(): void {
     this.getNgoOverviewItems();
+    this.getFilterOptions();
+    this.subscribeOverviewItemChanges();
   }
 
   getNgoOverviewItems(): void {
@@ -89,4 +94,22 @@ export class OverviewScreenComponent implements OnInit {
     });
   }
 
+  getFilterOptions() {
+    this.filter.getNgoFilterOptions().subscribe(data => {
+      this.filterOptions = data;
+    })
+  }
+
+  subscribeOverviewItemChanges() {
+    this.filter
+      .filteredNgoOverviewItemsChanged
+      .subscribe(data => {
+        this.showFilteredNgoItems(data);
+      });
+  }
+
+  showFilteredNgoItems(filteredOverviewItems: NgoOverviewItem[]) {
+    this.overviewItems = filteredOverviewItems;
+    console.log("Filtered Items:", this.overviewItems);
+  }
 }
