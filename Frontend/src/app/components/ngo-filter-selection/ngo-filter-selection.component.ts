@@ -12,10 +12,10 @@ export class NgoFilterSelectionComponent implements OnInit {
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
-  filterOptionsLoaded: boolean = false;
+  filterOptionsLoaded = false;
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
   hqDetails: string[] = ['cities', 'countries', 'workingLanguages', 'contactOptionPresent'];
-  ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding']
+  ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
 
   constructor(private filter: FilterService) { }
 
@@ -23,7 +23,7 @@ export class NgoFilterSelectionComponent implements OnInit {
     this.subscribeFilterSelection();
   }
 
-  subscribeFilterSelection() {
+  subscribeFilterSelection(): void {
     this.filter
       .selectedFiltersChanged
       .subscribe((data: NgoFilterSelection) => {
@@ -35,7 +35,7 @@ export class NgoFilterSelectionComponent implements OnInit {
     return this.filterOptions[key];
   }
 
-  addValue(keyOption: any, value: any, multiple: boolean = false) {
+  addValue(keyOption: any, value: any, multiple: boolean = false): void {
     if (this.filterSelection[keyOption] && multiple) {
       this.filterSelection[keyOption].push(value);
     } else {
@@ -47,11 +47,11 @@ export class NgoFilterSelectionComponent implements OnInit {
     }
   }
 
-  closeFilterSelection() {
-    this.closeFilterSelectionDrawer.emit(true)
+  closeFilterSelection(): void {
+    this.closeFilterSelectionDrawer.emit(true);
   }
 
-  applyFilter() {
+  applyFilter(): void {
     this.filter.applyFilter(this.filterSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
       this.filter.editSelectedFilters(this.filterSelection);

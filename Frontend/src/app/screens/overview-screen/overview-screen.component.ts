@@ -15,7 +15,9 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   overviewItems: NgoOverviewItem[] = [];
 
   filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
-  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
+
+  filterActive: boolean = false;
+  selectedFilters: NgoFilterSelection = {};
 
   constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService) {
     super();
@@ -25,6 +27,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.getNgoOverviewItems();
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
+    this.subscribeSelectedFilterChanges();
   }
 
   getNgoOverviewItems(): void {
@@ -44,18 +47,24 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-    this.overviewService.getNgoOverviewItemsForPage(pageNumber).subscribe(data => {
-      this.processPaginatedResults(data);
-    });
+    if (this.filterActive) {
+      this.filter.applyFilter(this.selectedFilters, pageNumber).subscribe(data => {
+        this.processPaginatedResults(data);
+      });
+    } else {
+      this.overviewService.getNgoOverviewItemsForPage(pageNumber).subscribe(data => {
+        this.processPaginatedResults(data);
+      });
+    }
   }
 
-  getFilterOptions() {
+  getFilterOptions(): void {
     this.filter.getNgoFilterOptions().subscribe(data => {
       this.filterOptions = data;
     });
   }
 
-  subscribeOverviewItemChanges() {
+  subscribeOverviewItemChanges(): void {
     this.filter
     .filteredNgoOverviewItemsChanged
     .subscribe((data: NgoOverviewItemPagination) => {
@@ -63,7 +72,14 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     });
   }
 
-  showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination) {
+  subscribeSelectedFilterChanges(): void {
+    this.filter.selectedFiltersChanged.subscribe((selectedFilter: NgoFilterSelection) => {
+      this.filterActive = selectedFilter !== {};
+      this.selectedFilters = selectedFilter;
+    });
+  }
+
+  showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination): void {
     this.processPaginatedResults(filteredOverviewItems);
     console.log('Filtered Items:', this.overviewItems);
   }

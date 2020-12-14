@@ -1,18 +1,23 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NgoFilterOptions, NgoFilterSelection, NgoOverviewItem } from '../models/ngo';
-import { Observable } from 'rxjs';
+import {EventEmitter, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItemPagination} from '../models/ngo';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
   selectedFilters: NgoFilterSelection = {} as NgoFilterSelection;
-  filteredNgoItems: NgoOverviewItem[] = {} as NgoOverviewItem[];
+  filteredNgoItems: NgoOverviewItemPagination = {} as NgoOverviewItemPagination;
   public selectedFiltersChanged: EventEmitter<NgoFilterSelection> = new EventEmitter<NgoFilterSelection>();
-  public filteredNgoOverviewItemsChanged: EventEmitter<NgoOverviewItem[]> = new EventEmitter<NgoOverviewItem[]>();
+  public filteredNgoOverviewItemsChanged: EventEmitter<NgoOverviewItemPagination> = new EventEmitter<NgoOverviewItemPagination>();
 
-  constructor(private http: HttpClient) { }
+  baseUrlGet = 'http://localhost:8000/ngos/filter';
+  baseUrlPost = this.baseUrlGet + '/';
+  pageSignifier = '?page=';
+
+  constructor(private http: HttpClient) {
+  }
 
   getSelectedFilters(): NgoFilterSelection {
     return this.selectedFilters;
@@ -23,23 +28,31 @@ export class FilterService {
     this.selectedFiltersChanged.emit(this.selectedFilters);
   };
 
-  getFilteredNgoItems(): NgoOverviewItem[] {
+  getFilteredNgoItems(): NgoOverviewItemPagination {
     return this.filteredNgoItems;
   }
 
-  displayFilteredNgoItems(filteredNgoItems: NgoOverviewItem[]): void {
+  displayFilteredNgoItems(filteredNgoItems: NgoOverviewItemPagination): void {
     this.filteredNgoItems = filteredNgoItems;
     this.filteredNgoOverviewItemsChanged.emit(this.filteredNgoItems);
   }
 
   getNgoFilterOptions(): Observable<NgoFilterOptions> {
-    let endpoint = 'http://localhost:8000/ngos/filter';
+    let endpoint = 'http://localhost:8000/ngos/filteroptions';
     return this.http.get<NgoFilterOptions>(endpoint); //TODO: move this to request service
   }
 
 
-  applyFilter(filterSelection: NgoFilterSelection): Observable<NgoOverviewItem[]> {
-    let endpoint = 'http://localhost:8000/ngos/filter/';
-    return this.http.post<NgoOverviewItem[]>(endpoint, filterSelection); //TODO: move this to request service
+  getFilterSelection(filterSelection: NgoFilterSelection): Observable<NgoOverviewItemPagination> {
+    return this.http.post<NgoOverviewItemPagination>(this.baseUrlPost, filterSelection); //TODO: move this to request service
+  }
+
+  applyFilter(filterSelection: NgoFilterSelection, pageNumber: number = 0): Observable<NgoOverviewItemPagination> {
+    if (pageNumber === 0) {
+      return this.getFilterSelection(filterSelection);
+    } else {
+      const url = this.baseUrlGet + this.pageSignifier + pageNumber.toString();
+      return this.http.get<NgoOverviewItemPagination>(url, filterSelection);
+    }
   }
 }

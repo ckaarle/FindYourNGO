@@ -17,7 +17,7 @@ from django.urls import include, path
 from django.conf.urls import url
 from rest_framework import routers
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_item_controller
-from findyourngo.restapi.controllers.ngo_filter_controller import NgoFilterController
+from findyourngo.restapi.controllers.ngo_filter_controller import NgoFilterView
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -32,7 +32,8 @@ urlpatterns = [
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
     url(r'^ngos$', ngo_controller.ngo_list),
     url(r'^ngos/(?P<pk>[0-9]+)$', ngo_controller.ngo_detail),
-    url(r'^ngos/filter/$', NgoFilterController.as_view()),
+    url(r'^ngos/filteroptions/$', ngo_controller.ngo_filter_options),
+    url(r'^ngos/filter/$', NgoFilterView.as_view()),
     path('recalculateTW', views.recalculateTW, name='recalculateTW'),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
 ]
