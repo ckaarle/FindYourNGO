@@ -1,16 +1,10 @@
-from typing import Any
-
-from django.db.models import QuerySet
 from django.http.response import JsonResponse
 
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from findyourngo.filtering.NgoFilter import NgoFilter
 from findyourngo.restapi.models import Ngo
-from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
-from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
@@ -52,27 +46,5 @@ def ngo_detail(request, pk):
     elif request.method == 'DELETE':
         ngo.delete()
         return JsonResponse({'message': 'Ngo was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['GET'])
-def ngo_filter_options(request: Any) -> JsonResponse:
-    return JsonResponse(filter_object())
-
-    filter_data = JSONParser().parse(request)
-    filter_serializer = FilterSerializer(data=filter_data)
-
-    if filter_serializer.is_valid() and request.method == 'POST':
-        print(f'REQUEST WAS {filter_data}')
-        filter_config = filter_serializer.create(filter_serializer.validated_data)
-        filter = NgoFilter(filter_config)
-        ngo_result: QuerySet = filter.apply()
-
-        print(f'FOUND {len(ngo_result)} RESULTS')
-
-        result_serializer = NgoSerializer(ngo_result, many=True)
-
-        return JsonResponse(result_serializer.data, safe=False)
-
-    return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

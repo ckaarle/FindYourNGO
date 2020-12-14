@@ -1,0 +1,36 @@
+<div class="content" fxLayoutGap="16px grid" fxLayout="row wrap">
+  <mat-drawer #filterSelectionDrawer class="filter-drawer" mode="over" fxFlex="500px"
+              fxFlex.xs="100%" fxFlex.sm="33%">
+    <ngo-filter-selection [filterOptions]="filterOptions"
+                          (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
+  </mat-drawer>
+
+  <div class="filter-bar">
+    <ngo-filter *ngIf="filterOptions" [filterOptions]="filterOptions"
+                (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
+  </div>
+
+  <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
+       *ngFor="let overviewItem of overviewItems"
+       (click)="filterSelectionDrawer.close()">
+    <ngo-overview-item [ngoOverviewItem]="overviewItem"
+                       [editableRating]="false"></ngo-overview-item>
+        <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
+  </div>
+  <div class="buttonBar">
+    <button mat-button class="button"
+            (click)="getNgoOverviewItemsForPageNumber(currentPageNumber - 1)"
+            [disabled]="currentPageNumber <= 1">&lt;
+    </button>
+    <button mat-button
+            [ngClass]="{'buttonCurrent': pageNumber === currentPageNumber, 'button': pageNumber != currentPageNumber}"
+            *ngFor="let pageNumber of surroundingPages"
+            [disabled]="pageNumber === currentPageNumber"
+            (click)="getNgoOverviewItemsForPageNumber(pageNumber)">{{pageNumber}}
+    </button>
+    <button mat-button class="button"
+            (click)="getNgoOverviewItemsForPageNumber(currentPageNumber + 1)"
+            [disabled]="currentPageNumber >= totalPages">&gt;
+    </button>
+  </div>
+</div>

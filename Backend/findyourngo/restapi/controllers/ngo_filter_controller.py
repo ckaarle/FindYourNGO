@@ -3,19 +3,23 @@ from typing import Any
 from django.db.models import QuerySet
 from django.http.response import JsonResponse
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser
 
 from findyourngo.filtering.NgoFilter import NgoFilter
-from findyourngo.restapi.models import Ngo, NgoStats, NgoType, NgoAddress, NgoTopic, NgoBranch
 from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
-from findyourngo.restapi.serializers.filter_serializer import FilterSerializer
+from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
 from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
 
 MAX_PAGE_SIZE = 20
 
 last_filter_config = []
+
+
+@api_view(['GET'])
+def ngo_filter_options(request: Any) -> JsonResponse:
+    return JsonResponse(filter_object())
 
 
 class NgoFilterView(GenericAPIView):
