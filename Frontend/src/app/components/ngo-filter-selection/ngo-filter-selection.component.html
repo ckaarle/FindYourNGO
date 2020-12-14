@@ -1,0 +1,62 @@
+<div class="filter-option-container">
+    <h1>Filters</h1>
+
+    <div *ngIf="filterOptions">
+        <h2>Ngo-Details</h2>
+        <div class="filter-option-category">
+            <div class="filter-option-item" *ngFor="let ngoDetailOption of ngoDetails">
+                <div *ngIf="this.filterOptions[ngoDetailOption]">
+                    <ng-container [ngTemplateOutlet]="filterOptionItem"
+                        [ngTemplateOutletContext]="{filterOption: this.filterOptions[ngoDetailOption], key: ngoDetailOption}">
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div *ngIf="filterOptions">
+        <h2>Headquarter</h2>
+        <div class="filter-option-category">
+            <div class="filter-option-item" *ngFor="let hqDetailOption of hqDetails">
+                <div *ngIf="this.filterOptions[hqDetailOption]">
+                    <ng-container [ngTemplateOutlet]="filterOptionItem"
+                        [ngTemplateOutletContext]="{filterOption: this.filterOptions[hqDetailOption], key: hqDetailOption}">
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div *ngIf="filterOptions">
+        <h2>Credibility</h2>
+        <div class="filter-option-category">
+            <div class="filter-option-item" *ngFor="let credibilityOption of credibility">
+                <div *ngIf="this.filterOptions[credibilityOption]">
+                    <ng-container [ngTemplateOutlet]="filterOptionItem"
+                        [ngTemplateOutletContext]="{filterOption: this.filterOptions[credibilityOption], key: credibilityOption}">
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="filter-apply" color="primary" (click)="applyFilter()">Apply filter</button>
+</div>
+
+<ng-template #filterOptionItem let-filterOption="filterOption" let-key="key">
+    <mat-form-field *ngIf="!isBoolean(filterOption.values)" ngDefaultControl appearance="standard">
+        <mat-label>{{filterOption.displayName}}</mat-label>
+
+        <input *ngIf="!(filterOption.values)" matInput [type]="key == 'trustworthiness'? 'number': 'text'"
+            (input)="addValue(key, $event.target.value)" placeholder="{{filterOption.displayName}}" />
+
+        <mat-select *ngIf="isStringArray(filterOption.values)" multiple>
+            <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"
+                (onSelectionChange)="addValue(key, $event.source.value, true)">{{optionValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox *ngIf="isBoolean(filterOption.values)" (change)="addValue(key, $event.checked)">{{key}}</mat-checkbox>
+</ng-template>

@@ -29,6 +29,7 @@ import { NgoFilterComponent } from './components/ngo-filter/ngo-filter.component
 import { OverviewService } from './services/overview.service';
 import { MediaService } from './services/media.service';
 import { FilterService } from './services/filter.service';
+import { NgoFilterSelectionComponent } from './components/ngo-filter-selection/ngo-filter-selection.component';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { FilterService } from './services/filter.service';
     NgoOverviewItemComponent,
     StarRatingComponent,
     NgoFilterComponent,
+    NgoFilterSelectionComponent,
     ValueTransformerPipe
   ],
   exports: [
