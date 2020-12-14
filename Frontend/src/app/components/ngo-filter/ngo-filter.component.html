@@ -5,7 +5,8 @@
         </button>
 
         <div *ngFor="let filterOption of filterOptions | keyvalue;">
-            <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)">
+            <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)" [removable]="true"
+                (removed)="removeValue(filterOption.key)">
                 <mat-icon>{{filterOption.value?.icon}}</mat-icon>
 
                 <mat-form-field *ngIf="!(filterOption.value?.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
@@ -13,7 +14,7 @@
 
                     <input *ngIf="!(filterOption.value?.values)" matInput
                         [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
-                        (input)="addValue(filterOption.key, $event.target?.value)"
+                        (input)="addValue(filterOption.key, $any($event.target).value)"
                         placeholder="{{filterOption.value?.displayName}}" [value]="filterSelection[filterOption.key]" />
 
                     <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
@@ -27,6 +28,8 @@
                 <mat-checkbox *ngIf="filterOption.value?.values | typeEvaluator: 'isBoolean'"
                     (change)="addValue(filterOption.key, $event.checked)" [checked]="filterSelection[filterOption.key]">
                     {{filterOption.key}}</mat-checkbox>
+
+                <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
         </div>
 

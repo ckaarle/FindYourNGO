@@ -12,7 +12,7 @@ export class NgoFilterSelectionComponent implements OnInit {
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
-  filterOptionsLoaded = false;
+  filterOptionsLoaded: boolean = false;
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
   hqDetails: string[] = ['cities', 'countries', 'workingLanguages', 'contactOptionPresent'];
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
@@ -52,10 +52,10 @@ export class NgoFilterSelectionComponent implements OnInit {
   }
 
   applyFilter(): void {
+    this.filter.editSelectedFilters(this.filterSelection);
+    this.closeFilterSelection();
     this.filter.applyFilter(this.filterSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
-      this.filter.editSelectedFilters(this.filterSelection);
-      this.closeFilterSelection();
     });
   }
 }

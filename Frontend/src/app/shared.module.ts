@@ -21,8 +21,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {StarRatingComponent} from './components/star-rating/star-rating.component';
 import {ValueTransformerPipe} from './pipes/value-transformer.pipe';
@@ -49,6 +50,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatSelectModule,
     MatCheckboxModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule
@@ -80,6 +82,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatSelectModule,
     MatCheckboxModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule
   ],

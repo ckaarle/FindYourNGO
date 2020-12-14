@@ -34,5 +34,11 @@
     width: 90%;
     margin: 16px 0;
   }
+
+    mat-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
 }
 

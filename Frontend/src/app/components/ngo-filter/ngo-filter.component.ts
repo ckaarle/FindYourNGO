@@ -11,7 +11,7 @@ export class NgoFilterComponent implements OnInit {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  filterUpdated = false;
+  filterUpdated: boolean = false;
   filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
 
   constructor(private filter: FilterService) { }
@@ -35,14 +35,21 @@ export class NgoFilterComponent implements OnInit {
   addValue(keyOption: any, value: any, multiple: boolean = false): void {
     if (this.filterSelection[keyOption] && multiple) {
       this.filterSelection[keyOption].push(value);
+      this.filterUpdated = true;
     } else {
       if (multiple) {
         this.filterSelection[keyOption] = [value];
+        this.filterUpdated = true;
       } else {
         this.filterSelection[keyOption] = value;
+        this.filterUpdated = true;
       }
     }
-    this.filterUpdated = true;
+  }
+
+  removeValue(keyOption: any) {
+    delete this.filterSelection[keyOption];
+    this.applyFilter();
   }
 
   openFilterSelection(): void {
@@ -50,9 +57,9 @@ export class NgoFilterComponent implements OnInit {
   }
 
   applyFilter(): void {
+    this.filter.editSelectedFilters(this.filterSelection);
     this.filter.applyFilter(this.filterSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
-      this.filter.editSelectedFilters(this.filterSelection);
       this.filterUpdated = false;
     });
   }

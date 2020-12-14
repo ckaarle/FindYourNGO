@@ -49,7 +49,7 @@
         <mat-label>{{filterOption.displayName}}</mat-label>
 
         <input *ngIf="!(filterOption.values)" matInput [type]="key == 'trustworthiness'? 'number': 'text'"
-            (input)="addValue(key, $event.target?.value)" placeholder="{{filterOption.displayName}}" />
+            (change)="addValue(key, $any($event.target).value)" placeholder="{{filterOption.displayName}}" />
 
         <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple>
             <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"

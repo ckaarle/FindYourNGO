@@ -15,6 +15,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   overviewItems: NgoOverviewItem[] = [];
 
   filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  loadingNgoOverviewItems: boolean = false;
 
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
@@ -60,15 +61,21 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getFilterOptions(): void {
     this.filter.getNgoFilterOptions().subscribe(data => {
-      this.filterOptions = data;
+      this.filterOptions = this.filter.mapDataToObject(data);
     });
   }
 
   subscribeOverviewItemChanges(): void {
     this.filter
+      .loadingNgoOverviewItems
+      .subscribe((data: boolean) => {
+        this.loadingNgoOverviewItems = true;
+      });
+    this.filter
     .filteredNgoOverviewItemsChanged
     .subscribe((data: NgoOverviewItemPagination) => {
       this.showFilteredNgoItems(data);
+        this.loadingNgoOverviewItems = false;
     });
   }
 
