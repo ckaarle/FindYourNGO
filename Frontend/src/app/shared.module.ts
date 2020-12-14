@@ -5,6 +5,8 @@ import { SearchScreenComponent } from './screens/search-screen/search-screen.com
 import { MapScreenComponent } from './screens/map-screen/map-screen.component';
 import { FavouritesScreenComponent } from './screens/favourites-screen/favourites-screen.component';
 import { NgoOverviewItemComponent } from './components/ngo-overview-item/ngo-overview-item.component';
+import { NgoFilterComponent } from './components/ngo-filter/ngo-filter.component';
+import { NgoFilterSelectionComponent } from './components/ngo-filter-selection/ngo-filter-selection.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -24,13 +26,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
-import { NgoFilterComponent } from './components/ngo-filter/ngo-filter.component';
+import { TypeEvaluatorPipe } from './pipes/type-evaluator.pipe';
 
 import { OverviewService } from './services/overview.service';
 import { MediaService } from './services/media.service';
 import { FilterService } from './services/filter.service';
-import { NgoFilterSelectionComponent } from './components/ngo-filter-selection/ngo-filter-selection.component';
-
 
 @NgModule({
   imports: [
@@ -61,7 +61,8 @@ import { NgoFilterSelectionComponent } from './components/ngo-filter-selection/n
     StarRatingComponent,
     NgoFilterComponent,
     NgoFilterSelectionComponent,
-    ValueTransformerPipe
+    ValueTransformerPipe,
+    TypeEvaluatorPipe
   ],
   exports: [
     MatTabsModule,
@@ -84,7 +85,8 @@ import { NgoFilterSelectionComponent } from './components/ngo-filter-selection/n
     MediaService,
     OverviewService,
     FilterService,
-    ValueTransformerPipe
+    ValueTransformerPipe,
+    TypeEvaluatorPipe
   ]
 })
 export class SharedModule { }

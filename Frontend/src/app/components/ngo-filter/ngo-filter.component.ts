@@ -28,14 +28,6 @@ export class NgoFilterComponent implements OnInit {
       });
   }
 
-  isStringArray(value: any): boolean {
-    return Array.isArray(value);
-  }
-
-  isBoolean(value: any): boolean {
-    return typeof value === 'boolean';
-  }
-
   checkIfFilterSet(key: string) {
     return key in this.filterSelection;
   }

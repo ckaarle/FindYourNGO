@@ -45,18 +45,18 @@
 </div>
 
 <ng-template #filterOptionItem let-filterOption="filterOption" let-key="key">
-    <mat-form-field *ngIf="!isBoolean(filterOption.values)" ngDefaultControl appearance="standard">
+    <mat-form-field *ngIf="!(filterOption.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
         <mat-label>{{filterOption.displayName}}</mat-label>
 
         <input *ngIf="!(filterOption.values)" matInput [type]="key == 'trustworthiness'? 'number': 'text'"
             (input)="addValue(key, $event.target.value)" placeholder="{{filterOption.displayName}}" />
 
-        <mat-select *ngIf="isStringArray(filterOption.values)" multiple>
+        <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple>
             <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"
                 (onSelectionChange)="addValue(key, $event.source.value, true)">{{optionValue}}
             </mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-checkbox *ngIf="isBoolean(filterOption.values)" (change)="addValue(key, $event.checked)">{{key}}</mat-checkbox>
+    <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'" (change)="addValue(key, $event.checked)">{{key}}</mat-checkbox>
 </ng-template>

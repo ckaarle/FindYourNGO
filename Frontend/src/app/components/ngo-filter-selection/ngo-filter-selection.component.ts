@@ -31,14 +31,6 @@ export class NgoFilterSelectionComponent implements OnInit {
       });
   }
 
-  isStringArray(value: any): boolean {
-    return Array.isArray(value);
-  }
-
-  isBoolean(value: any): boolean {
-    return typeof value === 'boolean';
-  }
-
   getFilterOption(key: string): any {
     return this.filterOptions[key];
   }
