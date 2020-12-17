@@ -19,6 +19,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatExpansionModule,
         MatCardModule,
         FlexLayoutModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatInputModule
     ],
   declarations: [
     OverviewScreenComponent,

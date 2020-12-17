@@ -1,5 +1,5 @@
 form {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -9,24 +9,31 @@ select {
   margin-left: 24px;
 }
 
-div {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+hr {
+  width: 40%;
 }
 
-hr {
-  width:40%;
+.align-right {
+  align-self: flex-end;
+}
+
+.page-transformation {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 640px;
+  margin: 24px auto auto auto;
+}
+
+.separator {
+  display: flex;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 #flex-left {
   justify-content: left;
   align-items: center;
-}
-
-#search {
-  width: 64px;
-  align-self: flex-end;
 }
 
 #search-icon {
