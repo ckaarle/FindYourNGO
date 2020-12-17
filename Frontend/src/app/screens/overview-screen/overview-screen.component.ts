@@ -29,7 +29,7 @@ export class OverviewScreenComponent implements OnInit {
 
 
   getNgoOverviewItems(): void {
-    this.apiService.getFromApi('ngoOverviewItems', this.queryList).subscribe(
+    this.apiService.get('ngoOverviewItems', this.queryList).subscribe(
       data => this.processPaginatedResults(data));
   }
 
@@ -89,7 +89,7 @@ export class OverviewScreenComponent implements OnInit {
   }
 
     getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-      this.apiService.getFromApi('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
+      this.apiService.get('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
         data => this.processPaginatedResults(data));
     }
 }

@@ -27,9 +27,9 @@ export class SearchScreenComponent {
       topic: new FormControl(''),
       trust: new FormControl(''),
     });
-    this.apiService.getFromApi('countries').subscribe(
+    this.apiService.get('countries').subscribe(
         (data: Countries) => this.countries = data.countries);
-    this.apiService.getFromApi('topics').subscribe(
+    this.apiService.get('topics').subscribe(
         (data: Topics) => this.topics = data.topics);
     this.nameForm = new FormGroup({name: new FormControl('')});
   }
