@@ -50,7 +50,7 @@
   </main>
 
 
-  <button class="search" routerLink="/search" mat-fab mat-accent>
+  <button *ngIf="getCurrentRoute() != '/search'" class="search" routerLink="/search" mat-fab mat-accent>
     <mat-icon>search</mat-icon>
   </button>
 </mat-sidenav-container>
