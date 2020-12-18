@@ -16,24 +16,29 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { OverviewService } from './services/overview.service';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatExpansionModule,
-    MatCardModule,
-    FlexLayoutModule
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatExpansionModule,
+        MatCardModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatInputModule
+    ],
   declarations: [
     OverviewScreenComponent,
     SearchScreenComponent,
@@ -55,7 +60,6 @@ import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
   ],
   providers: [
     MediaService,
-    OverviewService,
     ValueTransformerPipe
   ]
 })

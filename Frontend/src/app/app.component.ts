@@ -12,18 +12,18 @@ import { MediaService } from './services/media.service';
 export class AppComponent {
   screens = ['Map', 'Overview', 'Favourites'];
   activeScreen = this.screens[1];
-  currentTitle: string = 'Find your NGO'
+  currentTitle: string = 'Find your NGO';
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService, private titleService: Title) {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.setTitle();
     this.media.init();
   }
 
-  setTitle() {
+  setTitle(): void {
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       map(() => {
@@ -56,7 +56,7 @@ export class AppComponent {
       case 'Favourites':
         return 'star';
     }
-    return ''
+    return '';
   }
 
   getRouterLink(screen: string): string {
@@ -67,8 +67,13 @@ export class AppComponent {
         return 'overview';
       case 'Favourites':
         return 'favourites';
+      case 'Search':
+        return 'search';
     }
-    return ''
+    return '';
   }
 
+  getCurrentRoute(): string {
+    return this.router.url;
+  }
 }
