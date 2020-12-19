@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgoOverviewItem, NgoOverviewItemPagination } from '../../models/ngo';
+import { NgoDetailItem, NgoOverviewItem, NgoOverviewItemPagination } from '../../models/ngo';
 import { ApiService } from '../../services/api.service';
 import { ActivatedRoute } from '@angular/router';
+import { CustomOverlayRef, OverlayService } from 'src/app/services/overlay.service';
 
 const MAX_PAGES_TO_DISPLAY = 5;
 
@@ -19,11 +20,12 @@ export class OverviewScreenComponent implements OnInit {
 
   constructor(
     public apiService: ApiService,
-    public route: ActivatedRoute) { }
+    public route: ActivatedRoute,
+    private ngoOverviewDialog: OverlayService) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(
-  params => this.queryList = params);
+      params => this.queryList = params);
     this.getNgoOverviewItems();
   }
 
@@ -31,6 +33,15 @@ export class OverviewScreenComponent implements OnInit {
   getNgoOverviewItems(): void {
     this.apiService.get('ngoOverviewItems', this.queryList).subscribe(
       data => this.processPaginatedResults(data));
+  }
+
+  openNgoDetailItem(id: number): void {
+    this.apiService.get('ngoDetailItem', { id: id }).subscribe(data => {
+      let ngoDetailItem: NgoDetailItem = data;
+      let dialogRef: CustomOverlayRef = this.ngoOverviewDialog.open({
+        ngoDetailItem: ngoDetailItem
+      });
+    });
   }
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
@@ -62,7 +73,7 @@ export class OverviewScreenComponent implements OnInit {
         const nextPageNumber = this.surroundingPages[this.surroundingPages.length - 1] + 1;
 
         if (nextPageNumber <= this.totalPages &&
-            (this.surroundingPages.length < 2 || this.surroundingPages[this.surroundingPages.length - 1] === this.currentPageNumber)) {
+          (this.surroundingPages.length < 2 || this.surroundingPages[this.surroundingPages.length - 1] === this.currentPageNumber)) {
           this.surroundingPages.push(nextPageNumber);
         }
 
@@ -71,15 +82,15 @@ export class OverviewScreenComponent implements OnInit {
         }
 
       } else if (previousCurrentPage > this.currentPageNumber) {
-          const nextPageNumber = this.surroundingPages[0] - 1;
+        const nextPageNumber = this.surroundingPages[0] - 1;
 
-          if (nextPageNumber >= 1 && this.surroundingPages[0] === this.currentPageNumber) {
-            this.surroundingPages.unshift(nextPageNumber);
-          }
+        if (nextPageNumber >= 1 && this.surroundingPages[0] === this.currentPageNumber) {
+          this.surroundingPages.unshift(nextPageNumber);
+        }
 
-          if (this.surroundingPages.length > MAX_PAGES_TO_DISPLAY) {
-            this.surroundingPages.pop();
-          }
+        if (this.surroundingPages.length > MAX_PAGES_TO_DISPLAY) {
+          this.surroundingPages.pop();
+        }
 
       } else {
         // nothing to do here
@@ -88,8 +99,8 @@ export class OverviewScreenComponent implements OnInit {
 
   }
 
-    getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-      this.apiService.get('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
-        data => this.processPaginatedResults(data));
-    }
+  getNgoOverviewItemsForPageNumber(pageNumber: number): void {
+    this.apiService.get('ngoOverviewItems', { ...this.queryList, page: pageNumber }).subscribe(
+      data => this.processPaginatedResults(data));
+  }
 }

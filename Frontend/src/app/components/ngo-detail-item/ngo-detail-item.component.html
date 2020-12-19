@@ -1,0 +1,151 @@
+<mat-card class="ngo-detail-item" fxFlex="500px" fxFlex.xs="100%" fxFlex.sm="100%">
+    <div class="ngo-header">
+        <h1>{{ngoDetailItem.name}}</h1>
+        <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
+        <div class="ngo-rating">
+            <star-rating [value]="ngoDetailItem.trustworthiness - 1" [editable]="false"></star-rating>
+            <div class="rating-values">
+                <div class="rating-values-trustworthinesss">{{ngoDetailItem.trustworthiness}}</div>
+                <div class="rating-values-amount">( {{ngoDetailItem.amount}} )</div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    <div class="ngo-content">
+        <div class="ngo-details">
+            <div class="ngo-content-container">
+                <mat-icon>info</mat-icon>
+                <div class="ngo-description content-column">
+                    <div class="aim title-row" *ngIf="ngoDetailItem?.aim">
+                        <span class="title">Description</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.aim}}</span>
+                    </div>
+                    <div class="type-of-organization title-row" *ngIf="ngoDetailItem?.stats?.typeOfOrganization">
+                        <span class="title">Organization type</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.typeOfOrganization}}</span>
+                    </div>
+                    <div class="website title-row" *ngIf="ngoDetailItem?.contact?.website">
+                        <span class="title">Website</span>
+                        <span>•</span>
+                        <a [href]="ngoDetailItem.contact.website">{{ngoDetailItem.contact.website}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="ngo-content-container">
+                <mat-icon>group_work</mat-icon>
+                <div class="ngo-field-of-activity content-column">
+                    <div class="topics title-row" *ngIf="ngoDetailItem?.topics">
+                        <span class="title">Topics</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.topics}}</span>
+                    </div>
+                    <div class="activities title-row" *ngIf="ngoDetailItem?.activities">
+                        <span class="title">Activities</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.activities}}</span>
+                    </div>
+                    <div class="branches title-row" *ngIf="ngoDetailItem?.branches">
+                        <span class="title">Branches</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.branches}}</span>
+                    </div>
+                    <div class="working-languages title-row" *ngIf="ngoDetailItem.stats.workingLanguages">
+                        <span class="title">Working languages</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.workingLanguages}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ngo-content-container">
+                <mat-icon>query_stats</mat-icon>
+                <div class="ngo-stats content-column">
+                    <div class="president title-row" *ngIf="ngoDetailItem?.stats?.presidentLastName || ngoDetailItem?.stats?.presidentFirstName">
+                        <span class="title">President</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.presidentFirstName}}
+                            {{ngoDetailItem.stats.presidentLastName}}</span>
+                    </div>
+                    <div class="founding-year title-row" *ngIf="ngoDetailItem?.stats?.foundingYear">
+                        <span class="title">Founding year</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.foundingYear}}</span>
+                    </div>
+                    <div class="staff-number title-row" *ngIf="ngoDetailItem?.stats?.staffNumber">
+                        <span class="title">Staff number</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.staffNumber}}</span>
+                    </div>
+                    <div class="member-number title-row" *ngIf="ngoDetailItem?.stats?.memberNumber">
+                        <span class="title">Member number</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.memberNumber}}</span>
+                    </div>
+                    <div class="yearly-income title-row" *ngIf="ngoDetailItem?.stats?.yearlyIncome">
+                        <span class="title">Yearly income</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.yearlyIncome}}</span>
+                    </div>
+                    <div class="funding title-row" *ngIf="ngoDetailItem?.stats?.funding">
+                        <span class="title">Funding</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.stats.funding}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ngo-content-container">
+                <mat-icon>location_on</mat-icon>
+                <div class="ngo-location content-column">
+                    <div class="address title-row" *ngIf="ngoDetailItem.contact.address">
+                        <span class="title">Address</span>
+                        <span>•</span>
+                        <span>
+                            {{ngoDetailItem.contact.address.street}}
+                            {{'\n' + ngoDetailItem.contact.address.postcode}} {{ngoDetailItem.contact.address.city}}
+                            {{'\n' + ngoDetailItem.contact.address.country}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ngo-content-container">
+                <mat-icon>person</mat-icon>
+                <div class="ngo-contact content-column">
+                    <div class="phone-number title-row" *ngIf="ngoDetailItem?.contact?.ngoPhoneNumber">
+                        <span class="title">Phone number</span>
+                        <span>•</span>
+                        <span>{{ngoDetailItem.contact.ngoPhoneNumber}}</span>
+                    </div>
+                    <div class="email-address title-row" *ngIf="ngoDetailItem?.contact?.ngoEmail">
+                        <span class="title">Email</span>
+                        <span>•</span>
+                        <a [href]="'mailto:' + ngoDetailItem.contact.ngoEmail">{{ngoDetailItem.contact.ngoEmail}}</a>
+                    </div>
+                    <div class="representative title-row" *ngIf="ngoDetailItem?.contact?.representative">
+                        <span class="title">Representative</span>
+                        <span>•</span>
+                        <span>
+                            {{ngoDetailItem.contact.representative.representativeFirstName}}
+                            {{ngoDetailItem.contact.representative.representativeLastName}}
+                            {{'\n' + ngoDetailItem.contact.representative.representativeEmail}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ngo-content-container">
+                <mat-icon class="material-icons">star</mat-icon>
+                <div class="ngo-rating content-column">
+                    <div class="trustworthiness title-row">
+                        <span class="title">Trustworthiness</span>
+                        <span>•</span>
+                        <star-rating [value]="ngoDetailItem.trustworthiness - 1" [editable]="false"></star-rating>
+                        <div class="rating-values">
+                            <div class="rating-values-trustworthinesss">{{ngoDetailItem.trustworthiness}}</div>
+                            <div class="rating-values-amount">( {{ngoDetailItem.amount}} )</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-card>
