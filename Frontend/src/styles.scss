@@ -40,7 +40,7 @@
 /* Custom theming */
 $custom-typography: mat-typography-config(
   $font-family: "Roboto, Helvetiva Neue, sans-serif",
-  $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 700), //h1
+  $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 500), //h1
   $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
   $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
 );
@@ -58,6 +58,11 @@ $app-theme: mat-light-theme($primary, $accent, $warn);
 html, body { 
   margin: 0;
   height: 100%; 
+  font-family: Roboto, Helvetiva Neue, sans-serif;
+  font-weight: 300;
+  font-size: var(--font-size-normal);
+  line-height: var(--line-height-normal);
+  color: var(--primary-contrast-bw);
 }
 
 .mat-menu-item, .mat-tab-link, .mat-toolbar {
@@ -100,3 +105,9 @@ span, p :not(.mat-raised-button.mat-accent){
   @include mat-icon-size(var(--font-size-big))
 }
 
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  &.dark-backdrop {
+    background: #000;
+    opacity: 0.85 !important;
+  }
+}

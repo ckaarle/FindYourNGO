@@ -5,6 +5,7 @@ import { SearchScreenComponent } from './screens/search-screen/search-screen.com
 import { MapScreenComponent } from './screens/map-screen/map-screen.component';
 import { FavouritesScreenComponent } from './screens/favourites-screen/favourites-screen.component';
 import { NgoOverviewItemComponent } from './components/ngo-overview-item/ngo-overview-item.component';
+import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-item.component';
 import { MediaService } from './services/media.service';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -15,13 +16,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from "@angular/material/dialog";
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ValueTransformerPipe } from './pipes/value-transformer.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-
+import { OverlayService } from './services/overlay.service';
 
 @NgModule({
     imports: [
@@ -37,7 +40,8 @@ import { MatInputModule } from "@angular/material/input";
         FlexLayoutModule,
         ReactiveFormsModule,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        MatDialogModule
     ],
   declarations: [
     OverviewScreenComponent,
@@ -46,7 +50,8 @@ import { MatInputModule } from "@angular/material/input";
     FavouritesScreenComponent,
     NgoOverviewItemComponent,
     StarRatingComponent,
-    ValueTransformerPipe,
+    NgoDetailItemComponent,
+    ValueTransformerPipe
   ],
   exports: [
     MatTabsModule,
@@ -56,10 +61,12 @@ import { MatInputModule } from "@angular/material/input";
     MatIconModule,
     MatListModule,
     MatExpansionModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
   providers: [
     MediaService,
+    OverlayService,
     ValueTransformerPipe
   ]
 })
