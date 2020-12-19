@@ -26,8 +26,8 @@ def ngo_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def ngo_detail(request, pk):
-    ngo = Ngo.objects.get(pk=pk)
+def ngo_detail(request):
+    ngo = Ngo.objects.get(pk=request.query_params.get('id'))
 
     if request.method == 'GET':
         ngo_serializer = NgoSerializer(ngo)

@@ -30,7 +30,7 @@ urlpatterns = [
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
     url(r'^ngos', ngo_controller.ngo_list),
-    url(r'^ngos/(?P<pk>[0-9]+)$', ngo_controller.ngo_detail),
+    url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'countries', views.country_list),
     url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
