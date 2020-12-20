@@ -37,7 +37,7 @@ export class OverviewScreenComponent implements OnInit {
 
   openNgoDetailItem(id: number): void {
     this.apiService.get('ngoDetailItem', { id: id }).subscribe(data => {
-      let ngoDetailItem: NgoDetailItem = data;
+      let ngoDetailItem: any = data;
       let dialogRef: CustomOverlayRef = this.ngoOverviewDialog.open({
         ngoDetailItem: ngoDetailItem
       });

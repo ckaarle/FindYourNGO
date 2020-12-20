@@ -4,44 +4,46 @@ export interface NgoDetailItem {
   id: number;
   name: string;
   acronym: string;
-  aim: string;
-  activities: string;
-  branches: string[];
-  topics: string[];
-  accreditations: string[];
-  stats: NgoStats;
-  contact: NgoContact;
-  trustworthiness: number;
-  amount: number; //TODO
+  description: NgoDetailItemDescription;
+  fieldOfActivity: NgoDetailItemFieldOfActivity;
+  stats: NgoDetailItemStats;
+  location: {address: {displayName: string, values: string}};
+  contact: NgoDetailItemContact;
+  rating: NgoDetailItemRating;
 }
 
-export interface NgoStats {
-  foundingYear: number;
-  staffNumber: number;
-  memberNumber: number;
-  workingLanguages: string;
-  funding: string;
-  presidentFirstName: string;
-  presidentLastName: string;
-  yearlyIncome: string;
-  typeOfOrganization: string[];
+export interface NgoDetailItemRating {
+  trustworthiness: {displayName: string, values: number};
+  amount: {displayName: string, values: number};
 }
 
-export interface NgoContact {
-  ngoPhoneNumber: string;
-  ngoEmail: string;
-  website: string;
-  representative: {
-    representativeFirstName: string;
-    representativeLastName: string;
-    representativeEmail: string;
-  };
-  address: {
-    street: string;
-    postcode: string;
-    city: string;
-    country: string;
-  }
+export interface NgoDetailItemContact {
+  ngoPhoneNumber: {displayName: string, values: string};
+  ngoEmail: {displayName: string, values: string};
+  representative?: {displayName: string, values: string};
+}
+
+export interface NgoDetailItemStats {
+  president?: {displayName: string, values: string};
+  foundingYear: {displayName: string, values: number};
+  staffNumber: {displayName: string, values: number};
+  memberNumber: {displayName: string, values: number};
+  yearlyIncome: {displayName: string, values: string};
+  funding: {displayName: string, values: string};
+  accreditations: {displayName: string, values: string[]};
+}
+
+export interface NgoDetailItemFieldOfActivity {
+  topics: {displayName: string, values: string[]};
+  activities: {displayName: string, values: string};
+  branches: {displayName: string, values: string[]};
+  workingLanguages: {displayName: string, values: string[]};
+}
+
+export interface NgoDetailItemDescription {
+  aim: {displayName: string, values: string};
+  typeOfOrganization: {displayName: string, values: string[]};
+  website: {displayName: string, values: string};
 }
 
 export interface NgoOverviewItem {
