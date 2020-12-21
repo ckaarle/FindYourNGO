@@ -39,7 +39,7 @@
 
 /* Custom theming */
 $custom-typography: mat-typography-config(
-  $font-family: "Roboto, Helvetiva Neue, sans-serif",
+    $font-family: "Roboto, Helvetiva Neue, sans-serif",
   $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 500), //h1
   $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
   $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
@@ -55,9 +55,9 @@ $app-theme: mat-light-theme($primary, $accent, $warn);
 @include angular-material-theme($app-theme);
 
 /* Global styles */
-html, body { 
+html, body {
   margin: 0;
-  height: 100%; 
+  height: 100%;
   font-family: Roboto, Helvetiva Neue, sans-serif;
   font-weight: 300;
   font-size: var(--font-size-normal);
@@ -75,20 +75,38 @@ html, body {
   justify-content: space-between;
 }
 
-span, p :not(.mat-raised-button.mat-accent){
+span, p :not(.mat-raised-button.mat-accent) {
   color: var(--primary-contrast-bw)
+}
+
+.mat-raised-button,
+.mat-button,
+.mat-icon-button {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  height: fit-content;
+  padding: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
 }
 
 .mat-raised-button.mat-accent:not([disabled]),
 .mat-button.mat-accent:not([disabled]),
 .mat-fab.mat-accent:not([disabled]),
-.mat-mini-fab.mat-fab.mat-accent:not([disabled]) {
+.mat-mini-fab.mat-fab.mat-accent:not([disabled]),
+.mat-icon-button.mat-accent:not([disabled]) {
   background-color: var(--secondary-color);
   color: var(--secondary-contrast-bw);
 }
 
-.mat-icon-button.mat-accent:not([disabled]) {
-  color: var(--secondary-color)
+.mat-raised-button:not([disabled]),
+.mat-button:not([disabled]),
+.mat-fab:not([disabled]),
+.mat-mini-fab.mat-fab:not([disabled]),
+.mat-icon-button:not([disabled]) {
+  background-color: var(--primary-color);
+  color: var(--primary-contrast-bw);
 }
 
 @mixin mat-icon-size($size: 24px) {

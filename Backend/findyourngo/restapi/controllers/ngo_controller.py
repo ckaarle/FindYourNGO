@@ -1,10 +1,16 @@
+from typing import Any
+
+from django.db.models import QuerySet
 from django.http.response import JsonResponse
 
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from findyourngo.restapi.models import Ngo
+from findyourngo.filtering.NgoFilter import NgoFilter
+from findyourngo.restapi.models import Ngo, NgoTopic, NgoBranch, NgoAddress, NgoType, NgoStats
+from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
+from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
@@ -73,3 +79,7 @@ def ngo_filter(ngos, query_params):  # this function should probably go somewher
         ngos = ngos.filter(tw_score__total_tw_score__gte=int(trust))
 
     return ngos
+
+@api_view(['GET'])
+def ngo_filter_options(request: Any) -> JsonResponse:
+    return JsonResponse(filter_object())

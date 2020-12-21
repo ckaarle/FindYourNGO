@@ -7,15 +7,24 @@ mat-card-title {
     min-height: calc(2.5 * var(--line-height-normal))
 }
 
+mat-card-subtitle {
+    min-height: calc(1.5 * var(--line-height-normal))
+}
+
 .location {
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 5px 0 0 0;
+    min-height: 24px;
 
 
-    .city {
+    .city, .city-unavailable {
         padding-left: 5px;
+    }
+
+    .city-unavailable {
+        font-style: italic;
     }
 
     .mat-icon {
@@ -28,6 +37,7 @@ mat-card-title {
     flex-direction: row;
     align-items: center;
     padding: 5px 0 0 0;
+    min-height: 24px;
 
     .rating-values {
         display: flex;

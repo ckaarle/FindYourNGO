@@ -1,0 +1,42 @@
+.filter-apply, .filter-select {
+    height: 50px;
+    border-radius: 16px;
+}
+
+.filter-select {
+    border: var(--background-contrast-color-10) 1px solid;
+    margin-right: 8px;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+}
+
+.filter-apply {
+    border: none;
+    margin-left: 8px;
+}
+
+.filter-option-item {
+    height: 50px;
+    font-size: var(--font-size-small);
+    background-color: var(--background-color);
+    border: var(--background-contrast-color-10) 1px solid;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
+
+    .mat-icon {
+        font-size: var(--font-size-medium);
+        height: var(--font-size-medium);
+        width: var(--font-size-medium);
+        line-height: var(--font-size-medium);
+        padding-right: 8px;
+        color: var(--primary-color);
+    }
+
+    input {
+        margin: 0;
+    }
+
+    .mat-checkbox-inner-container {
+        width: var(--font-size-small) !important;
+        height: var(--font-size-small) !important;
+    }
+}

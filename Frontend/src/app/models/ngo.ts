@@ -64,6 +64,25 @@ export interface NgoOverviewItemPagination {
   current_page: number;
 }
 
+export interface NgoFilterOptions {
+    branches: {values: string[], displayName?: string, icon?: string};
+    topics: {values: string[], displayName?: string, icon?: string};
+    typeOfOrganization: {values: string[], displayName?: string, icon?: string};
+    workingLanguages: {values: string[], displayName?: string, icon?: string};
+    funding: {values: string[], displayName?: string, icon?: string};
+    hasEcosoc: {values: boolean, displayName?: string, icon?: string};
+    isCredible: {values: boolean, displayName?: string, icon?: string};
+    trustworthiness: {values: number, displayName?: string, icon?: string};
+    countries: {values: string[], displayName?: string, icon?: string};
+    cities: {values: string, displayName?: string, icon?: string};
+    contactOptionPresent: {values: boolean, displayName?: string, icon?: string};
+    [key: string]: any;
+}
+
+export interface NgoFilterSelection {
+    [keyOption: string]: any;
+}
+ 
 export interface Countries {
     countries: string[];
 }
