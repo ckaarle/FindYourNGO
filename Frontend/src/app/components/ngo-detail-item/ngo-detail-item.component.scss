@@ -1,6 +1,7 @@
 :host {
     background: white;
     border-radius: 4px;
+    overflow-y: auto;
 }
 
 .ngo-detail-item {
@@ -28,6 +29,7 @@
                 display: flex;
                 flex-direction: column;
                 padding: 4px 0 0 16px;
+                width: 100%;
 
                 .title-row {
                     display: flex;
@@ -36,6 +38,7 @@
 
                     span {
                         padding-right: 12px;
+                        white-space: break-spaces;
                     }
 
                     .title {
@@ -51,7 +54,6 @@
 .ngo-rating {
     display: flex;
     flex-direction: row;
-    align-items: center;
     padding: 5px 0 0 0;
 
     .rating-values {
@@ -59,7 +61,6 @@
         flex-direction: row;
         font-size: var(--font-size-small);
         padding-left: 5px;
-        align-items: center;
 
         .rating-values-amount {
             padding-left: 5px;
