@@ -9,6 +9,10 @@ from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 
 
 def _invalid_country(country: str) -> bool:
+
+    if country == 'ASIA':
+        return True
+
     if 'COUNTRIES' in country:
         return True
 
@@ -62,7 +66,7 @@ def convert_ngo_branch(info: Info) -> List[NgoBranch]:
 
     branches = []
     for country in countries:
-        country = country.upper()
+        country = country.upper().strip()
         country = _fix_country(country)
 
         if _invalid_country(country):
@@ -179,8 +183,23 @@ def _fix_address_country(country: str) -> str:
     if country is None:
         return country
 
-    if country == '47 avenue de la résistance 93104 Montreuil Cedex'.upper():
+    if '47 avenue de la résistance'.upper() in country:
         country = 'France'.upper()
+
+    if '138, avenue des'.upper() in country:
+        country = 'France'.upper()
+
+    if '99 Chauncy Street'.upper() in country:
+        country = 'USA'
+
+    if '40 Worth Street'.upper() in country:
+        country = 'USA'
+
+    if 'Arlington, VA'.upper() in country:
+        country = 'USA'
+
+    if 'Beirut, Badaro'.upper() in country:
+        country = 'Lebanon'.upper()
 
     if country == '(not available for security reasons)'.upper():
         country = ''
@@ -258,7 +277,7 @@ def convert_ngo_address(info: Info) -> Optional[NgoAddress]:
     street_formatted = set_to_empty_string_if_none(info.main_info.address.street)
     post_code_formatted = set_to_empty_string_if_none(info.main_info.address.postcode)
     city_formatted = set_to_empty_string_if_none(info.main_info.address.city)
-    country_formatted = set_to_empty_string_if_none(info.main_info.address.country).upper()
+    country_formatted = set_to_empty_string_if_none_upper_else(info.main_info.address.country).upper()
     country_formatted = _fix_address_country(country_formatted)
 
     if all_empty_string([street_formatted, post_code_formatted, city_formatted, country_formatted]):
