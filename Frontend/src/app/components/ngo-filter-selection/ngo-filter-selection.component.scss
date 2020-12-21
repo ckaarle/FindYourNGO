@@ -1,0 +1,33 @@
+.filter-option-container {
+    padding: 32px;
+
+    h1 {
+        padding-bottom: 5px;
+        margin-bottom: 32px;
+        border-bottom: 1px solid var(--background-contrast-color-10)
+    }
+
+    mat-divider {
+        margin-top: 16px;
+        margin-bottom: 32px;
+    }
+
+    .filter-option-category {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        font-size: var(--font-size-normal);
+        align-items: center;
+
+        .filter-option-item {
+            padding: 0 10px;
+        }
+    }
+
+    .filter-apply {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 32px;
+    }
+}

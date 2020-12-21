@@ -1,0 +1,40 @@
+<div class="filter-options">
+    <mat-chip-list #chipList>
+        <button class="filter-select" (click)="openFilterSelection()" mat-icon-button>
+            <mat-icon>tune</mat-icon>
+        </button>
+
+        <div *ngFor="let filterOption of filterOptions | keyvalue;">
+            <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)" [removable]="true"
+                (removed)="removeValue(filterOption.key)">
+                <mat-icon>{{filterOption.value?.icon}}</mat-icon>
+
+                <mat-form-field *ngIf="!(filterOption.value?.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
+                    <mat-label>{{filterOption.value?.displayName}}</mat-label>
+
+                    <input *ngIf="!(filterOption.value?.values)" matInput
+                        [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
+                        (input)="addValue(filterOption.key, $any($event.target).value)"
+                        placeholder="{{filterOption.value?.displayName}}" [value]="filterSelection[filterOption.key]" />
+
+                    <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
+                        [(ngModel)]="filterSelection[filterOption.key]">
+                        <mat-option *ngFor="let optionValue of filterOption.value?.values" [value]="optionValue"
+                            (onSelectionChange)="addValue(filterOption.key, $event.source.value, true)">{{optionValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-checkbox *ngIf="filterOption.value?.values | typeEvaluator: 'isBoolean'"
+                    (change)="addValue(filterOption.key, $event.checked)" [checked]="filterSelection[filterOption.key]">
+                    {{filterOption.key}}</mat-checkbox>
+
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+        </div>
+
+        <button class="filter-apply" *ngIf="filterUpdated" (click)="applyFilter()" mat-icon-button>
+            <mat-icon>filter_list</mat-icon>
+        </button>
+    </mat-chip-list>
+</div>

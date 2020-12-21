@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ActivationEnd, NavigationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
-import { MediaService } from './services/media.service';
+import {Component} from '@angular/core';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {filter, map} from 'rxjs/operators';
+import {MediaService} from './services/media.service';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +10,8 @@ import { MediaService } from './services/media.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  screens = ['Map', 'Overview', 'Favourites'];
-  activeScreen = this.screens[1];
+  screens = [/*'Map', */'Overview', 'Favourites'];
+  activeScreen = this.screens[0];
   currentTitle: string = 'Find your NGO';
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService, private titleService: Title) {
@@ -25,20 +25,20 @@ export class AppComponent {
 
   setTitle(): void {
     this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        let child = this.activatedRoute.firstChild;
-        while (child) {
-          if (child.firstChild) {
-            child = child.firstChild;
-          } else if (child.snapshot.data && child.snapshot.data['title']) {
-            return child.snapshot.data['title'];
-          } else {
-            return null;
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {
+          let child = this.activatedRoute.firstChild;
+          while (child) {
+            if (child.firstChild) {
+              child = child.firstChild;
+            } else if (child.snapshot.data && child.snapshot.data['title']) {
+              return child.snapshot.data['title'];
+            } else {
+              return null;
+            }
           }
-        }
-        return null;
-      })
+          return null;
+        })
     ).subscribe((data: any) => {
       if (data) {
         this.titleService.setTitle(data);
