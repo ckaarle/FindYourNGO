@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {NgoOverviewItemPagination} from '../models/ngo';
 import {PaginationComponent} from '../components/pagination/pagination.component';
 
@@ -11,10 +11,16 @@ const MAX_PAGES_TO_DISPLAY = 5;
 })
 export class PaginationService {
 
-  constructor() { }
+  constructor() {
+  }
 
   update(data: NgoOverviewItemPagination, component: PaginationComponent): void {
     const previousCurrentPage = component.currentPageNumber;
+
+    if (data.previous == null && data.next == null) {
+      component.surroundingPages = [];
+    }
+
     component.currentPageNumber = data.current_page;
     component.totalPages = data.total_pages;
 
@@ -28,8 +34,7 @@ export class PaginationService {
         component.surroundingPages.push(currentPage);
         currentPage += 1;
       }
-    }
-    else {
+    } else {
       if (previousCurrentPage < component.currentPageNumber) {
         const nextPageNumber = component.surroundingPages[component.surroundingPages.length - 1] + 1;
 
