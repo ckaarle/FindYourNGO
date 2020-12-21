@@ -1,79 +1,84 @@
 mat-sidenav-container, mat-sidenav-content, mat-sidenav {
-    height: 100%;
+  height: 100%;
 }
 
 .sidenav {
-    width: 250px;
+  width: 250px;
 
-    .sidenav-head {
-        display: flex;
-        height: 64px;
+  .sidenav-head {
+    display: flex;
+    height: 64px;
+  }
+
+  .sidenav-item {
+    height: 64px;
+
+    .sidenav-label {
+      padding-left: 5px;
     }
-
-    .sidenav-item {
-        height: 64px;
-
-        .sidenav-label {
-            padding-left: 5px;
-        }
-    }
+  }
 }
 
 .navbar {
-    height: 64px;
-    border: unset;
+  height: 80px;
+  border: unset;
 
-    .navbar-label {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        box-sizing: border-box;
-        margin-left: 5px;
-        color: var(--primary-contrast-bw)
-    }
+  .navbar-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    margin-left: 5px;
+    color: var(--primary-contrast-bw);
+  }
 
-    .navbar-row {
+  .navbar-row {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+
+    &.mobile {
+      justify-content: flex-start;
+
+      .mobile-navbar {
         display: flex;
-        flex-direction: row;
-        height: 100%;
-        box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
-
-        &.mobile {
-            justify-content: flex-start;
-
-            .mobile-navbar {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-            }
-        }
-
-        &.desktop {
-            justify-content: center;
-
-            .desktop-navbar {
-                display: flex;
-                border: unset;
-                justify-content: space-around;
-                overflow: hidden;
-                height: 64px;
-            }  
-        }  
-
-        .mat-tab-nav-bar {
-            width: 60%;
-            border-bottom: none;
-        }
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
     }
+
+    &.desktop {
+      justify-content: center;
+
+      .desktop-navbar {
+        display: flex;
+        border: unset;
+        justify-content: space-around;
+        overflow: hidden;
+        height: 64px;
+      }
+    }
+
+    .mat-tab-nav-bar {
+      width: 40%;
+      border-bottom: none;
+    }
+
+  }
+}
+
+.mat-tab-link {
+  align-self: center;
 }
 
 main {
-    padding: 16px 32px;
+  padding: 16px 32px;
 }
 
 .search {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 0 32px 32px 0;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 0 32px 32px 0;
 }
