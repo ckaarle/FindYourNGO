@@ -14,7 +14,8 @@
        *ngFor="let overviewItem of overviewItems"
        (click)="filterSelectionDrawer.close()">
     <ngo-overview-item [ngoOverviewItem]="overviewItem"
-                       [editableRating]="false"></ngo-overview-item>
+                         [editableRating]="false"
+                         (click)="openNgoDetailItem(overviewItem.id)"></ngo-overview-item>
         <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
   </div>
   <div class="buttonBar">

@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {OverviewService} from '../../services/overview.service';
 import {FilterService} from 'src/app/services/filter.service';
-import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
+import { NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import { ApiService } from '../../services/api.service';
 import { ActivatedRoute } from '@angular/router';
+import { CustomOverlayRef, OverlayService } from 'src/app/services/overlay.service';
 
 
 @Component({
@@ -24,13 +25,13 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   selectedFilters: NgoFilterSelection = {};
 
   constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService, public apiService: ApiService,
-    public route: ActivatedRoute) {
+    public route: ActivatedRoute, private ngoOverviewDialog: OverlayService) {
     super();
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(
-  params => this.queryList = params);
+      params => this.queryList = params);
     this.getNgoOverviewItems();
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
@@ -41,6 +42,15 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   getNgoOverviewItems(): void {
     this.apiService.get('ngoOverviewItems', this.queryList).subscribe(
       data => this.processPaginatedResults(data));
+  }
+
+  openNgoDetailItem(id: number): void {
+    this.apiService.get('ngoDetailItem', { id: id }).subscribe(data => {
+      let ngoDetailItem: any = data;
+      let dialogRef: CustomOverlayRef = this.ngoOverviewDialog.open({
+        ngoDetailItem: ngoDetailItem
+      });
+    });
   }
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
@@ -102,5 +112,4 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.processPaginatedResults(filteredOverviewItems);
     console.log('Filtered Items:', this.overviewItems);
   }
-
 }

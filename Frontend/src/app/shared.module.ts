@@ -5,8 +5,10 @@ import {SearchScreenComponent} from './screens/search-screen/search-screen.compo
 import {MapScreenComponent} from './screens/map-screen/map-screen.component';
 import {FavouritesScreenComponent} from './screens/favourites-screen/favourites-screen.component';
 import {NgoOverviewItemComponent} from './components/ngo-overview-item/ngo-overview-item.component';
+import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-item.component';
 import {NgoFilterComponent} from './components/ngo-filter/ngo-filter.component';
 import {NgoFilterSelectionComponent} from './components/ngo-filter-selection/ngo-filter-selection.component';
+import { MediaService } from './services/media.service';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -16,21 +18,22 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
+import { MatDialogModule } from "@angular/material/dialog";
+
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {StarRatingComponent} from './components/star-rating/star-rating.component';
 import {ValueTransformerPipe} from './pipes/value-transformer.pipe';
 import {TypeEvaluatorPipe} from './pipes/type-evaluator.pipe';
-
+import { OverlayService } from './services/overlay.service';
 import {OverviewService} from './services/overview.service';
-import {MediaService} from './services/media.service';
 import {FilterService} from './services/filter.service';
 import {PaginationComponent} from './components/pagination/pagination.component';
 
@@ -50,6 +53,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatSelectModule,
     MatCheckboxModule,
     MatInputModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
@@ -65,6 +69,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     StarRatingComponent,
     NgoFilterComponent,
     NgoFilterSelectionComponent,
+    NgoDetailItemComponent,
     ValueTransformerPipe,
     TypeEvaluatorPipe
   ],
@@ -78,6 +83,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatExpansionModule,
     MatCardModule,
     MatChipsModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatSelectModule,
     MatCheckboxModule,
@@ -89,6 +95,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
   providers: [
     MediaService,
     OverviewService,
+    OverlayService,
     FilterService,
     ValueTransformerPipe,
     TypeEvaluatorPipe
