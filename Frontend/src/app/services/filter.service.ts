@@ -51,7 +51,7 @@ export class FilterService {
       cities: { displayName: "Cities", values: data.cities, icon: "location_on" },
       contactOptionPresent: { displayName: "Contactable", values: data.contactOptionPresent, icon: "how_to_reg" },
       typeOfOrganization: { displayName: "Type of organization", values: data.typeOfOrganization, icon: "corporate_fare" },
-      workingLanguages: { displayName: "Working languages", values: data.working_languages, icon: "translate" },
+      workingLanguages: { displayName: "Working languages", values: ['German', 'English', 'French'], icon: "translate" },
       funding: { displayName: "Funding", values: data.funding, icon: "attach_money" },
       trustworthiness: { displayName: "Trustworthiness", values: data.trustworthiness, icon: "star" }
     }

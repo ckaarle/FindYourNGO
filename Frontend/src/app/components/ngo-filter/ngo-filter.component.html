@@ -15,7 +15,8 @@
                     <input *ngIf="!(filterOption.value?.values)" matInput
                         [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
                         (input)="addValue(filterOption.key, $any($event.target).value)"
-                        placeholder="{{filterOption.value?.displayName}}" [value]="filterSelection[filterOption.key]" />
+                        placeholder="{{filterOption.value?.displayName}}"
+                        [value]="filterSelection[filterOption.key]" />
 
                     <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
                         [(ngModel)]="filterSelection[filterOption.key]">

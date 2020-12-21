@@ -48,15 +48,19 @@
     <mat-form-field *ngIf="!(filterOption.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
         <mat-label>{{filterOption.displayName}}</mat-label>
 
-        <input *ngIf="!(filterOption.values)" matInput [type]="key == 'trustworthiness'? 'number': 'text'"
-            (change)="addValue(key, $any($event.target).value)" placeholder="{{filterOption.displayName}}" />
+        <input *ngIf="!(filterOption.values)" matInput
+            [type]="key == 'trustworthiness'? 'number': 'text'"
+            (change)="addValue(key, $any($event.target).value)"
+            placeholder="{{filterOption.displayName}}"
+            [value]="filterSelection[key]? filterSelection[key]: filterOption.displayName" />
 
-        <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple>
+        <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple
+            [(ngModel)]="filterSelection[key]">
             <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"
                 (onSelectionChange)="addValue(key, $event.source.value, true)">{{optionValue}}
             </mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'" (change)="addValue(key, $event.checked)">{{key}}</mat-checkbox>
+    <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'" (change)="addValue(key, $event.checked)" [checked]="filterSelection[key]">{{key}}</mat-checkbox>
 </ng-template>
