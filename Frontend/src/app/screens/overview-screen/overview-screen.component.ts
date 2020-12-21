@@ -65,6 +65,11 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     }
   }
 
+  // getNgoOverviewItemsForPageNumber(pageNumber: number): void {
+  //   this.apiService.get('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
+  //       data => this.processPaginatedResults(data));
+  // }
+
   getFilterOptions(): void {
     this.filter.getNgoFilterOptions().subscribe(data => {
       this.filterOptions = this.filter.mapDataToObject(data);
@@ -96,8 +101,5 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.processPaginatedResults(filteredOverviewItems);
     console.log('Filtered Items:', this.overviewItems);
   }
-    getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-      this.apiService.get('ngoOverviewItems', {...this.queryList, page: pageNumber}).subscribe(
-        data => this.processPaginatedResults(data));
-    }
+
 }

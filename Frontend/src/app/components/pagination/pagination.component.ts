@@ -7,16 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaginationComponent implements OnInit {
 
-  currentPageNumber: number | undefined;
-  totalPages: number | undefined;
-  surroundingPages: number[] | undefined;
+  currentPageNumber: number;
+  totalPages: number;
+  surroundingPages: number[];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
     this.currentPageNumber = 1;
     this.totalPages = 1;
     this.surroundingPages = [];
+  }
+
+  ngOnInit(): void {
   }
 
 }
