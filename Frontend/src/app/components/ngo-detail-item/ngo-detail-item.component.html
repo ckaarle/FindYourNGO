@@ -1,4 +1,4 @@
-<mat-card class="ngo-detail-item" fxFlex="500px" fxFlex.xs="100%" fxFlex.sm="100%">
+<mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
     <div class="ngo-header">
         <h1>{{ngoDetailItem.name}}</h1>
         <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
@@ -15,10 +15,10 @@
     <div class="ngo-content">
         <div class="ngo-details">
             <div class="ngo-content-container" *ngFor="let ngoContentContainer of ngoContentContainers">
-                <mat-icon *ngIf="!containerHasValues(ngoContentContainer)">{{ngoContentContainer.icon}}</mat-icon>
-                <div class="content-column">
+                <mat-icon *ngIf="containerHasValues(ngoContentContainer)">{{ngoContentContainer.icon}}</mat-icon>
+                <div class="content-column" *ngIf="containerHasValues(ngoContentContainer)">
                     <div *ngFor="let ngoTitle of ngoContentContainer.values | keyvalue">
-                        <div class="title-row" *ngIf="ngoTitle.value?.values && ngoTitle.value.values != '' && ngoTitle.value.values.length">
+                        <div class="title-row" *ngIf="ngoTitle.value?.values && (ngoTitle.value?.values != '' || ngoTitle.value?.values != ' ' || ngoTitle.value?.values?.length())">
                             <span class="title">{{ngoTitle.value?.displayName}}</span>
                             <span>•</span>
                             <span>{{ngoTitle.value?.values}}</span>

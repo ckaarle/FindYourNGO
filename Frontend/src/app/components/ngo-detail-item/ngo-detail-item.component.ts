@@ -22,16 +22,22 @@ export class NgoDetailItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapDataToObject();
-    this.generateContactContainers();
+    this.generateContentContainers();
   }
 
-  containerHasValues(ngoContentContainer: NgoContentContainer) {
-    return Object.entries(ngoContentContainer.values).some(titleRow => {
-      titleRow.values as unknown != "" && titleRow.values.length != 0 && titleRow.values != undefined;
+  containerHasValues(ngoContentContainer: NgoContentContainer): boolean {
+    let hasValues = false;
+    Object.entries(ngoContentContainer.values).forEach(titleRow => {
+      if (hasValues) { 
+        return;
+      } else {
+        hasValues = titleRow[1].values != undefined && (typeof titleRow[1].values == "string" && /\S/.test(titleRow[1].values) || titleRow[1].values.length);
+      }
     });
+    return hasValues;
   }
 
-  generateContactContainers() {
+  generateContentContainers() {
     this.ngoContentContainers = [
       {icon: 'info', values: this.ngoDetailItem.description},
       {icon: 'group_work', values: this.ngoDetailItem.fieldOfActivity},
