@@ -37,3 +37,10 @@ export interface NgoFilterSelection {
     [keyOption: string]: any;
 }
  
+export interface Countries {
+    countries: string[];
+}
+
+export interface Topics {
+    topics: string[];
+}

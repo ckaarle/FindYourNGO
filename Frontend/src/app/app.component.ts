@@ -18,12 +18,12 @@ export class AppComponent {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.setTitle();
     this.media.init();
   }
 
-  setTitle() {
+  setTitle(): void {
     this.router.events.pipe(
         filter((event) => event instanceof NavigationEnd),
         map(() => {
@@ -67,8 +67,13 @@ export class AppComponent {
         return 'overview';
       case 'Favourites':
         return 'favourites';
+      case 'Search':
+        return 'search';
     }
     return '';
   }
 
+  getCurrentRoute(): string {
+    return this.router.url;
+  }
 }
