@@ -33,6 +33,8 @@ class NgoFilterView(GenericAPIView):
                 if filter_serializer.is_valid():
                     last_filter_config.clear()
                     last_filter_config.append(filter_serializer.create(filter_serializer.validated_data))
+                else:
+                    return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except:
                 return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

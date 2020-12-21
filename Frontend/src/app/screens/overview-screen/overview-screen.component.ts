@@ -45,6 +45,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
+    console.log('UPDATED')
 
     this.overviewItems = data.results;
 
