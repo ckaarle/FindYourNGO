@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {OverviewService} from '../../services/overview.service';
 import {FilterService} from 'src/app/services/filter.service';
-import { NgoDetailItem, NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
+import { NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import { ApiService } from '../../services/api.service';
@@ -111,10 +111,5 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination): void {
     this.processPaginatedResults(filteredOverviewItems);
     console.log('Filtered Items:', this.overviewItems);
-  }
-
-  getNgoOverviewItemsForPageNumber(pageNumber: number): void {
-    this.apiService.get('ngoOverviewItems', { ...this.queryList, page: pageNumber }).subscribe(
-      data => this.processPaginatedResults(data));
   }
 }
