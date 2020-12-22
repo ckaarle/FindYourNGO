@@ -65,6 +65,10 @@ html, body {
   color: var(--primary-contrast-bw);
 }
 
+.ngo-custom-overlay {
+  max-height: 500px;
+}
+
 .mat-menu-item, .mat-tab-link, .mat-toolbar {
   opacity: 1 !important;
   font-size: var(--font-size-medium);

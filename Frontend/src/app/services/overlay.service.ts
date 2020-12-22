@@ -8,13 +8,14 @@ interface CustomOverlayConfig {
   panelClass?: string;
   hasBackdrop?: boolean;
   backdropClass?: string;
+  height?: string;
   ngoDetailItem?: NgoDetailItem;
 }
 
 const DEFAULT_CONFIG: CustomOverlayConfig = {
   hasBackdrop: true,
   backdropClass: 'dark-backdrop',
-  panelClass: 'ngo-detail-item-dialog-panel'
+  panelClass: 'ngo-custom-overlay',
 };
 
 export const NGO_DETAIL_ITEM_DIALOG_DATA = new InjectionToken<NgoDetailItem>('NGO_DETAIL_ITEM_DIALOG_DATA');
