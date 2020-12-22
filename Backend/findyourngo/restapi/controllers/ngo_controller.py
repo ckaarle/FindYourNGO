@@ -1,16 +1,13 @@
 from typing import Any
 
-from django.db.models import QuerySet
 from django.http.response import JsonResponse
 
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from findyourngo.filtering.NgoFilter import NgoFilter
-from findyourngo.restapi.models import Ngo, NgoTopic, NgoBranch, NgoAddress, NgoType, NgoStats
-from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
-from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
+from findyourngo.restapi.models import Ngo
+from findyourngo.restapi.serializers.filter_serializer import filter_object
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
