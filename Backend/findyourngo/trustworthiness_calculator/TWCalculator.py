@@ -19,9 +19,14 @@ class TWCalculator:
             return 0
 
     def calculate_ecosoc_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
-        if any(filter(lambda acc: 'ECOSOC' in acc.accreditation.upper(), accreditations)):
+        if any(filter(lambda acc: self._contains_valid_accreditation(acc.accreditation.upper()), accreditations)):
             return self._data_source_count()
         return 0
+
+    def _contains_valid_accreditation(self, accreditations):
+        valid_accreditations = ['ECOSOC', 'ECONOMIC AND SOCIAL COUNCIL', 'ILO', 'COMMONWEALTH FOUNDATION']
+
+        return any(acc in accreditations for acc in valid_accreditations)
 
     def _calculate_raw_score(
             self,

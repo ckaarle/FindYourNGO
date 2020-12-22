@@ -39,18 +39,18 @@ for more accreditation information (also lists other accreditations)
 
 - listed by one credible source
 - listed by all data sources
-- ECOSOC accredited
+- ECOSOC/ILO/Commonwealth Foundation (CF) accredited
 
 
 ## What is the current score distribution?
 | Score | # NGOs |
 | ----- | ------: |
-| 0 | 687 |
+| 0 | 649 |
 | 1 | 0 |
 | 2 | 0 |
-| 3 | 269 |
-| 4 | 44 |
-| 5 | 1 |
+| 3 | 264 |
+| 4 | 48 |
+| 5 | 2 |
 
 
 ## How is the score calculated?
@@ -58,7 +58,7 @@ for more accreditation information (also lists other accreditations)
 Most straightforward option:
 - max. number of data sources: 2
 - max. credibility: (# data sources) x yes
-- max. accreditation: ECOSOC yes
+- max. accreditation: ECOSOC yes OR ILO yes OR CF yes
 
 However, an NGO should not be punished with a lower rating simply because we add a new, less credible data-source.
 It should be possible to obtain the optimal score with only one credible data source.
@@ -75,10 +75,10 @@ The following factors will be used:
 | --------------------- | ----------------------------- | -------- | --------- |
 | # data sources        | 1 per source | 2 | |
 | one credible source   | (# data sources overall) * 2 + 1  | 5 | one credible source > all (less) credible sources combined + ECOSOC |
-| ECOSOC                | # data sources overall | 2 | ECOSOC does not hold as much meaning without a credible source |
+| ECOSOC/ILO/CF              | # data sources overall | 2 | ECOSOC/ILO/CF does not hold as much meaning without a credible source |
 
 
-score_raw(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC(NGO)
+score_raw(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO)
 
 Since the score has to be scaled into the range [0..5], use the following [formula](https://stats.stackexchange.com/questions/281162/scale-a-number-between-a-range/281164) to achieve this:
 
