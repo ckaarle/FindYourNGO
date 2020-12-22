@@ -8,7 +8,7 @@ import { ValueTransformerPipe } from 'src/app/pipes/value-transformer.pipe';
   providers: [ValueTransformerPipe]
 })
 export class StarRatingComponent implements OnInit {
-  private readonly MAX_AMOUNT_OF_STARS: number = 5;
+  public readonly MAX_AMOUNT_OF_STARS: number = 5;
   starArray: any[] = [];
   hasHalfStar: boolean = false;
 

@@ -25,6 +25,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -37,6 +38,9 @@ import {OverviewService} from './services/overview.service';
 import {FilterService} from './services/filter.service';
 import {PaginationComponent} from './components/pagination/pagination.component';
 import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component';
+import { NgoTwRatingComponent } from './components/ngo-tw-rating/ngo-tw-rating.component';
+import { NgoRatingTableComponent } from './components/ngo-rating-table/ngo-rating-table.component';
+import { NgoReviewComponent } from './components/ngo-review/ngo-review.component';
 
 @NgModule({
   imports: [
@@ -56,6 +60,7 @@ import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component
     MatInputModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule
@@ -74,6 +79,9 @@ import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component
     ValueTransformerPipe,
     TypeEvaluatorPipe,
     NgoRatingComponent,
+    NgoTwRatingComponent,
+    NgoRatingTableComponent,
+    NgoReviewComponent,
   ],
   exports: [
     MatTabsModule,
@@ -91,6 +99,7 @@ import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component
     MatCheckboxModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule
   ],
