@@ -36,6 +36,7 @@ import { OverlayService } from './services/overlay.service';
 import {OverviewService} from './services/overview.service';
 import {FilterService} from './services/filter.service';
 import {PaginationComponent} from './components/pagination/pagination.component';
+import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     NgoFilterSelectionComponent,
     NgoDetailItemComponent,
     ValueTransformerPipe,
-    TypeEvaluatorPipe
+    TypeEvaluatorPipe,
+    NgoRatingComponent,
   ],
   exports: [
     MatTabsModule,
