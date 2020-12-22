@@ -6,6 +6,7 @@ from django.db.models import QuerySet, Q
 
 from findyourngo.filtering.filter_util import FilterConfig
 from findyourngo.restapi.models import Ngo
+from findyourngo.trustworthiness_calculator.trustworthiness_constants import VALID_ACCREDITATIONS
 
 
 class NgoFilter:
@@ -51,7 +52,7 @@ class NgoFilter:
     @property
     def _filter_ecosoc_condition(self) -> Q:
         if self._filter_config.use_ecosoc:
-            return Q(accreditations__accreditation__icontains='ECOSOC')
+            return reduce(operator.or_, [Q(accreditations__accreditation__icontains=acc) for acc in VALID_ACCREDITATIONS])
         else:
             return self._default_condition
 

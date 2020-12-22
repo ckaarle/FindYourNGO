@@ -3,7 +3,7 @@ from typing import Iterable
 
 from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import RAW_SCORE_MIN_VALUE, RAW_SCORE_MAX_VALUE, \
-    TW_MIN_VALUE, TW_MAX_VALUE
+    TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS
 from findyourngo.type_variables import TWScore
 
 
@@ -24,9 +24,7 @@ class TWCalculator:
         return 0
 
     def _contains_valid_accreditation(self, accreditations):
-        valid_accreditations = ['ECOSOC', 'ECONOMIC AND SOCIAL COUNCIL', 'ILO', 'COMMONWEALTH FOUNDATION']
-
-        return any(acc in accreditations for acc in valid_accreditations)
+        return any(acc in accreditations for acc in VALID_ACCREDITATIONS)
 
     def _calculate_raw_score(
             self,

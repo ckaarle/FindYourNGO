@@ -13,7 +13,7 @@ class FilterConfig:
             hq_city_to_include: str = '',
             use_contact_possible: bool = False,
             types_of_organization_to_include: List[str] = None,
-            working_languages_to_include: str = None,
+            working_languages_to_include: List[str] = None,
             funding_to_include: List[str] = None,
             trustworthiness_lower_bound: Optional[float] = None,
     ):
@@ -35,16 +35,17 @@ class FilterConfig:
         self.funding_to_include = funding_to_include if funding_to_include is not None else []
         self.trustworthiness_lower_bound = trustworthiness_lower_bound
 
-    def _add_translations(self, language: str) -> List[str]:
-        if language is None or not language:
-            return language
+    def _add_translations(self, languages: List[str]) -> List[str]:
+        if languages is None or not languages:
+            return []
         else:
-            language = language.upper()
             languages_with_translations = []
+            for language in languages:
+                language = language.upper()
 
-            for key, values in self._language_translations.items():
-                if key.upper() == language:
-                    languages_with_translations.append(key)
-                    languages_with_translations.extend(values)
+                for key, values in self._language_translations.items():
+                    if key.upper() == language:
+                        languages_with_translations.append(key)
+                        languages_with_translations.extend(values)
 
             return languages_with_translations

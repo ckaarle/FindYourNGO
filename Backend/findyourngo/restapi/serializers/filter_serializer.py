@@ -58,7 +58,7 @@ class FilterSerializer(serializers.Serializer):
     cities = serializers.CharField(required=False)
     contactOptionPresent = serializers.BooleanField(required=False)
     typeOfOrganization = serializers.ListField(required=False)
-    workingLanguages = serializers.CharField(required=False)
+    workingLanguages = serializers.ListField(required=False)
     funding = serializers.ListField(required=False)
     trustworthiness = serializers.FloatField(required=False)
 
