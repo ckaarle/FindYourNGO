@@ -41,6 +41,8 @@ import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component
 import { NgoTwRatingComponent } from './components/ngo-tw-rating/ngo-tw-rating.component';
 import { NgoRatingTableComponent } from './components/ngo-rating-table/ngo-rating-table.component';
 import { NgoReviewComponent } from './components/ngo-review/ngo-review.component';
+import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.component';
+import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
 
 @NgModule({
   imports: [
@@ -82,6 +84,8 @@ import { NgoReviewComponent } from './components/ngo-review/ngo-review.component
     NgoTwRatingComponent,
     NgoRatingTableComponent,
     NgoReviewComponent,
+    NgoReviewsComponent,
+    NgoNewReviewComponent,
   ],
   exports: [
     MatTabsModule,

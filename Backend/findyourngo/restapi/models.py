@@ -70,6 +70,8 @@ class NgoStats(models.Model):
 
 class NgoTWScore(models.Model):
     total_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    base_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    user_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
     number_data_sources_score = models.FloatField(default=1)
     credible_source_score = models.FloatField(default=0)
     ecosoc_score = models.FloatField(default=0)
@@ -91,3 +93,17 @@ class Ngo(models.Model):
 
     meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT) # meta data should not be deleted if a ngo is referencing them (we need the data source)
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
+
+
+class NgoCommenter(models.Model):
+    user_id = models.IntegerField() # TODO change to foreign key of user table
+    number_of_comments = models.IntegerField(default=0)
+
+
+class NgoComment(models.Model):
+    ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    commenter_id = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
+    create_date = models.DateField()
+    last_edited = models.DateField()
+    text = models.TextField()
+    rating = models.IntegerField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])

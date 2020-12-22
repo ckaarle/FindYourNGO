@@ -54,6 +54,7 @@ export class RatingService {
   }
 
   getTwRating(ngoId: number): Observable<TwRating> {
+    // return this.apiService.get('twRating', {id: ngoId});
     return of(this.mockData[ngoId.toString()] as TwRating); // TODO delegate to ApiService
   }
 }

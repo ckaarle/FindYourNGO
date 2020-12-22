@@ -30,9 +30,15 @@ export class NgoTwRatingComponent implements OnInit {
       this.totalCommentNumber = rating.totalCommentNumber;
 
       const sortedKeys = Object.keys(rating.commentNumberByRating).sort();
-      for (const key in sortedKeys) {
-        this.commentNumberIndexedByRating.unshift(rating.commentNumberByRating[(+key + 1).toString()]);
+
+      if (sortedKeys.length > 0) {
+        for (const key in sortedKeys) {
+          this.commentNumberIndexedByRating.unshift(rating.commentNumberByRating[(+key + 1).toString()]);
+        }
+      } else {
+        this.commentNumberIndexedByRating = [0, 0, 0, 0, 0];
       }
+
     });
   }
 
