@@ -1,0 +1,42 @@
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+select {
+  width: 600px;
+  margin-left: 24px;
+}
+
+hr {
+  width: 40%;
+}
+
+.align-right {
+  align-self: flex-end;
+}
+
+.page-transformation {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 640px;
+  margin: 24px auto auto auto;
+}
+
+.separator {
+  display: flex;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+#flex-left {
+  justify-content: left;
+  align-items: center;
+}
+
+#search-icon {
+  border: 0;
+  background: none;
+}

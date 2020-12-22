@@ -1,15 +1,47 @@
 .buttonBar {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   margin: 0 100px 0 0;
+  width: 100%;
 }
 
 .button {
   min-width: 2%;
+  border-color: transparent;
+  border-style: solid;
+  background-color: transparent;
+  color: var(--primary-contrast-bw);
+  box-shadow: none;
 }
 
 .buttonCurrent {
   min-width: 2%;
   border-color: var(--secondary-color);
   border-style: solid;
+}
+
+ngo-overview-item {
+  cursor: pointer;
+}
+.content {
+  display: flex;
+  justify-content: center;
+
+  .filter-drawer {
+    position: absolute;
+    height: fit-content;
+    top: 64px;
+    left: 0
+  }
+
+  .filter-bar {
+    width: 90%;
+    margin: 16px 0;
+  }
+
+  mat-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
 }

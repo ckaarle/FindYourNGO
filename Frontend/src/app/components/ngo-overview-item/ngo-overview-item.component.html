@@ -6,8 +6,9 @@
         </mat-card-header>
         <mat-card-content>
             <div class="location">
-                <mat-icon>location_on</mat-icon>
-                <div class="city">{{ngoOverviewItem.city}}</div>
+                <mat-icon *ngIf="ngoOverviewItem.city">location_on</mat-icon>
+                <div class="city" *ngIf="ngoOverviewItem.city">{{ngoOverviewItem.city}}</div>
+                <div class="city-unavailable" *ngIf="!ngoOverviewItem.city">No location available</div>
             </div>
             <div class="rating">
                 <star-rating

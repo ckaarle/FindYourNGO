@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore, NgoType
-
-
-class NgoTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NgoType
-        fields = ['type']
+    NgoStats, NgoTWScore
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -32,7 +26,12 @@ class NgoRepresentativeSerializer(serializers.ModelSerializer):
 
 
 class NgoStatsSerializer(serializers.ModelSerializer):
-    typeOfOrganization = NgoTypeSerializer(source="type", many=True, read_only=True)
+    typeOfOrganization = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='type',
+        source='type_of_organization'
+    )
     foundingYear = serializers.IntegerField(source='founding_year')
     staffNumber = serializers.IntegerField(source='staff_number')
     memberNumber = serializers.IntegerField(source='member_number')
@@ -98,12 +97,17 @@ class NgoSerializer(serializers.ModelSerializer):
         slug_field='accreditation'
     )
 
+    trustworthiness = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='total_tw_score',
+        source='tw_score'
+    )
+
     stats = NgoStatsSerializer(read_only=True)
     contact = NgoContactSerializer(read_only=True)
     metaData = NgoMetaDataSerializer(source='meta_data', read_only=True)
-    twScore = NgoTWSerializer(source="tw_score", read_only=True)
 
     class Meta:
         model = Ngo
         fields = ['id', 'name', 'acronym', 'aim', 'activities', 'branches', 'topics', 'accreditations', 'stats',
-                  'contact', 'metaData', 'twScore']
+                  'contact', 'metaData', 'trustworthiness']

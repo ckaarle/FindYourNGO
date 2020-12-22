@@ -8,8 +8,9 @@
         </mat-list-item>
       </div>
       <mat-accordion>
-        <mat-list-item class="sidenav-item" *ngFor="let screen of screens" [routerLink]="getRouterLink(screen)"
-          routerLinkActive="active" (click)="sidenav.close()">
+        <mat-list-item class="sidenav-item" *ngFor="let screen of screens"
+                       [routerLink]="getRouterLink(screen)"
+                       routerLinkActive="active" (click)="sidenav.close()">
           <mat-icon color="primary">{{getScreenIcon(screen)}}</mat-icon>
           <span class="sidenav-label">{{screen}}</span>
           <mat-divider></mat-divider>
@@ -20,22 +21,29 @@
 
   <!-- navbar -->
   <mat-toolbar color="primary" class="navbar">
-    <mat-toolbar-row class="navbar-row" [ngClass]="{'mobile': media?.isMobile(), 'desktop': media?.isDesktop()}">
+    <mat-toolbar-row class="navbar-row"
+                     [ngClass]="{'mobile': media?.isMobile(), 'desktop': media?.isDesktop()}">
 
       <!-- mobile navbar -->
       <ng-container class="mobile-navbar" *ngIf="media?.isMobile()">
         <button mobile-menu-icon mat-icon-button (click)="sidenav.toggle()">
           <mat-icon class="navbar-label">menu</mat-icon>
         </button>
-        <span class="navbar-label" (click)="sidenav.toggle()">{{ currentTitle || 'Find your NGO' }}</span>
+        <span class="navbar-label" (click)="sidenav.toggle()">{{ currentTitle
+        || 'Find your NGO' }}</span>
       </ng-container>
 
       <!-- desktop navbar -->
       <ng-container class="desktop-navbar" *ngIf="media?.isDesktop()">
         <nav mat-tab-nav-bar>
-          <a mat-tab-link *ngFor="let screen of screens" (click)="activeScreen = screen"
-            [active]="activeScreen == screen" [routerLink]="getRouterLink(screen)">
-            <span class="navbar-label">{{screen}}</span>
+          <a mat-tab-link (click)="activeScreen = screens[0]"
+             [active]="activeScreen == screens[0]" [routerLink]="getRouterLink(screens[0])">
+            <span class="navbar-label">{{screens[0]}}</span>
+          </a>
+          <img src="assets/img/logo_red2.svg" alt="Logo" style="margin: 3px"/>
+          <a mat-tab-link (click)="activeScreen = screens[1]"
+             [active]="activeScreen == screens[1]" [routerLink]="getRouterLink(screens[1])">
+            <span class="navbar-label">{{screens[1]}}</span>
           </a>
         </nav>
       </ng-container>
@@ -50,7 +58,8 @@
   </main>
 
 
-  <button class="search" routerLink="/search" mat-fab mat-accent>
+  <button *ngIf="getCurrentRoute() != '/search'" class="search" routerLink="/search" mat-fab
+          mat-accent>
     <mat-icon>search</mat-icon>
   </button>
 </mat-sidenav-container>

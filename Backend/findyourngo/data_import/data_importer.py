@@ -9,6 +9,10 @@ from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 
 
 def _invalid_country(country: str) -> bool:
+
+    if country == 'ASIA':
+        return True
+
     if 'COUNTRIES' in country:
         return True
 
@@ -62,6 +66,7 @@ def convert_ngo_branch(info: Info) -> List[NgoBranch]:
 
     branches = []
     for country in countries:
+        country = country.upper().strip()
         country = _fix_country(country)
 
         if _invalid_country(country):
@@ -178,86 +183,101 @@ def _fix_address_country(country: str) -> str:
     if country is None:
         return country
 
-    if country == '47 avenue de la résistance 93104 Montreuil Cedex':
-        country = 'France'
+    if '47 avenue de la résistance'.upper() in country:
+        country = 'France'.upper()
 
-    if country == '(not available for security reasons)':
+    if '138, avenue des'.upper() in country:
+        country = 'France'.upper()
+
+    if '99 Chauncy Street'.upper() in country:
+        country = 'USA'
+
+    if '40 Worth Street'.upper() in country:
+        country = 'USA'
+
+    if 'Arlington, VA'.upper() in country:
+        country = 'USA'
+
+    if 'Beirut, Badaro'.upper() in country:
+        country = 'Lebanon'.upper()
+
+    if country == '(not available for security reasons)'.upper():
         country = ''
 
-    if country == '1F., No.2-1, Shunan St., Xindian Dist., New Taipei City, 23143, Taiwan':
-        country = 'Taiwan'
+    if country == '1F., No.2-1, Shunan St., Xindian Dist., New Taipei City, 23143, Taiwan'.upper():
+        country = 'Taiwan'.upper()
 
     if 'FÉDÉRATION HANDICAP INTERNATIONAL' in country:
-        country = 'France'
+        country = 'France'.upper()
 
     if 'NEW YORK OFFICE' in country:
-        country = 'Switzerland'
+        country = 'Switzerland'.upper()
 
-    if 'Discovery House' in country:
-        country = 'United Kingdom'
+    if 'Discovery House'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if '19 Rea St South Digbeth, Birmingham B5 6LB UK' in country:
-        country = 'United Kingdom'
+    if '19 Rea St South Digbeth, Birmingham B5 6LB UK'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if 'Street Masoud Bin Saed, P.O. Box 2943 , Amman 11181, Jordan' in country:
-        country = 'Jordan'
+    if 'Street Masoud Bin Saed, P.O. Box 2943 , Amman 11181, Jordan'.upper() in country:
+        country = 'Jordan'.upper()
 
-    if 'Oxfam House, John Smith Drive, Oxford OX4 2JY, UK' in country:
-        country = 'United Kingdom'
+    if 'Oxfam House, John Smith Drive, Oxford OX4 2JY, UK'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if '191028, Russia,' in country:
-        country = 'Russia'
+    if '191028, Russia,'.upper() in country:
+        country = 'Russia'.upper()
 
-    if '888 Commonwealth Avenue, 3rd floor, Boston, MA 02215 USA' in country:
+    if '888 Commonwealth Avenue, 3rd floor, Boston, MA 02215 USA'.upper() in country:
         country = 'USA'
 
-    if '100, rue des fougères' in country:
-        country = 'France'
+    if '100, rue des fougères'.upper() in country:
+        country = 'France'.upper()
 
-    if 'USA & Amsterdam' in country:
+    if 'USA & Amsterdam'.upper() in country:
         country = 'USA'
 
-    if '501 Kings Highway East, Suite 400, Fairfield, CT 06825 USA' in country:
+    if '501 Kings Highway East, Suite 400, Fairfield, CT 06825 USA'.upper() in country:
         country = 'USA'
 
-    if '301/301, Voluntários da Pátria, 22270-003, Rio de Janeiro, Rio de Janeiro, Brazil.' in country:
-        country = 'Brazil'
+    if '301/301, Voluntários da Pátria, 22270-003, Rio de Janeiro, Rio de Janeiro, Brazil.'.upper() in country:
+        country = 'Brazil'.upper()
 
-    if 'c/o Scorpio Corporate Advisors S-405 (LGF), Greater Kailash - II New Delhi 110 048 India' in country:
-        country = 'India'
+    if 'c/o Scorpio Corporate Advisors S-405 (LGF), Greater Kailash - II New Delhi 110 048 India'.upper() in country:
+        country = 'India'.upper()
 
-    if 'Parkstraat 83' in country:
-        country = 'Netherlands'
+    if 'Parkstraat 83'.upper() in country:
+        country = 'Netherlands'.upper()
 
-    if 'SolarAid' in country:
-        country = 'United Kingdom'
+    if 'SolarAid'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if '6 Charterhouse Buildings, London EC1M 7ET, UK' in country:
-        country = 'United Kingdom'
+    if '6 Charterhouse Buildings, London EC1M 7ET, UK'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if '2015 Australia' in country:
-        country = 'Australia'
+    if '2015 Australia'.upper() in country:
+        country = 'Australia'.upper()
 
-    if 'House No: 08(1st floor), Main Road, Block: C' in country:
-        country = 'Bangladesh'
+    if 'House No: 08(1st floor), Main Road, Block: C'.upper() in country:
+        country = 'Bangladesh'.upper()
 
-    if 'Rua Aspicuelta, 678, Vila Madalena - Zip Code: 05433-011, Sao Paulo/SP, Brazil.' in country:
-        country = 'Brazil'
+    if 'Rua Aspicuelta, 678, Vila Madalena - Zip Code: 05433-011, Sao Paulo/SP, Brazil.'.upper() in country:
+        country = 'Brazil'.upper()
 
-    if 'COMMUNICATIONS HOUSE, 26 YORK STREET, LONDON, W1U 6PZ, UK' in country:
-        country = 'United Kingdom'
+    if 'COMMUNICATIONS HOUSE, 26 YORK STREET, LONDON, W1U 6PZ, UK'.upper() in country:
+        country = 'United Kingdom'.upper()
 
-    if 'PO Box 4130,' in country:
-        country = 'Netherlands'
+    if 'PO Box 4130,'.upper() in country:
+        country = 'Netherlands'.upper()
 
-    return country
+    return country.strip()
 
 
 def convert_ngo_address(info: Info) -> Optional[NgoAddress]:
     street_formatted = set_to_empty_string_if_none(info.main_info.address.street)
     post_code_formatted = set_to_empty_string_if_none(info.main_info.address.postcode)
     city_formatted = set_to_empty_string_if_none(info.main_info.address.city)
-    country_formatted = set_to_empty_string_if_none(info.main_info.address.country)
+    country_formatted = set_to_empty_string_if_none_upper_else(info.main_info.address.country).upper()
     country_formatted = _fix_address_country(country_formatted)
 
     if all_empty_string([street_formatted, post_code_formatted, city_formatted, country_formatted]):
@@ -555,7 +575,7 @@ def update_ngo_tw_score(ngo: Ngo) -> None:
 
 def _update_with_ngo_advisor_info(info_match: Ngo, info: Info, source: str, credible: bool) -> None:
     if info_match.name == 'AMNESTY INTERNATIONAL':
-        info_match.contact.address.country = info.main_info.address.country.strip()
+        info_match.contact.address.country = info.main_info.address.country.strip().upper()
         _add_all_types(info, info_match)
         _add_all_branches(info, info_match)
         _add_all_topics(info, info_match)
@@ -589,7 +609,7 @@ def _update_with_ngo_advisor_info(info_match: Ngo, info: Info, source: str, cred
         info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
         info_match.contact.website = info.detail_info.hard_facts.website.strip()
         info_match.contact.address.city = info.main_info.address.city.strip()
-        info_match.contact.address.country = info.main_info.address.country.strip()
+        info_match.contact.address.country = info.main_info.address.country.strip().upper()
         _add_all_types(info, info_match)
         _add_all_branches(info, info_match)
         _add_all_topics(info, info_match)
@@ -723,7 +743,7 @@ def _fix_country(country):
         country = 'ETHIOPIA'
     if 'IVOIRE' in country or 'IVORY' in country:
         country = 'IVORY COAST'
-    return country
+    return country.strip()
 
 
 def run_initial_data_import() -> bool:
