@@ -17,7 +17,7 @@ export class PaginationService {
   update(data: NgoOverviewItemPagination, component: PaginationComponent): void {
     const previousCurrentPage = component.currentPageNumber;
 
-    if (data.previous == null && data.next == null) {
+    if (data.previous == null) {
       component.surroundingPages = [];
     }
 
