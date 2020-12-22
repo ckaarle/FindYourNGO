@@ -52,7 +52,7 @@
             [type]="key == 'trustworthiness'? 'number': 'text'"
             (change)="addValue(key, $any($event.target).value)"
             placeholder="{{filterOption.displayName}}"
-            [value]="filterSelection[key]? filterSelection[key]: filterOption.displayName" />
+            [value]="filterSelection[key]? filterSelection[key]: ''" />
 
         <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple
             [(ngModel)]="filterSelection[key]">
