@@ -32,7 +32,7 @@ class NgoFilter:
         query_set = query_set.filter(self._filter_working_languages_condition)
         query_set = query_set.filter(self._filter_funding_condition)
         query_set = query_set.filter(self._filter_trustworthiness_condition)
-        return query_set
+        return query_set.distinct()
 
     @property
     def _filter_branches_condition(self) -> Q:
