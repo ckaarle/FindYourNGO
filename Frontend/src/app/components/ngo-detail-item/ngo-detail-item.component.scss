@@ -3,7 +3,16 @@
   border-radius: 4px;
 }
 
+.card {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 1000px;
+  margin: 24px auto auto auto;
+}
+
 .ngo-detail-item {
+
   padding: 32px 32px 16px 32px;
 
   .ngo-header {
@@ -14,7 +23,6 @@
   }
 
   .ngo-content {
-    max-height: 65%;
     overflow-y: auto;
     overflow-x: hidden;
 
