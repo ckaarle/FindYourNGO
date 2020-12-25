@@ -151,3 +151,4 @@ def run_wango_data_import() -> bool:
     import_wango_general_data(source)
     accreditation = NgoAccreditation.objects.create(accreditation='Wango Code of Ethics')
     import_wango_accredited_data(source, accreditation)
+    return True

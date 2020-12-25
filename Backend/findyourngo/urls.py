@@ -38,7 +38,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
-    path('dataImportWango', views.dataImportWango, name='dataImportWango'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
     path('dataGenerate', views.dataGenerate, name='dataGenerate'),
     path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),

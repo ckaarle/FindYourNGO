@@ -6,13 +6,13 @@ from django.contrib.auth.models import User, Group
 from django.db import connection, transaction
 from django.http import HttpResponse, JsonResponse
 
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
 
+from findyourngo.data_import.data_importer import run_complete_data_import, update_ngo_tw_score
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from findyourngo.data_import.data_importer import run_initial_data_import
@@ -43,8 +43,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    initial_import_necessary = run_initial_data_import(request)
-    if initial_import_necessary:
+    data_import_necessary = run_complete_data_import(request)
+    if data_import_necessary:
         return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
     else:
         return HttpResponse('Data import not necessary')
