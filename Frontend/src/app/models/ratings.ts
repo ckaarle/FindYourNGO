@@ -7,8 +7,12 @@ export interface TwRating {
 }
 
 export interface TwComment {
+  id: number;
+  userId: number;
   userName: string;
-  userProfile: undefined; // TODO?
+  ngoId: number;
+  // userProfile: object; TODO?
+  commentsByUser: number;
   created: Date;
   last_edited: Date;
   rating: number;
@@ -16,7 +20,13 @@ export interface TwComment {
 }
 
 export interface TwComments {
-  ownComment: TwComment | undefined;
-  otherComments: TwComment[];
+  comments: TwComment[];
   commentNumber: number;
+}
+
+export interface NewTwComment {
+  ngoId: number;
+  userId: number;
+  rating: number;
+  text: string;
 }

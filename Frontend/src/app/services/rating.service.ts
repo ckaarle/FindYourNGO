@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
-import {Observable, of} from 'rxjs';
-import {TwRating} from '../models/ratings';
+import {Observable, of, throwError} from 'rxjs';
+import {NewTwComment, TwComment, TwComments, TwRating} from '../models/ratings';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RatingService {
 
-  mockData: { [id: string]: TwRating } = {
+  mockTwRatings: { [id: string]: TwRating } = {
     1: {
       totalTrustworthiness: 5,
       baseTrustworthiness: 5,
@@ -50,11 +50,152 @@ export class RatingService {
     },
   };
 
+
+  mockComments: TwComments[] = [
+    {
+      comments: [
+        {
+          id: 0,
+          userId: 10,
+          userName: 'reaaaaaally long user name',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 2,
+          created: new Date(2020, 12, 20),
+          last_edited: new Date(2020, 12, 22),
+          rating: 2,
+          text: 'This is a user comment. It really is not very short. Indeed, it is quite long. So we will see how it will be displayed. Maybe it will look weird, maybe it will look good. Hard to tell.'
+        },
+        {
+          id: 1,
+          userId: 11,
+          userName: 'User3',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 1,
+          created: new Date(2020, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 1,
+          text: ''
+        },
+        {
+          id: 2,
+          userId: 12,
+          userName: 'User4',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 2,
+          created: new Date(2019, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 5,
+          text: 'Mäh.'
+        },
+        { // own comment
+          id: 3,
+          userId: -1,
+          userName: 'Me',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 2,
+          created: new Date(2020, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 3,
+          text: 'This is my user comment. It is quite short :)'
+        },
+      ],
+      commentNumber: 3
+    },
+    {
+      comments: [
+        {
+          id: 4,
+          userId: 10,
+          userName: 'User2',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 1,
+          created: new Date(2020, 12, 20),
+          last_edited: new Date(2020, 12, 22),
+          rating: 2,
+          text: 'This is a user comment. It really is not very short. Indeed, it is quite long. So we will see how it will be displayed. Maybe it will look weird, maybe it will look good. Hard to tell.'
+        },
+        {
+          id: 5,
+          userId: -1,
+          userName: 'Me',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 2,
+          created: new Date(2020, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 3,
+          text: 'This is my user comment. It is quite short :)'
+        },
+        {
+          id: 6,
+          userId: 11,
+          userName: 'User3',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 3,
+          created: new Date(2020, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 1,
+          text: 'This is also a short comment.'
+        }
+      ],
+      commentNumber: 3
+    },
+    {
+      comments: [
+        {
+          id: 7,
+          userId: -1,
+          userName: 'Me',
+          // userProfile: null,
+          ngoId: 21348,
+          commentsByUser: 2,
+          created: new Date(2020, 12, 22),
+          last_edited: new Date(2020, 12, 22),
+          rating: 3,
+          text: 'This is my user comment. It is quite short :)'
+        }
+      ],
+      commentNumber: 1
+    },
+    {
+      comments: [],
+      commentNumber: 0
+    }
+  ];
+
   constructor(private apiService: ApiService) {
   }
 
   getTwRating(ngoId: number): Observable<TwRating> {
-    // return this.apiService.get('twRating', {id: ngoId});
-    return of(this.mockData[ngoId.toString()] as TwRating); // TODO delegate to ApiService
+    // return this.apiService.get('twRating', {id: ngoId}); TODO put back in
+    return of(this.mockTwRatings[ngoId.toString()] as TwRating);
+  }
+
+  getUserReviews(ngoId: number): Observable<TwComments> {
+    // return this.apiService.get('userReviewsForNgo', {id: ngoId}); // TODO test
+    return of(this.mockComments[0] as TwComments);
+  }
+
+  saveReview(newReview: NewTwComment) {
+    // return this.apiService.put('review', newReview) // TODO test
+    // return of({status: 202});
+    return throwError({status: 404});
+  }
+
+  deleteReview(id: number): Observable<any> {
+    // return throwError({status: 404});
+    // return this.apiService.delete('review', {id: id}); // TODO test
+    return of({status: 202});
+  }
+
+  getUserReview(reviewId: number): Observable<TwComment> {
+    // return this.apiService.get('review', {id: reviewId}); // TODO test
+    return of(this.mockComments[0].comments[3]);
   }
 }

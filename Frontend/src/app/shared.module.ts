@@ -43,6 +43,8 @@ import { NgoRatingTableComponent } from './components/ngo-rating-table/ngo-ratin
 import { NgoReviewComponent } from './components/ngo-review/ngo-review.component';
 import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.component';
 import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
+import { NgoOwnReviewComponent } from './components/ngo-own-review/ngo-own-review.component';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   imports: [
@@ -65,7 +67,8 @@ import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-revie
     MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AppRoutingModule
   ],
   declarations: [
     OverviewScreenComponent,
@@ -86,6 +89,7 @@ import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-revie
     NgoReviewComponent,
     NgoReviewsComponent,
     NgoNewReviewComponent,
+    NgoOwnReviewComponent,
   ],
   exports: [
     MatTabsModule,

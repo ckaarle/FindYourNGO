@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-        <img mat-card-avatar src="assets/img/generic_user_profile.png"/>
+    <img mat-card-avatar src="assets/img/generic_user_profile.png"/>
     <mat-card-title>{{comment.userName}}</mat-card-title>
     <mat-card-subtitle>has written {{comment.commentsByUser}} {{comment.commentsByUser > 1
         ? "reviews" : "review"}}</mat-card-subtitle>
@@ -12,6 +12,11 @@
     <p>{{comment.text}}</p>
   </mat-card-content>
   <mat-card-footer>
-    last edited: {{comment.last_edited | date}}
+    <p>last edited: {{comment.last_edited | date}}</p>
+    <p *ngIf="errorMessage" class="errorMessage">{{errorMessage}}</p>
   </mat-card-footer>
+  <mat-card-actions>
+    <button mat-button (click)="edit()">Edit</button>
+    <button mat-button (click)="delete()">Delete</button>
+  </mat-card-actions>
 </mat-card>

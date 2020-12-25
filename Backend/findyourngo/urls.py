@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'countries', views.country_list),
     url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
-    url(r'^twRating', rating_controller.tw_rating)
+    url(r'^twRating', rating_controller.tw_rating),
+    url(r'^userReviewsForNgo', rating_controller.userReviews),
+    url(r'^review', rating_controller.review),
 ]
 

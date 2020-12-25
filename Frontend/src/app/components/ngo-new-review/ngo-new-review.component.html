@@ -1,1 +1,15 @@
-<p>ngo-new-review works!</p>
+<mat-card>
+  <mat-card-header>Your review</mat-card-header>
+  <mat-card-content>
+    <star-rating #starRatingComponent [editable]="true" [value]="0"></star-rating>
+    <mat-form-field appearance="fill">
+      <textarea matInput placeholder="Add your review ..." [(ngModel)]="commentText"></textarea>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="save()">Save</button>
+  </mat-card-actions>
+  <mat-card-footer>
+    <p class="errorMessage" *ngIf="errorMessage">{{errorMessage}}</p>
+  </mat-card-footer>
+</mat-card>

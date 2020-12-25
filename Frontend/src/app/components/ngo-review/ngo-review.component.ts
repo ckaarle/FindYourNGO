@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {TwComment} from '../../models/ratings';
 
 @Component({
   selector: 'ngo-review',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NgoReviewComponent implements OnInit {
 
-  constructor() { }
+  @Input() comment: TwComment;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

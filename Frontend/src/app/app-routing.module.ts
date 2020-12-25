@@ -15,13 +15,13 @@ const routes: Routes = [
   {path: 'search', component: SearchScreenComponent, data: {title: 'Search'}},
   {path: 'favourites', component: FavouritesScreenComponent, data: {title: 'Favourites'}},
   {path: 'map', component: MapScreenComponent, data: {title: 'Map'}},
-  {path: 'newReview', component: NgoNewReviewComponent},
+  {path: 'newReview/:ngoId', component: NgoNewReviewComponent},
   {path: 'detailView/:id', component: NgoDetailItemComponent}
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}),
     CommonModule
   ],
   exports: [
