@@ -50,14 +50,6 @@ def dataImport(request):
         return HttpResponse('Data import not necessary')
 
 
-def dataImportWango(request):
-    wango_import_necessary = run_wango_data_import()
-    if wango_import_necessary:
-        return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
-    else:
-        return HttpResponse('Data import not necessary')
-
-
 def clearDatabase(request):
     cursor = connection.cursor()
     cursor.execute(delete_all_query)
