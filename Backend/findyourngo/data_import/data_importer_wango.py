@@ -1,9 +1,10 @@
+import shutil
 from findyourngo.restapi.models import Ngo, NgoAccreditation, NgoMetaData, NgoAddress, NgoContact, NgoDataSource
 from findyourngo.data_import.data_importer import update_ngo_tw_score, _get_ngo_tw_score
 
 
 def import_wango_general_data(source):
-    with open('/wango/results.txt', encoding='utf-8') as results:
+    with open('/tmp/results.txt', encoding='utf-8') as results:
         line_num = 0
         for line in results:
             line = line.strip()
@@ -25,7 +26,7 @@ def import_wango_general_data(source):
 
 
 def import_wango_accredited_data(source, accreditation):
-    with open('/wango/certified_results.txt', encoding='utf-8') as certified_results:
+    with open('/tmp/certified_results.txt', encoding='utf-8') as certified_results:
         line_num = 0
         for line in certified_results:
             line = line.strip()
@@ -66,7 +67,7 @@ def parse_name(name) -> (str, str):
 
 
 def parse_address(address) -> (str, str, str):
-    address = address.strip().split(',')
+    address = address.upper().strip().split(',')
     address = [x.strip() for x in address]
     street = None
     if address[0] == '1':
@@ -84,7 +85,7 @@ def parse_address(address) -> (str, str, str):
         country = address.pop()
         city = address.pop()
         street = ', '.join(address)
-    return country, city, street
+    return country.upper(), city, street
 
 
 def parse_email(email) -> str:
@@ -145,10 +146,20 @@ def create_or_update_ngo(name, source, acronym, country, city, street, email=Non
 
 
 def run_wango_data_import() -> bool:
+    # Move results to tmp directory to avoid slow wsl2 mounted file reading speed
+    shutil.copyfile('/wango/results.txt', '/tmp/results.txt')
+    shutil.copyfile('/wango/certified_results.txt', '/tmp/certified_results.txt')
+
     if NgoDataSource.objects.filter(source='Wango').count() > 0:
         return False
     source = NgoDataSource.objects.create(credible=False, source='Wango')
     import_wango_general_data(source)
-    accreditation = NgoAccreditation.objects.create(accreditation='Wango Code of Ethics')
+    accreditation = NgoAccreditation.objects.create(accreditation='WCE')
     import_wango_accredited_data(source, accreditation)
+
+    print(f'Updating the TW score, since it depends on # data sources, which might have changed after the initial import')
+    all_ngo_entries = Ngo.objects.all()
+    for ngo in all_ngo_entries:
+        update_ngo_tw_score(ngo)
+        ngo.save()
     return True

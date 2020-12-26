@@ -3,7 +3,6 @@ from typing import List, Optional, Iterable
 
 from findyourngo.data_import.InfoClasses import Info
 from findyourngo.data_import.european_council.parser import parse_european_council
-from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccreditation, NgoDataSource, NgoMetaData, \
     NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore, NgoCountry
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
@@ -925,9 +924,3 @@ def run_initial_data_import(request) -> bool:
 
 def database_not_empty() -> bool:
     return Ngo.objects.all()
-
-
-def run_complete_data_import() -> bool:
-    if not run_initial_data_import():
-        return False
-    return run_wango_data_import()

@@ -16,6 +16,7 @@ from findyourngo.data_import.data_importer import run_complete_data_import, upda
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from findyourngo.data_import.data_importer import run_initial_data_import
+from findyourngo.data_import.data_importer import update_ngo_tw_score, run_initial_data_import
 from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.data_generator import generate_data
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
@@ -43,7 +44,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    data_import_necessary = run_complete_data_import(request)
+    data_import_necessary = run_initial_data_import(request)
     if data_import_necessary:
         return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
     else:

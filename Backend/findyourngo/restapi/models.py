@@ -97,6 +97,7 @@ class NgoTWScore(models.Model):
     number_data_sources_score = models.FloatField(default=1)
     credible_source_score = models.FloatField(default=0)
     ecosoc_score = models.FloatField(default=0)
+    wce_score = models.FloatField(default=0)
     pagerank_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(PAGERANK_MAX_BOOST)])
     ngo_account_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(NGO_ACCOUNT_BOOST)])
     tw_series = models.ManyToManyField(NgoTWDataPoint)

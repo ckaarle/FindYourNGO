@@ -28,6 +28,11 @@ class TWCalculator:
             return self._data_source_count()
         return 0
 
+    def calculate_wce_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
+        if any(filter(lambda acc: 'WCE' in acc.accreditation.upper(), accreditations)):
+            return 1
+        return 0
+
     def _contains_valid_accreditation(self, accreditations):
         return any(acc in accreditations for acc in VALID_ACCREDITATIONS)
 
@@ -36,26 +41,29 @@ class TWCalculator:
             number_data_sources_score: float,
             credible_source_score: float,
             ecosoc_score: float,
+            wce_score: float,
             ngo_account_score: float,
     ) -> float:
-        return number_data_sources_score + credible_source_score + ecosoc_score + ngo_account_score
+        return number_data_sources_score + credible_source_score + ecosoc_score + ngo_account_score + wce_score
 
     def calculate_base_tw_from_partial_scores(
             self,
             number_data_sources_score: float,
             credible_source_score: float,
             ecosoc_score: float,
+            wce_score: float,
     ) -> TWScore:
-        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, 0)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, wce_score, 0)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_base_tw_from_ngo_tw_score(self, ngo_tw_score: NgoTWScore) -> TWScore:
         number_data_sources_score = ngo_tw_score.number_data_sources_score
         credible_source_score = ngo_tw_score.credible_source_score
         ecosoc_score = ngo_tw_score.ecosoc_score
+        wce_score = ngo_tw_score.wce_score
         ngo_account_score = ngo_tw_score.ngo_account_score
 
-        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, ngo_account_score)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, wce_score, ngo_account_score)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_user_tw_from_ngo_id(self, ngo_id: int) -> TWScore:
