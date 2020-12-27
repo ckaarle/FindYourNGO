@@ -31,7 +31,7 @@ export class NgoReviewsComponent implements OnInit {
   }
 
   private isOwnUserId(userId: number): boolean {
-    return userId < 0; // TODO compare to actual own user id once it exists
+    return userId <= 0; // TODO compare to actual own user id once it exists
   }
 
 }

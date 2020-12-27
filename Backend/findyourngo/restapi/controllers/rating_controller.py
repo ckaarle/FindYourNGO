@@ -19,14 +19,20 @@ def tw_rating(request) -> JsonResponse:
     except BaseException:
         return JsonResponse({'error': f'NGO with id {ngo_id} does not exist.'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
-    comments = NgoComment.objects.filter(ngo_id=ngo_id)
+    comments = NgoComment.objects.filter(ngo=ngo)
 
     total_tw = ngo.tw_score.total_tw_score
     base_tw = ngo.tw_score.base_tw_score
     user_tw = ngo.tw_score.user_tw_score
 
     total_comment_number = len(comments)
-    comments_by_rating = defaultdict(int)
+    comments_by_rating = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+    }
 
     for comment in comments:
         comments_by_rating[comment.rating] += 1
@@ -45,12 +51,12 @@ def convertComments(comments):
     result = []
 
     for comment in comments:
-        user = NgoCommenter.objects.get(pk=comment.commenter_id)
+        user = comment.commenter
         converted_comment = {
-            'id': None,
-            'userId': user.id,
+            'id': comment.id,
+            'userId': user.user_id,
             'userName': 'NAME', # TODO
-            'ngoId': comment.ngo_id,
+            'ngoId': comment.ngo.id,
             'commentsByUser': user.number_of_comments,
             'created': comment.create_date,
             'last_edited': comment.last_edited,
@@ -63,15 +69,15 @@ def convertComments(comments):
 
 
 @api_view(['GET'])
-def userReviews(request) -> JsonResponse: # TODO TEST
+def userReviews(request) -> JsonResponse:
     ngo_id = request.query_params.get('id')
 
     try:
-        Ngo.objects.get(pk=ngo_id)
+        ngo = Ngo.objects.get(pk=ngo_id)
     except BaseException:
         return JsonResponse({'error': f'NGO with id {ngo_id} does not exist.'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
-    comments = NgoComment.objects.filter(ngo_id=ngo_id)
+    comments = NgoComment.objects.filter(ngo=ngo).order_by('last_edited')
 
     result = {
         'comments': convertComments(comments),
@@ -81,7 +87,7 @@ def userReviews(request) -> JsonResponse: # TODO TEST
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def review(request) -> JsonResponse: # TODO TEST
+def review(request) -> JsonResponse:
     if request.method == 'GET':
         review_id = request.query_params.get('id')
         try:
@@ -94,32 +100,67 @@ def review(request) -> JsonResponse: # TODO TEST
         review = JSONParser().parse(request)
         try:
             user_id = review['userId']
-            user = NgoCommenter.objects.get(pk=user_id)
+            user = NgoCommenter.objects.get(user_id=user_id)
         except BaseException:
             return JsonResponse({'error': f'No user found for ID {user_id}'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
-        try:
-            ngo_id = review['ngoId']
-            rating = review['rating']
-            text = review['text']
+        comment_id = review['commentId']
 
-            create_time = datetime.now()
+        if comment_id is not None:
+            return update_comment(comment_id, review)
+        else:
+            return save_new_comment(review, user)
 
-            NgoComment.objects.create(
-                ngo_id=ngo_id,
-                commenter_id=user.id,
-                create_date=create_time,
-                last_edited=create_time,
-                text=text,
-                rating=rating,
-            )
-
-            return JsonResponse(data={'message': 'Review was successfully stored.'}, status=status.HTTP_200_OK)
-        except BaseException:
-            return JsonResponse({'error': f'Review could not be stored.'}, status=status.HTTP_400_BAD_REQUEST,
-                                safe=False)
 
     if request.method == 'DELETE':
         review_id = request.query_params.get('id')
-        NgoComment.objects.get(pk=review_id).delete()
+        comment = NgoComment.objects.get(pk=review_id)
+        comment.commenter.number_of_comments -= 1
+        comment.commenter.save()
+        comment.delete()
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+
+def update_comment(comment_id, review) -> JsonResponse:
+    rating = review['rating']
+    text = review['text']
+
+    update_time = datetime.now()
+
+    try:
+        comment = NgoComment.objects.get(pk=comment_id)
+        comment.text = text
+        comment.rating = rating
+        comment.last_edited = update_time
+        comment.save()
+        return JsonResponse({'message': 'Review successfully updated'}, status=status.HTTP_200_OK)
+    except BaseException:
+        return JsonResponse({'error': f'No review found for id {comment_id}'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def save_new_comment(review, user) -> JsonResponse:
+    try:
+        ngo_id = review['ngoId']
+        rating = review['rating']
+        text = review['text']
+
+        create_time = datetime.now()
+
+        ngo = Ngo.objects.get(pk=ngo_id)
+
+        NgoComment.objects.create(
+            ngo=ngo,
+            commenter=user,
+            create_date=create_time,
+            last_edited=create_time,
+            text=text,
+            rating=rating,
+        )
+
+        user.number_of_comments += 1
+        user.save()
+        return JsonResponse(data={'message': 'Review was successfully stored.'}, status=status.HTTP_200_OK)
+
+    except BaseException as err:
+        return JsonResponse({'error': f'Review could not be stored: {err}.'}, status=status.HTTP_400_BAD_REQUEST,
+                        safe=False)

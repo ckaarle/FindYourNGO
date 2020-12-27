@@ -18,15 +18,15 @@ export class NgoDetailItemComponent implements OnInit {
   public ngoDetailItem: any | NgoDetailItem;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService) {
-  }
-
-  ngOnInit(): void {
     let id = this.route.snapshot.paramMap.get('id');
     this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
       this.ngoDetailItem = data;
       this.mapDataToObject();
       this.generateContentContainers();
     });
+  }
+
+  ngOnInit(): void {
   }
 
   containerHasValues(ngoContentContainer: NgoContentContainer): boolean {

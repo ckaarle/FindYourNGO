@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {StarRatingComponent} from '../star-rating/star-rating.component';
 import {NewTwComment} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './ngo-new-review.component.html',
   styleUrls: ['./ngo-new-review.component.scss']
 })
-export class NgoNewReviewComponent implements OnInit {
+export class NgoNewReviewComponent implements OnInit, AfterViewInit {
 
   ngoId: number;
   reviewId: number;
@@ -30,17 +30,15 @@ export class NgoNewReviewComponent implements OnInit {
     if (this.reviewId != null) {
       this.ratingService.getUserReview(this.reviewId).subscribe(
           (review) => {
+            console.log(review)
             this.commentText = review.text;
             this.reviewId = review.id;
             this.reviewRating = review.rating;
+            if (this.reviewRating != null) {
+              this.starRatingComponent.setValue(this.reviewRating - 1);
+            }
           }
       );
-    }
-  }
-
-  ngAfterViewInit() {
-    if (this.reviewRating != null) {
-      this.starRatingComponent.setValue(this.reviewRating - 1);
     }
   }
 
@@ -48,8 +46,9 @@ export class NgoNewReviewComponent implements OnInit {
   save(): void {
     this.errorMessage = '';
 
-    const userRating = Math.round(this.starRatingComponent.value);
+    const userRating = Math.round(this.starRatingComponent.value) + 1;
     const newReview: NewTwComment = {
+      commentId: this.reviewId,
       ngoId: this.ngoId,
       userId: 0, // TODO
       rating: userRating,

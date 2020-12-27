@@ -173,29 +173,22 @@ export class RatingService {
   }
 
   getTwRating(ngoId: number): Observable<TwRating> {
-    // return this.apiService.get('twRating', {id: ngoId}); TODO put back in
-    return of(this.mockTwRatings[ngoId.toString()] as TwRating);
+    return this.apiService.get('twRating', {id: ngoId});
   }
 
   getUserReviews(ngoId: number): Observable<TwComments> {
-    // return this.apiService.get('userReviewsForNgo', {id: ngoId}); // TODO test
-    return of(this.mockComments[0] as TwComments);
+    return this.apiService.get('userReviewsForNgo', {id: ngoId});
   }
 
-  saveReview(newReview: NewTwComment) {
-    // return this.apiService.put('review', newReview) // TODO test
-    // return of({status: 202});
-    return throwError({status: 404});
+  saveReview(newReview: NewTwComment): Observable<any> {
+    return this.apiService.put('review', newReview);
   }
 
   deleteReview(id: number): Observable<any> {
-    // return throwError({status: 404});
-    // return this.apiService.delete('review', {id: id}); // TODO test
-    return of({status: 202});
+    return this.apiService.delete('review', {id: id});
   }
 
   getUserReview(reviewId: number): Observable<TwComment> {
-    // return this.apiService.get('review', {id: reviewId}); // TODO test
-    return of(this.mockComments[0].comments[3]);
+    return this.apiService.get('review', {id: reviewId});
   }
 }

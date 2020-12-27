@@ -25,6 +25,7 @@ export interface TwComments {
 }
 
 export interface NewTwComment {
+  commentId: number;
   ngoId: number;
   userId: number;
   rating: number;

@@ -21,6 +21,7 @@ export class NgoOwnReviewComponent implements OnInit {
 
   delete(): void {
     this.errorMessage = undefined;
+    console.log(this.comment)
     this.ratingService.deleteReview(this.comment.id).subscribe(
         (success) => this.showDeleteSuccess(),
         (error) => this.showDeleteError(),

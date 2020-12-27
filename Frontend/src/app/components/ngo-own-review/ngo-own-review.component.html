@@ -5,7 +5,7 @@
     <mat-card-subtitle>has written {{comment.commentsByUser}} {{comment.commentsByUser > 1
         ? "reviews" : "review"}}</mat-card-subtitle>
     <div>
-      <star-rating [value]="comment.rating" [editable]="false"></star-rating>
+      <star-rating [value]="comment.rating - 1" [editable]="false"></star-rating>
     </div>
   </mat-card-header>
   <mat-card-content>

@@ -101,8 +101,8 @@ class NgoCommenter(models.Model):
 
 
 class NgoComment(models.Model):
-    ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
-    commenter_id = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
+    ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    commenter = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
     create_date = models.DateField()
     last_edited = models.DateField()
     text = models.TextField()

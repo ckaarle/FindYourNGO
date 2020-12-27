@@ -48,8 +48,8 @@
                         </div>
                     </div>
                 </mat-tab>
-                <mat-tab label="User Rating">
-                    <ngo-rating [ngoId]="ngoDetailItem?.id"></ngo-rating>
+                <mat-tab label="User Rating" *ngIf="ngoDetailItem">
+                    <ngo-rating [ngoId]="ngoDetailItem.id"></ngo-rating>
                 </mat-tab>
             </mat-tab-group>
         </div>

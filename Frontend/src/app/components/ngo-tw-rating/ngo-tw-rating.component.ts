@@ -23,7 +23,7 @@ export class NgoTwRatingComponent implements OnInit {
 
   ngOnInit(): void {
     // const twRating = this.ratingService.getTwRating(this.ngoId).subscribe(rating => { TODO put back in
-    this.ratingService.getTwRating(this.NGO_ID).subscribe(rating => {
+    this.ratingService.getTwRating(this.ngoId).subscribe(rating => {
       this.totalTrustworthiness = rating.totalTrustworthiness;
       this.baseTrustworthiness = rating.baseTrustworthiness;
       this.userTrustworthiness = rating.userTrustworthiness;
