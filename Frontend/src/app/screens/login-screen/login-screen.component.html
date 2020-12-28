@@ -1,0 +1,9 @@
+<p>login-screen works!</p>
+<img src="{{ user?.photoUrl }}">
+<div>
+  <h4>{{ user?.name }}</h4>
+  <p>{{ user?.email }}</p>
+</div>
+<button (click)="signInWithGoogle()">G+</button>
+<button (click)="signInWithFB()">FB</button>
+<button (click)="signOut()">sign out</button>

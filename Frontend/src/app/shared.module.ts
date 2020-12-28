@@ -4,6 +4,7 @@ import {OverviewScreenComponent} from './screens/overview-screen/overview-screen
 import {SearchScreenComponent} from './screens/search-screen/search-screen.component';
 import {MapScreenComponent} from './screens/map-screen/map-screen.component';
 import {FavouritesScreenComponent} from './screens/favourites-screen/favourites-screen.component';
+import {LoginScreenComponent} from './screens/login-screen/login-screen.component';
 import {NgoOverviewItemComponent} from './components/ngo-overview-item/ngo-overview-item.component';
 import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-item.component';
 import {NgoFilterComponent} from './components/ngo-filter/ngo-filter.component';
@@ -18,15 +19,15 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatDialogModule } from '@angular/material/dialog';
 
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {StarRatingComponent} from './components/star-rating/star-rating.component';
@@ -64,6 +65,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     PaginationComponent,
     SearchScreenComponent,
     MapScreenComponent,
+    LoginScreenComponent,
     FavouritesScreenComponent,
     NgoOverviewItemComponent,
     StarRatingComponent,
