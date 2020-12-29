@@ -3,7 +3,9 @@
   <button mat-button *ngIf="!ownUserComment" [routerLink]="['/newReview', ngoId]">Write a
     review
   </button>
-  <p *ngIf="otherUserComments.length === 0 && !ownUserComment">No user reviews yet.</p>
-  <ngo-review *ngFor="let comment of otherUserComments" [comment]="comment"
-              class="review"></ngo-review>
+  <div class="otherReviews">
+    <p *ngIf="otherUserComments.length === 0 && !ownUserComment">No user reviews yet.</p>
+    <ngo-review *ngFor="let comment of otherUserComments" [comment]="comment"
+                class="review"></ngo-review>
+  </div>
 </div>

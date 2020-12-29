@@ -1,26 +1,27 @@
 <div class="rating-overview" fxLayoutGap="10px grid" fxLayout="row wrap" fxLayoutAlign="center">
 
-  <div class="tw-rating" fxFlex="40%"
+  <div class="tw-rating" fxFlex="33%"
        fxFlex.xs="100%" fxFlex.sm="50%">
-    <h5>User Rating</h5>
+    <h5 class="rating-header">User Rating</h5>
     <star-rating [value]="userTrustworthiness - 1" [editable]="false"></star-rating>
     <div class="rating-description">Based on {{totalCommentNumber}} user {{totalCommentNumber === 0
     || totalCommentNumber > 1 ? "ratings" : "rating"}}.
     </div>
 
     <ngo-rating-table [commentNumberIndexedByRating]="commentNumberIndexedByRating"
-                      [totalCommentNumber]="totalCommentNumber"></ngo-rating-table>
+                      [totalCommentNumber]="totalCommentNumber"
+    ></ngo-rating-table>
   </div>
 
-  <div class="tw-rating" fxFlex="30%"
+  <div class="tw-rating" fxFlex="33%"
        fxFlex.xs="100%" fxFlex.sm="25%">
-    <h5>Base Rating</h5>
+    <h5 class="rating-header">Base Rating</h5>
     <star-rating [value]="baseTrustworthiness - 1" [editable]="false"></star-rating>
   </div>
 
-  <div class="tw-rating" fxFlex="30%"
+  <div class="tw-rating" fxFlex="33%"
        fxFlex.xs="100%" fxFlex.sm="25%">
-    <h5>Overall Rating</h5>
+    <h5 class="rating-header">Overall Rating</h5>
     <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
   </div>
 </div>
