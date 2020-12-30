@@ -1,17 +1,33 @@
 <mat-card>
-  <mat-card-header>
-    <img mat-card-avatar src="assets/img/generic_user_profile.png"/>
-    <mat-card-title>{{comment.userName}}</mat-card-title>
-    <mat-card-subtitle>has written {{comment.commentsByUser}} {{comment.commentsByUser > 1
-        ? "reviews" : "review"}}</mat-card-subtitle>
-    <div>
-      <star-rating [value]="comment.rating - 1" [editable]="false"></star-rating>
+  <div>
+    <div class="header" fxLayoutGap="16px grid" fxLayout="row wrap">
+      <div fxFlex.xs="100%" fxFlex.sm="20%">
+        <img mat-card-avatar
+             src="assets/img/generic_user_profile.png"
+             class="avatar"/>
+
+      </div>
+
+      <div fxFlex.xs="100%" fxFlex.sm="40%">
+        <b class="title">{{comment.userName}}</b>
+        <p class="subtitle">has written {{comment.commentsByUser}} {{comment.commentsByUser > 1
+            ? "reviews"
+            : "review"}}</p>
+      </div>
+
+      <div fxFlex.xs="100%" fxFlex.sm="40%" class="right-aligned">
+        <star-rating [value]="comment.rating - 1"
+                     [editable]="false"></star-rating>
+      </div>
+
     </div>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{comment.text}}</p>
-  </mat-card-content>
-  <mat-card-footer>
-    <i class="editDate">last edited: {{comment.last_edited | date}}</i>
-  </mat-card-footer>
+  </div>
+
+  <div fxFlex.xs="100%" fxFlex.sm="100%">
+    <div class="reviewText">
+      <p>{{comment.text}}</p>
+    </div>
+    <br>
+    <i>last edited: {{comment.last_edited | date}}</i>
+  </div>
 </mat-card>

@@ -177,7 +177,8 @@ export class RatingService {
   }
 
   getUserReviews(ngoId: number): Observable<TwComments> {
-    return this.apiService.get('userReviewsForNgo', {id: ngoId});
+    // return this.apiService.get('userReviewsForNgo', {id: ngoId});
+    return of(this.mockComments[0]);
   }
 
   saveReview(newReview: NewTwComment): Observable<any> {

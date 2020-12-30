@@ -2,14 +2,42 @@
   color: var(--threshold-negative);
 }
 
-.editDate {
-  margin-left: 10px;
-}
-
 .reviewText {
   margin-top: 10px;
 }
 
-.buttons {
-  margin-right: 10px;
+.header {
+  display: flex;
+  justify-content: start;
+}
+
+.right-aligned {
+  margin-left: auto;
+}
+
+.subtitle {
+  color: var(--threshold-neutral);
+  margin-top: 10px;
+}
+
+.content {
+  display: flex;
+  justify-content: start;
+}
+
+.button {
+  height: 24px !important;
+  line-height: 24px !important;
+  width: 24px !important;
+}
+
+.button ::ng-deep .mat-icon {
+  height: 16px !important;
+  width: 16px !important;
+  line-height: 16px !important;
+  font-size: 16px !important;
+}
+
+.title {
+  font-size: 15px;
 }
