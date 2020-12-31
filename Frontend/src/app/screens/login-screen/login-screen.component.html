@@ -4,6 +4,45 @@
   <h4>{{ user?.name }}</h4>
   <p>{{ user?.email }}</p>
 </div>
+<mat-checkbox (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
+<br>
+
+<form *ngIf="isNgo">
+  <mat-form-field appearance="fill">
+    <input type="text"
+         matInput
+         [formControl]="ngoControl"
+         [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let name of $names | async | slice : 0 : 5" [value]="name">
+        {{name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
+
+<button (click)="updateForm('register')">Register</button>
+<button (click)="updateForm('login')">Login</button>
 <button (click)="signInWithGoogle()">G+</button>
 <button (click)="signInWithFB()">FB</button>
 <button (click)="signOut()">sign out</button>
+
+<form *ngIf="this.status === 'register'" [formGroup]="userForm">
+  <label>
+    UserName:
+    <input type="text" formControlName="username">
+  </label>
+</form>
+
+<form *ngIf="status !== ''" [formGroup]="userForm">
+  <label>
+    E-mail:
+    <input type="email" formControlName="email">
+  </label>
+
+    <label>
+    Password:
+    <input type="password" formControlName="password">
+  </label>
+  <button (click)="submit()">submit</button>
+</form>

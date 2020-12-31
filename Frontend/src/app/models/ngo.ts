@@ -82,9 +82,13 @@ export interface NgoFilterOptions {
 export interface NgoFilterSelection {
     [keyOption: string]: any;
 }
- 
+
 export interface Countries {
     countries: string[];
+}
+
+export interface Names {
+    names: string[];
 }
 
 export interface Topics {

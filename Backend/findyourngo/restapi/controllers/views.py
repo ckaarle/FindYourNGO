@@ -1,7 +1,7 @@
 import requests
 
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User, Group
 from django.db import connection, transaction
 from django.http import HttpResponse, JsonResponse
@@ -17,7 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from findyourngo.data_import.data_importer import run_initial_data_import, update_ngo_tw_score
 from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
-from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic
+from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccount
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -66,9 +66,24 @@ def country_list(request):
     return JsonResponse({'countries': result})
 
 
+def name_list(request):
+    result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
+    return JsonResponse({'names': result})
+
+
 def topic_list(request):
     result = list(map(lambda ngo_topic: ngo_topic['topic'], NgoTopic.objects.all().order_by('topic').values()))
     return JsonResponse({'topics': result})
+
+
+class LoginView(APIView):
+    def post(self, request):
+        return create_user(request.data, request.query_params.get('ngo_name'), 'login')
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        return create_user(request.data, request.query_params.get('ngo_name'), 'register')
 
 
 class GoogleView(APIView):
@@ -81,7 +96,7 @@ class GoogleView(APIView):
             content = {'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
 
-        return create_user(data)
+        return create_user(data, request.query_params.get('ngo_name'))
 
 
 class FacebookView(APIView):
@@ -98,20 +113,36 @@ class FacebookView(APIView):
             content = {'message': 'wrong facebook token / this facebook token is already expired.'}
             return Response(content)
 
-        return create_user(data)
+        return create_user(data, request.query_params.get('ngo_name'))
 
 
-def create_user(data):
+def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
         user = User.objects.get(email=data['email'])
+        if mode == 'register':
+            return Response({'error': 'User already registered'}, status=401)
     except User.DoesNotExist:
+        if mode == 'login':
+            return Response({'error': 'User not found'}, status=401)
         user = User()
-        user.username = data['email']
-        # provider random default password
-        user.password = make_password(BaseUserManager().make_random_password())
-        user.email = data['email']
+        if data.get('username'):
+            user.username = data['username']
+        else:
+            user.username = data['email']
+        if data['password']:
+            user.password = make_password(data['password'])
+        else:  # provider random default password
+            user.password = make_password(BaseUserManager().make_random_password())
+        user.email = data.get('email')
         user.save()
+        if ngo_name:
+            ngo = Ngo.objects.get(name=ngo_name)
+            NgoAccount.objects.create(user=user, ngo=ngo)
+            print(list(NgoAccount.objects.all()))
+
+    if mode == 'login' and not check_password(data['password'], user.password):
+        return Response({'error': 'User credentials incorrect'}, status=401)
 
     token = RefreshToken.for_user(user)  # generate token without username & password
     response = {'username': user.username,

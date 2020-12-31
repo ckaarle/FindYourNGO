@@ -1,4 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -91,3 +92,8 @@ class Ngo(models.Model):
 
     meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT) # meta data should not be deleted if a ngo is referencing them (we need the data source)
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
+
+
+class NgoAccount(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    ngo = models.ForeignKey(Ngo, on_delete=models.PROTECT)

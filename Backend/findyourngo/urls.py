@@ -28,6 +28,8 @@ router.register(r'groups', views.GroupViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('users/login/', views.LoginView.as_view(), name='email'),
+    path('users/register/', views.RegisterView.as_view(), name='email'),
     path('google/', views.GoogleView.as_view(), name='google'),
     path('facebook/', views.FacebookView.as_view(), name='facebook'),
     path('', include(router.urls)),
@@ -40,6 +42,7 @@ urlpatterns = [
     url(r'^ngos/filter/$', NgoFilterView.as_view()),
     path('recalculateTW', views.recalculateTW, name='recalculateTW'),
     url(r'countries', views.country_list),
+    url(r'names', views.name_list),
     url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
 ]
