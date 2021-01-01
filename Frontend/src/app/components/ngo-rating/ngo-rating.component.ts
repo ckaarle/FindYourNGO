@@ -8,8 +8,10 @@ import {Component, Input, OnInit} from '@angular/core';
 export class NgoRatingComponent implements OnInit {
 
   @Input() ngoId: number = 0;
+  @Input() ngoName: string;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

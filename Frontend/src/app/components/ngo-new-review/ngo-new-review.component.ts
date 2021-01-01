@@ -13,8 +13,9 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
 
   ngoId: number;
   reviewId: number;
+  ngoName = '';
   commentText = '';
-
+  
   errorMessage = '';
   reviewRating = null;
 
@@ -26,6 +27,7 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.ngoId = this.route.snapshot.paramMap.get('ngoId');
     this.reviewId = this.route.snapshot.paramMap.get('reviewId');
+    this.ngoName = this.route.snapshot.paramMap.get('ngoName');
 
     if (this.reviewId != null) {
       this.ratingService.getUserReview(this.reviewId).subscribe(

@@ -13,6 +13,7 @@ export class NgoReviewsComponent implements OnInit {
   otherUserComments: TwComment[] = [];
 
   @Input() ngoId: number = 0;
+  @Input() ngoName: string;
 
   constructor(private ratingService: RatingService) {
   }

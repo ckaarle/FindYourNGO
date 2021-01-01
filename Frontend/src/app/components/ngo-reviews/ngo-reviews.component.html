@@ -1,11 +1,16 @@
-<div class="reviews">
-  <ngo-own-review *ngIf="ownUserComment" [comment]="ownUserComment"></ngo-own-review>
-  <button mat-button *ngIf="!ownUserComment" [routerLink]="['/newReview', ngoId]">Write a
-    review
-  </button>
-  <div class="otherReviews">
-    <p *ngIf="otherUserComments.length === 0 && !ownUserComment">No user reviews yet.</p>
+<div>
+  <div class="own-review">
+    <ngo-own-review *ngIf="ownUserComment" [comment]="ownUserComment"
+                    [ngoName]="ngoName"></ngo-own-review>
+    <button mat-button *ngIf="!ownUserComment"
+            [routerLink]="['/newReview', ngoId, {ngoName: ngoName}]">Write a
+      review
+    </button>
+  </div>
+  <div class="otherReviews" fxLayoutGap="16px" fxLayout="column">
+    <p *ngIf="otherUserComments.length === 0 && !ownUserComment" fxFlex="100%">No user reviews
+      yet.</p>
     <ngo-review *ngFor="let comment of otherUserComments" [comment]="comment"
-                class="review"></ngo-review>
+                fxFlex="100%"></ngo-review>
   </div>
 </div>

@@ -12,6 +12,7 @@ export class NgoOwnReviewComponent implements OnInit {
 
   errorMessage: string | undefined = undefined;
   @Input() comment: TwComment;
+  @Input() ngoName: string;
 
   constructor(private ratingService: RatingService, private router: Router) {
   }
@@ -38,7 +39,7 @@ export class NgoOwnReviewComponent implements OnInit {
   }
 
   edit(): void {
-    this.router.navigate(['/newReview', this.comment.ngoId, {reviewId: this.comment.id}]);
+    this.router.navigate(['/newReview', this.comment.ngoId, {reviewId: this.comment.id, ngoName: this.ngoName}]);
   }
 
 }

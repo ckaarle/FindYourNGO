@@ -49,7 +49,7 @@
                     </div>
                 </mat-tab>
                 <mat-tab label="User Rating" *ngIf="ngoDetailItem">
-                    <ngo-rating [ngoId]="ngoDetailItem.id"></ngo-rating>
+                    <ngo-rating [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
                 </mat-tab>
             </mat-tab-group>
         </div>
