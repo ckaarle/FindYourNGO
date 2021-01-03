@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TwComment} from '../../models/ratings';
+import {TwReview} from '../../models/ratings';
 
 @Component({
   selector: 'ngo-review',
@@ -8,7 +8,7 @@ import {TwComment} from '../../models/ratings';
 })
 export class NgoReviewComponent implements OnInit {
 
-  @Input() comment: TwComment;
+  @Input() review: TwReview;
 
   constructor() {
   }

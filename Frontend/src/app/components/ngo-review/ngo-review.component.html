@@ -9,14 +9,14 @@
       </div>
 
       <div fxFlex.xs="100%" fxFlex.sm="40%">
-        <b class="title">{{comment.userName}}</b>
-        <p class="subtitle">has written {{comment.commentsByUser}} {{comment.commentsByUser > 1
+        <b class="title">{{review.userName}}</b>
+        <p class="subtitle">has written {{review.reviewsByUser}} {{review.reviewsByUser > 1
             ? "reviews"
             : "review"}}</p>
       </div>
 
       <div fxFlex.xs="100%" fxFlex.sm="40%" class="right-aligned">
-        <star-rating [value]="comment.rating - 1"
+        <star-rating [value]="review.rating - 1"
                      [editable]="false"></star-rating>
       </div>
 
@@ -25,9 +25,9 @@
 
   <div fxFlex.xs="100%" fxFlex.sm="100%">
     <div class="reviewText">
-      <p>{{comment.text}}</p>
+      <p>{{review.text}}</p>
     </div>
     <br>
-    <i>last edited: {{comment.last_edited | date}}</i>
+    <i>last edited: {{review.last_edited | date}}</i>
   </div>
 </mat-card>

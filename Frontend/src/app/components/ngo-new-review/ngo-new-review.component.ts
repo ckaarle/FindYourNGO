@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {StarRatingComponent} from '../star-rating/star-rating.component';
-import {NewTwComment} from '../../models/ratings';
+import {NewTwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -14,7 +14,7 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
   ngoId: number;
   reviewId: number;
   ngoName = '';
-  commentText = '';
+  reviewText = '';
   
   errorMessage = '';
   reviewRating = null;
@@ -33,7 +33,7 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
       this.ratingService.getUserReview(this.reviewId).subscribe(
           (review) => {
             console.log(review)
-            this.commentText = review.text;
+            this.reviewText = review.text;
             this.reviewId = review.id;
             this.reviewRating = review.rating;
             if (this.reviewRating != null) {
@@ -49,12 +49,12 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
     this.errorMessage = '';
 
     const userRating = Math.round(this.starRatingComponent.value) + 1;
-    const newReview: NewTwComment = {
-      commentId: this.reviewId,
+    const newReview: NewTwReview = {
+      reviewId: this.reviewId,
       ngoId: this.ngoId,
       userId: 0, // TODO
       rating: userRating,
-      text: this.commentText
+      text: this.reviewText
     };
 
     this.ratingService.saveReview(newReview).subscribe(
@@ -63,7 +63,7 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private onSaveSuccess(newReview: NewTwComment): void {
+  private onSaveSuccess(newReview: NewTwReview): void {
     this.router.navigate(['/detailView', this.ngoId]);
   }
 

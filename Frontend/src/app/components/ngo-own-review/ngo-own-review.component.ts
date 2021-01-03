@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TwComment} from '../../models/ratings';
+import {TwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 import {Router} from '@angular/router';
 
@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 export class NgoOwnReviewComponent implements OnInit {
 
   errorMessage: string | undefined = undefined;
-  @Input() comment: TwComment;
+  @Input() review: TwReview;
   @Input() ngoName: string;
 
   constructor(private ratingService: RatingService, private router: Router) {
@@ -22,8 +22,8 @@ export class NgoOwnReviewComponent implements OnInit {
 
   delete(): void {
     this.errorMessage = undefined;
-    console.log(this.comment)
-    this.ratingService.deleteReview(this.comment.id).subscribe(
+    console.log(this.review)
+    this.ratingService.deleteReview(this.review.id).subscribe(
         (success) => this.showDeleteSuccess(),
         (error) => this.showDeleteError(),
     );
@@ -31,7 +31,7 @@ export class NgoOwnReviewComponent implements OnInit {
 
   private showDeleteSuccess(): void {
     // I am not sure why manually reloading is necessary
-    this.router.navigate(['/detailView', this.comment.ngoId]).then(() => window.location.reload());
+    this.router.navigate(['/detailView', this.review.ngoId]).then(() => window.location.reload());
   }
 
   private showDeleteError(): void {
@@ -39,7 +39,7 @@ export class NgoOwnReviewComponent implements OnInit {
   }
 
   edit(): void {
-    this.router.navigate(['/newReview', this.comment.ngoId, {reviewId: this.comment.id, ngoName: this.ngoName}]);
+    this.router.navigate(['/newReview', this.review.ngoId, {reviewId: this.review.id, ngoName: this.ngoName}]);
   }
 
 }

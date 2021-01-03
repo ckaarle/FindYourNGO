@@ -7,8 +7,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class NgoRatingTableComponent implements OnInit {
 
-  @Input() totalCommentNumber: number = 0;
-  @Input() commentNumberIndexedByRating: number[] = [];
+  @Input() totalReviewNumber: number = 0;
+  @Input() reviewNumberIndexedByRating: number[] = [];
 
   constructor() {
   }
@@ -16,12 +16,12 @@ export class NgoRatingTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getPercentageOfTotalComments(comments: number): number {
-    if (this.totalCommentNumber === 0) {
+  getPercentageOfTotalReviews(reviews: number): number {
+    if (this.totalReviewNumber === 0) {
       return 0;
     }
     else {
-      return (comments / this.totalCommentNumber) * 100;
+      return (reviews / this.totalReviewNumber) * 100;
 
     }
   }

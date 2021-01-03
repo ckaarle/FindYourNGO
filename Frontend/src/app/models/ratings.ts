@@ -2,30 +2,30 @@ export interface TwRating {
   totalTrustworthiness: number;
   baseTrustworthiness: number; // calculated by the system with no regard to user comments
   userTrustworthiness: number;
-  commentNumberByRating: { [rating: number]: number };
-  totalCommentNumber: number;
+  reviewNumberByRating: { [rating: number]: number };
+  totalReviewNumber: number;
 }
 
-export interface TwComment {
+export interface TwReview {
   id: number;
   userId: number;
   userName: string;
   ngoId: number;
   // userProfile: object; TODO?
-  commentsByUser: number;
+  reviewsByUser: number;
   created: Date;
   last_edited: Date;
   rating: number;
   text: string;
 }
 
-export interface TwComments {
-  comments: TwComment[];
-  commentNumber: number;
+export interface TwReviews {
+  reviews: TwReview[];
+  reviewNumber: number;
 }
 
-export interface NewTwComment {
-  commentId: number;
+export interface NewTwReview {
+  reviewId: number;
   ngoId: number;
   userId: number;
   rating: number;

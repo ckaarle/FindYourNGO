@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {Observable, of, throwError} from 'rxjs';
-import {NewTwComment, TwComment, TwComments, TwRating} from '../models/ratings';
+import {NewTwReview, TwReview, TwReviews, TwRating} from '../models/ratings';
 
 @Injectable({
   providedIn: 'root'
@@ -13,54 +13,54 @@ export class RatingService {
       totalTrustworthiness: 5,
       baseTrustworthiness: 5,
       userTrustworthiness: 1,
-      commentNumberByRating: {
+      reviewNumberByRating: {
         5: 0,
         4: 0,
         1: 0,
         2: 0,
         3: 0,
       },
-      totalCommentNumber: 0,
+      totalReviewNumber: 0,
     },
     2: {
       totalTrustworthiness: 3.8,
       baseTrustworthiness: 2.4,
       userTrustworthiness: 3.2,
-      commentNumberByRating: {
+      reviewNumberByRating: {
         5: 10,
         1: 3,
         4: 50,
         3: 88,
         2: 27,
       },
-      totalCommentNumber: 10 + 50 + 3 + 27 + 88,
+      totalReviewNumber: 10 + 50 + 3 + 27 + 88,
     },
     3: {
       totalTrustworthiness: 1.7,
       baseTrustworthiness: 0,
       userTrustworthiness: 3.4,
-      commentNumberByRating: {
+      reviewNumberByRating: {
         4: 3,
         5: 5,
         2: 5,
         1: 1,
         3: 2,
       },
-      totalCommentNumber: 3 + 5 + 5 + 1 + 2,
+      totalReviewNumber: 3 + 5 + 5 + 1 + 2,
     },
   };
 
 
-  mockComments: TwComments[] = [
+  mockComments: TwReviews[] = [
     {
-      comments: [
+      reviews: [
         {
           id: 0,
           userId: 10,
           userName: 'reaaaaaally long user name',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 2,
+          reviewsByUser: 2,
           created: new Date(2020, 12, 20),
           last_edited: new Date(2020, 12, 22),
           rating: 2,
@@ -72,7 +72,7 @@ export class RatingService {
           userName: 'User3',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 1,
+          reviewsByUser: 1,
           created: new Date(2020, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 1,
@@ -84,7 +84,7 @@ export class RatingService {
           userName: 'User4',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 2,
+          reviewsByUser: 2,
           created: new Date(2019, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 5,
@@ -96,24 +96,24 @@ export class RatingService {
           userName: 'Me',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 2,
+          reviewsByUser: 2,
           created: new Date(2020, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 3,
           text: 'This is my user comment. It is quite short :)'
         },
       ],
-      commentNumber: 3
+      reviewNumber: 3
     },
     {
-      comments: [
+      reviews: [
         {
           id: 4,
           userId: 10,
           userName: 'User2',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 1,
+          reviewsByUser: 1,
           created: new Date(2020, 12, 20),
           last_edited: new Date(2020, 12, 22),
           rating: 2,
@@ -125,7 +125,7 @@ export class RatingService {
           userName: 'Me',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 2,
+          reviewsByUser: 2,
           created: new Date(2020, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 3,
@@ -137,35 +137,35 @@ export class RatingService {
           userName: 'User3',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 3,
+          reviewsByUser: 3,
           created: new Date(2020, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 1,
           text: 'This is also a short comment.'
         }
       ],
-      commentNumber: 3
+      reviewNumber: 3
     },
     {
-      comments: [
+      reviews: [
         {
           id: 7,
           userId: -1,
           userName: 'Me',
           // userProfile: null,
           ngoId: 21348,
-          commentsByUser: 2,
+          reviewsByUser: 2,
           created: new Date(2020, 12, 22),
           last_edited: new Date(2020, 12, 22),
           rating: 3,
           text: 'This is my user comment. It is quite short :)'
         }
       ],
-      commentNumber: 1
+      reviewNumber: 1
     },
     {
-      comments: [],
-      commentNumber: 0
+      reviews: [],
+      reviewNumber: 0
     }
   ];
 
@@ -176,11 +176,11 @@ export class RatingService {
     return this.apiService.get('twRating', {id: ngoId});
   }
 
-  getUserReviews(ngoId: number): Observable<TwComments> {
+  getUserReviews(ngoId: number): Observable<TwReviews> {
     return this.apiService.get('userReviewsForNgo', {id: ngoId});
   }
 
-  saveReview(newReview: NewTwComment): Observable<any> {
+  saveReview(newReview: NewTwReview): Observable<any> {
     return this.apiService.put('review', newReview);
   }
 
@@ -188,7 +188,7 @@ export class RatingService {
     return this.apiService.delete('review', {id: id});
   }
 
-  getUserReview(reviewId: number): Observable<TwComment> {
+  getUserReview(reviewId: number): Observable<TwReview> {
     return this.apiService.get('review', {id: reviewId});
   }
 }

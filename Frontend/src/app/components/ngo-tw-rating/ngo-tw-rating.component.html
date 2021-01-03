@@ -4,12 +4,12 @@
        fxFlex.xs="100%">
     <h5 class="rating-header">User Rating</h5>
     <star-rating [value]="userTrustworthiness - 1" [editable]="false"></star-rating>
-    <div class="rating-description">Based on {{totalCommentNumber}} user {{totalCommentNumber === 0
-    || totalCommentNumber > 1 ? "ratings" : "rating"}}.
+    <div class="rating-description">Based on {{totalReviewNumber}} user {{totalReviewNumber === 0
+    || totalReviewNumber > 1 ? "ratings" : "rating"}}.
     </div>
 
-    <ngo-rating-table [commentNumberIndexedByRating]="commentNumberIndexedByRating"
-                      [totalCommentNumber]="totalCommentNumber"
+    <ngo-rating-table [reviewNumberIndexedByRating]="reviewNumberIndexedByRating"
+                      [totalReviewNumber]="totalReviewNumber"
     ></ngo-rating-table>
   </div>
 

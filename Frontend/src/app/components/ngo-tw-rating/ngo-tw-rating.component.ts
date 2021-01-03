@@ -11,8 +11,8 @@ export class NgoTwRatingComponent implements OnInit {
   totalTrustworthiness: number;
   baseTrustworthiness: number;
   userTrustworthiness: number;
-  totalCommentNumber: number;
-  commentNumberIndexedByRating: number[] = [];
+  totalReviewNumber: number;
+  reviewNumberIndexedByRating: number[] = [];
 
   @Input() ngoId: number = 1;
 
@@ -27,16 +27,16 @@ export class NgoTwRatingComponent implements OnInit {
       this.totalTrustworthiness = rating.totalTrustworthiness;
       this.baseTrustworthiness = rating.baseTrustworthiness;
       this.userTrustworthiness = rating.userTrustworthiness;
-      this.totalCommentNumber = rating.totalCommentNumber;
+      this.totalReviewNumber = rating.totalReviewNumber;
 
-      const sortedKeys = Object.keys(rating.commentNumberByRating).sort();
+      const sortedKeys = Object.keys(rating.reviewNumberByRating).sort();
 
       if (sortedKeys.length > 0) {
         for (const key in sortedKeys) {
-          this.commentNumberIndexedByRating.unshift(rating.commentNumberByRating[(+key + 1).toString()]);
+          this.reviewNumberIndexedByRating.unshift(rating.reviewNumberByRating[(+key + 1).toString()]);
         }
       } else {
-        this.commentNumberIndexedByRating = [0, 0, 0, 0, 0];
+        this.reviewNumberIndexedByRating = [0, 0, 0, 0, 0];
       }
 
     });

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TwComment} from '../../models/ratings';
+import {TwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 
 @Component({
@@ -9,8 +9,8 @@ import {RatingService} from '../../services/rating.service';
 })
 export class NgoReviewsComponent implements OnInit {
 
-  ownUserComment: TwComment = null;
-  otherUserComments: TwComment[] = [];
+  ownUserReview: TwReview = null;
+  otherUserReviews: TwReview[] = [];
 
   @Input() ngoId: number = 0;
   @Input() ngoName: string;
@@ -21,11 +21,11 @@ export class NgoReviewsComponent implements OnInit {
   ngOnInit(): void {
     this.ratingService.getUserReviews(this.ngoId).subscribe(data => {
 
-      data.comments.forEach((comment) => {
-        if (this.isOwnUserId(comment.userId)) {
-          this.ownUserComment = comment;
+      data.reviews.forEach((review) => {
+        if (this.isOwnUserId(review.userId)) {
+          this.ownUserReview = review;
         } else {
-          this.otherUserComments.push(comment);
+          this.otherUserReviews.push(review);
         }
       });
     });

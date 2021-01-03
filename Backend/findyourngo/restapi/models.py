@@ -95,14 +95,14 @@ class Ngo(models.Model):
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
 
-class NgoCommenter(models.Model):
-    user_id = models.IntegerField() # TODO change to foreign key of user table
+class NgoCommenter(models.Model): # TODO remove this entirely
+    user_id = models.IntegerField()
     number_of_comments = models.IntegerField(default=0)
 
 
-class NgoComment(models.Model):
+class NgoReview(models.Model):
     ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE)
-    commenter = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
     create_date = models.DateField()
     last_edited = models.DateField()
     text = models.TextField()
