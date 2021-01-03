@@ -35,16 +35,8 @@ export class NgoFilterSelectionComponent implements OnInit {
     return this.filterOptions[key];
   }
 
-  addValue(keyOption: any, value: any, multiple: boolean = false): void {
-    if (this.filterSelection[keyOption] && multiple) {
-      this.filterSelection[keyOption].push(value);
-    } else {
-      if (multiple) {
-        this.filterSelection[keyOption] = [value];
-      } else {
-        this.filterSelection[keyOption] = value;
-      }
-    }
+  addValue(keyOption: any, value: any): void {
+    this.filterSelection[keyOption] = value;
   }
 
   closeFilterSelection(): void {

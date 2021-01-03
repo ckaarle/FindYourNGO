@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection } from 'src/app/models/ngo';
+import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -29,22 +29,12 @@ export class NgoFilterComponent implements OnInit {
   }
 
   checkIfFilterSet(key: string): boolean {
-    return key in this.filterSelection;
+    return this.filterSelection.hasOwnProperty(key);
   }
 
-  addValue(keyOption: any, value: any, multiple: boolean = false): void {
-    if (this.filterSelection[keyOption] && multiple) {
-      this.filterSelection[keyOption].push(value);
-      this.filterUpdated = true;
-    } else {
-      if (multiple) {
-        this.filterSelection[keyOption] = [value];
-        this.filterUpdated = true;
-      } else {
-        this.filterSelection[keyOption] = value;
-        this.filterUpdated = true;
-      }
-    }
+  addValue(keyOption: any, value: any): void {
+    this.filterSelection[keyOption] = value;
+    this.filterUpdated = true;
   }
 
   removeValue(keyOption: any) {
