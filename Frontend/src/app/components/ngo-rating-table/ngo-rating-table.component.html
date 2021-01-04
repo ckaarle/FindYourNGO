@@ -1,5 +1,5 @@
 <div class="rating-table">
-  <h5>User Ratings</h5>
+  <h5>User Ratings ({{totalReviewNumber}} total)</h5>
   <div class="rating-row" *ngFor="let i of reviewNumberIndexedByRating; let ind=index"
        fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
     <span fxFlex="50px">{{reviewNumberIndexedByRating.length
@@ -7,6 +7,6 @@
     > 1 ? "stars" : "star"}}</span>
     <mat-progress-bar mode="determinate"
                       value="{{getPercentageOfTotalReviews(i)}}"></mat-progress-bar>
-    <span>{{getPercentageOfTotalReviews(i) | number:'1.0-0'}}%</span>
+    <span>{{getPercentageOfTotalReviews(i) | number:'1.0-0'}}% ({{i}})</span>
   </div>
 </div>

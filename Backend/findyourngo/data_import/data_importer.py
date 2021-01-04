@@ -466,7 +466,8 @@ def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoM
         credible_source_score=credible_source_score,
         ecosoc_score=ecosoc_score,
         total_tw_score=total_score,
-        base_tw_score=total_score, # TODO
+        base_tw_score=total_score,
+        user_tw_score=0,
     )
     return tw_score
 

@@ -9,8 +9,6 @@ import {RatingService} from '../../services/rating.service';
 export class NgoTwRatingComponent implements OnInit {
 
   totalTrustworthiness: number;
-  baseTrustworthiness: number;
-  userTrustworthiness: number;
   totalReviewNumber: number;
   reviewNumberIndexedByRating: number[] = [];
 
@@ -25,8 +23,6 @@ export class NgoTwRatingComponent implements OnInit {
     // const twRating = this.ratingService.getTwRating(this.ngoId).subscribe(rating => { TODO put back in
     this.ratingService.getTwRating(this.ngoId).subscribe(rating => {
       this.totalTrustworthiness = rating.totalTrustworthiness;
-      this.baseTrustworthiness = rating.baseTrustworthiness;
-      this.userTrustworthiness = rating.userTrustworthiness;
       this.totalReviewNumber = rating.totalReviewNumber;
 
       const sortedKeys = Object.keys(rating.reviewNumberByRating).sort();

@@ -8,49 +8,6 @@ import {NewTwReview, TwReview, TwReviews, TwRating} from '../models/ratings';
 })
 export class RatingService {
 
-  mockTwRatings: { [id: string]: TwRating } = {
-    1: {
-      totalTrustworthiness: 5,
-      baseTrustworthiness: 5,
-      userTrustworthiness: 1,
-      reviewNumberByRating: {
-        5: 0,
-        4: 0,
-        1: 0,
-        2: 0,
-        3: 0,
-      },
-      totalReviewNumber: 0,
-    },
-    2: {
-      totalTrustworthiness: 3.8,
-      baseTrustworthiness: 2.4,
-      userTrustworthiness: 3.2,
-      reviewNumberByRating: {
-        5: 10,
-        1: 3,
-        4: 50,
-        3: 88,
-        2: 27,
-      },
-      totalReviewNumber: 10 + 50 + 3 + 27 + 88,
-    },
-    3: {
-      totalTrustworthiness: 1.7,
-      baseTrustworthiness: 0,
-      userTrustworthiness: 3.4,
-      reviewNumberByRating: {
-        4: 3,
-        5: 5,
-        2: 5,
-        1: 1,
-        3: 2,
-      },
-      totalReviewNumber: 3 + 5 + 5 + 1 + 2,
-    },
-  };
-
-
   mockComments: TwReviews[] = [
     {
       reviews: [

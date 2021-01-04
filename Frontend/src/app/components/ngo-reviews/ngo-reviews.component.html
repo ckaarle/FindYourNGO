@@ -1,16 +1,14 @@
 <div>
   <div class="own-review">
-    <ngo-own-review *ngIf="ownUserReview" [review]="ownUserReview"
-                    [ngoName]="ngoName"></ngo-own-review>
-    <button mat-button *ngIf="!ownUserReview"
-            [routerLink]="['/newReview', ngoId, {ngoName: ngoName}]">Write a
-      review
-    </button>
+    <ngo-review *ngIf="ownUserReview" [review]="ownUserReview"
+                [ngoName]="ngoName" [editable]="true"></ngo-review>
   </div>
   <div class="otherReviews" fxLayoutGap="16px" fxLayout="column">
-    <p *ngIf="otherUserReviews.length === 0 && !ownUserReview" fxFlex="100%">No user reviews
+    <p *ngIf="(!otherUserReviews || otherUserReviews?.length === 0) && !ownUserReview"
+       fxFlex="100%">No user reviews
       yet.</p>
-    <ngo-review *ngFor="let review of otherUserReviews" [review]="review"
+    <ngo-review *ngFor="let review of otherUserReviews" [review]="review" [ngoName]="ngoName"
+                [editable]="false"
                 fxFlex="100%"></ngo-review>
   </div>
 </div>

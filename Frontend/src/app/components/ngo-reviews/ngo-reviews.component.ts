@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {TwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 
@@ -7,32 +7,18 @@ import {RatingService} from '../../services/rating.service';
   templateUrl: './ngo-reviews.component.html',
   styleUrls: ['./ngo-reviews.component.scss']
 })
-export class NgoReviewsComponent implements OnInit {
-
-  ownUserReview: TwReview = null;
-  otherUserReviews: TwReview[] = [];
+export class NgoReviewsComponent implements OnInit, OnChanges {
 
   @Input() ngoId: number = 0;
   @Input() ngoName: string;
 
-  constructor(private ratingService: RatingService) {
+  @Input() ownUserReview: TwReview = null;
+  @Input() otherUserReviews: TwReview[];
+
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.ratingService.getUserReviews(this.ngoId).subscribe(data => {
-
-      data.reviews.forEach((review) => {
-        if (this.isOwnUserId(review.userId)) {
-          this.ownUserReview = review;
-        } else {
-          this.otherUserReviews.push(review);
-        }
-      });
-    });
-  }
-
-  private isOwnUserId(userId: number): boolean {
-    return userId <= 0; // TODO compare to actual own user id once it exists
   }
 
 }

@@ -39,8 +39,6 @@ def tw_rating(request) -> JsonResponse:
 
     result = {
         'totalTrustworthiness': total_tw,
-        'baseTrustworthiness': base_tw,
-        'userTrustworthiness': user_tw,
         'reviewNumberByRating': reviews_by_rating,
         'totalReviewNumber': total_review_number,
     }
@@ -104,7 +102,7 @@ def review(request) -> JsonResponse:
         except BaseException:
             return JsonResponse({'error': f'No user found for ID {user_id}'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
-        review_id = review['commentId']
+        review_id = review['reviewId']
 
         if review_id is not None:
             return update_review(review_id, review)
@@ -149,7 +147,7 @@ def save_new_review(review, user) -> JsonResponse:
 
         NgoReview.objects.create(
             ngo=ngo,
-            commenter=user,
+            reviewer=user,
             create_date=create_time,
             last_edited=create_time,
             text=text,

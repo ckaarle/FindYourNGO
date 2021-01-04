@@ -29,6 +29,7 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
     this.reviewId = this.route.snapshot.paramMap.get('reviewId');
     this.ngoName = this.route.snapshot.paramMap.get('ngoName');
 
+
     if (this.reviewId != null) {
       this.ratingService.getUserReview(this.reviewId).subscribe(
           (review) => {
@@ -58,18 +59,21 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
     };
 
     this.ratingService.saveReview(newReview).subscribe(
-        (success) => this.onSaveSuccess(newReview),
+        (success) => this.onSaveSuccess(),
         (error) => this.onSaveError()
     );
   }
 
-  private onSaveSuccess(newReview: NewTwReview): void {
+  private onSaveSuccess(): void {
     this.router.navigate(['/detailView', this.ngoId]);
   }
 
   private onSaveError(): void {
     this.errorMessage = 'Review could not be saved. Please try again later.';
   }
-}
 
+  cancel(): void {
+    this.onSaveSuccess();
+  }
+}
 // TODO logged out redirection!

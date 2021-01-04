@@ -1,7 +1,5 @@
 export interface TwRating {
   totalTrustworthiness: number;
-  baseTrustworthiness: number; // calculated by the system with no regard to user comments
-  userTrustworthiness: number;
   reviewNumberByRating: { [rating: number]: number };
   totalReviewNumber: number;
 }

@@ -1,27 +1,10 @@
-<div class="rating-overview" fxLayout="row wrap" fxLayoutAlign="center">
+<div class="rating-overview" fxLayout="row wrap">
 
   <div class="tw-rating" fxFlex="33%" fxFlex.sm="33%"
        fxFlex.xs="100%">
-    <h5 class="rating-header">User Rating</h5>
-    <star-rating [value]="userTrustworthiness - 1" [editable]="false"></star-rating>
-    <div class="rating-description">Based on {{totalReviewNumber}} user {{totalReviewNumber === 0
-    || totalReviewNumber > 1 ? "ratings" : "rating"}}.
-    </div>
-
+    <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
     <ngo-rating-table [reviewNumberIndexedByRating]="reviewNumberIndexedByRating"
                       [totalReviewNumber]="totalReviewNumber"
     ></ngo-rating-table>
-  </div>
-
-  <div class="tw-rating" fxFlex="33%" fxFlex.sm="33%"
-       fxFlex.xs="100%">
-    <h5 class="rating-header">Base Rating</h5>
-    <star-rating [value]="baseTrustworthiness - 1" [editable]="false"></star-rating>
-  </div>
-
-  <div class="tw-rating" fxFlex="33%" fxFlex.sm="33%"
-       fxFlex.xs="100%">
-    <h5 class="rating-header">Overall Rating</h5>
-    <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
   </div>
 </div>

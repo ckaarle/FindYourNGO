@@ -3,7 +3,7 @@
     <div class="header" fxLayoutGap="16px grid" fxLayout="row wrap">
       <div fxFlex.xs="100%" fxFlex.sm="20%">
         <img mat-card-avatar
-             src="assets/img/generic_user_profile.png"
+             src="assets/img/default-user-icon-4.jpg"
              class="avatar"/>
 
       </div>
@@ -27,7 +27,23 @@
     <div class="reviewText">
       <p>{{review.text}}</p>
     </div>
+
     <br>
-    <i>last edited: {{review.last_edited | date}}</i>
+
+    <div class="text-bottom">
+      <i *ngIf="!editable" class="text-bottom-no-icon">last
+        edited: {{review.last_edited | date}}</i>
+    </div>
+
+
+    <div class="text-bottom" *ngIf="editable">
+      <i>last edited: {{review.last_edited | date}}</i>
+      <mat-icon (click)="edit()" class="icon">edit</mat-icon>
+      <mat-icon (click)="delete()" class="icon">delete</mat-icon>
+
+      <div *ngIf="errorMessage">
+        <p class="errorMessage">{{errorMessage}}</p>
+      </div>
+    </div>
   </div>
 </mat-card>
