@@ -16,9 +16,12 @@ export class FilterService {
     constructor(public apiService: ApiService) {
     }
 
+    getSelectedFilters(): NgoFilterSelection {
+        return this.selectedFilters;
+    }
+
     editSelectedFilters(selectedFilters: NgoFilterSelection): void {
         this.selectedFilters = selectedFilters;
-        console.log("Selected Filters: ", this.selectedFilters);
         this.selectedFiltersChanged.emit(this.selectedFilters);
         this.loadingNgoOverviewItems.emit(true);
     }
@@ -30,21 +33,23 @@ export class FilterService {
 
     mapDataToObject(data: any): NgoFilterOptions {
         return {
-            branches: {displayName: "Branches", values: data.branches, icon: "account_tree"},
-            topics: {displayName: "Topics", values: data.topics, icon: "topic"},
-            hasEcosoc: {displayName: "Accreditations", values: data.hasEcosoc, icon: "account_balance"},
-            isCredible: {displayName: "Credibility", values: data.isCredible, icon: "loyalty"},
-            countries: {displayName: "Countries", values: data.countries, icon: "flag"},
-            cities: {displayName: "Cities", values: data.cities, icon: "location_on"},
-            contactOptionPresent: {displayName: "Contactable", values: data.contactOptionPresent, icon: "how_to_reg"},
+            name: {values: data.name},
+            branches: {displayName: 'Branches', values: data.branches, icon: 'account_tree'},
+            regions: {values: data.regions},
+            topics: {displayName: 'Topics', values: data.topics, icon: 'topic'},
+            hasEcosoc: {displayName: 'Accreditations', values: data.hasEcosoc, icon: 'account_balance'},
+            isCredible: {displayName: 'Credibility', values: data.isCredible, icon: 'loyalty'},
+            countries: {displayName: 'Countries', values: data.countries, icon: 'flag'},
+            cities: {displayName: 'Cities', values: data.cities, icon: 'location_on'},
+            contactOptionPresent: {displayName: 'Contactable', values: data.contactOptionPresent, icon: 'how_to_reg'},
             typeOfOrganization: {
-                displayName: "Type of organization",
+                displayName: 'Type of organization',
                 values: data.typeOfOrganization,
-                icon: "corporate_fare"
+                icon: 'corporate_fare'
             },
-            workingLanguages: {displayName: "Working languages", values: data.workingLanguages, icon: "translate"},
-            funding: {displayName: "Funding", values: data.funding, icon: "attach_money"},
-            trustworthiness: {displayName: "Trustworthiness", values: data.trustworthiness, icon: "star"}
+            workingLanguages: {displayName: 'Working languages', values: data.workingLanguages, icon: 'translate'},
+            funding: {displayName: 'Funding', values: data.funding, icon: 'attach_money'},
+            trustworthiness: {displayName: 'Trustworthiness', values: data.trustworthiness, icon: 'star'}
         };
     }
 

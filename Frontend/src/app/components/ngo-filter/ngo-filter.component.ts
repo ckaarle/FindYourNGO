@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
@@ -9,24 +9,13 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class NgoFilterComponent implements OnInit {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   filterUpdated: boolean = false;
-  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
 
   constructor(private filter: FilterService) { }
 
-  ngOnInit(): void {
-    this.subscribeFilterSelection();
-  }
-
-  subscribeFilterSelection(): void {
-    this.filter
-      .selectedFiltersChanged
-      .subscribe((data: NgoFilterSelection) => {
-        this.filterSelection = data;
-      });
-  }
+  ngOnInit(): void {}
 
   checkIfFilterSet(key: string): boolean {
     return this.filterSelection.hasOwnProperty(key);
@@ -37,7 +26,7 @@ export class NgoFilterComponent implements OnInit {
     this.filterUpdated = true;
   }
 
-  removeValue(keyOption: any) {
+  removeValue(keyOption: any): void {
     delete this.filterSelection[keyOption];
     this.applyFilter();
   }

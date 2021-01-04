@@ -6,7 +6,9 @@ from findyourngo.restapi.models import NgoTopic, NgoBranch, NgoAddress, NgoType,
 
 def filter_object():
     return {
+            'name': None,
             'branches': branches(),
+            'regions': regions(),
             'topics': topics(),
             'hasEcosoc': False,
             'isCredible': False,
@@ -23,6 +25,10 @@ def filter_object():
 def branches():
     branches = list(map(lambda ngo_branch: ngo_branch['country'], NgoBranch.objects.all().order_by('country').values('country').distinct()))
     return branches
+
+
+def regions():
+    return ["Africa", "Asia", "Europe"]
 
 
 def topics():
@@ -50,7 +56,9 @@ def funding():
 
 
 class FilterSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
     branches = serializers.ListField(required=False)
+    regions = serializers.ListField(required=False)
     topics = serializers.ListField(required=False)
     hasEcosoc = serializers.BooleanField(required=False)
     isCredible = serializers.BooleanField(required=False)
@@ -63,7 +71,9 @@ class FilterSerializer(serializers.Serializer):
     trustworthiness = serializers.FloatField(required=False)
 
     def create(self, validated_data):
+        name = validated_data.get('name')
         branches = validated_data.get('branches')
+        regions = validated_data.get('regions')
         topics = validated_data.get('topics')
         use_ecosoc = validated_data.get('hasEcosoc')
         use_credible_source = validated_data.get('isCredible')
@@ -75,7 +85,9 @@ class FilterSerializer(serializers.Serializer):
         funding = validated_data.get('funding')
         trustworthiness_lower_bound = validated_data.get('trustworthiness')
         return FilterConfig(
+            name,
             branches,
+            regions,
             topics,
             use_ecosoc,
             use_credible_source,

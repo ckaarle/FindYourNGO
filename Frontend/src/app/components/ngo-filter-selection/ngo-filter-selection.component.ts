@@ -9,10 +9,9 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class NgoFilterSelectionComponent implements OnInit {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
-  filterOptionsLoaded: boolean = false;
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
   hqDetails: string[] = ['cities', 'countries', 'workingLanguages', 'contactOptionPresent'];
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
@@ -20,19 +19,6 @@ export class NgoFilterSelectionComponent implements OnInit {
   constructor(private filter: FilterService) { }
 
   ngOnInit(): void {
-    this.subscribeFilterSelection();
-  }
-
-  subscribeFilterSelection(): void {
-    this.filter
-      .selectedFiltersChanged
-      .subscribe((data: NgoFilterSelection) => {
-        this.filterSelection = data;
-      });
-  }
-
-  getFilterOption(key: string): any {
-    return this.filterOptions[key];
   }
 
   addValue(keyOption: any, value: any): void {

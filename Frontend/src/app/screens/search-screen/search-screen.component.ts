@@ -1,46 +1,59 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
-import { Countries, Topics } from '../../models/ngo';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {ApiService} from '../../services/api.service';
+import {NgoFilterOptions} from '../../models/ngo';
+import {Router} from '@angular/router';
+import {FilterService} from '../../services/filter.service';
+import Utils from '../../services/utils';
 
 @Component({
-  selector: 'app-search-screen',
-  templateUrl: './search-screen.component.html',
-  styleUrls: ['./search-screen.component.scss']
+    selector: 'app-search-screen',
+    templateUrl: './search-screen.component.html',
+    styleUrls: ['./search-screen.component.scss']
 })
 export class SearchScreenComponent {
+    branches: string[] = [];
+    countries: string[] = [];
+    topics: string[] = [];
+    regions: string[] = [];
+    trustworthiness: number[] = [0, 1, 2, 3, 4, 5];
 
-  countries: string[] = [];
-  topics: string[] = [];
-  regions: string[] = ['AFRICA', 'ASIA', 'EUROPE'];
-  trustworthiness: string[] = ['0', '1', '2', '3', '4', '5'];
+    searchForm: FormGroup;
+    nameForm: FormGroup;
 
-  searchForm: FormGroup;
-  nameForm: FormGroup;
+    constructor(private apiService: ApiService, private router: Router, private filter: FilterService) {
+        this.searchForm = new FormGroup({
+            branches: new FormControl(null),
+            regions: new FormControl(null),
+            countries: new FormControl(null),
+            topics: new FormControl(null),
+            trustworthiness: new FormControl(null),
+        });
 
-  constructor(private apiService: ApiService, private router: Router) {
-    this.searchForm = new FormGroup({
-      operation: new FormControl(''),
-      region: new FormControl(''),
-      office: new FormControl(''),
-      topic: new FormControl(''),
-      trust: new FormControl(''),
-    });
-    this.apiService.get('countries').subscribe(
-        (data: Countries) => this.countries = data.countries);
-    this.apiService.get('topics').subscribe(
-        (data: Topics) => this.topics = data.topics);
-    this.nameForm = new FormGroup({name: new FormControl('')});
-  }
+        this.nameForm = new FormGroup({name: new FormControl(null)});
 
-  onFormSearch(): void {
-    const queryList = this.searchForm.value;
-    this.router.navigate(['overview'], {queryParams: queryList});
-  }
+        this.getSearchOptions();
+    }
 
-  onNameSearch(): void {
-    const queryList = this.nameForm.value;
-    this.router.navigate(['overview'], {queryParams: queryList});
-  }
+    getSearchOptions(): void {
+        this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
+            const filterOptions = this.filter.mapDataToObject(data);
+            this.branches = filterOptions.branches.values;
+            this.regions = filterOptions.regions.values;
+            this.countries = filterOptions.countries.values;
+            this.topics = filterOptions.topics.values;
+        });
+    }
+
+    onFormSearch(): void {
+        const filterSelection = Utils.cleanObject(this.searchForm.value);
+        this.filter.editSelectedFilters(filterSelection);
+        this.router.navigate(['overview']);
+    }
+
+    onNameSearch(): void {
+        const filterSelection = Utils.cleanObject(this.nameForm.value);
+        this.filter.editSelectedFilters(filterSelection);
+        this.router.navigate(['overview']);
+    }
 }
