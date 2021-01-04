@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
@@ -7,15 +7,13 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './ngo-filter.component.html',
   styleUrls: ['./ngo-filter.component.scss']
 })
-export class NgoFilterComponent implements OnInit {
+export class NgoFilterComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
   filterUpdated: boolean = false;
 
   constructor(private filter: FilterService) { }
-
-  ngOnInit(): void {}
 
   checkIfFilterSet(key: string): boolean {
     return this.filterSelection.hasOwnProperty(key);

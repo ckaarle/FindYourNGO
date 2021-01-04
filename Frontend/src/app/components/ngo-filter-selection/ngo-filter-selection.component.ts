@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection } from 'src/app/models/ngo';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './ngo-filter-selection.component.html',
   styleUrls: ['./ngo-filter-selection.component.scss']
 })
-export class NgoFilterSelectionComponent implements OnInit {
+export class NgoFilterSelectionComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -17,9 +17,6 @@ export class NgoFilterSelectionComponent implements OnInit {
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
 
   constructor(private filter: FilterService) { }
-
-  ngOnInit(): void {
-  }
 
   addValue(keyOption: any, value: any): void {
     this.filterSelection[keyOption] = value;

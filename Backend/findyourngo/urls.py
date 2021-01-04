@@ -35,8 +35,6 @@ urlpatterns = [
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', NgoFilterView.as_view()),
     path('recalculateTW', views.recalculateTW, name='recalculateTW'),
-    url(r'countries', views.country_list),
-    url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
 ]
 
