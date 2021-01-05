@@ -1,7 +1,7 @@
 // Adapted from https://www.metaltoad.com/blog/angular-api-calls-django-authentication-jwt
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +17,16 @@ export class ApiService {
   public tokenExpires: Date | undefined | null;
 
   // the username of the logged in user
-  public username: string | undefined | null;
+  public userid: BehaviorSubject<string>;
+  public username: BehaviorSubject<string>;
 
   // error messages received from the login attempt
   public errors: any = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.userid = new BehaviorSubject<string>('');
+    this.username = new BehaviorSubject<string>('');
+  }
   public delete(endpoint: string, params?: any): Observable<any> {
     return this.httpClient.delete(this.url(endpoint), {headers: this.authHeader(), params});
   }
@@ -59,10 +63,15 @@ export class ApiService {
     this.userPost(user, this.url('users/register/'), query);
   }
 
+  public socialLogin(token: object, endpoint: string, query?: any): void {
+    this.userPost(token, this.url(endpoint), query);
+  }
+
   private userPost(user: object, endpoint: string, query?: any): void {
     this.httpClient.post(endpoint, user, {params: query}).subscribe(
         (data: any) => {
-        this.updateData(data.token);
+        this.updateData(data.access_token);
+        this.username.next(data.username);
       },
       err => {
         this.errors = err.error;
@@ -85,7 +94,8 @@ export class ApiService {
   public logout(): void {
     this.token = null;
     this.tokenExpires = null;
-    this.username = null;
+    this.userid.next('');
+    this.username.next('');
   }
 
   private updateData(token: string): void {
@@ -95,7 +105,9 @@ export class ApiService {
     // decode the token to read the username and expiration timestamp
     const tokenParts = this.token.split(/\./);
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
+    console.log(tokenDecoded);
     this.tokenExpires = new Date(tokenDecoded.exp * 1000);
-    this.username = tokenDecoded.username;
+    this.userid.next(tokenDecoded.user_id);
+    console.log(this.userid.value);
   }
 }

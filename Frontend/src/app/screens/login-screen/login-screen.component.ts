@@ -44,8 +44,7 @@ export class LoginScreenComponent implements OnInit {
       this.loggedIn = (user != null);
       this.updateQuery();
       if (this.endpoint) {
-        this.apiService.post(this.endpoint, {token: this.user?.authToken}, this.query).subscribe(
-            data => console.log(data));
+        this.apiService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
       }
     });
   }
@@ -67,7 +66,7 @@ export class LoginScreenComponent implements OnInit {
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
       this.user = user;
-      this.loggedIn = (user != null);
+      this.loggedIn = true;
     });
   }
 
