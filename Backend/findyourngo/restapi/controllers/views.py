@@ -1,13 +1,16 @@
 import requests
 
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User, Group
 from django.db import connection, transaction
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -150,3 +153,14 @@ def create_user(data, ngo_name, mode=None):
                 'refresh_token': str(token),
                 }
     return Response(response)
+
+
+class TestView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        print(request)
+        to_check = request.data.get('user_id')
+        if request.user.id == to_check:
+            return JsonResponse({'success': f'User {request.user.username} was verified!'})
+        return JsonResponse({'error': f'User was {request.user.id} but the request was for {to_check}'})

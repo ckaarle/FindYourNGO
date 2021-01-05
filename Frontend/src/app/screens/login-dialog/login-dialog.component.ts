@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { ApiService } from '../../services/api.service';
 import { Names } from '../../models/ngo';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { Observable, of } from 'rxjs';
-import {FormControl, FormGroup} from '@angular/forms';
+import { Observable } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-login-screen',
-  templateUrl: './login-screen.component.html',
-  styleUrls: ['./login-screen.component.scss']
+  selector: 'app-login-dialog',
+  templateUrl: './login-dialog.component.html',
+  styleUrls: ['./login-dialog.component.scss']
 })
-export class LoginScreenComponent implements OnInit {
+export class LoginDialogComponent implements OnInit, OnDestroy {
 
   user?: SocialUser;
-  loggedIn?: boolean;
   endpoint?: string;
   isNgo: boolean;
   query: any;
   names: string[] = [];
   $names: Observable<string[]>;
   ngoControl = new FormControl();
-  ngoName = '';
   status = '';
   userForm = new FormGroup({
     username: new FormControl(''),
@@ -31,7 +30,9 @@ export class LoginScreenComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private authService: SocialAuthService, private apiService: ApiService) {
+  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
+              private authService: SocialAuthService,
+              private apiService: ApiService) {
     this.isNgo = false;
     this.apiService.get('names').subscribe((data: Names) => {
       this.names = data.names;
@@ -41,10 +42,14 @@ export class LoginScreenComponent implements OnInit {
     );
     this.authService.authState.subscribe((user) => {
       this.user = user;
-      this.loggedIn = (user != null);
       this.updateQuery();
       if (this.endpoint) {
         this.apiService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
+      }
+    });
+    this.apiService.userid.subscribe((id: string) => {
+      if (id !== '') {  // The dialog is automatically closed if a user is signed in
+        this.dialogRef.close(this.user?.photoUrl);  // and it returns the photo url if there is one
       }
     });
   }
@@ -60,14 +65,20 @@ export class LoginScreenComponent implements OnInit {
   }
 
   signOut(): void {
-    this.authService.signOut();
+    if (this.user) {
+      this.authService.signOut();
+    }
   }
 
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
       this.user = user;
-      this.loggedIn = true;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.endpoint = '';
+    this.signOut();
   }
 
   submit(): void {

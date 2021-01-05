@@ -4,7 +4,7 @@ import {OverviewScreenComponent} from './screens/overview-screen/overview-screen
 import {SearchScreenComponent} from './screens/search-screen/search-screen.component';
 import {MapScreenComponent} from './screens/map-screen/map-screen.component';
 import {FavouritesScreenComponent} from './screens/favourites-screen/favourites-screen.component';
-import {LoginScreenComponent} from './screens/login-screen/login-screen.component';
+import {LoginDialogComponent} from './screens/login-dialog/login-dialog.component';
 import {NgoOverviewItemComponent} from './components/ngo-overview-item/ngo-overview-item.component';
 import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-item.component';
 import {NgoFilterComponent} from './components/ngo-filter/ngo-filter.component';
@@ -67,7 +67,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     PaginationComponent,
     SearchScreenComponent,
     MapScreenComponent,
-    LoginScreenComponent,
+    LoginDialogComponent,
     FavouritesScreenComponent,
     NgoOverviewItemComponent,
     StarRatingComponent,

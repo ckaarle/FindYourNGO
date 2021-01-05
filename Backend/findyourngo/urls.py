@@ -45,5 +45,6 @@ urlpatterns = [
     url(r'names', views.name_list),
     url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
+    url('test/', views.TestView.as_view(), name='test'),
 ]
 

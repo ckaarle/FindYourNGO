@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>Tell us who you are!</h1>
+<div mat-dialog-content class="limit-width">
+  <mat-checkbox (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
+  <br>
+  <form *ngIf="isNgo">
+    <mat-form-field>
+      <mat-label>NGO Name</mat-label>
+      <input type="text"
+           matInput
+           [formControl]="ngoControl"
+           [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let name of $names | async | slice : 0 : 5" [value]="name">
+          {{name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+
+  <form *ngIf="this.status === 'register'" [formGroup]="userForm">
+    <mat-form-field>
+      <mat-label>UserName</mat-label>
+      <input matInput type="text" formControlName="username">
+    </mat-form-field>
+  </form>
+  <form *ngIf="status !== ''" [formGroup]="userForm">
+    <mat-form-field>
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+    </mat-form-field>
+  </form>
+</div>
+
+<div *ngIf="status === ''; else submitBlock" mat-dialog-actions>
+  <button (click)="updateForm('register')" mat-button>Register</button>
+  <button (click)="updateForm('login')" mat-button>Login</button>
+  <button (click)="signInWithGoogle()" mat-button>G+</button>
+  <button (click)="signInWithFB()" mat-button>FB</button>
+</div>
+<ng-template #submitBlock mat-dialog-actions>
+  <button (click)="submit()" mat-button>Submit</button>
+</ng-template>

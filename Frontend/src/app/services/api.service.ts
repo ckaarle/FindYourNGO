@@ -49,7 +49,7 @@ export class ApiService {
 
   private authHeader(): HttpHeaders {
     if (this.token) {
-      return new HttpHeaders({Authorization: 'JWT ' + this.token});
+      return new HttpHeaders({Authorization: 'Bearer ' + this.token});
     }
     return new HttpHeaders({});
   }
@@ -91,7 +91,7 @@ export class ApiService {
     );
   }
 
-  public logout(): void {
+  public signOut(): void {
     this.token = null;
     this.tokenExpires = null;
     this.userid.next('');
