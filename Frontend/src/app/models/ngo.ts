@@ -7,9 +7,9 @@ export interface NgoDetailItem {
   description: NgoDetailItemDescription;
   fieldOfActivity: NgoDetailItemFieldOfActivity;
   stats: NgoDetailItemStats;
-  location: {address: {displayName: string, values: string}};
   contact: NgoDetailItemContact;
   rating: NgoDetailItemRating;
+  [key: string]: any;
 }
 
 export interface NgoDetailItemRating {
@@ -18,6 +18,7 @@ export interface NgoDetailItemRating {
 }
 
 export interface NgoDetailItemContact {
+  address: {displayName: string, values: string};
   ngoPhoneNumber: {displayName: string, values: string};
   ngoEmail: {displayName: string, values: string};
   representative?: {displayName: string, values: string};
