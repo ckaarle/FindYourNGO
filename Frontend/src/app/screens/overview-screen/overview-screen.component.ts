@@ -7,6 +7,7 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import { ApiService } from '../../services/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { CustomOverlayRef, OverlayService } from 'src/app/services/overlay.service';
+import {Utils} from "../../services/utils";
 
 
 @Component({
@@ -83,7 +84,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getFilterOptions(): void {
     this.filter.getNgoFilterOptions().subscribe(data => {
-      this.filterOptions = this.filter.mapDataToObject(data);
+      this.filterOptions = Utils.mapDataToNgoFilterOptions(data);
     });
   }
 
@@ -110,6 +111,5 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination): void {
     this.processPaginatedResults(filteredOverviewItems);
-    console.log('Filtered Items:', this.overviewItems);
   }
 }

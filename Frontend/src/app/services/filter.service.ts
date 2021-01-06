@@ -41,22 +41,6 @@ export class FilterService {
     this.filteredNgoOverviewItemsChanged.emit(this.filteredNgoItems);
   }
 
-  mapDataToObject(data: any): NgoFilterOptions {
-    return {
-      branches: { displayName: "Branches", values: data.branches, icon: "account_tree" },
-      topics: { displayName: "Topics", values: data.topics, icon: "topic" },
-      hasEcosoc: { displayName: "Accreditations", values: data.hasEcosoc, icon: "account_balance" },
-      isCredible: { displayName: "Credibility", values: data.isCredible, icon: "loyalty" },
-      countries: { displayName: "Countries", values: data.countries, icon: "flag" },
-      cities: { displayName: "Cities", values: data.cities, icon: "location_on" },
-      contactOptionPresent: { displayName: "Contactable", values: data.contactOptionPresent, icon: "how_to_reg" },
-      typeOfOrganization: { displayName: "Type of organization", values: data.typeOfOrganization, icon: "corporate_fare" },
-      workingLanguages: { displayName: "Working languages", values: data.workingLanguages, icon: "translate" },
-      funding: { displayName: "Funding", values: data.funding, icon: "attach_money" },
-      trustworthiness: { displayName: "Trustworthiness", values: data.trustworthiness, icon: "star" }
-    }
-  }
-
   getNgoFilterOptions(): Observable<any> {
     let endpoint = 'http://localhost:8000/ngos/filteroptions';
     return this.http.get<any>(endpoint); //TODO: move this to request service
