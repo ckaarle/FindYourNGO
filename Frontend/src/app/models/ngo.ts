@@ -9,7 +9,6 @@ export interface NgoDetailItem {
   stats: NgoDetailItemStats;
   contact: NgoDetailItemContact;
   rating: NgoDetailItemRating;
-  [key: string]: any;
 }
 
 export interface NgoDetailItemRating {

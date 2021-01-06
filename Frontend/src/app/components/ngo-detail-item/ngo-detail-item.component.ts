@@ -34,22 +34,22 @@ export class NgoDetailItemComponent implements OnInit {
         break;
       } else {
         hasValues = ngoContentContainerTitles[title].values &&
-            (ngoContentContainerTitles[title].values !== '' || ngoContentContainerTitles[title].values.length > 0);
+            (ngoContentContainerTitles[title].values != '' || ngoContentContainerTitles[title].values.length > 0);
       }
     }
     return hasValues;
   }
 
   titleRowHasValues(titleRow: any): boolean {
-    return titleRow && (titleRow !== '' || titleRow.length > 0);
+    return titleRow && (titleRow != '' || titleRow.length > 0);
   }
 
   generateContentContainers(): void {
     this.ngoContentContainers = [
-      {icon: 'info', values: this.ngoDetailItem.description},
-      {icon: 'group_work', values: this.ngoDetailItem.fieldOfActivity},
-      {icon: 'query_stats', values: this.ngoDetailItem.stats},
-      {icon: 'person', values: this.ngoDetailItem.contact}
+        {icon: 'info', values: this.ngoDetailItem.description},
+        {icon: 'group_work', values: this.ngoDetailItem.fieldOfActivity},
+        {icon: 'query_stats', values: this.ngoDetailItem.stats},
+        {icon: 'person', values: this.ngoDetailItem.contact}
     ];
   }
 
