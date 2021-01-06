@@ -21,7 +21,6 @@
         .ngo-content-container {
             display: flex;
             flex-direction: row;
-            padding-bottom: 16px;
 
             .mat-icon {
                 color: var(--primary-color);
@@ -30,22 +29,25 @@
             .content-column {
                 display: flex;
                 flex-direction: column;
-                padding: 4px 0 0 16px;
-                width: 90%;
+                padding: 4px 16px 16px;
+                width: 100%;
 
                 .title-row {
                     display: flex;
                     flex-direction: row;
                     padding-bottom: 8px;
 
-                    span {
-                        padding-right: 12px;
-                        white-space: break-spaces;
+                    .title {
+                        width: 20%;
+                        font-weight: 400;
+                        font-size: var(--font-size-medium);
                     }
 
-                    .title {
-                        font-weight: 400;
-                        font-size: var(--font-size-medium)
+                    .content {
+                        display: flex;
+                        flex-direction: row;
+                        width: 80%;
+                        word-break: break-word;
                     }
                 }
             }
