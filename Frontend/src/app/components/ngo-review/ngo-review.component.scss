@@ -1,0 +1,46 @@
+.errorMessage {
+  color: var(--threshold-negative);
+  margin-top: 16px;
+}
+
+.reviewText {
+  margin-top: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: start;
+}
+
+.right-aligned {
+  margin-left: auto;
+}
+
+.subtitle {
+  color: var(--threshold-neutral);
+  margin-top: 10px;
+}
+
+.content {
+  display: flex;
+  justify-content: start;
+}
+
+.icon {
+  height: var(--font-size-normal) !important;
+  width: var(--font-size-normal) !important;
+  line-height: var(--font-size-normal) !important;
+  font-size: var(--font-size-normal) !important;
+  margin-left: 8px;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  cursor: pointer;
+}
+
+.title {
+  font-size: 15px;
+}
+
+.text-bottom {
+  margin-bottom: 8px;
+}

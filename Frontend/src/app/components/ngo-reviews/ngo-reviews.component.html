@@ -1,0 +1,14 @@
+<div>
+  <div class="own-review">
+    <ngo-review *ngIf="ownUserReview" [review]="ownUserReview"
+                [ngoName]="ngoName" [editable]="true"></ngo-review>
+  </div>
+  <div class="otherReviews" fxLayoutGap="16px" fxLayout="column">
+    <p *ngIf="(!otherUserReviews || otherUserReviews?.length === 0) && !ownUserReview"
+       fxFlex="100%">No user reviews
+      yet.</p>
+    <ngo-review *ngFor="let review of otherUserReviews" [review]="review" [ngoName]="ngoName"
+                [editable]="false"
+                fxFlex="100%"></ngo-review>
+  </div>
+</div>

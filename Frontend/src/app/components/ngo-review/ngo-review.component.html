@@ -1,0 +1,49 @@
+<mat-card>
+  <div>
+    <div class="header" fxLayoutGap="16px grid" fxLayout="row wrap">
+      <div fxFlex.xs="100%" fxFlex.sm="20%">
+        <img mat-card-avatar
+             src="assets/img/default-user-icon-4.jpg"
+             class="avatar"/>
+
+      </div>
+
+      <div fxFlex.xs="100%" fxFlex.sm="40%">
+        <b class="title">{{review.userName}}</b>
+        <p class="subtitle">has written {{review.reviewsByUser}} {{review.reviewsByUser > 1
+            ? "reviews"
+            : "review"}}</p>
+      </div>
+
+      <div fxFlex.xs="100%" fxFlex.sm="40%" class="right-aligned">
+        <star-rating [value]="review.rating - 1"
+                     [editable]="false"></star-rating>
+      </div>
+
+    </div>
+  </div>
+
+  <div fxFlex.xs="100%" fxFlex.sm="100%">
+    <div class="reviewText">
+      <p>{{review.text}}</p>
+    </div>
+
+    <br>
+
+    <div class="text-bottom">
+      <i *ngIf="!editable" class="text-bottom-no-icon">last
+        edited: {{review.last_edited | date}}</i>
+    </div>
+
+
+    <div class="text-bottom" *ngIf="editable">
+      <i>last edited: {{review.last_edited | date}}</i>
+      <mat-icon (click)="edit()" class="icon">edit</mat-icon>
+      <mat-icon (click)="delete()" class="icon">delete</mat-icon>
+
+      <div *ngIf="errorMessage">
+        <p class="errorMessage">{{errorMessage}}</p>
+      </div>
+    </div>
+  </div>
+</mat-card>
