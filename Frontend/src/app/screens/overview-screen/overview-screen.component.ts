@@ -5,8 +5,8 @@ import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPa
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {ApiService} from '../../services/api.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {OverlayService} from 'src/app/services/overlay.service';
+import {ActivatedRoute} from '@angular/router';
+import {Utils} from '../../services/utils';
 
 
 @Component({
@@ -25,8 +25,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   selectedFilters: NgoFilterSelection = {};
 
   constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService,
-              public apiService: ApiService, public route: ActivatedRoute, private ngoOverviewDialog: OverlayService,
-              private router: Router) {
+              public apiService: ApiService, public route: ActivatedRoute) {
     super();
   }
 
@@ -48,7 +47,6 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
     this.overviewItems = data.results;
-
     this.overviewItems.forEach(overviewItem => {
       overviewItem.amount = 10; // TODO: replace with amount of votes
     });
@@ -73,7 +71,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getFilterOptions(): void {
     this.filter.getNgoFilterOptions().subscribe(data => {
-      this.filterOptions = this.filter.mapDataToObject(data);
+      this.filterOptions = Utils.mapDataToNgoFilterOptions(data);
     });
   }
 
@@ -100,6 +98,5 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination): void {
     this.processPaginatedResults(filteredOverviewItems);
-    console.log('Filtered Items:', this.overviewItems);
   }
 }
