@@ -1,0 +1,19 @@
+<div class="rating-content">
+  <div class="rating-header">
+    <h4>Trustworthiness</h4>
+    <ngo-tw-rating [ngoId]="ngoId"></ngo-tw-rating>
+  </div>
+  <div class="rating-header" fxLayout="row wrap"
+       fxLayoutAlign="space-between end">
+    <h4 fxFlex.xs="100%" fxFlex.sm="75%">User
+      Reviews</h4>
+    <button mat-button *ngIf="!ownUserReview"
+            [routerLink]="['/newReview', ngoId, {ngoName: ngoName}]"
+            fxFlex.xs="100%" fxFlex.sm="25%">Write a
+      review
+    </button>
+  </div>
+  <ngo-reviews [ngoId]=" ngoId
+    " [ngoName]="ngoName" [ownUserReview]="ownUserReview"
+               [otherUserReviews]="otherUserReviews"></ngo-reviews>
+</div>

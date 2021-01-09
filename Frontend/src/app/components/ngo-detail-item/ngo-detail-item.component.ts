@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { NgoDetailItem } from 'src/app/models/ngo';
-import { CustomOverlayRef, NGO_DETAIL_ITEM_DIALOG_DATA } from 'src/app/services/overlay.service';
+import {Component, OnInit} from '@angular/core';
+import {NgoDetailItem} from 'src/app/models/ngo';
+import {ActivatedRoute} from '@angular/router';
+import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 
 export interface NgoContentContainer {
@@ -15,15 +16,18 @@ export interface NgoContentContainer {
 })
 export class NgoDetailItemComponent implements OnInit {
   ngoContentContainers: NgoContentContainer[] = [];
+  public ngoDetailItem: any | NgoDetailItem;
 
-  constructor(
-    public dialogRef: CustomOverlayRef,
-    @Inject(NGO_DETAIL_ITEM_DIALOG_DATA) public ngoDetailItem: NgoDetailItem
-    ) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService) {
+    let id = this.route.snapshot.paramMap.get('id');
+    this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
+      this.ngoDetailItem = data;
+    this.ngoDetailItem = Utils.mapDataToNgoDetailItem(this.ngoDetailItem);
+      this.generateContentContainers();
+    });
+  }
 
   ngOnInit(): void {
-    this.ngoDetailItem = Utils.mapDataToNgoDetailItem(this.ngoDetailItem);
-    this.generateContentContainers();
   }
 
   containerHasValues(ngoContentContainer: NgoContentContainer): boolean {

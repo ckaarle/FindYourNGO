@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {OverviewService} from '../../services/overview.service';
 import {FilterService} from 'src/app/services/filter.service';
-import { NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
+import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
-import { ApiService } from '../../services/api.service';
-import { ActivatedRoute } from '@angular/router';
-import { CustomOverlayRef, OverlayService } from 'src/app/services/overlay.service';
-import {Utils} from "../../services/utils";
+import {ApiService} from '../../services/api.service';
+import {ActivatedRoute} from '@angular/router';
+import {Utils} from '../../services/utils';
 
 
 @Component({
@@ -25,14 +24,14 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
 
-  constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService, public apiService: ApiService,
-    public route: ActivatedRoute, private ngoOverviewDialog: OverlayService) {
+  constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService,
+              public apiService: ApiService, public route: ActivatedRoute) {
     super();
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(
-      params => this.queryList = params);
+        params => this.queryList = params);
     this.getNgoOverviewItems();
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
@@ -42,24 +41,12 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getNgoOverviewItems(): void {
     this.apiService.get('ngoOverviewItems', this.queryList).subscribe(
-      data => this.processPaginatedResults(data));
-  }
-
-  openNgoDetailItem(id: number): void {
-    this.apiService.get('ngoDetailItem', { id: id }).subscribe(data => {
-      let ngoDetailItem: any = data;
-      let dialogRef: CustomOverlayRef = this.ngoOverviewDialog.open({
-        ngoDetailItem: ngoDetailItem
-      });
-    });
+        data => this.processPaginatedResults(data));
   }
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
-    console.log('UPDATED')
-
     this.overviewItems = data.results;
-
     this.overviewItems.forEach(overviewItem => {
       overviewItem.amount = 10; // TODO: replace with amount of votes
     });
@@ -90,15 +77,15 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   subscribeOverviewItemChanges(): void {
     this.filter
-      .loadingNgoOverviewItems
-      .subscribe((data: boolean) => {
-        this.loadingNgoOverviewItems = true;
-      });
+    .loadingNgoOverviewItems
+    .subscribe((data: boolean) => {
+      this.loadingNgoOverviewItems = true;
+    });
     this.filter
     .filteredNgoOverviewItemsChanged
     .subscribe((data: NgoOverviewItemPagination) => {
       this.showFilteredNgoItems(data);
-        this.loadingNgoOverviewItems = false;
+      this.loadingNgoOverviewItems = false;
     });
   }
 

@@ -40,9 +40,9 @@
 /* Custom theming */
 $custom-typography: mat-typography-config(
     $font-family: "Roboto, Helvetiva Neue, sans-serif",
-  $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 500), //h1
-  $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
-  $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
+    $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 500), //h1
+    $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
+    $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
 );
 
 @include mat-core($custom-typography);
@@ -111,6 +111,10 @@ span, p :not(.mat-raised-button.mat-accent) {
 .mat-icon-button:not([disabled]) {
   background-color: var(--primary-color);
   color: var(--primary-contrast-bw);
+}
+
+mat-progress-bar .mat-progress-bar-buffer {
+  background: var(--threshold-neutral);
 }
 
 @mixin mat-icon-size($size: 24px) {
