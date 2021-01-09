@@ -19,15 +19,15 @@ class NgoAddressSerializer(serializers.ModelSerializer):
                     return ''
                 return obj.country
             elif obj.country == '':
-                return '{} {}'.format(obj.postcode, obj.city)
-            return '{} {}, {}'.format(obj.postcode, obj.city, obj.country)
+                return f"{obj.postcode} {obj.city}"
+            return f"{obj.postcode} {obj.city}, {obj.country}"
         elif obj.postcode == '' or obj.city == '':
             if obj.country == '':
                 return obj.street
-            return '{}, {}'.format(obj.street, obj.country)
+            return f"{obj.street}, {obj.country}"
         elif obj.country == '':
-            return '{}, {} {}'.format(obj.street, obj.postcode, obj.city)
-        return '{}, {} {}, {}'.format(obj.street, obj.postcode, obj.city, obj.country)
+            return f"{obj.street}, {obj.postcode} {obj.city}"
+        return f"{obj.street}, {obj.postcode} {obj.city}, {obj.country}"
 
     class Meta:
         model = NgoAddress
@@ -51,14 +51,14 @@ class NgoRepresentativeSerializer(serializers.ModelSerializer):
                 return obj.representative_email
             elif obj.representative_email == '':
                 return obj.representative_last_name
-            return '{}, {}'.format(obj.representative_last_name, obj.representative_email)
+            return f"{obj.representative_last_name}, {obj.representative_email}"
         elif obj.representative_last_name == '':
             if obj.representative_email == '':
-                return obj.representative_first_name
-            return '{}, {}'.format(obj.representative_first_name, obj.representative_email)
+                return ''
+            return obj.representative_email
         elif obj.representative_email == '':
-            return '{}, {}'.format(obj.representative_first_name, obj.representative_last_name)
-        return '{} {}, {}'.format(obj.representative_first_name, obj.representative_last_name, obj.representative_email)
+            return f"{obj.representative_first_name} {obj.representative_last_name}"
+        return f"{obj.representative_first_name} {obj.representative_last_name}, {obj.representative_email}"
 
     class Meta:
         model = NgoRepresentative
@@ -93,7 +93,7 @@ class NgoStatsSerializer(serializers.ModelSerializer):
             return obj.president_last_name
         elif obj.president_last_name == '':
             return obj.president_first_name
-        return '{} {}'.format(obj.president_first_name, obj.president_last_name)
+        return f"{obj.president_first_name} {obj.president_last_name}"
 
     class Meta:
         model = NgoStats
