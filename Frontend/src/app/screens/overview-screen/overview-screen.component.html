@@ -2,11 +2,14 @@
   <mat-drawer #filterSelectionDrawer class="filter-drawer" mode="over" fxFlex="500px"
               fxFlex.xs="100%" fxFlex.sm="33%">
     <ngo-filter-selection [filterOptions]="filterOptions"
+                          [filterSelection]="selectedFilters"
                           (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
   </mat-drawer>
 
   <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions" [filterOptions]="filterOptions"
+    <ngo-filter *ngIf="filterOptions"
+                [filterOptions]="filterOptions"
+                [filterSelection]="selectedFilters"
                 (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
   </div>
 

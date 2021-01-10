@@ -65,7 +65,9 @@ export interface NgoOverviewItemPagination {
 }
 
 export interface NgoFilterOptions {
+    name: {values: string, displayName?: string, icon?: string};
     branches: {values: string[], displayName?: string, icon?: string};
+    regions: {values: string[], displayName?: string, icon?: string};
     topics: {values: string[], displayName?: string, icon?: string};
     typeOfOrganization: {values: string[], displayName?: string, icon?: string};
     workingLanguages: {values: string[], displayName?: string, icon?: string};
@@ -81,12 +83,4 @@ export interface NgoFilterOptions {
 
 export interface NgoFilterSelection {
     [keyOption: string]: any;
-}
- 
-export interface Countries {
-    countries: string[];
-}
-
-export interface Topics {
-    topics: string[];
 }

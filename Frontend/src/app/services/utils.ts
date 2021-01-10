@@ -1,6 +1,15 @@
-import {NgoDetailItem, NgoFilterOptions, NgoOverviewItem} from '../models/ngo';
+import {NgoFilterSelection, NgoDetailItem, NgoFilterOptions} from '../models/ngo';
 
 export class Utils {
+
+    static clearNullValues(object: any): NgoFilterSelection {
+        for (const propName in object) {
+            if (object[propName] === null) {
+                delete object[propName];
+            }
+        }
+        return object;
+    }
 
     static mapDataToNgoFilterOptions(ngoOverviewItem: any): NgoFilterOptions {
         return {

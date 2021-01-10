@@ -17,7 +17,6 @@ from django.urls import include, path
 from django.conf.urls import url
 from rest_framework import routers
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_item_controller, ngo_filter_controller, rating_controller
-from findyourngo.restapi.controllers.ngo_filter_controller import NgoFilterView
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -33,10 +32,8 @@ urlpatterns = [
     url(r'^ngos$', ngo_controller.ngo_list),
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
-    url(r'^ngos/filter/$', NgoFilterView.as_view()),
+    url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
     path('recalculateTW', views.recalculateTW, name='recalculateTW'),
-    url(r'countries', views.country_list),
-    url(r'topics', views.topic_list),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
