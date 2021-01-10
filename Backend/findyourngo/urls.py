@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import include, path
 from django.conf.urls import url
 from rest_framework import routers
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_item_controller, ngo_filter_controller
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_item_controller, ngo_filter_controller, rating_controller
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -35,5 +35,8 @@ urlpatterns = [
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
     path('recalculateTW', views.recalculateTW, name='recalculateTW'),
     url(r'^ngoOverviewItems', ngo_overview_item_controller.NgoOverviewItemList.as_view()),
+    url(r'^twRating', rating_controller.tw_rating),
+    url(r'^userReviewsForNgo', rating_controller.userReviews),
+    url(r'^review', rating_controller.review),
 ]
 

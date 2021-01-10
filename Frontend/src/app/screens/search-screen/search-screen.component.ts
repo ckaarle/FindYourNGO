@@ -4,7 +4,8 @@ import {ApiService} from '../../services/api.service';
 import {NgoFilterOptions} from '../../models/ngo';
 import {Router} from '@angular/router';
 import {FilterService} from '../../services/filter.service';
-import Utils from '../../services/utils';
+import {Utils} from '../../services/utils';
+
 
 @Component({
     selector: 'app-search-screen',

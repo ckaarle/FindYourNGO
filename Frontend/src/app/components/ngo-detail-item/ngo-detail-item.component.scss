@@ -1,51 +1,60 @@
 :host {
-    background: white;
-    border-radius: 4px;
+  background: white;
+  border-radius: 4px;
+}
+
+.card {
+  display: flex;
+  align-self: center;
+  max-width: 1000px;
+  margin: 24px auto auto auto;
 }
 
 .ngo-detail-item {
-    padding: 32px 32px 16px 32px;
 
-    .ngo-header {
-        mat-divider {
-            position: relative;
-            margin: 16px 0 32px 0;
-        }
+  padding: 32px 32px 16px 32px;
+
+  .ngo-header {
+    mat-divider {
+      position: relative;
+      margin: 16px 0 32px 0;
     }
+  }
 
-    .ngo-content {
-        max-height: 65%;
-        overflow-y: auto;
-        overflow-x: hidden;
+  .ngo-content {
+    overflow-y: auto;
+    overflow-x: hidden;
 
-        .ngo-content-container {
-            display: flex;
-            flex-direction: row;
-            padding-bottom: 16px;
+    .ngo-content-container {
+      display: flex;
+      flex-direction: row;
 
-            .mat-icon {
-                color: var(--primary-color);
-            }
+      .mat-icon {
+        color: var(--primary-color);
+      }
 
-            .content-column {
-                display: flex;
-                flex-direction: column;
-                padding: 4px 0 0 16px;
-                width: 90%;
+      .content-column {
+        display: flex;
+        flex-direction: column;
+                padding: 4px 16px 16px;
+                width: 100%;
 
-                .title-row {
-                    display: flex;
-                    flex-direction: row;
-                    padding-bottom: 8px;
+        .title-row {
+          display: flex;
+          flex-direction: row;
+          padding-bottom: 8px;
 
-                    span {
-                        padding-right: 12px;
-                        white-space: break-spaces;
+          .title {
+                        width: 20%;
+            font-weight: 400;
+                        font-size: var(--font-size-medium);
                     }
 
-                    .title {
-                        font-weight: 400;
-                        font-size: var(--font-size-medium)
+                    .content {
+                        display: flex;
+                        flex-direction: row;
+                        width: 80%;
+                        word-break: break-word;
                     }
                 }
             }
@@ -54,20 +63,20 @@
 }
 
 .ngo-rating {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 0 0 0;
+
+  .rating-values {
     display: flex;
     flex-direction: row;
-    padding: 5px 0 0 0;
+    font-size: var(--font-size-small);
+    padding-left: 5px;
+    align-items: center;
 
-    .rating-values {
-        display: flex;
-        flex-direction: row;
-        font-size: var(--font-size-small);
-        padding-left: 5px;
-        align-items: center;
-
-        .rating-values-amount {
-            padding-left: 5px;
-            font-weight: 500;
-        }
+    .rating-values-amount {
+      padding-left: 5px;
+      font-weight: 500;
     }
+  }
 }

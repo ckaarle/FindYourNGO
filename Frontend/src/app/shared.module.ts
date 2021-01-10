@@ -25,6 +25,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInputModule} from '@angular/material/input';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -35,6 +36,13 @@ import {TypeEvaluatorPipe} from './pipes/type-evaluator.pipe';
 import { OverlayService } from './services/overlay.service';
 import {FilterService} from './services/filter.service';
 import {PaginationComponent} from './components/pagination/pagination.component';
+import { NgoRatingComponent } from './components/ngo-rating/ngo-rating.component';
+import { NgoTwRatingComponent } from './components/ngo-tw-rating/ngo-tw-rating.component';
+import { NgoRatingTableComponent } from './components/ngo-rating-table/ngo-rating-table.component';
+import { NgoReviewComponent } from './components/ngo-review/ngo-review.component';
+import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.component';
+import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   imports: [
@@ -54,9 +62,11 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatInputModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AppRoutingModule
   ],
   declarations: [
     OverviewScreenComponent,
@@ -70,7 +80,13 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     NgoFilterSelectionComponent,
     NgoDetailItemComponent,
     ValueTransformerPipe,
-    TypeEvaluatorPipe
+    TypeEvaluatorPipe,
+    NgoRatingComponent,
+    NgoTwRatingComponent,
+    NgoRatingTableComponent,
+    NgoReviewComponent,
+    NgoReviewsComponent,
+    NgoNewReviewComponent,
   ],
   exports: [
     MatTabsModule,
@@ -88,6 +104,7 @@ import {PaginationComponent} from './components/pagination/pagination.component'
     MatCheckboxModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule
   ],

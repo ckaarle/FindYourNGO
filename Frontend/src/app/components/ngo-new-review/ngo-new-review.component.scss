@@ -1,0 +1,24 @@
+.errorMessage {
+  color: var(--secondary-color);
+}
+
+.rating {
+  margin-top: 30px !important;
+  margin-bottom: 30px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 1000px;
+  margin: 24px auto auto auto;
+}
+
+.cancel-button {
+  margin-left: 8px !important;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+}
+
+
