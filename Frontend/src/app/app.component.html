@@ -1,4 +1,4 @@
-A<mat-sidenav-container>
+<mat-sidenav-container>
 
   <!-- sidenav for mobile -->
   <mat-sidenav #sidenav class="sidenav" mode="over">
@@ -10,7 +10,7 @@ A<mat-sidenav-container>
       <mat-accordion>
         <mat-list-item class="sidenav-item" *ngFor="let screen of screens"
                        [routerLink]="getRouterLink(screen)"
-                       routerLinkActive="active" (click)="resetSelectedFilters(); sidenav.close()">
+                       routerLinkActive="active" (click)="sidenav.close()">
           <mat-icon color="primary">{{getScreenIcon(screen)}}</mat-icon>
           <span class="sidenav-label">{{screen}}</span>
           <mat-divider></mat-divider>
@@ -36,12 +36,12 @@ A<mat-sidenav-container>
       <!-- desktop navbar -->
       <ng-container class="desktop-navbar" *ngIf="media?.isDesktop()">
         <nav mat-tab-nav-bar>
-          <a mat-tab-link (click)="resetSelectedFilters(); activeScreen = screens[0]"
+          <a mat-tab-link (click)="activeScreen = screens[0]"
              [active]="activeScreen == screens[0]" [routerLink]="getRouterLink(screens[0])">
             <span class="navbar-label">{{screens[0]}}</span>
           </a>
           <img src="assets/img/logo_red2.svg" alt="Logo" style="margin: 3px"/>
-          <a mat-tab-link (click)="resetSelectedFilters(); activeScreen = screens[1]"
+          <a mat-tab-link (click)="activeScreen = screens[1]"
              [active]="activeScreen == screens[1]" [routerLink]="getRouterLink(screens[1])">
             <span class="navbar-label">{{screens[1]}}</span>
           </a>

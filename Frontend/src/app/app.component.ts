@@ -77,11 +77,4 @@ export class AppComponent {
   getCurrentRoute(): string {
     return this.router.url;
   }
-
-  resetSelectedFilters(): void {
-    this.filter.editSelectedFilters({});
-    this.filter.applyFilter({}).subscribe(data => {
-        this.filter.displayFilteredNgoItems(data);
-    });
-  }
 }

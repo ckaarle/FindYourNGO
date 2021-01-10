@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {OverviewService} from '../../services/overview.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FilterService} from 'src/app/services/filter.service';
 import { NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
 import {PaginationService} from '../../services/pagination.service';
@@ -14,7 +13,7 @@ import { CustomOverlayRef, OverlayService } from 'src/app/services/overlay.servi
   templateUrl: './overview-screen.component.html',
   styleUrls: ['./overview-screen.component.scss'],
 })
-export class OverviewScreenComponent extends PaginationComponent implements OnInit {
+export class OverviewScreenComponent extends PaginationComponent implements OnInit, OnDestroy {
   overviewItems: NgoOverviewItem[] = [];
 
   filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
@@ -23,7 +22,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
 
-  constructor(private overviewService: OverviewService, private filter: FilterService, protected paginationService: PaginationService, public apiService: ApiService,
+  constructor(private filter: FilterService, protected paginationService: PaginationService, public apiService: ApiService,
     public route: ActivatedRoute, private ngoOverviewDialog: OverlayService) {
     super();
   }
@@ -69,7 +68,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
         this.processPaginatedResults(data);
       });
     } else {
-      this.overviewService.getNgoOverviewItemsForPage(pageNumber).subscribe(data => {
+      this.apiService.get('ngoOverviewItems', {page: pageNumber}).subscribe(data => {
         this.processPaginatedResults(data);
       });
     }
@@ -109,5 +108,12 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   showFilteredNgoItems(filteredOverviewItems: NgoOverviewItemPagination): void {
     this.processPaginatedResults(filteredOverviewItems);
+  }
+
+  ngOnDestroy(): void {
+      this.filter.editSelectedFilters({});
+      this.filter.applyFilter({}).subscribe(data => {
+          this.filter.displayFilteredNgoItems(data);
+    });
   }
 }
