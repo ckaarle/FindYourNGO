@@ -53,12 +53,10 @@ export class FilterService {
         };
     }
 
-    pageSignifier = '?page=';
     applyFilter(filterSelection: NgoFilterSelection, pageNumber: number = 0): Observable<NgoOverviewItemPagination> {
         if (pageNumber === 0) {
-            return this.apiService.post('ngos/filter/', filterSelection);
-        } else {
-            return this.apiService.get('ngos/filter' + this.pageSignifier + pageNumber.toString(), filterSelection);
+            return this.apiService.get('ngos/filter', {filter_selection: encodeURIComponent( JSON.stringify(filterSelection))});
         }
+        return this.apiService.get('ngos/filter', {filter_selection: encodeURIComponent( JSON.stringify(filterSelection)), page: pageNumber});
     }
 }
