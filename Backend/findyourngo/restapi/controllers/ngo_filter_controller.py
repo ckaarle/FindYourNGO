@@ -10,7 +10,7 @@ import json
 from findyourngo.filtering.NgoFilter import NgoFilter
 from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
 from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
-from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
+from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewItemSerializer
 
 MAX_PAGE_SIZE = 20
 

@@ -23,7 +23,7 @@ export class Utils {
             typeOfOrganization: {displayName: 'Type of organization', values: ngoOverviewItem.typeOfOrganization, icon: 'corporate_fare'},
             workingLanguages: {displayName: 'Working languages', values: ngoOverviewItem.workingLanguages, icon: 'translate'},
             funding: {displayName: 'Funding', values: ngoOverviewItem.funding, icon: 'attach_money'},
-            trustworthiness: {displayName: 'Trustworthiness', values: ngoOverviewItem.trustworthiness, icon: 'star'}
+            trustworthiness: {displayName: 'Trustworthiness', values: ngoOverviewItem.trustworthiness, icon: 'star'},
         };
     }
 
@@ -60,7 +60,7 @@ export class Utils {
             },
             rating: {
                 trustworthiness: {displayName: 'Trustworthiness', values: ngoDetailItem.trustworthiness},
-                amount: {displayName: 'Amount', values: 10} //TODO
+                amount: {displayName: 'Amount', values: ngoDetailItem.amount}
             }
         };
     }
