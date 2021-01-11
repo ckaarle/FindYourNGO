@@ -3,7 +3,7 @@ from typing import Iterable
 from django.db.models import Sum
 
 from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation, NgoReview
-from findyourngo.trustworthiness_calculator.trustworthiness_constants import BASE_RAW_SCORE_MIN_VALUE, BASE_RAW_SCORE_MAX_VALUE, \
+from findyourngo.trustworthiness_calculator.trustworthiness_constants import RAW_SCORE_MIN_VALUE, RAW_SCORE_MAX_VALUE, \
     TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS
 from findyourngo.type_variables import TWScore
 
@@ -83,7 +83,7 @@ class TWCalculator:
         return self._round(score)
 
     def _restrict_to_allowed_score_range_base(self, base_raw_score: float) -> TWScore:
-        raw_score_scaled_around_zero = (base_raw_score - BASE_RAW_SCORE_MIN_VALUE) / (BASE_RAW_SCORE_MAX_VALUE - BASE_RAW_SCORE_MIN_VALUE)
+        raw_score_scaled_around_zero = (base_raw_score - RAW_SCORE_MIN_VALUE) / (RAW_SCORE_MAX_VALUE - RAW_SCORE_MIN_VALUE)
         range_of_target_interval = TW_MAX_VALUE - TW_MIN_VALUE
 
         score = raw_score_scaled_around_zero * range_of_target_interval + TW_MIN_VALUE
