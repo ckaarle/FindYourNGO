@@ -107,3 +107,16 @@ class NgoReview(models.Model):
     last_edited = models.DateField()
     text = models.TextField()
     rating = models.IntegerField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+
+
+class NgoConnection(models.Model):
+    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    report_date = models.DateField()
+    approval_date = models.DateField()
+
+
+class NgoPendingConnection(models.Model):
+    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    report_date = models.DateField()
