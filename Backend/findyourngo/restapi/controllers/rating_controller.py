@@ -1,4 +1,3 @@
-from collections import defaultdict
 from datetime import datetime
 
 from django.http.response import JsonResponse
@@ -8,6 +7,7 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from findyourngo.restapi.models import Ngo, NgoReview, NgoCommenter
+from findyourngo.data_import.data_importer import update_ngo_tw_score
 
 
 @api_view(['GET'])
@@ -115,6 +115,7 @@ def review(request) -> JsonResponse:
         review.reviewer.number_of_comments -= 1
         review.reviewer.save()
         review.delete()
+        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo))
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -130,6 +131,7 @@ def update_review(review_id, review) -> JsonResponse:
         review.rating = rating
         review.last_edited = update_time
         review.save()
+        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo))
         return JsonResponse({'message': 'Review successfully updated'}, status=status.HTTP_200_OK)
     except BaseException:
         return JsonResponse({'error': f'No review found for id {review_id}'}, status=status.HTTP_400_BAD_REQUEST)
@@ -156,6 +158,7 @@ def save_new_review(review, user) -> JsonResponse:
 
         user.number_of_comments += 1
         user.save()
+        update_ngo_tw_score(ngo)
         return JsonResponse(data={'message': 'Review was successfully stored.'}, status=status.HTTP_200_OK)
 
     except BaseException as err:
