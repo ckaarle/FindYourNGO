@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 
 from findyourngo.restapi.models import Ngo
 from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
-from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
+from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewItemSerializer
 
 
 class NgoOverviewItemList(GenericAPIView):

@@ -55,6 +55,8 @@ for more accreditation information (also lists other accreditations)
 
 ## How is the score calculated?
 
+### Base TW score
+
 Most straightforward option:
 - max. number of data sources: 2
 - max. credibility: (# data sources) x yes
@@ -69,7 +71,7 @@ Further considerations:
 - more than one credible source does not make the NGO more credible
 
 
-The following factors will be used:
+The following factors will be used to calculate the raw base tw score:
 
 | Factor                | Value                        | current max. value |Reasoning |
 | --------------------- | ----------------------------- | -------- | --------- |
@@ -78,24 +80,56 @@ The following factors will be used:
 | ECOSOC/ILO/CF              | # data sources overall | 2 | ECOSOC/ILO/CF does not hold as much meaning without a credible source |
 
 
-score_raw(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO)
+score_raw_base(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO)
 
 Since the score has to be scaled into the range [0..5], use the following [formula](https://stats.stackexchange.com/questions/281162/scale-a-number-between-a-range/281164) to achieve this:
 
 | Variable | Value | Description |
 | -------- | ----- | ----------- |
-| r<sub>min</sub> | 1 | min. value of raw TW score (i.e. one data source and nothing else) |
-| r <sub>max</sub> | 9 | max. value of raw TW score |
+| r<sub>min</sub> | 1 | min. value of raw base TW score (i.e. one data source and nothing else) |
+| r <sub>max</sub> | 9 | max. value of raw base TW score |
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
 
-TW_score = [(TW_score_raw - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub>)] * (t<sub>max</sub> - t<sub>min</sub>) + t<sub>min</sub>
+score_raw_base_scaled = [(score_raw_base - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub>)] * (t<sub>max</sub> - t<sub>min</sub>) + t<sub>min</sub>
 
+### User TW score
+
+Since the rating of the users for an NGO is to be taken into account in the overall rating, a user tw score is now also calculated.
+
+The raw score is calculated as follows:
+score_raw_user(NGO) = sum_commenter_ratings / amount_commenter_ratings
+
+Since the score has to be scaled into the range [0..5], the same formula is used as with the base tw score:
+
+| Variable | Value | Description |
+| -------- | ----- | ----------- |
+| r<sub>min</sub> | 0 | min. value of raw user TW score (no rating has been given until now) |
+| r <sub>max</sub> | amount_commenter_ratings * TW_MAX_VALUE | max. value of raw user TW score |
+| t<sub>min</sub> | 0 | min. value of TW score |
+| t<sub>max</sub> | 5 | max. value of TW score |
+
+score_raw_user_scaled = [(score_raw_user - r<sub>min</sub>) / (r<sub>max</sub> - r<sub>min</sub>)] * (t<sub>max</sub> - t<sub>min</sub>) + t<sub>min</sub>
+
+### Total TW score
+
+The total tw score is then calculated as follows:
+* If no rating has been given until now:
+
+total_tw_score = score_raw_base_scaled
+
+* Otherwise:
+
+total_tw_score = score_raw_base_scaled * (1 - user_tw_factor) + score_raw_user_scaled * user_tw_factor
+
+where user_tw_factor results from the share of NGO ratings in the total number of ratings.
+This is to prevent individual comments from being weighted disproportionately.
 
 ## When will the score be calculated?
-During the initial data import, the score will be calculated. There also exists a URL to recalculate the score for all
- NGOs in the database if necessary (e.g. if the score calculation was modified). There is currently no feature that would 
- automatically recalculate the score, for example when an object is saved to the database. Instead, use the `TWCalculator`
- to calculate the new trustworthiness score after changes to the NGO's data were made.
- It is possible to include a recalculation of the tw score into the `save`-method of database objects. This should be 
- discussed further.
+During the initial data import, the score will be calculated for each NGO. There also exists a URL to recalculate the
+ score for all NGOs in the database if necessary (e.g. if the score calculation was modified).
+ 
+The score is recalculated for a single NGO, when a new user rating is saved to the database and when an existing user
+ rating is updated or deleted. In the future, a recalculation of the score for each NGO will be performed automatically
+ in fixed intervals. This ensures, that the scores will be kept up-to-date, even if no changes are being made to 
+ to specific NGOs, which would trigger a single recalculation.
