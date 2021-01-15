@@ -126,9 +126,10 @@ where user_tw_factor results from the share of NGO ratings in the total number o
 This is to prevent individual comments from being weighted disproportionately.
 
 ## When will the score be calculated?
-During the initial data import, the score will be calculated. There also exists a URL to recalculate the score for all
- NGOs in the database if necessary (e.g. if the score calculation was modified). There is currently no feature that would 
- automatically recalculate the score, for example when an object is saved to the database. Instead, use the `TWCalculator`
- to calculate the new trustworthiness score after changes to the NGO's data were made.
- It is possible to include a recalculation of the tw score into the `save`-method of database objects. This should be 
- discussed further.
+During the initial data import, the score will be calculated for each NGO. There also exists a URL to recalculate the
+ score for all NGOs in the database if necessary (e.g. if the score calculation was modified).
+ 
+The score is recalculated for a single NGO, when a new user rating is saved to the database and when an existing user
+ rating is updated or deleted. In the future, a recalculation of the score for each NGO will be performed automatically
+ in fixed intervals. This ensures, that the scores will be kept up-to-date, even if no changes are being made to 
+ to specific NGOs, which would trigger a single recalculation.

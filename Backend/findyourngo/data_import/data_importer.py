@@ -575,7 +575,7 @@ def update_ngo_tw_score(ngo: Ngo) -> None:
 
     ngo_tw_score.base_tw_score = tw_calculator.calculate_base_tw_from_ngo_tw_score(ngo_tw_score)
     ngo_tw_score.user_tw_score = tw_calculator.calculate_user_tw_from_ngo_id(ngo.id)
-    ngo_tw_score.total_tw_score = tw_calculator.calculate_tw_from_ngo_tw_scores(ngo_tw_score, user_tw_factor)
+    ngo_tw_score.total_tw_score = tw_calculator.calculate_tw_from_ngo_tw_scores(ngo.id, ngo_tw_score, user_tw_factor)
     ngo_tw_score.save()
 
 

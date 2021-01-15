@@ -27,7 +27,7 @@ class TWCalculator:
     def _contains_valid_accreditation(self, accreditations):
         return any(acc in accreditations for acc in VALID_ACCREDITATIONS)
 
-    def _calculate_raw_score(
+    def _calculate_raw_base_score(
             self,
             number_data_sources_score: float,
             credible_source_score: float,
@@ -41,7 +41,7 @@ class TWCalculator:
             credible_source_score: float,
             ecosoc_score: float,
     ) -> TWScore:
-        raw_score = self._calculate_raw_score(number_data_sources_score, credible_source_score, ecosoc_score)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_base_tw_from_ngo_tw_score(self, ngo_tw_score: NgoTWScore) -> TWScore:
@@ -49,21 +49,21 @@ class TWCalculator:
         credible_source_score = ngo_tw_score.credible_source_score
         ecosoc_score = ngo_tw_score.ecosoc_score
 
-        raw_score = self._calculate_raw_score(number_data_sources_score, credible_source_score, ecosoc_score)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_user_tw_from_ngo_id(self, ngo_id: int) -> TWScore:
         amount_review_ratings = self._review_count(ngo_id)
         if amount_review_ratings == 0:
-            return -1
+            return 0
         else:
-            sum_review_ratings = self._review_sum(ngo_id)
+            sum_review_ratings = self._review_rating_sum(ngo_id)
             return self._restrict_to_allowed_score_range_user(sum_review_ratings, amount_review_ratings)
 
-    def calculate_tw_from_ngo_tw_scores(self, ngo_tw_score: NgoTWScore, user_tw_factor) -> TWScore:
+    def calculate_tw_from_ngo_tw_scores(self, ngo_id: int, ngo_tw_score: NgoTWScore, user_tw_factor) -> TWScore:
         base_tw = ngo_tw_score.base_tw_score
         user_tw = ngo_tw_score.user_tw_score
-        if user_tw < 0:
+        if self._review_count(ngo_id) == 0:
             return base_tw
         else:
             return base_tw * (1 - user_tw_factor) + user_tw * user_tw_factor
@@ -99,8 +99,8 @@ class TWCalculator:
     def _review_count(self, ngo_id: int) -> int:
         return NgoReview.objects.filter(ngo=ngo_id).count()
 
-    def _review_sum(self, ngo_id: int) -> int:
-        return NgoReview.objects.filter(ngo=ngo_id).aggregate(sum=Sum('rating'))['sum']
+    def _review_rating_sum(self, ngo_id: int) -> int:
+        return NgoReview.objects.filter(ngo=ngo_id).aggregate(sum=Sum('rating'))['sum'] or 0
 
     # why is this function necessary when the python-native round() function exists?
     # since Python 3, this function implements banker's rounding:
