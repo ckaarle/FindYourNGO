@@ -70,6 +70,8 @@ class TWCalculator:
 
     def calculate_user_tw_factor(self, ngo_id: int) -> float:
         total_reviews = self._total_review_count()
+        if total_reviews == 0:
+            return 0
         ngo_reviews = self._review_count(ngo_id)
         return ngo_reviews / total_reviews
 
