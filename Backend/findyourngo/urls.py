@@ -33,10 +33,10 @@ urlpatterns = [
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
-    path('recalculateTW', views.recalculateTW, name='recalculateTW'),
     url(r'^ngoOverviewItems', ngo_overview_controller.NgoOverviewItemList.as_view()),
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
+    path('testPagerank', views.pagerankTest),
 ]
 

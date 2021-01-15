@@ -6,8 +6,8 @@ import networkx as nx
 import pandas as pd
 from matplotlib import pyplot as plt
 
-from findyourngo.restapi.models import Ngo, NgoTWScore
-from findyourngo.trustworthiness_calculator.pagerank import PageRank
+from findyourngo.restapi.models import Ngo, NgoTWScore, NgoConnection
+from findyourngo.trustworthiness_calculator.Pagerank import PageRank
 
 
 def test_pagerank_library_function():
@@ -118,12 +118,7 @@ ngos_by_name = {
     'l': ngo_l,
 }
 
-
-class PageRankTest(PageRank):
-
-    def __init__(self, ngos):
-        super().__init__(ngos)
-        self.connected = {
+connected = {
             'a': ['h', 'e'],
             'b': ['h', 'e'],
             'c': ['h', 'e'],
@@ -134,12 +129,37 @@ class PageRankTest(PageRank):
             'h': ['e', 'f', 'g', 'a', 'b', 'c', 'd'],
         }
 
+
+connected_with_subgraph = {
+            'a': ['h', 'e'],
+            'b': ['h', 'e'],
+            'c': ['h', 'e'],
+            'd': ['h', 'e'],
+            'e': ['a', 'b', 'c', 'd', 'h'],
+            'f': ['h'],
+            'g': ['h'],
+            'h': ['e', 'f', 'g', 'a', 'b', 'c', 'd'],
+            'i': ['j', 'l'],
+            'j': ['k', 'i'],
+            'k': ['l', 'j'],
+            'l': ['i', 'k'],
+        }
+
+
+class PageRankTest(PageRank):
+
     def _get_connected_ngos(self, ngo):
-        connected_names = self.connected[ngo.name]
+        connected_names = self._get_connected(ngo)
 
         ngos = []
         for connected_name in connected_names:
-            ngos.append(ngos_by_name[connected_name])
+            ngos.append(NgoConnection(connected_ngo=ngos_by_name[connected_name]))
+        return ngos
+
+    def _get_connected(self, ngo):
+        return connected[ngo.name]
+
+    def _remove_ngos_without_connections(self, ngos):
         return ngos
 
 
@@ -147,7 +167,7 @@ def test_pagerank_with_ngos():
     pr = PageRankTest(ngos)
     pr.draw_graph()
 
-    ppr = pr.pagerank()
+    ppr = pr._pagerank()
     pprint.pprint(ppr)
 
     assert ppr['a'] == 0.09214971509174363
@@ -171,20 +191,8 @@ class PageRankWithSubgraphsTest(PageRankTest):
 
         self.cancel_subgraph = cancel_subgraph
 
-        self.connected = {
-            'a': ['h', 'e'],
-            'b': ['h', 'e'],
-            'c': ['h', 'e'],
-            'd': ['h', 'e'],
-            'e': ['a', 'b', 'c', 'd', 'h'],
-            'f': ['h'],
-            'g': ['h'],
-            'h': ['e', 'f', 'g', 'a', 'b', 'c', 'd'],
-            'i': ['j', 'l'],
-            'j': ['k', 'i'],
-            'k': ['l', 'j'],
-            'l': ['i', 'k'],
-        }
+    def _get_connected(self, ngo):
+        return connected_with_subgraph[ngo.name]
 
 
 class PageRankWithSubgraphsDefaultPersonalizationTest(PageRankWithSubgraphsTest):
@@ -223,7 +231,7 @@ def test_pagerank_with_fraudulent_ngo_connections():
     pr = PageRankWithSubgraphsTest(ngos_with_subgraph)
     pr.draw_graph()
 
-    ppr = pr.pagerank()
+    ppr = pr._pagerank()
     pprint.pprint(ppr)
 
     assert ppr['a'] == 0.061432505304915785

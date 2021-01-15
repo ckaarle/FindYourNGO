@@ -218,13 +218,22 @@ should not receive a trustworthiness boost, so it seems safe to simply exclude t
 But it might cause the dangling node-problem described above.
 
 ### Influence on TW score
-The pagerank result is a float value between 0 and 1. This will be multiplied by a factor of 2, meaning that the PageRank 
-can at most lead to a TW score boost of 2. The TW score will then be re-scaled into its original range. 
+The pagerank result is a float value between 0 and 1. This will be multiplied by a factor of # NGOs in PageRank and then
+scaled into the range of [0, 2] meaning that the PageRank can at most lead to a TW score boost of 2. 
 
-Of course, if we add more and more NGOs with links to each other, the PageRank score will continously decrease. Since all 
-rescaling options (e.g. multiply PageRank score by # NGOs) can lead to strange effects, we will re-adjust this calculation
-periodically to ensure the result stays reasonable.
+ 
+However, there is one more issue: In the case of only 2 connected NGOs, one with TW 3.8 and one with TW 0.0, the following would happen:  
+NGO1 with TW 3.8 before would be boosted to TW 4.7  
+NGO2 with TW 0.0 before would be boosted to TW 1.1
 
+Pagerank inherently leads to a boost for NGO1, but we want this boost to be fairly small, since the connection to NGO2 
+does not actually indicate a higher TW for NGO1. Therefore, we factor in the pre-calculated TW score again:  
+A NGO with TW 5.0 before would not receive any boost (and it in fact **cannot**, since the TW is capped at 5).  
+A NGO with TW 0.0 before can receive the max. boost of 2.
+
+With this factoring, the above mentioned example changes to:  
+NGO1 improves from 3.8 to around 4.  
+NGO2 improves from 0.0 to 1.1.
 
 ## When will the score be calculated?
 During the initial data import, the score will be calculated for each NGO. There also exists a URL to recalculate the

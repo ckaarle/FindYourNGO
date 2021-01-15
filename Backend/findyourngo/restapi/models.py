@@ -112,8 +112,8 @@ class NgoReview(models.Model):
 
 
 class NgoConnection(models.Model):
-    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter')
-    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo')
+    reporter = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter')
+    connected_ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo')
     report_date = models.DateField()
     approval_date = models.DateField()
 

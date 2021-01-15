@@ -1,4 +1,4 @@
-from typing import Tuple, List, Iterable, Dict
+from typing import Tuple, List, Iterable, Dict, Optional
 
 from findyourngo.restapi.models import Ngo, NgoConnection
 import networkx as nx
@@ -7,7 +7,7 @@ import networkx as nx
 class PageRank:
 
     def __init__(self, ngos: Iterable[Ngo]):
-        self.ngos = ngos
+        self.ngos = self._remove_ngos_without_connections(ngos)
         self.G = nx.DiGraph()
 
         self.initialized = False
@@ -25,22 +25,25 @@ class PageRank:
         nodes = []
 
         for ngo in self.ngos:
-            connected_ngos = self._get_connected_ngos(ngo)
-
-            if connected_ngos:
-                nodes.append((ngo.name, {'tw': ngo.tw_score.total_tw_score}))
-                for connected_ngo in connected_ngos:
-                    edges.append((ngo.name, connected_ngo.name))
+            connections = self._get_connected_ngos(ngo)
+            nodes.append((ngo.name, {'tw': ngo.tw_score.total_tw_score}))
+            for connection in connections:
+                edges.append((ngo.name, connection.connected_ngo.name))
 
         return nodes, edges
 
-    def pagerank(self, alpha: float = 0.85) -> Dict[str, float]:
+    def _pagerank(self, alpha: float = 0.85) -> Dict[str, float]:
         self._initialize()
         return nx.pagerank(self.G, alpha=alpha)
 
-    def personalized_pagerank(self, alpha: float = 0.85) -> Dict[str, float]:
+    def personalized_pagerank(self, alpha: float = 0.85) -> Optional[Dict[str, float]]:
         self._initialize()
+
+        if not self.G.nodes: # graph is empty
+            return None
+
         personalization = self._get_personalization()
+
         return nx.pagerank(self.G, alpha=alpha, personalization=personalization)
 
     def _get_connected_ngos(self, ngo):
@@ -49,8 +52,8 @@ class PageRank:
     def _get_personalization(self) -> Dict[str, float]:
         connected_tw_sum = {}
         for ngo in self.ngos:
-            connected_ngos = self._get_connected_ngos(ngo)
-            connected_tw_sum[ngo.name] = sum(map(lambda ngo: ngo.tw_score.total_tw_score, connected_ngos))
+            connections = self._get_connected_ngos(ngo)
+            connected_tw_sum[ngo.name] = sum(map(lambda connection: connection.connected_ngo.tw_score.total_tw_score, connections))
 
         total_tw = sum(connected_tw_sum.values())
 
@@ -85,3 +88,13 @@ class PageRank:
         #     'k': [0.6, -0.95],
         #     'l': [0.9, -0.65],
         # }, labels=labels)
+
+    def _remove_ngos_without_connections(self, ngos: Iterable[Ngo]) -> List[Ngo]:
+        ngos_with_connections = []
+        for ngo in ngos:
+            connections = self._get_connected_ngos(ngo)
+
+            if connections:
+                ngos_with_connections.append(ngo)
+
+        return ngos_with_connections
