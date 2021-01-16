@@ -35,11 +35,23 @@
   </form>
 </div>
 
-<div *ngIf="status === ''; else submitBlock" mat-dialog-actions>
-  <button (click)="updateForm('register')" mat-button>Register</button>
-  <button (click)="updateForm('login')" mat-button>Login</button>
-  <button (click)="signInWithGoogle()" mat-button>G+</button>
-  <button (click)="signInWithFB()" mat-button>FB</button>
+<div *ngIf="status === ''; else submitBlock" mat-dialog-actions class="limit-width">
+  <button (click)="updateForm('login')" mat-button class="action-button">
+    <mat-icon>login</mat-icon>
+    Login
+  </button>
+  <button (click)="updateForm('register')" mat-button class="action-button">
+    <mat-icon>how_to_reg</mat-icon>
+    Sign up with Email
+  </button>
+  <button (click)="signInWithGoogle()" mat-button class="action-button">
+    <mat-icon>person</mat-icon>
+    Sign up with Google
+  </button>
+  <button (click)="signInWithFB()" mat-button class="action-button">
+    <mat-icon>facebook</mat-icon>
+    Sign up with Facebook
+  </button>
 </div>
 <ng-template #submitBlock mat-dialog-actions>
   <button (click)="submit()" mat-button>Submit</button>

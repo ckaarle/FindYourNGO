@@ -28,9 +28,11 @@ export class NgoDetailItemComponent implements OnInit {
   containerHasValues(ngoContentContainer: NgoContentContainer): boolean {
     let hasValues = false;
     Object.entries(ngoContentContainer.values).forEach(titleRow => {
-      if (hasValues) { 
+      if (hasValues) {
         return;
       } else {
+        // @ts-ignore
+        // tslint:disable-next-line:max-line-length
         hasValues = titleRow[1].values != undefined && (typeof titleRow[1].values == "string" && /\S/.test(titleRow[1].values) || titleRow[1].values.length);
       }
     });
