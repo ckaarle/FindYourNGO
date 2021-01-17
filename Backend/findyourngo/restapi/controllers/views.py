@@ -1,12 +1,10 @@
 import requests
 
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User, Group
 from django.db import connection, transaction
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -64,19 +62,9 @@ def recalculateTW(request):
 
 
 # request is a necessary positional parameter for the framework call
-def country_list(request):
-    result = list(map(lambda ngo: ngo['country'], NgoBranch.objects.all().order_by('country').values()))
-    return JsonResponse({'countries': result})
-
-
 def name_list(request):
     result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
     return JsonResponse({'names': result})
-
-
-def topic_list(request):
-    result = list(map(lambda ngo_topic: ngo_topic['topic'], NgoTopic.objects.all().order_by('topic').values()))
-    return JsonResponse({'topics': result})
 
 
 class LoginView(APIView):

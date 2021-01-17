@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection } from 'src/app/models/ngo';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -7,44 +7,19 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './ngo-filter-selection.component.html',
   styleUrls: ['./ngo-filter-selection.component.scss']
 })
-export class NgoFilterSelectionComponent implements OnInit {
+export class NgoFilterSelectionComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
-  filterOptionsLoaded: boolean = false;
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
   hqDetails: string[] = ['cities', 'countries', 'workingLanguages', 'contactOptionPresent'];
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
 
   constructor(private filter: FilterService) { }
 
-  ngOnInit(): void {
-    this.subscribeFilterSelection();
-  }
-
-  subscribeFilterSelection(): void {
-    this.filter
-      .selectedFiltersChanged
-      .subscribe((data: NgoFilterSelection) => {
-        this.filterSelection = data;
-      });
-  }
-
-  getFilterOption(key: string): any {
-    return this.filterOptions[key];
-  }
-
-  addValue(keyOption: any, value: any, multiple: boolean = false): void {
-    if (this.filterSelection[keyOption] && multiple) {
-      this.filterSelection[keyOption].push(value);
-    } else {
-      if (multiple) {
-        this.filterSelection[keyOption] = [value];
-      } else {
-        this.filterSelection[keyOption] = value;
-      }
-    }
+  addValue(keyOption: any, value: any): void {
+    this.filterSelection[keyOption] = value;
   }
 
   closeFilterSelection(): void {

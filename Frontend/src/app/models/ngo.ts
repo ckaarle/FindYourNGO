@@ -7,7 +7,6 @@ export interface NgoDetailItem {
   description: NgoDetailItemDescription;
   fieldOfActivity: NgoDetailItemFieldOfActivity;
   stats: NgoDetailItemStats;
-  location: {address: {displayName: string, values: string}};
   contact: NgoDetailItemContact;
   rating: NgoDetailItemRating;
 }
@@ -18,6 +17,7 @@ export interface NgoDetailItemRating {
 }
 
 export interface NgoDetailItemContact {
+  address: {displayName: string, values: string};
   ngoPhoneNumber: {displayName: string, values: string};
   ngoEmail: {displayName: string, values: string};
   representative?: {displayName: string, values: string};
@@ -65,7 +65,9 @@ export interface NgoOverviewItemPagination {
 }
 
 export interface NgoFilterOptions {
+    name: {values: string, displayName?: string, icon?: string};
     branches: {values: string[], displayName?: string, icon?: string};
+    regions: {values: string[], displayName?: string, icon?: string};
     topics: {values: string[], displayName?: string, icon?: string};
     typeOfOrganization: {values: string[], displayName?: string, icon?: string};
     workingLanguages: {values: string[], displayName?: string, icon?: string};
@@ -83,14 +85,6 @@ export interface NgoFilterSelection {
     [keyOption: string]: any;
 }
 
-export interface Countries {
-    countries: string[];
-}
-
 export interface Names {
     names: string[];
-}
-
-export interface Topics {
-    topics: string[];
 }

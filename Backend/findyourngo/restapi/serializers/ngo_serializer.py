@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore
+    NgoStats, NgoTWScore, NgoReview
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -10,19 +10,65 @@ class NgoDataSourceSerializer(serializers.ModelSerializer):
 
 
 class NgoAddressSerializer(serializers.ModelSerializer):
+    address = serializers.SerializerMethodField()
+
+    def get_address(self, obj):
+        if obj.street == '':
+            if obj.postcode == '' or obj.city == '':
+                if obj.country == '':
+                    return ''
+                return obj.country
+            elif obj.country == '':
+                return f"{obj.postcode} {obj.city}"
+            return f"{obj.postcode} {obj.city}, {obj.country}"
+        elif obj.postcode == '' or obj.city == '':
+            if obj.country == '':
+                return obj.street
+            return f"{obj.street}, {obj.country}"
+        elif obj.country == '':
+            return f"{obj.street}, {obj.postcode} {obj.city}"
+        return f"{obj.street}, {obj.postcode} {obj.city}, {obj.country}"
+
     class Meta:
         model = NgoAddress
-        fields = ['street', 'postcode', 'city', 'country']
+        fields = ['address']
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representative_address = representation.pop('address')
+
+        return representative_address
 
 
 class NgoRepresentativeSerializer(serializers.ModelSerializer):
-    representativeFirstName = serializers.CharField(source='representative_first_name')
-    representativeLastName = serializers.CharField(source='representative_last_name')
-    representativeEmail = serializers.EmailField(source='representative_email')
+    representative = serializers.SerializerMethodField()
+
+    def get_representative(self, obj):
+        if obj.representative_first_name == '':
+            if obj.representative_last_name == '':
+                if obj.representative_email == '':
+                    return ''
+                return obj.representative_email
+            elif obj.representative_email == '':
+                return obj.representative_last_name
+            return f"{obj.representative_last_name}, {obj.representative_email}"
+        elif obj.representative_last_name == '':
+            if obj.representative_email == '':
+                return ''
+            return obj.representative_email
+        elif obj.representative_email == '':
+            return f"{obj.representative_first_name} {obj.representative_last_name}"
+        return f"{obj.representative_first_name} {obj.representative_last_name}, {obj.representative_email}"
 
     class Meta:
         model = NgoRepresentative
-        fields = ['representativeFirstName', 'representativeLastName', 'representativeEmail']
+        fields = ['representative']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representative_representation = representation.pop('representative')
+
+        return representative_representation
 
 
 class NgoStatsSerializer(serializers.ModelSerializer):
@@ -36,15 +82,23 @@ class NgoStatsSerializer(serializers.ModelSerializer):
     staffNumber = serializers.IntegerField(source='staff_number')
     memberNumber = serializers.IntegerField(source='member_number')
     workingLanguages = serializers.CharField(source='working_languages')
-    presidentFirstName = serializers.CharField(source='president_first_name')
-    presidentLastName = serializers.CharField(source='president_last_name')
     yearlyIncome = serializers.CharField(source='yearly_income')
+
+    president = serializers.SerializerMethodField()
+
+    def get_president(self, obj):
+        if obj.president_first_name == '':
+            if obj.president_last_name == '':
+                return ''
+            return obj.president_last_name
+        elif obj.president_last_name == '':
+            return obj.president_first_name
+        return f"{obj.president_first_name} {obj.president_last_name}"
 
     class Meta:
         model = NgoStats
         fields = ['foundingYear', 'staffNumber', 'memberNumber', 'workingLanguages', 'funding',
-                  'presidentFirstName', 'presidentLastName', 'typeOfOrganization',
-                  'yearlyIncome']
+                  'president', 'typeOfOrganization', 'yearlyIncome']
 
 
 class NgoTWSerializer(serializers.ModelSerializer):
@@ -106,8 +160,12 @@ class NgoSerializer(serializers.ModelSerializer):
     stats = NgoStatsSerializer(read_only=True)
     contact = NgoContactSerializer(read_only=True)
     metaData = NgoMetaDataSerializer(source='meta_data', read_only=True)
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, obj):
+        return NgoReview.objects.filter(ngo=obj.id).count()
 
     class Meta:
         model = Ngo
         fields = ['id', 'name', 'acronym', 'aim', 'activities', 'branches', 'topics', 'accreditations', 'stats',
-                  'contact', 'metaData', 'trustworthiness']
+                  'contact', 'metaData', 'trustworthiness', 'amount']

@@ -2,11 +2,14 @@
   <mat-drawer #filterSelectionDrawer class="filter-drawer" mode="over" fxFlex="500px"
               fxFlex.xs="100%" fxFlex.sm="33%">
     <ngo-filter-selection [filterOptions]="filterOptions"
+                          [filterSelection]="selectedFilters"
                           (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
   </mat-drawer>
 
   <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions" [filterOptions]="filterOptions"
+    <ngo-filter *ngIf="filterOptions"
+                [filterOptions]="filterOptions"
+                [filterSelection]="selectedFilters"
                 (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
   </div>
 
@@ -14,9 +17,9 @@
        *ngFor="let overviewItem of overviewItems"
        (click)="filterSelectionDrawer.close()">
     <ngo-overview-item [ngoOverviewItem]="overviewItem"
-                         [editableRating]="false"
-                         (click)="openNgoDetailItem(overviewItem.id)"></ngo-overview-item>
-        <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
+                       [editableRating]="false"
+                       [routerLink]="['/detailView', overviewItem.id]"></ngo-overview-item>
+    <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
   </div>
   <div class="buttonBar">
     <button mat-button class="button"

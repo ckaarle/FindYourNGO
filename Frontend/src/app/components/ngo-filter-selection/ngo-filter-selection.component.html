@@ -49,15 +49,16 @@
         <mat-label>{{filterOption.displayName}}</mat-label>
 
         <input *ngIf="!(filterOption.values)" matInput
-            [type]="key == 'trustworthiness'? 'number': 'text'"
             (change)="addValue(key, $any($event.target).value)"
             placeholder="{{filterOption.displayName}}"
-            [value]="filterSelection[key]? filterSelection[key]: ''" />
+            [value]="filterSelection[key]? filterSelection[key]: ''"
+            [type]="key == 'trustworthiness'? 'number': 'text'"
+            [min]="key == 'trustworthiness'? 0: undefined"
+            [max]="key == 'trustworthiness'? 5: undefined"/>
 
         <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple
-            [(ngModel)]="filterSelection[key]">
-            <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue"
-                (onSelectionChange)="addValue(key, $event.source.value, true)">{{optionValue}}
+            [(ngModel)]="filterSelection[key]" (selectionChange)="addValue(key, $event.value)">
+            <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue">{{optionValue}}
             </mat-option>
         </mat-select>
     </mat-form-field>

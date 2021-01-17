@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgoFilterOptions, NgoOverviewItem, NgoFilterSelection } from 'src/app/models/ngo';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
+import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -7,47 +7,24 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './ngo-filter.component.html',
   styleUrls: ['./ngo-filter.component.scss']
 })
-export class NgoFilterComponent implements OnInit {
+export class NgoFilterComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   filterUpdated: boolean = false;
-  filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
 
   constructor(private filter: FilterService) { }
 
-  ngOnInit(): void {
-    this.subscribeFilterSelection();
-  }
-
-  subscribeFilterSelection(): void {
-    this.filter
-      .selectedFiltersChanged
-      .subscribe((data: NgoFilterSelection) => {
-        this.filterSelection = data;
-      });
-  }
-
   checkIfFilterSet(key: string): boolean {
-    return key in this.filterSelection;
+    return this.filterSelection.hasOwnProperty(key);
   }
 
-  addValue(keyOption: any, value: any, multiple: boolean = false): void {
-    if (this.filterSelection[keyOption] && multiple) {
-      this.filterSelection[keyOption].push(value);
-      this.filterUpdated = true;
-    } else {
-      if (multiple) {
-        this.filterSelection[keyOption] = [value];
-        this.filterUpdated = true;
-      } else {
-        this.filterSelection[keyOption] = value;
-        this.filterUpdated = true;
-      }
-    }
+  addValue(keyOption: any, value: any): void {
+    this.filterSelection[keyOption] = value;
+    this.filterUpdated = true;
   }
 
-  removeValue(keyOption: any) {
+  removeValue(keyOption: any): void {
     delete this.filterSelection[keyOption];
     this.applyFilter();
   }

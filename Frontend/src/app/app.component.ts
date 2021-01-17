@@ -3,6 +3,7 @@ import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {MediaService} from './services/media.service';
+import {FilterService} from './services/filter.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ export class AppComponent {
   activeScreen = this.screens[0];
   currentTitle: string = 'Find your NGO';
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService, private titleService: Title) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService, private titleService: Title, private filter: FilterService) {
     this.init();
   }
 

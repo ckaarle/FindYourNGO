@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
+import { FilterService } from '../../services/filter.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { ApiService } from '../../services/api.service';
@@ -8,11 +9,21 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './favourites-screen.component.html',
   styleUrls: ['./favourites-screen.component.scss']
 })
-export class FavouritesScreenComponent {
+export class FavouritesScreenComponent implements OnInit, OnDestroy {
 
   public photoUrl = '';
 
-  constructor(public apiService: ApiService, public dialog: MatDialog) { }
+  constructor(private filter: FilterService, public apiService: ApiService, public dialog: MatDialog) { }
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.filter.editSelectedFilters({});
+    this.filter.applyFilter({}).subscribe(data => {
+        this.filter.displayFilteredNgoItems(data);
+    });
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent);

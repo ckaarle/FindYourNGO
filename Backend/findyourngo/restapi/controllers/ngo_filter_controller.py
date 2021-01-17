@@ -4,62 +4,39 @@ from django.db.models import QuerySet
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.generics import GenericAPIView
-from rest_framework.parsers import JSONParser
+from urllib.parse import unquote_plus
+import json
 
 from findyourngo.filtering.NgoFilter import NgoFilter
 from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
 from findyourngo.restapi.serializers.filter_serializer import FilterSerializer, filter_object
-from findyourngo.restapi.serializers.ngo_overview_item_serializer import NgoOverviewItemSerializer
+from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewItemSerializer
 
 MAX_PAGE_SIZE = 20
-
-last_filter_config = []
-
 
 @api_view(['GET'])
 def ngo_filter_options(request: Any) -> JsonResponse:
     return JsonResponse(filter_object())
 
 
-class NgoFilterView(GenericAPIView):
+@api_view(['GET'])
+def filter_options(request: Any) -> JsonResponse:
+    filter_data = json.loads(unquote_plus(request.query_params.get('filter_selection')))
+    filter_serializer = FilterSerializer(data=filter_data)
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            try:
-                filter_data = JSONParser().parse(request)
-                filter_serializer = FilterSerializer(data=filter_data)
+    if filter_serializer.is_valid():
+        filter_serializer = filter_serializer.create(filter_serializer.validated_data)
+    else:
+        return JsonResponse(filter_serializer, status=status.HTTP_400_BAD_REQUEST)
 
-                if filter_serializer.is_valid():
-                    last_filter_config.clear()
-                    last_filter_config.append(filter_serializer.create(filter_serializer.validated_data))
-                else:
-                    return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            except:
-                return JsonResponse(filter_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    paginator = NgoOverviewItemListPaginator()
+    paginator.page_size = MAX_PAGE_SIZE
 
-        return super(NgoFilterView, self).dispatch(request, *args, **kwargs)
+    filters = NgoFilter(filter_serializer)
+    queryset: QuerySet = filters.apply()
 
-    def get(self, request: Any) -> JsonResponse:
-        paginator = NgoOverviewItemListPaginator()
-        paginator.page_size = MAX_PAGE_SIZE
+    result_page = paginator.paginate_queryset(queryset, request)
 
-        filter = NgoFilter(last_filter_config[-1])
-        self.queryset: QuerySet = filter.apply()
+    ngo_overview_item_serializer = NgoOverviewItemSerializer(result_page, many=True)
+    return paginator.get_paginated_response(ngo_overview_item_serializer.data)
 
-        result_page = paginator.paginate_queryset(self.queryset, request)
-
-        ngo_overview_item_serializer = NgoOverviewItemSerializer(result_page, many=True)
-        return paginator.get_paginated_response(ngo_overview_item_serializer.data)
-
-    def post(self, request: Any) -> JsonResponse:
-        paginator = NgoOverviewItemListPaginator()
-        paginator.page_size = MAX_PAGE_SIZE
-
-        filter = NgoFilter(last_filter_config[-1])
-        self.queryset: QuerySet = filter.apply()
-
-        result_page = paginator.paginate_queryset(self.queryset, request)
-
-        ngo_overview_item_serializer = NgoOverviewItemSerializer(result_page, many=True)
-        return paginator.get_paginated_response(ngo_overview_item_serializer.data)

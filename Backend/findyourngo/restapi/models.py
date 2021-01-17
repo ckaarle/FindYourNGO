@@ -71,6 +71,8 @@ class NgoStats(models.Model):
 
 class NgoTWScore(models.Model):
     total_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    base_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    user_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
     number_data_sources_score = models.FloatField(default=1)
     credible_source_score = models.FloatField(default=0)
     ecosoc_score = models.FloatField(default=0)
@@ -97,3 +99,31 @@ class Ngo(models.Model):
 class NgoAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ngo = models.ForeignKey(Ngo, on_delete=models.PROTECT)
+
+
+
+class NgoCommenter(models.Model): # TODO remove this entirely
+    user_id = models.IntegerField()
+    number_of_comments = models.IntegerField(default=0)
+
+
+class NgoReview(models.Model):
+    ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
+    create_date = models.DateField()
+    last_edited = models.DateField()
+    text = models.TextField()
+    rating = models.IntegerField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+
+
+class NgoConnection(models.Model):
+    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter')
+    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo')
+    report_date = models.DateField()
+    approval_date = models.DateField()
+
+
+class NgoPendingConnection(models.Model):
+    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter_pending')
+    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo_pending')
+    report_date = models.DateField()

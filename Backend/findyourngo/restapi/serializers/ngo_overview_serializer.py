@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoTWScore
+from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoTWScore, NgoReview
 
 
 class NgoOverviewItemAddressSerializer(serializers.ModelSerializer):
@@ -43,10 +43,14 @@ class NgoOverviewItemTWScoreSerializer(serializers.ModelSerializer):
 class NgoOverviewItemSerializer(serializers.ModelSerializer):
     trustworthiness = NgoOverviewItemTWScoreSerializer(source="tw_score")
     city = NgoOverviewItemContactSerializer(source="contact")
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, obj):
+        return NgoReview.objects.filter(ngo=obj.id).count()
 
     class Meta:
         model = Ngo
-        fields = ['id', 'name', 'acronym', 'city', 'trustworthiness']
+        fields = ['id', 'name', 'acronym', 'city', 'trustworthiness', 'amount']
 
     def to_internal_value(self, data):
         values_internal = {}
