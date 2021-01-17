@@ -4,6 +4,7 @@ import {OverviewScreenComponent} from './screens/overview-screen/overview-screen
 import {SearchScreenComponent} from './screens/search-screen/search-screen.component';
 import {MapScreenComponent} from './screens/map-screen/map-screen.component';
 import {FavouritesScreenComponent} from './screens/favourites-screen/favourites-screen.component';
+import {LoginDialogComponent} from './screens/login-dialog/login-dialog.component';
 import {NgoOverviewItemComponent} from './components/ngo-overview-item/ngo-overview-item.component';
 import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-item.component';
 import {NgoFilterComponent} from './components/ngo-filter/ngo-filter.component';
@@ -19,6 +20,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -66,13 +68,15 @@ import {AppRoutingModule} from './app-routing.module';
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatAutocompleteModule
   ],
   declarations: [
     OverviewScreenComponent,
     PaginationComponent,
     SearchScreenComponent,
     MapScreenComponent,
+    LoginDialogComponent,
     FavouritesScreenComponent,
     NgoOverviewItemComponent,
     StarRatingComponent,

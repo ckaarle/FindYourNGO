@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.conf.urls import url
+from django.contrib import admin
 from rest_framework import routers
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
 
@@ -25,6 +26,11 @@ router.register(r'groups', views.GroupViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('users/login/', views.LoginView.as_view(), name='email'),
+    path('users/register/', views.RegisterView.as_view(), name='email'),
+    path('google/', views.GoogleView.as_view(), name='google'),
+    path('facebook/', views.FacebookView.as_view(), name='facebook'),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
@@ -38,5 +44,7 @@ urlpatterns = [
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
+    url(r'names', views.name_list),
+    url('test/', views.TestView.as_view(), name='test'),
 ]
 

@@ -84,3 +84,7 @@ export interface NgoFilterOptions {
 export interface NgoFilterSelection {
     [keyOption: string]: any;
 }
+
+export interface Names {
+    names: string[];
+}
