@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgoFilterOptions, NgoFilterSelection } from 'src/app/models/ngo';
+import {NgoFilterOptions, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -10,6 +10,8 @@ import { FilterService } from 'src/app/services/filter.service';
 export class NgoFilterSelectionComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
+  @Input() sortingOptions: string[] = [];
+  @Input() sortingSelection: NgoSortingSelection = {value: 'Name', order: 'asc'};
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
@@ -22,14 +24,21 @@ export class NgoFilterSelectionComponent {
     this.filterSelection[keyOption] = value;
   }
 
+  changeSorting(sortingOption: any, sortingOrder?: string): void {
+    this.sortingSelection.value = sortingOption;
+    if (sortingOrder) {
+      this.sortingSelection.order = sortingOrder;
+    }
+  }
+
   closeFilterSelection(): void {
     this.closeFilterSelectionDrawer.emit(true);
   }
 
   applyFilter(): void {
-    this.filter.editSelectedFilters(this.filterSelection);
+    this.filter.editSelectedFilters(this.filterSelection, this.sortingSelection);
     this.closeFilterSelection();
-    this.filter.applyFilter(this.filterSelection).subscribe(data => {
+    this.filter.applyFilter(this.filterSelection, this.sortingSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
     });
   }

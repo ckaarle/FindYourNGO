@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FilterService} from "../../services/filter.service";
+import {FilterService} from '../../services/filter.service';
+import {NgoSortingSelection} from '../../models/ngo';
 
 @Component({
   selector: 'app-favourites-screen',
@@ -14,8 +15,9 @@ export class FavouritesScreenComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.filter.editSelectedFilters({});
-    this.filter.applyFilter({}).subscribe(data => {
+    const selectedSorting: NgoSortingSelection = {value: 'Name', order: 'asc'};
+    this.filter.editSelectedFilters({}, selectedSorting);
+    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
         this.filter.displayFilteredNgoItems(data);
     });
   }

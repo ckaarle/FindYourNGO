@@ -3,7 +3,16 @@
         <button class="filter-select" (click)="openFilterSelection()" mat-icon-button>
             <mat-icon>tune</mat-icon>
         </button>
-
+        <mat-chip *ngIf="sortingSelection && sortingOptions" class="sorting-option-item">
+            <mat-icon *ngIf="sortingSelection.order === 'asc'" (click)="changeSorting(sortingSelection.value, 'desc')">arrow_circle_down</mat-icon>
+            <mat-icon *ngIf="sortingSelection.order === 'desc'" (click)="changeSorting(sortingSelection.value, 'asc')">arrow_circle_up</mat-icon>
+            <mat-form-field ngDefaultControl appearance="standard">
+                <mat-label>Sorted by ...</mat-label>
+                <mat-select [(ngModel)]="sortingSelection.value" (selectionChange)="changeSorting($event.value)">
+                    <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption">{{sortingOption}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-chip>
         <div *ngFor="let filterOption of filterOptions | keyvalue;">
             <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)" [removable]="true"
                 (removed)="removeValue(filterOption.key)">
