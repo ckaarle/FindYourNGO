@@ -121,7 +121,7 @@ def create_user(data, ngo_name, mode=None):
             user.username = data['username']
         else:
             user.username = data['email']
-        if data['password']:
+        if data.get('password'):
             user.password = make_password(data['password'])
         else:  # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
