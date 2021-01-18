@@ -20,7 +20,6 @@ export class PaginationService {
     if (data.previous == null) {
       component.surroundingPages = [];
     }
-
     component.currentPageNumber = data.current_page;
     component.totalPages = data.total_pages;
 
@@ -30,10 +29,23 @@ export class PaginationService {
   private calculateSurroundingPages(previousCurrentPage: number, component: PaginationComponent): void {
     if (component.surroundingPages.length === 0) {
       let currentPage = component.currentPageNumber;
-      while (component.surroundingPages.length < MAX_PAGES_TO_DISPLAY && currentPage <= component.totalPages) {
-        component.surroundingPages.push(currentPage);
-        currentPage += 1;
+      if (currentPage === 1) {
+        while (component.surroundingPages.length < MAX_PAGES_TO_DISPLAY && currentPage <= component.totalPages) {
+          component.surroundingPages.push(currentPage);
+          currentPage += 1;
+        }
+      } else {
+        let pagesAdded = 0;
+
+        let startPageNumber = Math.max(1, MAX_PAGES_TO_DISPLAY - Math.floor(MAX_PAGES_TO_DISPLAY / 2));
+
+        while (pagesAdded < MAX_PAGES_TO_DISPLAY) {
+          component.surroundingPages.push(startPageNumber);
+          startPageNumber++;
+          pagesAdded++;
+        }
       }
+
     } else {
       if (previousCurrentPage < component.currentPageNumber) {
         const nextPageNumber = component.surroundingPages[component.surroundingPages.length - 1] + 1;
@@ -63,6 +75,5 @@ export class PaginationService {
         // nothing to do here
       }
     }
-
   }
 }

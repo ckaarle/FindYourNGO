@@ -22,6 +22,8 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
 
+  initialized: boolean = false;
+
   constructor(
       private filter: FilterService,
       protected paginationService: PaginationService,
@@ -33,14 +35,15 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   ngOnInit(): void {
+    const customStartPage = this.route.snapshot.paramMap.get('startPage');
+    if (customStartPage != null && customStartPage !== 'null') { // please don't ask
+      this.initialized = true;
+      this.surroundingPages = [];
+      this.getNgoOverviewItemsForPageNumber(+customStartPage);
+    }
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
     this.subscribeSelectedFilterChanges();
-
-    const customStartPage = this.route.snapshot.paramMap.get('startPage');
-    if (customStartPage != null && customStartPage !== 'null') { // please don't ask
-      this.getNgoOverviewItemsForPageNumber(+customStartPage);
-    }
   }
 
   getNgoOverviewItems(): void {
@@ -48,8 +51,10 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       this.filter.applyFilter(this.selectedFilters).subscribe(data =>
           this.processPaginatedResults(data));
     } else {
-      this.apiService.get('ngoOverviewItems').subscribe(data =>
-          this.processPaginatedResults(data));
+      const ngoOverviewSubscription = this.apiService.get('ngoOverviewItems').subscribe(data => {
+            this.processPaginatedResults(data);
+            ngoOverviewSubscription.unsubscribe();
+      });
     }
   }
 
@@ -64,8 +69,9 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
         this.processPaginatedResults(data);
       });
     } else {
-      this.apiService.get('ngoOverviewItems', {page: pageNumber}).subscribe(data => {
+      const ngoOverviewSubscription = this.apiService.get('ngoOverviewItems', {page: pageNumber}).subscribe(data => {
         this.processPaginatedResults(data);
+        ngoOverviewSubscription.unsubscribe();
       });
     }
   }
@@ -94,7 +100,12 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     if (!this.filterActive) {
       this.selectedFilters = this.filter.getSelectedFilters();
       this.filterActive = Object.keys(this.selectedFilters).length > 0;
-      this.getNgoOverviewItems();
+
+      if (!this.initialized) {
+        this.getNgoOverviewItems();
+        this.initialized = true;
+      }
+
     }
     this.filter.selectedFiltersChanged.subscribe((selectedFilter: NgoFilterSelection) => {
       this.filterActive = selectedFilter !== {};
