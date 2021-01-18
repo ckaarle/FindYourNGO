@@ -4,6 +4,8 @@ delete_all_query = '''
     DELETE FROM restapi_ngo_branches;
     DELETE FROM restapi_ngo_accreditations;
     DELETE FROM restapi_ngoreview;
+    DELETE FROM restapi_ngoconnection;
+    DELETE FROM restapi_ngopendingconnection;
     DELETE FROM restapi_ngo;
     DELETE FROM restapi_ngoaccreditation;
     DELETE FROM restapi_ngobranch;

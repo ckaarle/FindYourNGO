@@ -15,9 +15,10 @@ from rest_framework.views import APIView
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from findyourngo.data_import.data_importer import run_initial_data_import, update_ngo_tw_score
+from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
+from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccount
 
 
@@ -54,12 +55,9 @@ def clearDatabase(request):
     return HttpResponse('Database has been cleared')
 
 
-def recalculateTW(request):
-    for ngo in Ngo.objects.all():
-        update_ngo_tw_score(ngo)
-        ngo.save()
-    return HttpResponse('Trustworthiness scores have been recalculated')
-
+def twUpdate(request):
+    TWUpdater().update()
+    return HttpResponse('TW updated with PageRank')
 
 # request is a necessary positional parameter for the framework call
 def name_list(request):
