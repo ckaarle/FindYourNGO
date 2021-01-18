@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgoDetailItem} from 'src/app/models/ngo';
+import {NgoDetailItem, NgoFilterSelection} from 'src/app/models/ngo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
@@ -20,6 +20,9 @@ export class NgoDetailItemComponent implements OnInit {
 
   currentPageOfPageBefore: null | number = null;
 
+  filter: boolean;
+  filterSelection: NgoFilterSelection;
+
   constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
     let id = this.route.snapshot.paramMap.get('id');
     this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
@@ -31,6 +34,16 @@ export class NgoDetailItemComponent implements OnInit {
     const pageBefore = this.route.snapshot.paramMap.get('currentPage');
     if (pageBefore != null) {
       this.currentPageOfPageBefore = +pageBefore;
+    }
+
+    const filterActive = this.route.snapshot.paramMap.get('filter');
+    const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
+
+    if (filterActive != null) {
+      this.filter = filterActive.toLowerCase() === 'true';
+    }
+    if (filterSelection != null) {
+      this.filterSelection = JSON.parse(filterSelection);
     }
   }
 
@@ -65,6 +78,10 @@ export class NgoDetailItemComponent implements OnInit {
   }
 
   back(): void {
-    this.router.navigate(['/overview', {startPage: this.currentPageOfPageBefore}]);
+    this.router.navigate(['/overview', {
+      startPage: this.currentPageOfPageBefore,
+      filter: this.filter,
+      filterSelection: JSON.stringify(this.filterSelection)
+    }]);
   }
 }

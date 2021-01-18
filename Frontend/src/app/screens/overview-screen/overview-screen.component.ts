@@ -30,20 +30,39 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       public apiService: ApiService,
       public route: ActivatedRoute,
       public router: Router,
-      ) {
+  ) {
     super();
   }
 
   ngOnInit(): void {
     const customStartPage = this.route.snapshot.paramMap.get('startPage');
-    if (customStartPage != null && customStartPage !== 'null') { // please don't ask
-      this.initialized = true;
-      this.surroundingPages = [];
-      this.getNgoOverviewItemsForPageNumber(+customStartPage);
+
+    const filter = this.route.snapshot.paramMap.get('filter');
+    if (this.isNull(filter)) {
+      // @ts-ignore
+      this.filterActive = filter.toLowerCase() === 'true';
     }
+    const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
+    if (this.isNull(filterSelection)) {
+      // @ts-ignore
+      this.selectedFilters = JSON.parse(filterSelection);
+      this.filter.editSelectedFilters(this.selectedFilters);
+    }
+
+    if (this.isNull(customStartPage)) {
+        this.initialized = true;
+        this.surroundingPages = [];
+        // @ts-ignore
+        this.getNgoOverviewItemsForPageNumber(+customStartPage);
+    }
+
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
     this.subscribeSelectedFilterChanges();
+  }
+
+  private isNull(value: string | null): boolean {  // please don't ask
+    return value != null && value !== 'null';
   }
 
   getNgoOverviewItems(): void {
@@ -52,8 +71,8 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
           this.processPaginatedResults(data));
     } else {
       const ngoOverviewSubscription = this.apiService.get('ngoOverviewItems').subscribe(data => {
-            this.processPaginatedResults(data);
-            ngoOverviewSubscription.unsubscribe();
+        this.processPaginatedResults(data);
+        ngoOverviewSubscription.unsubscribe();
       });
     }
   }
@@ -125,6 +144,10 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   showDetail(overviewItem: NgoOverviewItem): void {
-    this.router.navigate(['/detailView', overviewItem.id, {currentPage: this.currentPageNumber}]);
+    this.router.navigate(['/detailView', overviewItem.id, {
+      currentPage: this.currentPageNumber,
+      filter: this.filterActive,
+      filterSelection: JSON.stringify(this.selectedFilters),
+    }]);
   }
 }
