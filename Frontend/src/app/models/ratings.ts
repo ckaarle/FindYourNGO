@@ -37,7 +37,7 @@ export const EMPTY_TW_REVIEWS: TwReviews = {
 
 export const EMPTY_TW_REVIEW: TwReview = {
   id: 0,
-  userId: 0,
+  userId: '',
   userName: '',
   ngoId: 0,
   // userProfile: object; TODO?
