@@ -29,3 +29,21 @@ export interface NewTwReview {
   rating: number;
   text: string;
 }
+
+export const EMPTY_TW_REVIEWS: TwReviews = {
+  reviews: [],
+  reviewNumber: 0
+};
+
+export const EMPTY_TW_REVIEW: TwReview = {
+  id: 0,
+  userId: 0,
+  userName: '',
+  ngoId: 0,
+  // userProfile: object; TODO?
+  reviewsByUser: 0,
+  created: Date.prototype,
+  last_edited: Date.prototype,
+  rating: 0,
+  text: ''
+};
