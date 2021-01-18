@@ -43,6 +43,6 @@ def clearDatabase(request):
     return HttpResponse('Database has been cleared')
 
 
-def pagerankTest(request):
+def twUpdate(request):
     TWUpdater().update()
     return HttpResponse('TW updated with PageRank')

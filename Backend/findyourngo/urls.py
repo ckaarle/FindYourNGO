@@ -37,6 +37,6 @@ urlpatterns = [
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
-    path('testPagerank', views.pagerankTest),
+    path('twUpdate', views.twUpdate),
 ]
 
