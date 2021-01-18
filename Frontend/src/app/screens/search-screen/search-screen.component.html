@@ -41,7 +41,12 @@
               <mat-form-field class="example-full-width">
                   <mat-label>Search for your favorite NGOs</mat-label>
                   <input formControlName="name" matInput placeholder="Ex. International..."
-             			(keydown.enter)="onNameSearch()"/>
+	             	(keydown.enter)="onNameSearch()" [matAutocomplete]="auto"/>
+			      <mat-autocomplete #auto="matAutocomplete">
+			        <mat-option *ngFor="let name of $ngoNames | async | slice : 0 : 5" [value]="name">
+			          {{name}}
+			        </mat-option>
+			      </mat-autocomplete>	
               </mat-form-field>
         </form>
         <button class="align-right" (click)="onNameSearch()" mat-button mat-fab>
