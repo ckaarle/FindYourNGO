@@ -460,7 +460,7 @@ def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoM
     number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(meta_data)
     credible_source_score = tw_calculator.calculate_data_source_credibility_score(meta_data)
     ecosoc_score = tw_calculator.calculate_ecosoc_score(accreditation)
-    total_score = tw_calculator.calculate_tw_from_partial_scores(number_data_sources_score, credible_source_score,
+    total_score = tw_calculator.calculate_base_tw_from_partial_scores(number_data_sources_score, credible_source_score,
                                                                  ecosoc_score)
     tw_score = NgoTWScore.objects.create(
         number_data_sources_score=number_data_sources_score,

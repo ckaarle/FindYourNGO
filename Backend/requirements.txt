@@ -7,3 +7,5 @@ networkx
 pandas
 matplotlib
 pytest-django
+djangorestframework_simplejwt
+requests
