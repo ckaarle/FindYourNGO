@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TwReview} from '../../models/ratings';
+import {EMPTY_TW_REVIEW, TwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 import {Router} from '@angular/router';
 
@@ -11,9 +11,9 @@ import {Router} from '@angular/router';
 export class NgoReviewComponent implements OnInit {
 
   errorMessage: string | undefined = undefined;
-  @Input() review: TwReview;
-  @Input() ngoName: string;
-  @Input() editable: boolean;
+  @Input() review: TwReview = EMPTY_TW_REVIEW;
+  @Input() ngoName: string = '';
+  @Input() editable: boolean = false;
 
   constructor(private ratingService: RatingService, private router: Router) {
   }
@@ -22,7 +22,7 @@ export class NgoReviewComponent implements OnInit {
   }
 
   delete(): void {
-    if (!this.editable){
+    if (!this.editable) {
       return;
     }
     this.errorMessage = undefined;
@@ -43,7 +43,7 @@ export class NgoReviewComponent implements OnInit {
   }
 
   edit(): void {
-    if (!this.editable){
+    if (!this.editable) {
       return;
     }
     this.router.navigate(['/newReview', this.review.ngoId, {reviewId: this.review.id, ngoName: this.ngoName}]);

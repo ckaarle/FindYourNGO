@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {StarRatingComponent} from '../star-rating/star-rating.component';
 import {NewTwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
@@ -9,35 +9,40 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './ngo-new-review.component.html',
   styleUrls: ['./ngo-new-review.component.scss']
 })
-export class NgoNewReviewComponent implements OnInit, AfterViewInit {
+export class NgoNewReviewComponent implements OnInit {
 
-  ngoId: number;
-  reviewId: number;
+  ngoId: number = 0;
+  reviewId: number = 0;
   ngoName = '';
   reviewText = '';
-  
-  errorMessage = '';
-  reviewRating = null;
 
+  errorMessage = '';
+  reviewRating = 0;
+
+  // @ts-ignore
   @ViewChild('starRatingComponent') starRatingComponent: StarRatingComponent;
 
   constructor(private ratingService: RatingService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
+    // @ts-ignore
     this.ngoId = this.route.snapshot.paramMap.get('ngoId');
+    // @ts-ignore
     this.reviewId = this.route.snapshot.paramMap.get('reviewId');
+    // @ts-ignore
     this.ngoName = this.route.snapshot.paramMap.get('ngoName');
 
 
     if (this.reviewId != null) {
       this.ratingService.getUserReview(this.reviewId).subscribe(
           (review) => {
-            console.log(review)
+            console.log(review);
             this.reviewText = review.text;
             this.reviewId = review.id;
             this.reviewRating = review.rating;
             if (this.reviewRating != null) {
+              // @ts-ignore
               this.starRatingComponent.setValue(this.reviewRating - 1);
             }
           }
@@ -76,4 +81,5 @@ export class NgoNewReviewComponent implements OnInit, AfterViewInit {
     this.onSaveSuccess();
   }
 }
+
 // TODO logged out redirection!
