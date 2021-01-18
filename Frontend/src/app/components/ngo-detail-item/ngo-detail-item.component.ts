@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgoDetailItem} from 'src/app/models/ngo';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 
@@ -18,13 +18,20 @@ export class NgoDetailItemComponent implements OnInit {
   ngoContentContainers: NgoContentContainer[] = [];
   public ngoDetailItem: any | NgoDetailItem;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) {
+  currentPageOfPageBefore: null | number = null;
+
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
     let id = this.route.snapshot.paramMap.get('id');
     this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
       this.ngoDetailItem = data;
-    this.ngoDetailItem = Utils.mapDataToNgoDetailItem(this.ngoDetailItem);
+      this.ngoDetailItem = Utils.mapDataToNgoDetailItem(this.ngoDetailItem);
       this.generateContentContainers();
     });
+
+    const pageBefore = this.route.snapshot.paramMap.get('currentPage');
+    if (pageBefore != null) {
+      this.currentPageOfPageBefore = +pageBefore;
+    }
   }
 
   ngOnInit(): void {
@@ -50,11 +57,14 @@ export class NgoDetailItemComponent implements OnInit {
 
   generateContentContainers(): void {
     this.ngoContentContainers = [
-        {icon: 'info', values: this.ngoDetailItem.description},
-        {icon: 'group_work', values: this.ngoDetailItem.fieldOfActivity},
-        {icon: 'query_stats', values: this.ngoDetailItem.stats},
-        {icon: 'person', values: this.ngoDetailItem.contact}
+      {icon: 'info', values: this.ngoDetailItem.description},
+      {icon: 'group_work', values: this.ngoDetailItem.fieldOfActivity},
+      {icon: 'query_stats', values: this.ngoDetailItem.stats},
+      {icon: 'person', values: this.ngoDetailItem.contact}
     ];
   }
 
+  back(): void {
+    this.router.navigate(['/overview', {startPage: this.currentPageOfPageBefore}]);
+  }
 }

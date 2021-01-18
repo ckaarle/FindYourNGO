@@ -4,7 +4,7 @@ import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPa
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {ApiService} from '../../services/api.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Utils} from '../../services/utils';
 
 
@@ -22,7 +22,13 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
 
-  constructor(private filter: FilterService, protected paginationService: PaginationService, public apiService: ApiService, public route: ActivatedRoute) {
+  constructor(
+      private filter: FilterService,
+      protected paginationService: PaginationService,
+      public apiService: ApiService,
+      public route: ActivatedRoute,
+      public router: Router,
+      ) {
     super();
   }
 
@@ -30,15 +36,20 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
     this.subscribeSelectedFilterChanges();
+
+    const customStartPage = this.route.snapshot.paramMap.get('startPage');
+    if (customStartPage != null && customStartPage !== 'null') { // please don't ask
+      this.getNgoOverviewItemsForPageNumber(+customStartPage);
+    }
   }
 
   getNgoOverviewItems(): void {
     if (this.filterActive) {
       this.filter.applyFilter(this.selectedFilters).subscribe(data =>
-            this.processPaginatedResults(data));
+          this.processPaginatedResults(data));
     } else {
-        this.apiService.get('ngoOverviewItems').subscribe(data =>
-            this.processPaginatedResults(data));
+      this.apiService.get('ngoOverviewItems').subscribe(data =>
+          this.processPaginatedResults(data));
     }
   }
 
@@ -81,9 +92,9 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   subscribeSelectedFilterChanges(): void {
     if (!this.filterActive) {
-        this.selectedFilters = this.filter.getSelectedFilters();
-        this.filterActive = Object.keys(this.selectedFilters).length > 0;
-        this.getNgoOverviewItems();
+      this.selectedFilters = this.filter.getSelectedFilters();
+      this.filterActive = Object.keys(this.selectedFilters).length > 0;
+      this.getNgoOverviewItems();
     }
     this.filter.selectedFiltersChanged.subscribe((selectedFilter: NgoFilterSelection) => {
       this.filterActive = selectedFilter !== {};
@@ -96,9 +107,13 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   ngOnDestroy(): void {
-      this.filter.editSelectedFilters({});
-      this.filter.applyFilter({}).subscribe(data => {
-          this.filter.displayFilteredNgoItems(data);
+    this.filter.editSelectedFilters({});
+    this.filter.applyFilter({}).subscribe(data => {
+      this.filter.displayFilteredNgoItems(data);
     });
+  }
+
+  showDetail(overviewItem: NgoOverviewItem): void {
+    this.router.navigate(['/detailView', overviewItem.id, {currentPage: this.currentPageNumber}]);
   }
 }
