@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
-import {NewTwReview, TwReview, TwReviews, TwRating} from '../models/ratings';
+import {NewTwReview, TwRating, TwReview, TwReviews} from '../models/ratings';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +29,9 @@ export class RatingService {
 
   getUserReview(reviewId: number): Observable<TwReview> {
     return this.apiService.get('review', {id: reviewId});
+  }
+
+  getUserHasWrittenReviewForNgo(ngoId: number, userId: string): Observable<boolean> {
+    return this.apiService.get('userReviewPresent', {ngoId: ngoId, userId: userId});
   }
 }
