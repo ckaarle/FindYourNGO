@@ -22,6 +22,7 @@ def ngo_filter_options(request: Any) -> JsonResponse:
 @api_view(['GET'])
 def filter_options(request: Any) -> JsonResponse:
     filter_data = json.loads(unquote_plus(request.query_params.get('filter_selection')))
+    sorting_data = json.loads(unquote_plus(request.query_params.get('sorting_selection')))
     filter_serializer = FilterSerializer(data=filter_data)
 
     if filter_serializer.is_valid():
@@ -33,7 +34,7 @@ def filter_options(request: Any) -> JsonResponse:
     paginator.page_size = MAX_PAGE_SIZE
 
     filters = NgoFilter(filter_serializer)
-    queryset: QuerySet = filters.apply()
+    queryset: QuerySet = filters.apply(sorting_data)
 
     result_page = paginator.paginate_queryset(queryset, request)
 

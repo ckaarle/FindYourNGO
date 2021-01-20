@@ -52,7 +52,7 @@ export interface NgoOverviewItem {
   acronym: string;
   city: number;
   trustworthiness: number;
-  amount: number; //TODO
+  amount: number;
 }
 
 export interface NgoOverviewItemPagination {
@@ -83,6 +83,11 @@ export interface NgoFilterOptions {
 
 export interface NgoFilterSelection {
     [keyOption: string]: any;
+}
+
+export interface NgoSortingSelection {
+    keyToSort: string;
+    orderToSort: string;
 }
 
 export interface Names {

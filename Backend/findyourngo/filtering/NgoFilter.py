@@ -7,6 +7,7 @@ from django.db.models import QuerySet, Q
 from findyourngo.filtering.filter_util import FilterConfig
 from findyourngo.restapi.models import Ngo
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import VALID_ACCREDITATIONS
+from findyourngo.type_variables import SortingOption
 
 
 class NgoFilter:
@@ -14,10 +15,10 @@ class NgoFilter:
     def __init__(self, filter_config: FilterConfig):
         self._filter_config = filter_config
 
-    def apply(self) -> QuerySet:
+    def apply(self, sorting_option: SortingOption) -> QuerySet:
         query_set = self._add_all_filters()
 
-        query_set = self._sort(query_set)
+        query_set = self._sort(query_set, sorting_option)
         return query_set
 
     def _add_all_filters(self) -> QuerySet:
@@ -129,11 +130,38 @@ class NgoFilter:
     def _default_condition(self) -> Q:
         return Q()
 
-    def _sort(self, query_set: QuerySet) -> QuerySet:
-        query_set = query_set.order_by('name')
+    def _sort(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
+        sorting_option_value = sorting_option["keyToSort"]
 
-        if self._filter_config.trustworthiness_lower_bound is not None:
-            # trustworthiness DESC, name ASC
+        if sorting_option_value == "name":
+            query_set = self._sort_by_default_condition(query_set, sorting_option)
+        elif sorting_option_value == "countries":
+            query_set = self._sort_by_default_condition(query_set, self._get_ngo_address_condition(sorting_option, "country"))
+        elif sorting_option_value == "cities":
+            query_set = self._sort_by_default_condition(query_set, self._get_ngo_address_condition(sorting_option, "city"))
+        elif sorting_option_value == "trustworthiness":
+            query_set = self._sort_by_default_condition(query_set, self._get_trustworthiness_condition(sorting_option))
+        else:
+            query_set = self._sort_by_default_condition(query_set, sorting_option)
+
+        # always sort if trustworthiness filter is applied
+        if self._filter_config.trustworthiness_lower_bound is not None and sorting_option_value is not "trustworthiness":
             query_set = query_set.order_by('-tw_score__total_tw_score', 'name')
 
         return query_set
+
+    def _sort_by_default_condition(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
+        return query_set.exclude(**{sorting_option["keyToSort"]: ''}).order_by(f'{"-" if sorting_option["orderToSort"] =="desc" else ""}{sorting_option["keyToSort"]}')
+
+    def _get_ngo_address_condition(self, sorting_option: SortingOption, parameter_name: str) -> SortingOption:
+        sorting_option["keyToSort"] = f'contact__address__{parameter_name}'
+        return sorting_option
+
+    def _get_trustworthiness_condition(self, sorting_option: SortingOption) -> SortingOption:
+        sorting_option["keyToSort"] = 'tw_score__total_tw_score'
+        return sorting_option
+
+
+
+
+

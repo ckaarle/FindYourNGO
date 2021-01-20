@@ -38,8 +38,7 @@ export class SearchScreenComponent {
 
   getSearchOptions(): void {
     this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
-      // @ts-ignore
-      const filterOptions = this.filter.mapDataToObject(data);
+            const filterOptions = Utils.mapDataToNgoFilterOptions(data);
       this.branches = filterOptions.branches.values;
       this.regions = filterOptions.regions.values;
       this.countries = filterOptions.countries.values;
@@ -49,13 +48,13 @@ export class SearchScreenComponent {
 
   onFormSearch(): void {
     const filterSelection = Utils.clearNullValues(this.searchForm.value);
-    this.filter.editSelectedFilters(filterSelection);
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
     this.router.navigate(['overview']);
   }
 
   onNameSearch(): void {
     const filterSelection = Utils.clearNullValues(this.nameForm.value);
-    this.filter.editSelectedFilters(filterSelection);
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
     this.router.navigate(['overview']);
   }
 }

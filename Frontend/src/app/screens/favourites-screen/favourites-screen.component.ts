@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FilterService } from '../../services/filter.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgoSortingSelection } from '../../models/ngo';
+import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { ApiService } from '../../services/api.service';
 
@@ -19,8 +20,9 @@ export class FavouritesScreenComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.filter.editSelectedFilters({});
-    this.filter.applyFilter({}).subscribe(data => {
+    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
+    this.filter.editSelectedFilters({}, selectedSorting);
+    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
         this.filter.displayFilteredNgoItems(data);
     });
   }
