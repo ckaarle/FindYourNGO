@@ -35,6 +35,14 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   ngOnInit(): void {
+    this._restorePreviousPaginationStatus();
+
+    this.getFilterOptions();
+    this.subscribeOverviewItemChanges();
+    this.subscribeSelectedFilterChanges();
+  }
+
+  private _restorePreviousPaginationStatus(): void {
     const customStartPage = this.route.snapshot.paramMap.get('startPage');
 
     const filter = this.route.snapshot.paramMap.get('filter');
@@ -50,15 +58,11 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     }
 
     if (this.isNull(customStartPage)) {
-        this.initialized = true;
-        this.surroundingPages = [];
-        // @ts-ignore
-        this.getNgoOverviewItemsForPageNumber(+customStartPage);
+      this.initialized = true;
+      this.surroundingPages = [];
+      // @ts-ignore
+      this.getNgoOverviewItemsForPageNumber(+customStartPage);
     }
-
-    this.getFilterOptions();
-    this.subscribeOverviewItemChanges();
-    this.subscribeSelectedFilterChanges();
   }
 
   private isNull(value: string | null): boolean {  // please don't ask
