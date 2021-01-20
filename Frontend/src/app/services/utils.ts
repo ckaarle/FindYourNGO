@@ -13,7 +13,9 @@ export class Utils {
 
     static mapDataToNgoFilterOptions(ngoOverviewItem: any): NgoFilterOptions {
         return {
+            name: {values: ngoOverviewItem.name},
             branches: {displayName: 'Branches', values: ngoOverviewItem.branches, icon: 'account_tree'},
+            regions: {values: ngoOverviewItem.regions},
             topics: {displayName: 'Topics', values: ngoOverviewItem.topics, icon: 'topic'},
             hasEcosoc: {displayName: 'Accreditations', values: ngoOverviewItem.hasEcosoc, icon: 'account_balance'},
             isCredible: {displayName: 'Credibility', values: ngoOverviewItem.isCredible, icon: 'loyalty'},

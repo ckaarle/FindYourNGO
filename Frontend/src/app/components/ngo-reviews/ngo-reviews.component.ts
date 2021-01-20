@@ -7,7 +7,7 @@ import {RatingService} from '../../services/rating.service';
   templateUrl: './ngo-reviews.component.html',
   styleUrls: ['./ngo-reviews.component.scss']
 })
-export class NgoReviewsComponent implements OnInit, OnChanges {
+export class NgoReviewsComponent implements OnInit {
 
   @Input() ngoId: number = 0;
   @Input() ngoName: string;

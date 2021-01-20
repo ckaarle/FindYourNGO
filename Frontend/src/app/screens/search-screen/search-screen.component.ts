@@ -17,7 +17,7 @@ export class SearchScreenComponent {
     countries: string[] = [];
     topics: string[] = [];
     regions: string[] = [];
-    trustworthiness: number[] = [0, 1, 2, 3, 4, 5];
+    trustworthiness: number = 0;
 
     searchForm: FormGroup;
     nameForm: FormGroup;
@@ -38,7 +38,7 @@ export class SearchScreenComponent {
 
     getSearchOptions(): void {
         this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
-            const filterOptions = this.filter.mapDataToObject(data);
+            const filterOptions: NgoFilterOptions = Utils.mapDataToNgoFilterOptions(data);
             this.branches = filterOptions.branches.values;
             this.regions = filterOptions.regions.values;
             this.countries = filterOptions.countries.values;
