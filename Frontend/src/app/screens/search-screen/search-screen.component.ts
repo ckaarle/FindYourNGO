@@ -17,7 +17,7 @@ export class SearchScreenComponent {
   countries: string[] = [];
   topics: string[] = [];
   regions: string[] = [];
-  trustworthiness: number[] = [0, 1, 2, 3, 4, 5];
+  trustworthiness: number = 0;
 
   searchForm: FormGroup;
   nameForm: FormGroup;

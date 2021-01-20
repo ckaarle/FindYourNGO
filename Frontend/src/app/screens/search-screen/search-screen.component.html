@@ -3,33 +3,31 @@
     <form [formGroup]="searchForm">
         <mat-form-field>
             <mat-label>Country of operation</mat-label>
-            <mat-select formControlName="branches">
-                <mat-option *ngFor="let c of countries" [value]="[c]">{{ c }}</mat-option>
+            <mat-select formControlName="branches" multiple>
+                <mat-option *ngFor="let c of countries" [value]="c">{{ c }}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Region of operation</mat-label>
-            <mat-select formControlName="regions">
-                <mat-option *ngFor="let c of regions" [value]="[c]">{{ c }}</mat-option>
+            <mat-select formControlName="regions" multiple>
+                <mat-option *ngFor="let c of regions" [value]="c">{{ c }}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Head office</mat-label>
-            <mat-select formControlName="countries">
-                <mat-option *ngFor="let c of countries" [value]="[c]">{{ c }}</mat-option>
+            <mat-select formControlName="countries" multiple>
+                <mat-option *ngFor="let c of countries" [value]="c">{{ c }}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Field of activity</mat-label>
-            <mat-select formControlName="topics">
-                <mat-option *ngFor="let c of topics" [value]="[c]">{{ c }}</mat-option>
+            <mat-select formControlName="topics" multiple>
+                <mat-option *ngFor="let c of topics" [value]="c">{{ c }}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Trustworthiness</mat-label>
-            <mat-select formControlName="trustworthiness">
-                <mat-option *ngFor="let c of trustworthiness" [value]="c.toString()">{{ c }}</mat-option>
-            </mat-select>
+            <input formControlName="trustworthiness" matInput [type]="'number'" [min]="0" [max]="5"/>
         </mat-form-field>
     </form>
     <div class="align-right">
