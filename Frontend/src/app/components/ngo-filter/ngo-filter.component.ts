@@ -11,7 +11,7 @@ export class NgoFilterComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Input() sortingOptions: string[] = [];
-  @Input() sortingSelection: NgoSortingSelection = {value: 'Name', order: 'asc'};
+  @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
   filterUpdated: boolean = false;
 
@@ -27,9 +27,9 @@ export class NgoFilterComponent {
   }
 
   changeSorting(sortingOption: any, sortingOrder?: string): void {
-    this.sortingSelection.value = sortingOption;
+    this.sortingSelection.keyToSort = sortingOption;
     if (sortingOrder) {
-      this.sortingSelection.order = sortingOrder;
+      this.sortingSelection.orderToSort = sortingOrder;
     }
     this.applyFilter();
   }

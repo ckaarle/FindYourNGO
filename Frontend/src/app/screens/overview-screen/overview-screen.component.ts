@@ -72,7 +72,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   getFilterOptions(): void {
     this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
       this.filterOptions = Utils.mapDataToNgoFilterOptions(data);
-      this.selectedSorting = {value: 'Name', order: 'asc'};
+      this.selectedSorting = {keyToSort: 'Name', orderToSort: 'asc'};
     });
   }
 
@@ -107,7 +107,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   ngOnDestroy(): void {
-    const selectedSorting: NgoSortingSelection = {value: 'Name', order: 'asc'};
+    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
     this.filter.editSelectedFilters({}, selectedSorting);
     this.filter.applyFilter({}, this.selectedSorting).subscribe(data => {
           this.filter.displayFilteredNgoItems(data);

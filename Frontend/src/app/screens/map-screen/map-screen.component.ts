@@ -15,7 +15,7 @@ export class MapScreenComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    const selectedSorting: NgoSortingSelection = {value: 'Name', order: 'asc'};
+    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
     this.filter.editSelectedFilters({}, selectedSorting);
     this.filter.applyFilter({}, selectedSorting).subscribe(data => {
         this.filter.displayFilteredNgoItems(data);

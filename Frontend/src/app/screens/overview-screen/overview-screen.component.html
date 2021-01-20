@@ -9,7 +9,7 @@
   </mat-drawer>
 
   <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions && sortingOptions"
+    <ngo-filter *ngIf="filterOptions || sortingOptions"
                 [filterOptions]="filterOptions"
                 [filterSelection]="selectedFilters"
                 [sortingOptions]="sortingOptions"

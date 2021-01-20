@@ -39,8 +39,8 @@ export class FilterService {
     applyFilter(filterSelection: NgoFilterSelection, sortingSelection: NgoSortingSelection, pageNumber: number = 0): Observable<NgoOverviewItemPagination> {
         // deep copy needed
         const tempSortingSelection: NgoSortingSelection = {
-            value: Utils.retrieveObjectKeyFromDisplayName(sortingSelection.value),
-            order: sortingSelection.order,
+            keyToSort: Utils.retrieveObjectKeyFromDisplayName(sortingSelection.keyToSort),
+            orderToSort: sortingSelection.orderToSort,
         };
 
         if (pageNumber === 0) {

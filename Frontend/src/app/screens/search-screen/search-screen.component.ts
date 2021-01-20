@@ -48,13 +48,13 @@ export class SearchScreenComponent {
 
     onFormSearch(): void {
         const filterSelection = Utils.clearNullValues(this.searchForm.value);
-        this.filter.editSelectedFilters(filterSelection, {value: 'Name', order: 'asc'});
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
         this.router.navigate(['overview']);
     }
 
     onNameSearch(): void {
         const filterSelection = Utils.clearNullValues(this.nameForm.value);
-        this.filter.editSelectedFilters(filterSelection, {value: 'Name', order: 'asc'});
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
         this.router.navigate(['overview']);
     }
 }

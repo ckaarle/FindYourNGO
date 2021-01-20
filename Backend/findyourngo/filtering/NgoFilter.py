@@ -131,7 +131,8 @@ class NgoFilter:
         return Q()
 
     def _sort(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
-        sorting_option_value = sorting_option['value']
+        sorting_option_value = sorting_option["keyToSort"]
+
         if sorting_option_value == "name":
             query_set = self._sort_by_default_condition(query_set, sorting_option)
         elif sorting_option_value == "countries":
@@ -150,14 +151,14 @@ class NgoFilter:
         return query_set
 
     def _sort_by_default_condition(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
-        return query_set.exclude(**{sorting_option["value"]: ''}).order_by(f'{"-" if sorting_option["order"]=="desc" else ""}{sorting_option["value"]}')
+        return query_set.exclude(**{sorting_option["keyToSort"]: ''}).order_by(f'{"-" if sorting_option["orderToSort"] =="desc" else ""}{sorting_option["keyToSort"]}')
 
     def _get_ngo_address_condition(self, sorting_option: SortingOption, parameter_name: str) -> SortingOption:
-        sorting_option["value"] = f'contact__address__{parameter_name}'
+        sorting_option["keyToSort"] = f'contact__address__{parameter_name}'
         return sorting_option
 
     def _get_trustworthiness_condition(self, sorting_option: SortingOption) -> SortingOption:
-        sorting_option["value"] = 'tw_score__total_tw_score'
+        sorting_option["keyToSort"] = 'tw_score__total_tw_score'
         return sorting_option
 
 

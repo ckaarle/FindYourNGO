@@ -86,6 +86,6 @@ export interface NgoFilterSelection {
 }
 
 export interface NgoSortingSelection {
-    value: string;
-    order: string;
+    keyToSort: string;
+    orderToSort: string;
 }

@@ -11,7 +11,7 @@ export class NgoFilterSelectionComponent {
   @Input() filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Input() sortingOptions: string[] = [];
-  @Input() sortingSelection: NgoSortingSelection = {value: 'Name', order: 'asc'};
+  @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
@@ -25,9 +25,9 @@ export class NgoFilterSelectionComponent {
   }
 
   changeSorting(sortingOption: any, sortingOrder?: string): void {
-    this.sortingSelection.value = sortingOption;
+    this.sortingSelection.keyToSort = sortingOption;
     if (sortingOrder) {
-      this.sortingSelection.order = sortingOrder;
+      this.sortingSelection.orderToSort = sortingOrder;
     }
   }
 
