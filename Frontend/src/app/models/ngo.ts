@@ -89,3 +89,7 @@ export interface NgoSortingSelection {
     keyToSort: string;
     orderToSort: string;
 }
+
+export interface Names {
+    names: string[];
+}

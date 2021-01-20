@@ -24,6 +24,7 @@ export class Utils {
     }
 
     static mapDataToNgoFilterOptions(ngoOverviewItem: any): NgoFilterOptions {
+        // @ts-ignore
         return {
             name: {values: ngoOverviewItem.name},
             branches: {displayName: 'Branches', values: ngoOverviewItem.branches, icon: 'account_tree'},

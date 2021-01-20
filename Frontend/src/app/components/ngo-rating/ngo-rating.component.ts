@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RatingService} from '../../services/rating.service';
-import {TwReview, TwReviews} from '../../models/ratings';
+import {EMPTY_TW_REVIEWS, TwReview, TwReviews} from '../../models/ratings';
 
 @Component({
   selector: 'ngo-rating',
@@ -9,12 +9,13 @@ import {TwReview, TwReviews} from '../../models/ratings';
 })
 export class NgoRatingComponent implements OnInit {
 
-  @Input() ngoId: number;
-  @Input() ngoName: string;
+  @Input() ngoId: number = 0;
+  @Input() ngoName: string = '';
 
-  reviews: TwReviews;
+  reviews: TwReviews = EMPTY_TW_REVIEWS;
 
-  ownUserReview: TwReview;
+  // @ts-ignore
+  ownUserReview: TwReview = null;
   otherUserReviews: TwReview[] = [];
 
   constructor(private ratingService: RatingService) {

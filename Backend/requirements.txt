@@ -3,3 +3,9 @@ psycopg2-binary>=2.8
 djangorestframework
 pytest
 django-cors-headers
+networkx
+pandas
+matplotlib
+pytest-django
+djangorestframework_simplejwt
+requests
