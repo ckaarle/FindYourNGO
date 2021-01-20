@@ -26,16 +26,12 @@ export class NgoRatingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('NGO ON INIT WAS CALLED');
     this.ratingService.getUserReviews(this.ngoId).subscribe(data => {
 
       data.reviews.forEach((review) => {
-        console.log(review);
         if (this.isOwnUserId(review.userId)) {
-          console.log('OWN USER REVIEW');
           this.ownUserReview = review;
         } else {
-          console.log('OTHER USER REVIEW');
           this.otherUserReviews.push(review);
         }
       });
@@ -43,8 +39,6 @@ export class NgoRatingComponent implements OnInit {
   }
 
   private isOwnUserId(userId: string): boolean {
-    console.log(userId);
-    console.log(this.apiService.userid.getValue());
     return userId !== '' && userId === this.apiService.userid.getValue();
   }
 
