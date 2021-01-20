@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Tell us who you are!</h1>
-<div mat-dialog-content class="limit-width">
+<div mat-dialog-content class="limit-width" (keydown.enter)="submit()">
   <mat-checkbox (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
   <br>
   <form *ngIf="isNgo">
@@ -25,7 +25,8 @@
   </form>
   <form *ngIf="status !== ''" [formGroup]="userForm">
     <mat-form-field>
-      <mat-label>E-mail</mat-label>
+      <mat-label *ngIf="status === 'login'">E-mail or username</mat-label>
+      <mat-label *ngIf="status !== 'login'">E-mail</mat-label>
       <input matInput type="email" formControlName="email">
     </mat-form-field>
     <mat-form-field>
