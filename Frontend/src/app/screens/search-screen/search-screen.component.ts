@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
-import {NgoFilterOptions, NgoSortingSelection} from '../../models/ngo';
+import {NgoFilterOptions} from '../../models/ngo';
 import {Router} from '@angular/router';
 import {FilterService} from '../../services/filter.service';
 import {Utils} from '../../services/utils';
