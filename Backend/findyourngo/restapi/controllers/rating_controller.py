@@ -2,11 +2,13 @@ from datetime import datetime
 
 from django.http.response import JsonResponse
 
+from django.contrib.auth.models import User
+
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from findyourngo.restapi.models import Ngo, NgoReview, NgoCommenter
+from findyourngo.restapi.models import Ngo, NgoReview
 from findyourngo.data_import.data_importer import update_ngo_tw_score
 
 
@@ -22,8 +24,6 @@ def tw_rating(request) -> JsonResponse:
     reviews = NgoReview.objects.filter(ngo=ngo)
 
     total_tw = ngo.tw_score.total_tw_score
-    base_tw = ngo.tw_score.base_tw_score
-    user_tw = ngo.tw_score.user_tw_score
 
     total_review_number = len(reviews)
     reviews_by_rating = {
@@ -52,10 +52,10 @@ def convert_reviews(reviews):
         user = review.reviewer
         converted_comment = {
             'id': review.id,
-            'userId': user.user_id,
-            'userName': 'NAME', # TODO
+            'userId': user.id,
+            'userName': user.username,
             'ngoId': review.ngo.id,
-            'reviewsByUser': user.number_of_comments,
+            'reviewsByUser': len(NgoReview.objects.filter(reviewer=user)),
             'created': review.create_date,
             'last_edited': review.last_edited,
             'rating': review.rating,
@@ -98,7 +98,11 @@ def review(request) -> JsonResponse:
         review = JSONParser().parse(request)
         try:
             user_id = review['userId']
-            user = NgoCommenter.objects.get(user_id=user_id)
+
+            if request.user.id != user_id:
+                return JsonResponse({'error': 'Comments can only be stored / edited for the current user.'})
+
+            user = User.objects.get(pk=user_id)
         except BaseException:
             return JsonResponse({'error': f'No user found for ID {user_id}'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
@@ -112,10 +116,13 @@ def review(request) -> JsonResponse:
     if request.method == 'DELETE':
         review_id = request.query_params.get('id')
         review = NgoReview.objects.get(pk=review_id)
-        review.reviewer.number_of_comments -= 1
-        review.reviewer.save()
+
+        user_id = review.reviewer.id
+        if request.user.id != user_id:
+            return JsonResponse({'error': 'Only own comments can be deleted.'})
+
         review.delete()
-        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo))
+        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo.id))
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -131,7 +138,7 @@ def update_review(review_id, review) -> JsonResponse:
         review.rating = rating
         review.last_edited = update_time
         review.save()
-        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo))
+        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo.id))
         return JsonResponse({'message': 'Review successfully updated'}, status=status.HTTP_200_OK)
     except BaseException:
         return JsonResponse({'error': f'No review found for id {review_id}'}, status=status.HTTP_400_BAD_REQUEST)
@@ -156,11 +163,23 @@ def save_new_review(review, user) -> JsonResponse:
             rating=rating,
         )
 
-        user.number_of_comments += 1
-        user.save()
         update_ngo_tw_score(ngo)
         return JsonResponse(data={'message': 'Review was successfully stored.'}, status=status.HTTP_200_OK)
 
     except BaseException as err:
         return JsonResponse({'error': f'Review could not be stored: {err}.'}, status=status.HTTP_400_BAD_REQUEST,
                         safe=False)
+
+
+@api_view(['GET'])
+def user_review_present(request) -> JsonResponse:
+    ngo_id = request.query_params.get('ngoId')
+    user_id = request.query_params.get('userId')
+
+    try:
+        ngo = Ngo.objects.get(pk=ngo_id)
+        user = User.objects.get(pk=user_id)
+        reviews = NgoReview.objects.filter(ngo=ngo, reviewer=user)
+        return JsonResponse(len(reviews) > 0, safe=False)
+    except:
+        return JsonResponse(False, safe=False)

@@ -19,7 +19,7 @@ from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccount
+from findyourngo.restapi.models import Ngo, NgoAccount
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -58,6 +58,7 @@ def clearDatabase(request):
 def twUpdate(request):
     TWUpdater().update()
     return HttpResponse('TW updated with PageRank')
+
 
 # request is a necessary positional parameter for the framework call
 def name_list(request):
