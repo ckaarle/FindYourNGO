@@ -18,7 +18,7 @@ export class NgoDetailItemComponent implements OnInit {
   ngoContentContainers: NgoContentContainer[] = [];
   public ngoDetailItem: any | NgoDetailItem;
 
-  currentPageOfPageBefore: null | number = null;
+  previousPageNumber: null | number = null;
 
   filter: boolean;
   filterSelection: NgoFilterSelection;
@@ -33,7 +33,7 @@ export class NgoDetailItemComponent implements OnInit {
 
     const pageBefore = this.route.snapshot.paramMap.get('currentPage');
     if (pageBefore != null) {
-      this.currentPageOfPageBefore = +pageBefore;
+      this.previousPageNumber = +pageBefore;
     }
 
     const filterActive = this.route.snapshot.paramMap.get('filter');
@@ -79,7 +79,7 @@ export class NgoDetailItemComponent implements OnInit {
 
   back(): void {
     this.router.navigate(['/overview', {
-      startPage: this.currentPageOfPageBefore,
+      startPage: this.previousPageNumber,
       filter: this.filter,
       filterSelection: JSON.stringify(this.filterSelection)
     }]);
