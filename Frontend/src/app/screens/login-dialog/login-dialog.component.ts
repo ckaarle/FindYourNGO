@@ -47,8 +47,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         this.apiService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
       }
     });
-    this.apiService.userid.subscribe((id: string) => {
-      if (id !== '') {  // The dialog is automatically closed if a user is signed in
+    this.apiService.userid.subscribe((id: number) => {
+      if (id !== -1) {  // The dialog is automatically closed if a user is signed in
         this.dialogRef.close(this.user?.photoUrl);  // and it returns the photo url if there is one
       }
     });

@@ -17,15 +17,32 @@ export class ApiService {
   public tokenExpires: Date | undefined | null;
 
   // the username of the logged in user
-  public userid: BehaviorSubject<string>;
+  public userid: BehaviorSubject<number>;
   public username: BehaviorSubject<string>;
+  public ngoid: BehaviorSubject<number>;
 
   // error messages received from the login attempt
   public errors: any = [];
 
   constructor(private httpClient: HttpClient) {
-    this.userid = new BehaviorSubject<string>('');
+    this.userid = new BehaviorSubject<number>(-1);
     this.username = new BehaviorSubject<string>('');
+    this.ngoid = new BehaviorSubject<number>(-1);
+
+    this.token = localStorage.getItem('token');
+    const expiration = localStorage.getItem('token-expiration');
+    if (this.token && expiration) {
+      if (Date.parse(expiration) < Date.now()) {
+        this.refreshToken();
+      }
+      console.log(localStorage.getItem('userid'));
+      this.userid.next(Number(localStorage.getItem('userid')));
+      this.username.next(localStorage.getItem('username') as string);
+      const ngoid = Number(localStorage.getItem('ngoid'));
+      if (ngoid) {
+        this.ngoid.next(ngoid);
+      }
+    }
   }
   public delete(endpoint: string, params?: any): Observable<any> {
     return this.httpClient.delete(this.url(endpoint), {headers: this.authHeader(), params});
@@ -70,8 +87,15 @@ export class ApiService {
   private userPost(user: object, endpoint: string, query?: any): void {
     this.httpClient.post(endpoint, user, {params: query}).subscribe(
         (data: any) => {
+        localStorage.setItem('refresh-token', data.refresh_token);
         this.updateData(data.access_token);
+        localStorage.setItem('token', data.access_token);
         this.username.next(data.username);
+        localStorage.setItem('username', this.username.value);
+        this.ngoid.next(data.ngo_id);
+        if (this.ngoid.value !== -1) {
+          localStorage.setItem('ngoid', String(this.ngoid.value));
+        }
       },
       err => {
         this.errors = err.error;
@@ -81,9 +105,10 @@ export class ApiService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): void {
-    this.httpClient.post('/api-token-refresh/', JSON.stringify({token: this.token}), this.httpOptions).subscribe(
+    this.httpClient.post(this.url('refresh/'), {refresh_token: localStorage.getItem('refresh-token')}, this.httpOptions).subscribe(
         (data: any) => {
-        this.updateData(data.token);
+        this.updateData(data.access_token);
+        localStorage.setItem('token', data.access_token);
       },
       err => {
         this.errors = err.error;
@@ -94,8 +119,14 @@ export class ApiService {
   public signOut(): void {
     this.token = null;
     this.tokenExpires = null;
-    this.userid.next('');
+    this.userid.next(-1);
     this.username.next('');
+    this.ngoid.next(-1);
+    localStorage.removeItem('refresh-token');
+    localStorage.removeItem('token');
+    localStorage.removeItem('token-expiration');
+    localStorage.removeItem('username');
+    localStorage.removeItem('ngoid');
   }
 
   private updateData(token: string): void {
@@ -107,7 +138,8 @@ export class ApiService {
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
     console.log(tokenDecoded);
     this.tokenExpires = new Date(tokenDecoded.exp * 1000);
+    localStorage.setItem('token-expiration', String(this.tokenExpires));
     this.userid.next(tokenDecoded.user_id);
-    console.log(this.userid.value);
+    localStorage.setItem('userid', tokenDecoded.user_id);
   }
 }

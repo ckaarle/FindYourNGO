@@ -107,6 +107,12 @@ class FacebookView(APIView):
         return create_user(data, request.query_params.get('ngo_name'))
 
 
+class RefreshView(APIView):
+    def post(self, request):
+        refresh_token = RefreshToken(token=request.data.get('refresh_token'))
+        return Response({'access_token': str(refresh_token.access_token)})
+
+
 def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
@@ -135,8 +141,15 @@ def create_user(data, ngo_name, mode=None):
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)
 
+    ngo_id = -1
+    try:
+        ngo_id = NgoAccount.objects.get(user=user).ngo_id
+    except Exception:
+        pass
+
     token = RefreshToken.for_user(user)  # generate token without username & password
     response = {'username': user.username,
+                'ngo_id': ngo_id,
                 'access_token': str(token.access_token),
                 'refresh_token': str(token),
                 }

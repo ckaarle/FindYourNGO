@@ -31,6 +31,7 @@ urlpatterns = [
     path('users/register/', views.RegisterView.as_view(), name='email'),
     path('google/', views.GoogleView.as_view(), name='google'),
     path('facebook/', views.FacebookView.as_view(), name='facebook'),
+    path('refresh/', views.RefreshView.as_view(), name='refresh'),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
