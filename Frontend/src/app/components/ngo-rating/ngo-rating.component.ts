@@ -34,6 +34,7 @@ export class NgoRatingComponent implements OnInit {
     });
   }
 
+  
   private isOwnUserId(userId: number): boolean {
     return userId <= 0; // TODO compare to actual own user id once it exists
   }

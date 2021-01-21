@@ -15,7 +15,8 @@ export class NgoFilterComponent {
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
   filterUpdated: boolean = false;
 
-  constructor(private filter: FilterService) { }
+  constructor(private filter: FilterService) {
+  }
 
   checkIfFilterSet(key: string): boolean {
     return this.filterSelection.hasOwnProperty(key);
@@ -39,7 +40,13 @@ export class NgoFilterComponent {
     this.applyFilter();
   }
 
-  openFilterSelection(): void {
+  openFilterSelection(event: MouseEvent): void {
+    if (event.buttons === 0 && event.clientX === 0 && event.clientY === 0) {
+      // triggered by hitting enter key in the filter selection drawer ...
+      return;
+    }
+
+    console.log('OPENING FILTER');
     this.openFilterSelectionDrawer.emit(true);
   }
 

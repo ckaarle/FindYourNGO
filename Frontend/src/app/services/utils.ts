@@ -79,4 +79,10 @@ export class Utils {
             }
         };
     }
+
+    static filter(value: string, values: string[]): string[] {
+        const filterValue = value.toLowerCase();
+
+        return values.filter(option => option.toLowerCase().includes(filterValue));
+    }
 }

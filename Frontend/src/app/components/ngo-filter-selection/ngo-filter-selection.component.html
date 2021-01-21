@@ -1,4 +1,4 @@
-<div class="filter-option-container">
+<div class="filter-option-container" (keydown.enter)="applyFilter()" tabindex="0">
     <h1>Filters</h1>
 
     <div class="sorting-option-item" *ngIf="sortingOptions">
