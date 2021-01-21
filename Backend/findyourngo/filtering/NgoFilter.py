@@ -145,7 +145,7 @@ class NgoFilter:
             query_set = self._sort_by_default_condition(query_set, sorting_option)
 
         # always sort if trustworthiness filter is applied
-        if self._filter_config.trustworthiness_lower_bound is not None and sorting_option_value is not "trustworthiness":
+        if self._filter_config.trustworthiness_lower_bound is not None and sorting_option_value != "trustworthiness":
             query_set = query_set.order_by('-tw_score__total_tw_score', 'name')
 
         return query_set
