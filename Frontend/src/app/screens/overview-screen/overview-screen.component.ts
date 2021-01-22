@@ -55,18 +55,27 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     const customStartPage = this.route.snapshot.paramMap.get('startPage');
 
     const filter = this.route.snapshot.paramMap.get('filter');
-    if (this.isNull(filter)) {
+    if (!this.isNull(filter)) {
       // @ts-ignore
       this.filterActive = filter.toLowerCase() === 'true';
     }
     const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
-    if (this.isNull(filterSelection)) {
+    if (!this.isNull(filterSelection)) {
       // @ts-ignore
       this.selectedFilters = JSON.parse(filterSelection);
-      this.filter.editSelectedFilters(this.selectedFilters);
     }
 
-    if (this.isNull(customStartPage)) {
+    const sortingSelection = this.route.snapshot.paramMap.get('sortingSelection');
+    if (!this.isNull(sortingSelection)) {
+      // @ts-ignore
+      this.selectedSorting = JSON.parse(sortingSelection);
+    }
+
+    if (!this.isNull(sortingSelection) || !this.isNull(filterSelection)) {
+      this.filter.editSelectedFilters(this.selectedFilters, this.selectedSorting);
+    }
+
+    if (!this.isNull(customStartPage)) {
       this.initialized = true;
       this.surroundingPages = [];
       // @ts-ignore
@@ -75,7 +84,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   private isNull(value: string | null): boolean {  // please don't ask
-    return value != null && value !== 'null';
+    return value == null || value === 'null';
   }
 
   getNgoOverviewItems(): void {
@@ -163,6 +172,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       currentPage: this.currentPageNumber,
       filter: this.filterActive,
       filterSelection: JSON.stringify(this.selectedFilters),
+      sortingSelection: JSON.stringify(this.selectedSorting),
     }]);
   }
 }
