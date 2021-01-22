@@ -11,10 +11,24 @@ export class Utils {
         return object;
     }
 
+    static retrieveObjectKeyFromDisplayName(displayName: string): string {
+        let tempFilterObject: NgoFilterOptions = {} as NgoFilterOptions;
+        tempFilterObject = this.mapDataToNgoFilterOptions(tempFilterObject);
+        let key = 'name';
+        for (const entry of Object.entries(tempFilterObject)) {
+            if (entry[1].displayName === displayName) {
+                key = entry[0];
+            }
+        }
+        return key;
+    }
+
     static mapDataToNgoFilterOptions(ngoOverviewItem: any): NgoFilterOptions {
         // @ts-ignore
         return {
+            name: {values: ngoOverviewItem.name},
             branches: {displayName: 'Branches', values: ngoOverviewItem.branches, icon: 'account_tree'},
+            regions: {values: ngoOverviewItem.regions},
             topics: {displayName: 'Topics', values: ngoOverviewItem.topics, icon: 'topic'},
             hasEcosoc: {displayName: 'Accreditations', values: ngoOverviewItem.hasEcosoc, icon: 'account_balance'},
             isCredible: {displayName: 'Credibility', values: ngoOverviewItem.isCredible, icon: 'loyalty'},
@@ -64,5 +78,11 @@ export class Utils {
                 amount: {displayName: 'Amount', values: ngoDetailItem.amount}
             }
         };
+    }
+
+    static filter(value: string, values: string[]): string[] {
+        const filterValue = value.toLowerCase();
+
+        return values.filter(option => option.toLowerCase().includes(filterValue));
     }
 }

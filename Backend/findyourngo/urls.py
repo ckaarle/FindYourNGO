@@ -46,5 +46,6 @@ urlpatterns = [
     path('twUpdate', views.twUpdate),
     url(r'names', views.name_list),
     url('test/', views.TestView.as_view(), name='test'),
+    url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
 

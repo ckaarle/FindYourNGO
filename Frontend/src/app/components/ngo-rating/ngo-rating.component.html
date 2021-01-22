@@ -8,7 +8,7 @@
     <h4 fxFlex.xs="100%" fxFlex.sm="75%">User
       Reviews</h4>
     <button mat-button *ngIf="!ownUserReview"
-            [routerLink]="['/newReview', ngoId, {ngoName: ngoName}]"
+            (click)="writeNewReview()"
             fxFlex.xs="100%" fxFlex.sm="25%">Write a
       review
     </button>

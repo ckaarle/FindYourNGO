@@ -3,13 +3,17 @@
               fxFlex.xs="100%" fxFlex.sm="33%">
     <ngo-filter-selection [filterOptions]="filterOptions"
                           [filterSelection]="selectedFilters"
+                          [sortingOptions]="sortingOptions"
+                          [sortingSelection]="selectedSorting"
                           (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
   </mat-drawer>
 
   <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions"
+    <ngo-filter *ngIf="filterOptions || sortingOptions"
                 [filterOptions]="filterOptions"
                 [filterSelection]="selectedFilters"
+                [sortingOptions]="sortingOptions"
+                [sortingSelection]="selectedSorting"
                 (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
   </div>
 

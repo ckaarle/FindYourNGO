@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
-import {NgoFilterOptions} from '../../models/ngo';
+import {Names, NgoFilterOptions} from '../../models/ngo';
 import {Router} from '@angular/router';
 import {FilterService} from '../../services/filter.service';
 import {Utils} from '../../services/utils';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 
 @Component({
@@ -17,10 +19,15 @@ export class SearchScreenComponent {
   countries: string[] = [];
   topics: string[] = [];
   regions: string[] = [];
-  trustworthiness: number[] = [0, 1, 2, 3, 4, 5];
+  trustworthiness: number = 0;
 
   searchForm: FormGroup;
   nameForm: FormGroup;
+
+  nameControl: FormControl = new FormControl(null);
+
+  ngoNames: string[] = [];
+  $ngoNames: Observable<string[]>;
 
   constructor(private apiService: ApiService, private router: Router, private filter: FilterService) {
     this.searchForm = new FormGroup({
@@ -31,15 +38,22 @@ export class SearchScreenComponent {
       trustworthiness: new FormControl(null),
     });
 
-    this.nameForm = new FormGroup({name: new FormControl(null)});
+    this.nameForm = new FormGroup({name: this.nameControl});
+
+    this.apiService.get('names').subscribe((data: Names) => {
+      this.ngoNames = data.names;
+    });
+
+    this.$ngoNames = this.nameControl.valueChanges.pipe(
+        startWith(''), map(value => Utils.filter(value, this.ngoNames))
+    );
 
     this.getSearchOptions();
   }
 
   getSearchOptions(): void {
     this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
-      // @ts-ignore
-      const filterOptions = this.filter.mapDataToObject(data);
+            const filterOptions = Utils.mapDataToNgoFilterOptions(data);
       this.branches = filterOptions.branches.values;
       this.regions = filterOptions.regions.values;
       this.countries = filterOptions.countries.values;
@@ -49,13 +63,13 @@ export class SearchScreenComponent {
 
   onFormSearch(): void {
     const filterSelection = Utils.clearNullValues(this.searchForm.value);
-    this.filter.editSelectedFilters(filterSelection);
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
     this.router.navigate(['overview']);
   }
 
   onNameSearch(): void {
     const filterSelection = Utils.clearNullValues(this.nameForm.value);
-    this.filter.editSelectedFilters(filterSelection);
+        this.filter.editSelectedFilters(filterSelection, {keyToSort: 'Name', orderToSort: 'asc'});
     this.router.navigate(['overview']);
   }
 }

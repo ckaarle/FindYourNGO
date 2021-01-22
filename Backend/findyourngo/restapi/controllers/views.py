@@ -19,7 +19,7 @@ from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccount
+from findyourngo.restapi.models import Ngo, NgoAccount
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -58,6 +58,7 @@ def clearDatabase(request):
 def twUpdate(request):
     TWUpdater().update()
     return HttpResponse('TW updated with PageRank')
+
 
 # request is a necessary positional parameter for the framework call
 def name_list(request):
@@ -108,7 +109,16 @@ class FacebookView(APIView):
 def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
-        user = User.objects.get(email=data['email'])
+        if mode == 'login':
+            email_or_username = data['email']
+
+            if '@' in email_or_username:
+                user = User.objects.get(email=email_or_username)
+            else:
+                user = User.objects.get(username=email_or_username)
+        else:
+            user = User.objects.get(email=data['email'])
+
         if mode == 'register':
             return Response({'error': 'User already registered'}, status=401)
     except User.DoesNotExist:

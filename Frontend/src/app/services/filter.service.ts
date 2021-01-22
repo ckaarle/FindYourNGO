@@ -1,15 +1,18 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItemPagination} from '../models/ngo';
+import {NgoFilterSelection, NgoOverviewItemPagination, NgoSortingSelection} from '../models/ngo';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
+import {Utils} from './utils';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FilterService {
     selectedFilters: NgoFilterSelection = {} as NgoFilterSelection;
+    selectedSorting: NgoSortingSelection = {} as NgoSortingSelection;
     filteredNgoItems: NgoOverviewItemPagination = {} as NgoOverviewItemPagination;
     public selectedFiltersChanged: EventEmitter<NgoFilterSelection> = new EventEmitter<NgoFilterSelection>();
+    public selectedSortingChanged: EventEmitter<NgoSortingSelection> = new EventEmitter<NgoSortingSelection>();
     public filteredNgoOverviewItemsChanged: EventEmitter<NgoOverviewItemPagination> = new EventEmitter<NgoOverviewItemPagination>();
     public loadingNgoOverviewItems: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -20,9 +23,11 @@ export class FilterService {
         return this.selectedFilters;
     }
 
-    editSelectedFilters(selectedFilters: NgoFilterSelection): void {
+    editSelectedFilters(selectedFilters: NgoFilterSelection, selectedSorting: NgoSortingSelection): void {
         this.selectedFilters = selectedFilters;
         this.selectedFiltersChanged.emit(this.selectedFilters);
+        this.selectedSorting = selectedSorting;
+        this.selectedSortingChanged.emit(this.selectedSorting);
         this.loadingNgoOverviewItems.emit(true);
     }
 
@@ -31,10 +36,21 @@ export class FilterService {
         this.filteredNgoOverviewItemsChanged.emit(this.filteredNgoItems);
     }
 
-    applyFilter(filterSelection: NgoFilterSelection, pageNumber: number = 0): Observable<NgoOverviewItemPagination> {
+    applyFilter(filterSelection: NgoFilterSelection, sortingSelection: NgoSortingSelection, pageNumber: number = 0): Observable<NgoOverviewItemPagination> {
+        // deep copy needed
+        const tempSortingSelection: NgoSortingSelection = {
+            keyToSort: Utils.retrieveObjectKeyFromDisplayName(sortingSelection.keyToSort),
+            orderToSort: sortingSelection.orderToSort,
+        };
+
         if (pageNumber === 0) {
-            return this.apiService.get('ngos/filter', {filter_selection: encodeURIComponent( JSON.stringify(filterSelection))});
+            return this.apiService.get('ngos/filter',
+                {filter_selection: encodeURIComponent(JSON.stringify(filterSelection)),
+                sorting_selection: encodeURIComponent(JSON.stringify(tempSortingSelection))});
         }
-        return this.apiService.get('ngos/filter', {filter_selection: encodeURIComponent( JSON.stringify(filterSelection)), page: pageNumber});
+        return this.apiService.get('ngos/filter',
+            {filter_selection: encodeURIComponent(JSON.stringify(filterSelection)),
+                sorting_selection: encodeURIComponent(JSON.stringify(tempSortingSelection)),
+                page: pageNumber});
     }
 }

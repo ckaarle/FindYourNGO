@@ -1,6 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FilterService} from 'src/app/services/filter.service';
-import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItem, NgoOverviewItemPagination} from '../../models/ngo';
+import {
+    NgoFilterOptions,
+    NgoFilterSelection,
+    NgoOverviewItem,
+    NgoOverviewItemPagination,
+    NgoSortingSelection
+} from '../../models/ngo';
 import {PaginationService} from '../../services/pagination.service';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {ApiService} from '../../services/api.service';
@@ -17,10 +23,12 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   overviewItems: NgoOverviewItem[] = [];
 
   filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
+  sortingOptions: string[] = [];
   loadingNgoOverviewItems: boolean = false;
 
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
+  selectedSorting: NgoSortingSelection = {} as NgoSortingSelection;
 
   initialized: boolean = false;
 
@@ -32,6 +40,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       public router: Router,
   ) {
     super();
+    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness'];
   }
 
   ngOnInit(): void {
@@ -71,8 +80,8 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getNgoOverviewItems(): void {
     if (this.filterActive) {
-      this.filter.applyFilter(this.selectedFilters).subscribe(data =>
-          this.processPaginatedResults(data));
+      this.filter.applyFilter(this.selectedFilters, this.selectedSorting).subscribe(data =>
+            this.processPaginatedResults(data));
     } else {
       const ngoOverviewSubscription = this.apiService.get('ngoOverviewItems').subscribe(data => {
         this.processPaginatedResults(data);
@@ -88,7 +97,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   getNgoOverviewItemsForPageNumber(pageNumber: number): void {
     if (this.filterActive) {
-      this.filter.applyFilter(this.selectedFilters, pageNumber).subscribe(data => {
+      this.filter.applyFilter(this.selectedFilters, this.selectedSorting, pageNumber).subscribe(data => {
         this.processPaginatedResults(data);
       });
     } else {
@@ -102,6 +111,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   getFilterOptions(): void {
     this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
       this.filterOptions = Utils.mapDataToNgoFilterOptions(data);
+      this.selectedSorting = {keyToSort: 'Name', orderToSort: 'asc'};
     });
   }
 
@@ -141,9 +151,10 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   ngOnDestroy(): void {
-    this.filter.editSelectedFilters({});
-    this.filter.applyFilter({}).subscribe(data => {
-      this.filter.displayFilteredNgoItems(data);
+    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
+    this.filter.editSelectedFilters({}, selectedSorting);
+    this.filter.applyFilter({}, this.selectedSorting).subscribe(data => {
+          this.filter.displayFilteredNgoItems(data);
     });
   }
 
