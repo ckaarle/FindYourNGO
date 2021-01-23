@@ -20,6 +20,13 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  tasks:
+    build: ./Backend
+    command: python manage.py process_tasks
+    volumes:
+      - ./Backend:/code
+    depends_on:
+      - db
   node:
     build: ./Frontend
     environment:

@@ -18,6 +18,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
+from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -35,6 +36,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
+    path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
@@ -49,3 +51,5 @@ urlpatterns = [
     url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
 
+
+start_background_tasks()
