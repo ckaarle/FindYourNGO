@@ -103,7 +103,6 @@ class NgoAccount(models.Model):
     ngo = models.ForeignKey(Ngo, on_delete=models.PROTECT)
 
 
-
 class NgoCommenter(models.Model): # TODO remove this entirely
     user_id = models.IntegerField()
     number_of_comments = models.IntegerField(default=0)
@@ -119,32 +118,35 @@ class NgoReview(models.Model):
 
 
 class NgoConnection(models.Model):
-    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter')
-    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo')
+    reporter = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter')
+    connected_ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo')
     report_date = models.DateField()
     approval_date = models.DateField()
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['reporter_id', 'connected_ngo_id'], name='unique_connection'),
+            UniqueConstraint(fields=['reporter', 'connected_ngo'], name='unique_connection'),
         ]
 
 
 class NgoPendingConnection(models.Model):
-    reporter_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter_pending')
-    connected_ngo_id = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo_pending')
+    reporter = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='reporter_pending')
+    connected_ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE, related_name='connected_ngo_pending')
     report_date = models.DateField()
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['reporter_id', 'connected_ngo_id'], name='unique_pending_connection'),
+            UniqueConstraint(fields=['reporter', 'connected_ngo'], name='unique_pending_connection'),
         ]
 
 
 class NgoEvent(models.Model):
     name = models.CharField(max_length=200)
-    date = models.DateField()
+    start_date = models.DateField()
+    end_date = models.DateField()
     organizer = models.ForeignKey(Ngo, null=True, on_delete=models.SET_NULL)
+    description = models.CharField(max_length=200)
+    topics = models.CharField(max_length=200)
 
 
 class NgoEventCollaborator(models.Model):

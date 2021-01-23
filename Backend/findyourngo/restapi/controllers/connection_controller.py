@@ -6,61 +6,97 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from findyourngo.restapi.models import NgoPendingConnection, NgoConnection
+from findyourngo.restapi.models import NgoPendingConnection, NgoConnection, NgoAccount, Ngo
+from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_connections(request) -> JsonResponse:
-    reporter_id = request.query_params.get('reporter_id')
-    if not is_user_authorized(request, reporter_id):
+    try:
+        requested_ngo = request.query_params.get('requested_ngo')
+        ngos = Ngo.objects.filter(connected_ngo__reporter=requested_ngo)
+        ngo_serializer = NgoSerializer(ngos, many=True)
+        return JsonResponse(ngo_serializer.data, safe=False)  # TODO: Use pagination
+    except Exception as e:
+        print(e)
         return forbidden_response()
-    return JsonResponse(NgoConnection.objects.filter(reporter_id=reporter_id))  # TODO: Use pagination
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_incoming_pending_connections(request) -> JsonResponse:
-    reporter_id = request.query_params.get('reporter_id')
-    if not is_user_authorized(request, reporter_id):
+    try:
+        requesting_ngo = NgoAccount.objects.get(user__id=request.user.id).ngo
+        ngos = Ngo.objects.filter(reporter_pending__connected_ngo=requesting_ngo)
+        ngo_serializer = NgoSerializer(ngos, many=True)
+        return JsonResponse(ngo_serializer.data, safe=False)  # TODO: Use pagination
+    except Exception as e:
+        print(e)
         return forbidden_response()
-    return JsonResponse(NgoPendingConnection.objects.filter(connected_ngo_id=reporter_id))  # TODO: Use pagination
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_outgoing_pending_connections(request) -> JsonResponse:
-    reporter_id = request.query_params.get('reporter_id')
-    if not is_user_authorized(request, reporter_id):
+    try:
+        requesting_ngo = NgoAccount.objects.get(user__id=request.user.id).ngo
+        ngos = Ngo.objects.filter(connected_ngo_pending__reporter=requesting_ngo)
+        ngo_serializer = NgoSerializer(ngos, many=True)
+        return JsonResponse(ngo_serializer.data, safe=False)  # TODO: Use pagination
+    except Exception as e:
+        print(e)
         return forbidden_response()
-    return JsonResponse(NgoPendingConnection.objects.filter(reporter_id=reporter_id))  # TODO: Use pagination
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_connection_type(request, requested_ngo) -> JsonResponse:
+    try:
+        reporter = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        if reporter == requested_ngo:
+            return JsonResponse({'type': 'self'})
+        if len(list(NgoConnection.objects.filter(reporter_id=reporter, connected_ngo_id=requested_ngo))) > 0:
+            return JsonResponse({'type': 'connected'})
+        if len(list(NgoPendingConnection.objects.filter(reporter_id=reporter, connected_ngo_id=requested_ngo))) > 0:
+            return JsonResponse({'type': 'requesting'})
+        if len(list(NgoPendingConnection.objects.filter(reporter_id=requested_ngo, connected_ngo_id=reporter))) > 0:
+            return JsonResponse({'type': 'requested'})
+        return JsonResponse({'type': 'none'})
+    except Exception as e:
+        print(e)
+        return forbidden_response()
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_connection(request) -> JsonResponse:
-    reporter_id = request.query_params.get('reporter_id')
-    if not is_user_authorized(request, reporter_id):
+    try:
+        reporter_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        connected_ngo_id = request.query_params.get('ngo_id')
+        if reporter_id == connected_ngo_id:
+            return forbidden_response()
+        return create_connection(reporter_id, connected_ngo_id)
+    except Exception as e:
+        print(e)
         return forbidden_response()
-
-    connected_ngo_id = request.query_params.get('connected_ngo_id')
-    return create_connection(reporter_id, connected_ngo_id)
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def remove_connection(request) -> JsonResponse:
-    reporter_id = request.query_params.get('reporter_id')
-    if not is_user_authorized(request, reporter_id):
-        return JsonResponse({}, status=403)
-
-    connected_ngo_id = request.query_params.get('connected_ngo_id')
-    return delete_connection(reporter_id, connected_ngo_id)
-
-
-def is_user_authorized(request, ngo_id) -> bool:
     try:
-        if NgoAccount.objects.get(user=request.user.id) == ngo_id:
+        reporter_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        connected_ngo_id = request.query_params.get('ngo_id')
+        return delete_connection(reporter_id, connected_ngo_id)
+    except Exception as e:
+        print(e)
+        return forbidden_response()
+
+
+def is_user_authorized(request) -> bool:
+    try:
+        if NgoAccount.objects.get(user=request.user.id):
             return True
         return False
     except Exception:

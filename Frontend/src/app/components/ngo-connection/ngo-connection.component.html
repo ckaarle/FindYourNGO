@@ -1,0 +1,33 @@
+<div *ngIf="apiService.ngoid.value === currentNgoId">
+  <form>
+    <mat-form-field appearance="outline">
+      <mat-label>NGO Name</mat-label>
+      <input type="text"
+           matInput
+           [formControl]="ngoControl"
+           [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
+        <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
+          {{ngo.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <button (click)="addNgo()" mat-button>Add NGO</button>
+  </form>
+  <h2>Connection Requests</h2>
+  <div class="connection-type-wrapper" *ngFor="let connection of incomingRequests">
+    <mat-card>{{ connection.name }}</mat-card>
+    <button mat-button (click)="addConnection(connection.id)">Accept Request</button>
+    <button mat-button (click)="removeConnection(connection.id)">Reject Request</button>
+  </div>
+  <h2>Sent Requests</h2>
+  <div class="connection-type-wrapper" *ngFor="let connection of outgoingRequests">
+    <mat-card>{{ connection.name }}</mat-card>
+    <button mat-button (click)="removeConnection(connection.id)">Cancel Request</button>
+  </div>
+</div>
+<h2>Connections</h2>
+<div class="connection-type-wrapper" *ngFor="let connection of connections">
+  <mat-card>{{ connection.name }}</mat-card>
+  <button mat-button (click)="removeConnection(connection.id)">Remove Connection</button>
+</div>

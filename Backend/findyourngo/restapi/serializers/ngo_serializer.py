@@ -169,3 +169,9 @@ class NgoSerializer(serializers.ModelSerializer):
         model = Ngo
         fields = ['id', 'name', 'acronym', 'aim', 'activities', 'branches', 'topics', 'accreditations', 'stats',
                   'contact', 'metaData', 'trustworthiness', 'amount']
+
+
+class NgoShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ngo
+        fields = ['id', 'name']
