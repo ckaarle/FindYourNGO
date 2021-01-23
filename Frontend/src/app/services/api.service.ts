@@ -1,7 +1,7 @@
 // Adapted from https://www.metaltoad.com/blog/angular-api-calls-django-authentication-jwt
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, interval, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +32,10 @@ export class ApiService {
     this.token = localStorage.getItem('token');
     const expiration = localStorage.getItem('token-expiration');
     if (this.token && expiration) {
-      if (Date.parse(expiration) < Date.now()) {
+      if (Date.parse(expiration) + 120000 < Date.now()) {
         this.refreshToken();
       }
-      console.log(localStorage.getItem('userid'));
+      interval(120000).subscribe(x => this.refreshToken());
       this.userid.next(Number(localStorage.getItem('userid')));
       this.username.next(localStorage.getItem('username') as string);
       const ngoid = Number(localStorage.getItem('ngoid'));
@@ -136,7 +136,6 @@ export class ApiService {
     // decode the token to read the username and expiration timestamp
     const tokenParts = this.token.split(/\./);
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
-    console.log(tokenDecoded);
     this.tokenExpires = new Date(tokenDecoded.exp * 1000);
     localStorage.setItem('token-expiration', String(this.tokenExpires));
     this.userid.next(tokenDecoded.user_id);
