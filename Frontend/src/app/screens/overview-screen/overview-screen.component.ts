@@ -13,6 +13,10 @@ import {ApiService} from '../../services/api.service';
 import {ActivatedRoute} from '@angular/router';
 import {Utils} from '../../services/utils';
 
+export interface FilteredNgosCount {
+  currentAmount: number;
+  totalAmount: number;
+}
 
 @Component({
   selector: 'app-overview-screen',
@@ -21,6 +25,7 @@ import {Utils} from '../../services/utils';
 })
 export class OverviewScreenComponent extends PaginationComponent implements OnInit, OnDestroy {
   overviewItems: NgoOverviewItem[] = [];
+  totalAmountOverviewItems: FilteredNgosCount = {currentAmount: 0, totalAmount: 0};
 
   filterOptions: NgoFilterOptions = {} as NgoFilterOptions;
   sortingOptions: string[] = [];
@@ -43,6 +48,10 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   getNgoOverviewItems(): void {
+    this.apiService.get('ngoOverviewItems/totalAmount').subscribe(data => {
+        this.totalAmountOverviewItems.totalAmount = data.count;
+    });
+
     if (this.filterActive) {
       this.filter.applyFilter(this.selectedFilters, this.selectedSorting).subscribe(data =>
             this.processPaginatedResults(data));
@@ -55,6 +64,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
     this.overviewItems = data.results;
+    this.totalAmountOverviewItems.currentAmount = data.count;
   }
 
   getNgoOverviewItemsForPageNumber(pageNumber: number): void {
