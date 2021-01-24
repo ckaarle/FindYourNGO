@@ -98,11 +98,6 @@ class Ngo(models.Model):
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
 
-class NgoAccount(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    ngo = models.ForeignKey(Ngo, on_delete=models.PROTECT)
-
-
 class NgoCommenter(models.Model): # TODO remove this entirely
     user_id = models.IntegerField()
     number_of_comments = models.IntegerField(default=0)
