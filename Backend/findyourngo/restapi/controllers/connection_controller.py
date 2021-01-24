@@ -94,15 +94,6 @@ def remove_connection(request) -> JsonResponse:
         return forbidden_response()
 
 
-def is_user_authorized(request) -> bool:
-    try:
-        if NgoAccount.objects.get(user=request.user.id):
-            return True
-        return False
-    except Exception:
-        return False
-
-
 def forbidden_response() -> JsonResponse:
     return JsonResponse({}, status=status.HTTP_403_FORBIDDEN)
 

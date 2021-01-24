@@ -5,8 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
 
-from findyourngo.restapi.controllers.connection_controller import is_user_authorized, forbidden_response,\
-    create_connection
+from findyourngo.restapi.controllers.connection_controller import forbidden_response, create_connection
 from findyourngo.restapi.models import NgoEvent, NgoEventCollaborator, NgoAccount
 from findyourngo.restapi.serializers.ngo_serializer import NgoEventSerializer
 
@@ -112,27 +111,26 @@ def accept_event(request) -> JsonResponse:
         collaborator_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
         event_id = request.query_params.get('event_id')
         event = NgoEvent.objects.get(id=event_id)
-        invitation = NgoEventCollaborator.objects.get(event=event, collaborator=collaborator_id)
+        invitation = NgoEventCollaborator.objects.get(event_id=event, collaborator=collaborator_id)
         if not invitation.pending:
             return JsonResponse({'error': 'Invitation already accepted'})
 
         invitation.pending = False
-        create_connection(collaborator_id, event.organizer)
+        invitation.save()
+        create_connection(collaborator_id, event.organizer_id)
         return JsonResponse({'success': 'Invitation accepted'})
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return JsonResponse({'error': 'Invitation could not be accepted'})
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def reject_event(request) -> JsonResponse:
-    collaborator_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, collaborator_id):
-        return forbidden_response()
-
-    event_id = request.query_params.get('event_id')
     try:
+        collaborator_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        event_id = request.query_params.get('event_id')
         event = NgoEvent.objects.get(id=event_id)
         invitation = NgoEventCollaborator.objects.get(event=event, collaborator=collaborator_id)
         invitation.delete()
