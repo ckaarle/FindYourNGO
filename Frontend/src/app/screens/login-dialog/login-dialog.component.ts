@@ -34,12 +34,9 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
               private authService: SocialAuthService,
               private apiService: ApiService) {
     this.isNgo = false;
-    this.apiService.get('names').subscribe((data: Names) => {
-      this.names = data.names;
-    });
-    this.$names = this.ngoControl.valueChanges.pipe(
-        startWith(''), map(value => this._filter(value))
-    );
+    this.apiService.get('names').subscribe((data: Names) =>
+      this.$names = this.ngoControl.valueChanges.pipe(startWith(''),
+          map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.updateQuery();

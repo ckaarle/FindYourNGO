@@ -10,6 +10,7 @@ import { NgoDetailItemComponent } from './components/ngo-detail-item/ngo-detail-
 import {NgoFilterComponent} from './components/ngo-filter/ngo-filter.component';
 import {NgoFilterSelectionComponent} from './components/ngo-filter-selection/ngo-filter-selection.component';
 import {NgoConnectionComponent} from './components/ngo-connection/ngo-connection.component';
+import {NgoEventComponent} from './components/ngo-event/ngo-event.component';
 import { MediaService } from './services/media.service';
 
 import {MatButtonModule} from '@angular/material/button';
@@ -85,6 +86,7 @@ import {AppRoutingModule} from './app-routing.module';
     NgoFilterSelectionComponent,
     NgoDetailItemComponent,
     NgoConnectionComponent,
+    NgoEventComponent,
     ValueTransformerPipe,
     TypeEvaluatorPipe,
     NgoRatingComponent,

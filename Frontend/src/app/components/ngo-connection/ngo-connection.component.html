@@ -29,5 +29,5 @@
 <h2>Connections</h2>
 <div class="connection-type-wrapper" *ngFor="let connection of connections">
   <mat-card>{{ connection.name }}</mat-card>
-  <button mat-button (click)="removeConnection(connection.id)">Remove Connection</button>
+  <button mat-button (click)="removeConnection(connection.id)" *ngIf="apiService.ngoid.value === currentNgoId">Remove Connection</button>
 </div>

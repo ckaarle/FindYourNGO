@@ -55,5 +55,12 @@ urlpatterns = [
     path('requests/outgoing', connection_controller.view_outgoing_pending_connections),
     path('connections/add/', connection_controller.add_connection),
     path('connections/remove/', connection_controller.remove_connection),
+    path('events', event_controller.view_events),
+    path('events/invitations', event_controller.view_invitations),
+    path('events/invite/', event_controller.invite_to_event),
+    path('events/create/', event_controller.create_event),
+    path('events/delete/', event_controller.delete_event),
+    path('events/accept/', event_controller.accept_event),
+    path('events/reject/', event_controller.reject_event),
 ]
 

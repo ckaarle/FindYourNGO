@@ -146,7 +146,7 @@ class NgoEvent(models.Model):
     end_date = models.DateField()
     organizer = models.ForeignKey(Ngo, null=True, on_delete=models.SET_NULL)
     description = models.CharField(max_length=200)
-    topics = models.CharField(max_length=200)
+    tags = models.CharField(max_length=200)
 
 
 class NgoEventCollaborator(models.Model):

@@ -32,7 +32,7 @@ export class ApiService {
     this.token = localStorage.getItem('token');
     const expiration = localStorage.getItem('token-expiration');
     if (this.token && expiration) {
-      if (Date.parse(expiration) + 120000 < Date.now()) {
+      if (Date.parse(expiration) - 120000 < Date.now()) {
         this.refreshToken();
       }
       interval(120000).subscribe(x => this.refreshToken());

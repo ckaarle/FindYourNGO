@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore, NgoReview
+    NgoStats, NgoTWScore, NgoReview, NgoEvent
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -175,3 +175,9 @@ class NgoShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ngo
         fields = ['id', 'name']
+
+
+class NgoEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NgoEvent
+        fields = ['id', 'name', 'start_date', 'end_date', 'organizer_id', 'description', 'tags']

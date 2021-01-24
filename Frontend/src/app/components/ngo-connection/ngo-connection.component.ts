@@ -25,11 +25,12 @@ export class NgoConnectionComponent {
     this.updateConnections();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
-          map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value)))));
+          map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value.toLowerCase()) && ngo.id !== this.currentNgoId))));
   }
 
   addNgo(): void {
     this.addConnection(this.ngoControl.value.id);
+    this.ngoControl.reset();
   }
 
   addConnection(id: number): void {

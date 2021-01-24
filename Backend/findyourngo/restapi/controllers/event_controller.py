@@ -3,67 +3,76 @@ from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import JSONParser
 
 from findyourngo.restapi.controllers.connection_controller import is_user_authorized, forbidden_response,\
     create_connection
-from findyourngo.restapi.models import NgoEvent, NgoEventCollaborator
+from findyourngo.restapi.models import NgoEvent, NgoEventCollaborator, NgoAccount
+from findyourngo.restapi.serializers.ngo_serializer import NgoEventSerializer
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_events(request) -> JsonResponse:
     collaborator_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, collaborator_id):
-        return forbidden_response()
-    return JsonResponse(NgoEvent.objects.filter(ngoeventcollaborator__collaborator=collaborator_id)
-                        .filter(ngoeventcollaborator__pending=False))
+    ngo_events = NgoEvent.objects.filter(
+        ngoeventcollaborator__collaborator_id=collaborator_id, ngoeventcollaborator__pending=False)
+    event_serializer = NgoEventSerializer(ngo_events, many=True)
+    return JsonResponse(event_serializer.data, safe=False)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_invitations(request) -> JsonResponse:
-    collaborator_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, collaborator_id):
+    try:
+        collaborator_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        ngo_events = NgoEvent.objects.filter(
+            ngoeventcollaborator__collaborator_id=collaborator_id, ngoeventcollaborator__pending=True)
+        event_serializer = NgoEventSerializer(ngo_events, many=True)
+        return JsonResponse(event_serializer.data, safe=False)
+    except:
         return forbidden_response()
-    return JsonResponse(NgoEvent.objects.filter(ngoeventcollaborator__collaborator=collaborator_id)
-                        .filter(ngoeventcollaborator__pending=True))
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_event(request) -> JsonResponse:
-    founder_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, founder_id):
-        return forbidden_response()
-
-    event_name = request.query_params.get('event_name')
-    current_date = datetime.now()
-    collaborators = request.query_params.get('collaborators')
-
     try:
-        event = NgoEvent.objects.create(name=event_name, date=current_date, organizer=founder_id)
-        NgoEventCollaborator.objects.create(event=event, collaborators=founder_id, pending=False)
+        founder_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        event_request = JSONParser().parse(request)
+
+        event_name = event_request['event_name']
+        start_date = event_request['start_date']
+        end_date = event_request['end_date']
+        if start_date is None:
+            start_date = end_date
+        if end_date is None:
+            end_date = start_date
+        description = event_request['description']
+        tags = event_request['tags']
+        collaborators = event_request['collaborators']
+
+        event = NgoEvent.objects.create(name=event_name, start_date=start_date, end_date=end_date,
+                                        organizer_id=founder_id, description=description, tags=tags)
+        NgoEventCollaborator.objects.create(event=event, collaborator_id=founder_id, pending=False)
 
         for collaborator_id in collaborators:
-            NgoEventCollaborator.objects.create(event=event, collaborators=collaborator_id)
+            NgoEventCollaborator.objects.create(event=event, collaborator_id=collaborator_id)
             create_connection(founder_id, collaborator_id)
 
         return JsonResponse({'success': 'Event created successfully'})
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return JsonResponse({'error': 'Event creation failed'})
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def delete_event(request) -> JsonResponse:
-    founder_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, founder_id):
-        return forbidden_response()
-
-    event_id = request.query_params.get('event_id')
-
     try:
+        founder_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        event_id = request.query_params.get('event_id')
         event = NgoEvent.objects.get(id=event_id)
         if founder_id != event.organizer:
             return forbidden_response()
@@ -78,18 +87,14 @@ def delete_event(request) -> JsonResponse:
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def invite_to_event(request) -> JsonResponse:
-    founder_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, founder_id):
-        return forbidden_response()
-
-    event_id = request.query_params.get('event_id')
-    collaborators = request.query_params.get('collaborators')
-
     try:
+        founder_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        event_id = request.query_params.get('event_id')
         event = NgoEvent.objects.get(id=event_id)
         if founder_id != event.organizer:
             return forbidden_response()
 
+        collaborators = request.query_params.get('collaborators')
         for collaborator_id in collaborators:
             NgoEventCollaborator.objects.create(event=event, collaborator=collaborator_id)
             create_connection(founder_id, collaborator_id)
@@ -103,12 +108,9 @@ def invite_to_event(request) -> JsonResponse:
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def accept_event(request) -> JsonResponse:
-    collaborator_id = request.query_params.get('collaborator_id')
-    if not is_user_authorized(request, collaborator_id):
-        return forbidden_response()
-
-    event_id = request.query_params.get('event_id')
     try:
+        collaborator_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
+        event_id = request.query_params.get('event_id')
         event = NgoEvent.objects.get(id=event_id)
         invitation = NgoEventCollaborator.objects.get(event=event, collaborator=collaborator_id)
         if not invitation.pending:

@@ -73,7 +73,9 @@
                 <mat-tab label="User Rating" *ngIf="ngoDetailItem">
                     <ngo-rating [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
                 </mat-tab>
-                <mat-tab label="Events"></mat-tab>
+                <mat-tab label="Events">
+                    <app-ngo-event [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
+                </mat-tab>
                 <mat-tab label="Connections">
                     <app-ngo-connection [currentNgoId]="ngoDetailItem.id"></app-ngo-connection>
                 </mat-tab>
