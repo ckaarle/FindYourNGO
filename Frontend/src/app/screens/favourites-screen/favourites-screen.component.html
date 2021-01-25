@@ -1,1 +1,7 @@
-<p>favourites-screen works!</p>
+<div class="card" *ngIf="!userLoggedIn">
+  <mat-card>
+    <mat-card-content>
+      <p>Favourites are only accessible for registered users. Please login first.</p>
+    </mat-card-content>
+  </mat-card>
+</div>
