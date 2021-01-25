@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {ApiService} from './api.service';
+import {NgoOverviewItem} from '../models/ngo';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class FavouriteService {
     return this.apiService.get('userFavourite', {ngoId: ngoId, userId: this.apiService.userid.getValue()});
   }
 
-  areUserFavourites(): Observable<number[]> {
+  areUserFavourites(): Observable<NgoOverviewItem[]> {
     if (this.apiService.userid.getValue() === '') {
       return of([]);
     }

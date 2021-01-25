@@ -119,8 +119,8 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
         result => {
           this.userFavourites = [];
 
-          for (const id of result){
-            this.userFavourites.push(id);
+          for (const ngoOverViewItem of result){
+            this.userFavourites.push(ngoOverViewItem.id);
           }
         });
 

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../../services/api.service';
 
 @Component({
   selector: 'app-favourites-screen',
@@ -7,7 +8,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class FavouritesScreenComponent implements OnInit {
 
-  constructor() {
+  constructor(apiService: ApiService) {
   }
 
   ngOnInit(): void {
