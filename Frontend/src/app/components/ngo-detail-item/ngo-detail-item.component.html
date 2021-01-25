@@ -4,7 +4,14 @@
 <div class="card">
   <mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
     <div class="ngo-header">
-      <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
+      <div>
+        <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
+        <span fxFlex></span>
+        <button mat-icon-button>
+          <mat-icon>favorite_outline</mat-icon>
+        </button>
+      </div>
+
       <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
       <div class="ngo-rating">
         <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
