@@ -132,7 +132,7 @@ class NgoFilter:
 
     def _sort(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
         sorting_option_value = sorting_option["keyToSort"]
-
+        print(f'SORTING OPTION {sorting_option_value}')
         if sorting_option_value == "name":
             query_set = self._sort_by_default_condition(query_set, sorting_option)
         elif sorting_option_value == "countries":
@@ -141,6 +141,8 @@ class NgoFilter:
             query_set = self._sort_by_default_condition(query_set, self._get_ngo_address_condition(sorting_option, "city"))
         elif sorting_option_value == "trustworthiness":
             query_set = self._sort_by_default_condition(query_set, self._get_trustworthiness_condition(sorting_option))
+        elif sorting_option_value == 'reviewNumber':
+            query_set = self._sort_by_ngo_number_of_reviews(sorting_option, query_set)
         else:
             query_set = self._sort_by_default_condition(query_set, sorting_option)
 
@@ -160,6 +162,9 @@ class NgoFilter:
     def _get_trustworthiness_condition(self, sorting_option: SortingOption) -> SortingOption:
         sorting_option["keyToSort"] = 'tw_score__total_tw_score'
         return sorting_option
+
+    def _sort_by_ngo_number_of_reviews(self, sorting_option: SortingOption, query_set: QuerySet) -> QuerySet:
+        return query_set.order_by(f'{"-" if sorting_option["orderToSort"] =="desc" else ""}number_of_reviews')
 
 
 

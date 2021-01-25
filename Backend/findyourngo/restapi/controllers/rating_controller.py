@@ -122,7 +122,10 @@ def review(request) -> JsonResponse:
             return JsonResponse({'error': 'Only own comments can be deleted.'})
 
         review.delete()
-        update_ngo_tw_score(Ngo.objects.get(pk=review.ngo.id))
+        ngo = Ngo.objects.get(pk=review.ngo.id)
+        ngo.number_of_reviews -= 1
+        ngo.save()
+        update_ngo_tw_score(ngo)
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -162,7 +165,8 @@ def save_new_review(review, user) -> JsonResponse:
             text=text,
             rating=rating,
         )
-
+        ngo.number_of_reviews += 1
+        ngo.save()
         update_ngo_tw_score(ngo)
         return JsonResponse(data={'message': 'Review was successfully stored.'}, status=status.HTTP_200_OK)
 
