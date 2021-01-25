@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 import {FavouriteService} from '../../services/favourite.service';
+import {Location} from '@angular/common';
 
 export interface NgoContentContainer {
   icon: string;
@@ -26,7 +27,15 @@ export class NgoDetailItemComponent implements OnInit {
 
   userFavourite: boolean = true;
 
-  constructor(private route: ActivatedRoute, public apiService: ApiService, private router: Router, private favouriteService: FavouriteService) {
+  pageBeforePaginated: boolean = true;
+
+  constructor(
+      private route: ActivatedRoute,
+      public apiService: ApiService,
+      private router: Router,
+      private favouriteService: FavouriteService,
+      private location: Location,
+      ) {
     let id = this.route.snapshot.paramMap.get('id');
     this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
       this.ngoDetailItem = data;
@@ -47,6 +56,11 @@ export class NgoDetailItemComponent implements OnInit {
     }
     if (filterSelection != null) {
       this.filterSelection = JSON.parse(filterSelection);
+    }
+
+    const pageBeforePaginated = this.route.snapshot.paramMap.get('pageBeforePaginated');
+    if (pageBeforePaginated != null) {
+      this.pageBeforePaginated = pageBeforePaginated.toLowerCase() === 'true';
     }
 
     // @ts-ignore
@@ -86,11 +100,16 @@ export class NgoDetailItemComponent implements OnInit {
   }
 
   back(): void {
-    this.router.navigate(['/overview', {
-      startPage: this.previousPageNumber,
-      filter: this.filter,
-      filterSelection: JSON.stringify(this.filterSelection)
-    }]);
+    if (this.pageBeforePaginated) {
+      this.router.navigate(['/overview', {
+        startPage: this.previousPageNumber,
+        filter: this.filter,
+        filterSelection: JSON.stringify(this.filterSelection)
+      }]);
+    }
+    else {
+      this.location.back();
+    }
   }
 
   toggleFavouriteStatus(): void {

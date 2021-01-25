@@ -197,6 +197,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       filter: this.filterActive,
       filterSelection: JSON.stringify(this.selectedFilters),
       sortingSelection: JSON.stringify(this.selectedSorting),
+      pageBeforePaginated: true,
     }]);
   }
 }
