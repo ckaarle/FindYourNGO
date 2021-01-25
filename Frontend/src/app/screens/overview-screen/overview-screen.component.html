@@ -22,7 +22,7 @@
        (click)="filterSelectionDrawer.close()">
     <ngo-overview-item [ngoOverviewItem]="overviewItem"
                        [editableRating]="false"
-                       [routerLink]="['/detailView', overviewItem.id]"></ngo-overview-item>
+                       (click)="showDetail(overviewItem)"></ngo-overview-item>
     <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
   </div>
   <div class="buttonBar">
