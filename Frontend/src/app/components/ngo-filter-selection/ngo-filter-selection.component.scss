@@ -30,4 +30,34 @@
         right: 0;
         margin: 32px;
     }
+
+    .sorting-option-item {
+        display: flex;
+        flex-direction: row;
+        padding: 0 10px;
+        align-items: center;
+        justify-content: space-between;
+
+        .sorting-label {
+            margin-top: 5px;
+        }
+
+        .mat-icon {
+            width: fit-content;
+            height: fit-content;
+            border-radius: 50%;
+            margin: 0 8px 0 24px;
+            cursor: pointer;
+            background-color: var(--primary-color);
+            color: var(--background-contrast-color);
+
+            &:hover {
+                background-color: var(--background-color);
+            }
+        }
+
+        .mat-form-field {
+            flex: 1 1;
+        }
+    }
 }

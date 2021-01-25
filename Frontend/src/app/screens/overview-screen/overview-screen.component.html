@@ -3,13 +3,18 @@
               fxFlex.xs="100%" fxFlex.sm="33%">
     <ngo-filter-selection [filterOptions]="filterOptions"
                           [filterSelection]="selectedFilters"
+                          [sortingOptions]="sortingOptions"
+                          [sortingSelection]="selectedSorting"
                           (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
   </mat-drawer>
 
   <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions"
+    <ngo-filter *ngIf="filterOptions || sortingOptions"
                 [filterOptions]="filterOptions"
                 [filterSelection]="selectedFilters"
+                [sortingOptions]="sortingOptions"
+                [sortingSelection]="selectedSorting"
+                [totalAmountOfNgos]="totalAmountOverviewItems"
                 (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
   </div>
 
@@ -18,7 +23,7 @@
        (click)="filterSelectionDrawer.close()">
     <ngo-overview-item [ngoOverviewItem]="overviewItem"
                        [editableRating]="false"
-                       [routerLink]="['/detailView', overviewItem.id]"></ngo-overview-item>
+                       (click)="showDetail(overviewItem)"></ngo-overview-item>
     <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
   </div>
   <div class="buttonBar">

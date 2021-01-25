@@ -10,6 +10,10 @@ from findyourngo.type_variables import TWScore
 
 class TWCalculator:
 
+    def __init__(self) -> None:
+        self._raw_score_min_value = RAW_SCORE_MIN_VALUE
+        self._raw_score_max_value = RAW_SCORE_MAX_VALUE
+
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
         return len(meta_data.info_source.all())
 
@@ -85,7 +89,7 @@ class TWCalculator:
         return self._round(score)
 
     def _restrict_to_allowed_score_range_base(self, base_raw_score: float) -> TWScore:
-        raw_score_scaled_around_zero = (base_raw_score - RAW_SCORE_MIN_VALUE) / (RAW_SCORE_MAX_VALUE - RAW_SCORE_MIN_VALUE)
+        raw_score_scaled_around_zero = (base_raw_score - self._raw_score_min_value) / (self._raw_score_max_value - self._raw_score_min_value)
         range_of_target_interval = TW_MAX_VALUE - TW_MIN_VALUE
 
         score = raw_score_scaled_around_zero * range_of_target_interval + TW_MIN_VALUE

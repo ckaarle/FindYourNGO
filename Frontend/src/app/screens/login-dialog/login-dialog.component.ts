@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
+import {Utils} from '../../services/utils';
 
 @Component({
   selector: 'app-login-dialog',
@@ -90,12 +91,6 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   checkNgo($event: MatCheckboxChange): void {
     this.isNgo = !this.isNgo;
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.names.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   updateQuery(): void {

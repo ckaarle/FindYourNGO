@@ -15,7 +15,7 @@
     margin-left: 8px;
 }
 
-.filter-option-item {
+.filter-option-item, .sorting-option-item {
     height: 50px;
     font-size: var(--font-size-small);
     background-color: var(--background-color);
@@ -27,7 +27,7 @@
         height: var(--font-size-medium);
         width: var(--font-size-medium);
         line-height: var(--font-size-medium);
-        padding-right: 8px;
+        margin-right: 8px;
         color: var(--primary-color);
     }
 
@@ -39,4 +39,29 @@
         width: var(--font-size-small) !important;
         height: var(--font-size-small) !important;
     }
+}
+
+.sorting-option-item {
+    .mat-icon {
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: var(--background-contrast-color);
+        padding: 1px 0 0 0;
+
+        &:hover {
+            background-color: var(--background-color);
+        }
+    }
+
+    .mat-form-field {
+        max-width: 100px;
+    }
+}
+
+.currently-filtered-items {
+    padding-top: 12px;
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    color: var(--background-contrast-color);
 }

@@ -42,11 +42,12 @@ urlpatterns = [
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
-    path('recalculateTW', views.recalculateTW, name='recalculateTW'),
-    url(r'^ngoOverviewItems', ngo_overview_controller.NgoOverviewItemList.as_view()),
+    url(r'^ngoOverviewItems$', ngo_overview_controller.NgoOverviewItemList.as_view()),
+    url(r'^ngoOverviewItems/totalAmount', ngo_overview_controller.ngo_overview_items_amount),
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
+    path('twUpdate', views.twUpdate),
     url(r'names', views.name_list),
     url('test/', views.TestView.as_view(), name='test'),
     path('connections/', connection_controller.view_connections),
@@ -62,5 +63,6 @@ urlpatterns = [
     path('events/delete/', event_controller.delete_event),
     path('events/accept/', event_controller.accept_event),
     path('events/reject/', event_controller.reject_event),
+    url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
 

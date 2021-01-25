@@ -42,6 +42,8 @@ In case of incompatible migrations / an out-of-date state of the database, it ca
 	- python manage.py makemigrations -- re-make initial migration
 	- python manage.py migrate -- apply the initial migration
 	
+	In case the DB complains that tables already exist, simply drop them manually.
+	
 
 In case this does not fix the problem, you can reset the entire database:
 - delete all model classes in models.py

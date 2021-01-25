@@ -9,7 +9,8 @@ from django.db import models
 # ManyToMany can be null by default, no need to explicitly declare it
 from django.db.models import UniqueConstraint
 
-from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_MIN_VALUE, TW_MAX_VALUE
+from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_MIN_VALUE, TW_MAX_VALUE, \
+    PAGERANK_MAX_BOOST
 
 
 class NgoBranch(models.Model):
@@ -78,6 +79,7 @@ class NgoTWScore(models.Model):
     number_data_sources_score = models.FloatField(default=1)
     credible_source_score = models.FloatField(default=0)
     ecosoc_score = models.FloatField(default=0)
+    pagerank_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(PAGERANK_MAX_BOOST)])
 
 
 class Ngo(models.Model):
@@ -103,14 +105,9 @@ class NgoAccount(models.Model):
     ngo = models.ForeignKey(Ngo, on_delete=models.PROTECT)
 
 
-class NgoCommenter(models.Model): # TODO remove this entirely
-    user_id = models.IntegerField()
-    number_of_comments = models.IntegerField(default=0)
-
-
 class NgoReview(models.Model):
     ngo = models.ForeignKey(Ngo, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(NgoCommenter, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     create_date = models.DateField()
     last_edited = models.DateField()
     text = models.TextField()

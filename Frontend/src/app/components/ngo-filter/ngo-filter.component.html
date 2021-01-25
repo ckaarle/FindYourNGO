@@ -1,42 +1,63 @@
 <div class="filter-options">
-    <mat-chip-list #chipList>
-        <button class="filter-select" (click)="openFilterSelection()" mat-icon-button>
-            <mat-icon>tune</mat-icon>
-        </button>
+  <mat-chip-list #chipList>
+    <button class="filter-select" (click)="openFilterSelection($event)" mat-icon-button>
+      <mat-icon>tune</mat-icon>
+    </button>
 
-        <div *ngFor="let filterOption of filterOptions | keyvalue;">
-            <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)" [removable]="true"
+    <mat-chip *ngIf="sortingSelection && sortingOptions" class="sorting-option-item">
+            <mat-icon *ngIf="sortingSelection.orderToSort === 'asc'" (click)="changeSorting(sortingSelection.keyToSort, 'desc')">arrow_circle_down</mat-icon>
+            <mat-icon *ngIf="sortingSelection.orderToSort === 'desc'" (click)="changeSorting(sortingSelection.keyToSort, 'asc')">arrow_circle_up</mat-icon>
+            <mat-form-field ngDefaultControl appearance="standard">
+                <mat-label>Sorted by ...</mat-label>
+                <mat-select [(ngModel)]="sortingSelection.keyToSort" (selectionChange)="changeSorting($event.value)">
+                    <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption">{{sortingOption}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+    </mat-chip>
+
+    <div *ngFor="let filterOption of filterOptions | keyvalue;">
+      <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)"
+                [removable]="true"
                 (removed)="removeValue(filterOption.key)">
-                <mat-icon>{{filterOption.value?.icon}}</mat-icon>
+        <mat-icon>{{filterOption.value?.icon}}</mat-icon>
 
-                <mat-form-field *ngIf="!(filterOption.value?.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
-                    <mat-label>{{filterOption.value?.displayName}}</mat-label>
+        <mat-form-field *ngIf="!(filterOption.value?.values | typeEvaluator: 'isBoolean')"
+                        ngDefaultControl appearance="standard">
+          <mat-label>{{filterOption.value?.displayName}}</mat-label>
 
-                    <input *ngIf="!(filterOption.value?.values)" matInput
-                        (input)="addValue(filterOption.key, $any($event.target).value)"
-                        placeholder="{{filterOption.value?.displayName}}"
-                        [value]="filterSelection[filterOption.key]"
-                        [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
-                        [min]="filterOption.key?.toString() == 'trustworthiness'? 0: undefined"
-                        [max]="filterOption.key?.toString() == 'trustworthiness'? 5: undefined"/>
+          <input *ngIf="!(filterOption.value?.values)" matInput
+                 (input)="addValue(filterOption.key, $any($event.target).value)"
+                 placeholder="{{filterOption.value?.displayName}}"
+                 [value]="filterSelection[filterOption.key]"
+                 [type]="filterOption.key?.toString() == 'trustworthiness'? 'number': 'text'"
+                 [min]="filterOption.key?.toString() == 'trustworthiness'? 0: undefined"
+                 [max]="filterOption.key?.toString() == 'trustworthiness'? 5: undefined"/>
 
-                    <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
-                        [(ngModel)]="filterSelection[filterOption.key]" (selectionChange)="addValue(filterOption.key, $event.value)">
-                        <mat-option *ngFor="let optionValue of filterOption.value?.values" [value]="optionValue">{{optionValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+          <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
+                      [(ngModel)]="filterSelection[filterOption.key]"
+                      (selectionChange)="addValue(filterOption.key, $event.value)">
+            <mat-option *ngFor="let optionValue of filterOption.value?.values"
+                        [value]="optionValue">{{optionValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-                <mat-checkbox *ngIf="filterOption.value?.values | typeEvaluator: 'isBoolean'"
-                    (change)="addValue(filterOption.key, $event.checked)" [checked]="filterSelection[filterOption.key]">
-                    {{filterOption.key}}</mat-checkbox>
+        <mat-checkbox *ngIf="filterOption.value?.values | typeEvaluator: 'isBoolean'"
+                      (change)="addValue(filterOption.key, $event.checked)"
+                      [checked]="filterSelection[filterOption.key]">
+          {{filterOption.key}}</mat-checkbox>
 
-                <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-        </div>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </div>
 
-        <button class="filter-apply" *ngIf="filterUpdated" (click)="applyFilter()" mat-icon-button>
-            <mat-icon>filter_list</mat-icon>
-        </button>
-    </mat-chip-list>
+    <button class="filter-apply" *ngIf="filterUpdated" (click)="applyFilter()" mat-icon-button>
+      <mat-icon>filter_list</mat-icon>
+    </button>
+  </mat-chip-list>
+
+  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount && totalAmountOfNgos.totalAmount !== totalAmountOfNgos.currentAmount"
+       class="currently-filtered-items">
+      {{totalAmountOfNgos.currentAmount}} of {{totalAmountOfNgos.totalAmount}} NGOs displayed.
+  </div>
 </div>

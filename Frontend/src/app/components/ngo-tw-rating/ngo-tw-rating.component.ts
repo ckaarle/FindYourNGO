@@ -8,19 +8,16 @@ import {RatingService} from '../../services/rating.service';
 })
 export class NgoTwRatingComponent implements OnInit {
 
-  totalTrustworthiness: number;
-  totalReviewNumber: number;
+  totalTrustworthiness: number = 0;
+  totalReviewNumber: number = 0;
   reviewNumberIndexedByRating: number[] = [];
 
   @Input() ngoId: number = 1;
-
-  NGO_ID = 2; // TODO remove later
 
   constructor(private ratingService: RatingService) {
   }
 
   ngOnInit(): void {
-    // const twRating = this.ratingService.getTwRating(this.ngoId).subscribe(rating => { TODO put back in
     this.ratingService.getTwRating(this.ngoId).subscribe(rating => {
       this.totalTrustworthiness = rating.totalTrustworthiness;
       this.totalReviewNumber = rating.totalReviewNumber;
@@ -29,6 +26,7 @@ export class NgoTwRatingComponent implements OnInit {
 
       if (sortedKeys.length > 0) {
         for (const key in sortedKeys) {
+          // @ts-ignore
           this.reviewNumberIndexedByRating.unshift(rating.reviewNumberByRating[(+key + 1).toString()]);
         }
       } else {

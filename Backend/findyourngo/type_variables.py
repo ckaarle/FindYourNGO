@@ -2,3 +2,4 @@
 
 TWScore = float
 
+SortingOption = {'keyToSort': str, 'orderToSort': str}
