@@ -21,7 +21,7 @@ export class NgoConnectionComponent {
   $allNgos: Observable<NgoOverviewItem[]>;
 
   constructor(public apiService: ApiService, private route: ActivatedRoute) {
-    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // This is a hack until ngodetail item does not return undefined
+    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
     this.updateConnections();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
