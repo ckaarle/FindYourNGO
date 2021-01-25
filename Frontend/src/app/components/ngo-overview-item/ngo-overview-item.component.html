@@ -3,8 +3,9 @@
     <mat-card-header>
       <mat-card-title>{{ngoOverviewItem.name}}</mat-card-title>
       <span fxFlex></span>
-      <button mat-icon-button>
-        <mat-icon>favorite</mat-icon>
+      <button mat-icon-button *ngIf="apiService.userid.getValue() != ''" (click)="toggleFavouriteStatus($event)">
+        <mat-icon *ngIf="!userFavourite">favorite_outlined</mat-icon>
+        <mat-icon *ngIf="userFavourite">favorite</mat-icon>
       </button>
       <mat-card-subtitle>{{ngoOverviewItem.acronym}}</mat-card-subtitle>
     </mat-card-header>

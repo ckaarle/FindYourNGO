@@ -7,8 +7,9 @@
       <div>
         <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
         <span fxFlex></span>
-        <button mat-icon-button>
-          <mat-icon>favorite_outline</mat-icon>
+        <button mat-icon-button *ngIf="apiService.userid.getValue() != ''" (click)="toggleFavouriteStatus()">
+          <mat-icon *ngIf="!userFavourite">favorite_outlined</mat-icon>
+          <mat-icon *ngIf="userFavourite">favorite</mat-icon>
         </button>
       </div>
 

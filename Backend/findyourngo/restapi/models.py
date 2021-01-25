@@ -127,4 +127,4 @@ class NgoPendingConnection(models.Model):
 
 class NgoFavourites(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    favourite_ngos = models.ManyToManyField(Ngo)
+    favourite_ngo = models.ManyToManyField(Ngo)

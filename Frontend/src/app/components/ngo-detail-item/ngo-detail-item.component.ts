@@ -3,6 +3,7 @@ import {NgoDetailItem, NgoFilterSelection} from 'src/app/models/ngo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
+import {FavouriteService} from '../../services/favourite.service';
 
 export interface NgoContentContainer {
   icon: string;
@@ -23,7 +24,9 @@ export class NgoDetailItemComponent implements OnInit {
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+  userFavourite: boolean = true;
+
+  constructor(private route: ActivatedRoute, public apiService: ApiService, private router: Router, private favouriteService: FavouriteService) {
     let id = this.route.snapshot.paramMap.get('id');
     this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
       this.ngoDetailItem = data;
@@ -45,6 +48,11 @@ export class NgoDetailItemComponent implements OnInit {
     if (filterSelection != null) {
       this.filterSelection = JSON.parse(filterSelection);
     }
+
+    // @ts-ignore
+    this.favouriteService.isUserFavourite(id).subscribe(result => {
+      this.userFavourite = result;
+    });
   }
 
   ngOnInit(): void {
@@ -83,5 +91,11 @@ export class NgoDetailItemComponent implements OnInit {
       filter: this.filter,
       filterSelection: JSON.stringify(this.filterSelection)
     }]);
+  }
+
+  toggleFavouriteStatus(): void {
+    this.favouriteService.setUserFavourite(!this.userFavourite, this.ngoDetailItem.id).subscribe(newStatus => {
+      this.userFavourite = newStatus;
+    });
   }
 }

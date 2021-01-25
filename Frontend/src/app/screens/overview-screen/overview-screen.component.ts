@@ -12,6 +12,7 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import {ApiService} from '../../services/api.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Utils} from '../../services/utils';
+import {FavouriteService} from '../../services/favourite.service';
 
 export interface FilteredNgosCount {
   currentAmount: number;
@@ -37,12 +38,15 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   initialized: boolean = false;
 
+  userFavourites: number[] = [];
+
   constructor(
       private filter: FilterService,
       protected paginationService: PaginationService,
       public apiService: ApiService,
       public route: ActivatedRoute,
       public router: Router,
+      private favouriteService: FavouriteService,
   ) {
     super();
     this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness'];
@@ -110,6 +114,16 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
+
+    this.favouriteService.areUserFavourites().subscribe(
+        result => {
+          this.userFavourites = [];
+
+          for (const id of result){
+            this.userFavourites.push(id);
+          }
+        });
+
     this.overviewItems = data.results;
     this.totalAmountOverviewItems.currentAmount = data.count;
   }

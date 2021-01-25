@@ -17,7 +17,7 @@ from django.urls import include, path
 from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller, favourite_controller
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -47,6 +47,8 @@ urlpatterns = [
     path('twUpdate', views.twUpdate),
     url(r'names', views.name_list),
     url('test/', views.TestView.as_view(), name='test'),
-    url(r'^userReviewPresent', rating_controller.user_review_present)
+    url(r'^userReviewPresent', rating_controller.user_review_present),
+    url(r'^userFavourite$', favourite_controller.user_favourite),
+    url(r'^userFavourites$', favourite_controller.user_favourites),
 ]
 
