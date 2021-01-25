@@ -42,7 +42,6 @@
 }
 
 .sorting-option-item {
-
     .mat-icon {
         cursor: pointer;
         border-radius: 50%;
@@ -58,5 +57,11 @@
     .mat-form-field {
         max-width: 100px;
     }
+}
 
+.currently-filtered-items {
+    padding-top: 12px;
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    color: var(--background-contrast-color);
 }
