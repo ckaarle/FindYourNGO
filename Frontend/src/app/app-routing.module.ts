@@ -8,12 +8,14 @@ import {OverviewScreenComponent} from './screens/overview-screen/overview-screen
 import {SearchScreenComponent} from './screens/search-screen/search-screen.component';
 import {NgoNewReviewComponent} from './components/ngo-new-review/ngo-new-review.component';
 import {NgoDetailItemComponent} from './components/ngo-detail-item/ngo-detail-item.component';
+import {UserScreenComponent} from './screens/user-screen/user-screen.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/overview', pathMatch: 'full'},
   {path: 'overview', component: OverviewScreenComponent, data: {title: 'Overview'}},
   {path: 'search', component: SearchScreenComponent, data: {title: 'Search'}},
   {path: 'favourites', component: FavouritesScreenComponent, data: {title: 'Favourites'}},
+  {path: 'user', component: UserScreenComponent, data: {title: 'User'}},
   {path: 'map', component: MapScreenComponent, data: {title: 'Map'}},
   {path: 'newReview/:ngoId', component: NgoNewReviewComponent},
   {path: 'detailView/:id', component: NgoDetailItemComponent}

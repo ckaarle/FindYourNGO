@@ -45,6 +45,7 @@ import { NgoReviewComponent } from './components/ngo-review/ngo-review.component
 import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.component';
 import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
 import {AppRoutingModule} from './app-routing.module';
+import { UserScreenComponent } from './screens/user-screen/user-screen.component';
 
 @NgModule({
   imports: [
@@ -91,6 +92,7 @@ import {AppRoutingModule} from './app-routing.module';
     NgoReviewComponent,
     NgoReviewsComponent,
     NgoNewReviewComponent,
+    UserScreenComponent,
   ],
   exports: [
     MatTabsModule,

@@ -1,10 +1,1 @@
 <p>favourites-screen works!</p>
-<button mat-raised-button (click)="openDialog()">Privileged Action</button>
-<button mat-raised-button (click)="apiService.signOut(); photoUrl=''">Sign Out</button>
-<div>
-  <img src="{{ photoUrl }}">
-  <h4>{{ apiService.userid?.value }}</h4>
-  <p>{{ apiService.username?.value }}</p>
-</div>
-<button (click)="postAllowed()" mat-button>Post Mine</button>
-<button (click)="postNotAllowed()" mat-button>Post Someone Else's</button>

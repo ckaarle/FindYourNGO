@@ -11,7 +11,7 @@ import {FilterService} from './services/filter.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  screens = [/*'Map', */'Overview', 'Favourites'];
+  screens = ['Overview', 'Favourites', 'User'];
   activeScreen = this.screens[0];
   currentTitle: string = 'Find your NGO';
 
@@ -56,6 +56,8 @@ export class AppComponent {
         return 'list';
       case 'Favourites':
         return 'star';
+      case 'User':
+        return 'star';
     }
     return '';
   }
@@ -70,6 +72,8 @@ export class AppComponent {
         return 'favourites';
       case 'Search':
         return 'search';
+      case 'User':
+        return 'user';
     }
     return '';
   }
