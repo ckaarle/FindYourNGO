@@ -28,7 +28,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   filterActive: boolean = false;
   selectedFilters: NgoFilterSelection = {};
-  selectedSorting: NgoSortingSelection = {} as NgoSortingSelection;
+  selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
 
   initialized: boolean = false;
 
