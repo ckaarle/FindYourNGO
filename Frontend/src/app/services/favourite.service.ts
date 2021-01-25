@@ -1,12 +1,14 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {ApiService} from './api.service';
-import {NgoOverviewItem} from '../models/ngo';
+import {NgoFavourite, NgoOverviewItem} from '../models/ngo';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FavouriteService {
+
+  public favouriteChanged: EventEmitter<NgoFavourite> = new EventEmitter<NgoFavourite>();
 
   constructor(private apiService: ApiService) {
   }
@@ -18,7 +20,7 @@ export class FavouriteService {
     return this.apiService.get('userFavourite', {ngoId: ngoId, userId: this.apiService.userid.getValue()});
   }
 
-  areUserFavourites(): Observable<NgoOverviewItem[]> {
+  getUserFavourites(): Observable<NgoOverviewItem[]> {
     if (this.apiService.userid.getValue() === '') {
       return of([]);
     }
@@ -27,5 +29,9 @@ export class FavouriteService {
 
   setUserFavourite(favourite: boolean, ngoId: number): Observable<boolean> {
     return this.apiService.post('userFavourite', {favourite: favourite}, {ngoId: ngoId, userId: this.apiService.userid.getValue()});
+  }
+
+  emit(favourite: NgoFavourite): void {
+    this.favouriteChanged.emit(favourite);
   }
 }

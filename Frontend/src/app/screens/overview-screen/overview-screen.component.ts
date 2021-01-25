@@ -115,7 +115,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
 
-    this.favouriteService.areUserFavourites().subscribe(
+    this.favouriteService.getUserFavourites().subscribe(
         result => {
           this.userFavourites = [];
 

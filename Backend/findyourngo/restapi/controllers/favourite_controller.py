@@ -39,8 +39,11 @@ def user_favourite(request) -> JsonResponse:
             try:
                 if len(NgoFavourites.objects.filter(user=user, favourite_ngo=ngo)) > 0:
                     return JsonResponse({'error': 'NGO already favourited.'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    ngo_favourite = NgoFavourites.objects.get(user=user)
+                except NgoFavourites.DoesNotExist:
+                    ngo_favourite = NgoFavourites.objects.create(user=user)
 
-                ngo_favourite = NgoFavourites.objects.create(user=user)
                 ngo_favourite.favourite_ngo.add(ngo)
                 ngo_favourite.save()
             except Exception as e:
@@ -48,8 +51,9 @@ def user_favourite(request) -> JsonResponse:
                 return JsonResponse({'error': 'NGO could not be favourited.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             try:
-                ngo_favourite = NgoFavourites.objects.get(favourite_ngo=ngo, user=user)
-                ngo_favourite.delete()
+                ngo_favourite = NgoFavourites.objects.get(user=user)
+                ngo_favourite.favourite_ngo.remove(ngo)
+                ngo_favourite.save()
             except:
                 return JsonResponse({'error': 'NGO could not be un-favourited.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -68,10 +72,9 @@ def user_favourites(request) -> JsonResponse:
 
         favourite_ngos = []
         for favourite in favourites:
-            for ngo in favourite.favourite_ngo.all():
+            for ngo in favourite.favourite_ngo.all().order_by('name'):
                 favourite_ngos.append(ngo)
 
-        print(f'FAVOURITE NGOS {favourite_ngos}')
         ngo_overview_item_serializer = NgoOverviewItemSerializer(favourite_ngos, many=True)
 
         return JsonResponse(ngo_overview_item_serializer.data, safe=False, status=status.HTTP_200_OK)
