@@ -20,8 +20,8 @@ export class NgoDetailItemComponent implements OnInit {
 
   previousPageNumber: null | number = null;
 
-  filter: boolean;
-  filterSelection: NgoFilterSelection;
+  filter: boolean = false;
+  filterSelection: NgoFilterSelection = {};
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
     let id = this.route.snapshot.paramMap.get('id');
