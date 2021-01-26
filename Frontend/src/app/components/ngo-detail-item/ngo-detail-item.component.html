@@ -14,9 +14,18 @@
         </button>
       </div>
 
-      <div class="ngo-header-button-wrapper">
-        <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
-
+      <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
+      <div>
+        <div class="ngo-rating">
+          <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
+                       [editable]="false"></star-rating>
+          <div class="rating-values">
+            <div
+                class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
+            <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
+          </div>
+        </div>
+        <span fxFlex></span>
         <div *ngIf="apiService.ngoid.value !== -1">
           <div *ngIf="$ngoRelation.value === 'self'">
             <button mat-button *ngIf="!editMode" (click)="startEditMode()">Edit Profile</button>
@@ -42,15 +51,7 @@
           </button>
         </div>
       </div>
-      <div class="ngo-rating">
-        <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
-                     [editable]="false"></star-rating>
-        <div class="rating-values">
-          <div
-              class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
-          <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
-        </div>
-      </div>
+
       <mat-divider></mat-divider>
     </div>
     <div class="ngo-content">
