@@ -34,6 +34,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+
 import {StarRatingComponent} from './components/star-rating/star-rating.component';
 import {ValueTransformerPipe} from './pipes/value-transformer.pipe';
 import {TypeEvaluatorPipe} from './pipes/type-evaluator.pipe';
@@ -48,6 +54,15 @@ import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.compon
 import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
 import {AppRoutingModule} from './app-routing.module';
 import { UserScreenComponent } from './screens/user-screen/user-screen.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { NgoEventOverviewComponent } from './components/ngo-event-overview/ngo-event-overview.component';
+
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  dayGridPlugin,
+  interactionPlugin,
+  timeGridPlugin,
+  listPlugin
+]);
 
 @NgModule({
   imports: [
@@ -72,7 +87,8 @@ import { UserScreenComponent } from './screens/user-screen/user-screen.component
     ReactiveFormsModule,
     FlexLayoutModule,
     AppRoutingModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    FullCalendarModule
   ],
   declarations: [
     OverviewScreenComponent,
@@ -97,6 +113,8 @@ import { UserScreenComponent } from './screens/user-screen/user-screen.component
     NgoReviewsComponent,
     NgoNewReviewComponent,
     UserScreenComponent,
+    CalendarComponent,
+    NgoEventOverviewComponent,
   ],
   exports: [
     MatTabsModule,

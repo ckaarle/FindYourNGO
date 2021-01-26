@@ -5,6 +5,7 @@ import {LoginDialogComponent} from '../login-dialog/login-dialog.component';
 import {FavouriteService} from '../../services/favourite.service';
 import {NgoFavourite, NgoOverviewItem} from '../../models/ngo';
 import {Router} from '@angular/router';
+import {CalendarComponent} from '../../components/calendar/calendar.component';
 
 @Component({
   selector: 'app-favourites-screen',
@@ -23,7 +24,7 @@ export class FavouritesScreenComponent implements OnInit {
       private dialog: MatDialog,
       private favouriteService: FavouriteService,
       private router: Router,
-      ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -65,7 +66,7 @@ export class FavouritesScreenComponent implements OnInit {
           result => {
             this.userFavourites = [];
 
-            for (const ngoOverViewItem of result){
+            for (const ngoOverViewItem of result) {
               this.userFavourites.push(ngoOverViewItem.id);
             }
           });
@@ -77,5 +78,9 @@ export class FavouritesScreenComponent implements OnInit {
     this.router.navigate(['/detailView', overviewItem.id, {
       pageBeforePaginated: false,
     }]);
+  }
+
+  openCalendar(): void {
+    this.dialog.open(CalendarComponent, {height: '700px', width: '800px'});
   }
 }

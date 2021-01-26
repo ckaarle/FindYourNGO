@@ -66,5 +66,6 @@ urlpatterns = [
     url(r'^userReviewPresent', rating_controller.user_review_present),
     url(r'^userFavourite$', favourite_controller.user_favourite),
     url(r'^userFavourites$', favourite_controller.user_favourites),
+    url(r'^userFavouriteEvents', favourite_controller.favourite_events),
 ]
 

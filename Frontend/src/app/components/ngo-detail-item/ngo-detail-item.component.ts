@@ -45,6 +45,7 @@ export class NgoDetailItemComponent {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
     this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
+    // @ts-ignore
     this.refreshNgoDetailItem(id);
 
     const pageBefore = this.route.snapshot.paramMap.get('currentPage');

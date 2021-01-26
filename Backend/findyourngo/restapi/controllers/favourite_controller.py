@@ -1,15 +1,18 @@
 from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 
-from findyourngo.restapi.models import NgoFavourites, Ngo
+from findyourngo.restapi.models import NgoFavourites, Ngo, NgoEvent, NgoEventCollaborator
 from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewItemSerializer
+from findyourngo.restapi.serializers.ngo_serializer import NgoEventSerializer
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def user_favourite(request) -> JsonResponse:
     user_id = request.query_params.get('userId')
 
@@ -60,6 +63,7 @@ def user_favourite(request) -> JsonResponse:
         return JsonResponse(favourite, safe=False, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def user_favourites(request) -> JsonResponse:
     user_id = request.query_params.get('userId')
 
@@ -81,3 +85,25 @@ def user_favourites(request) -> JsonResponse:
     except Exception as e:
         print(e)
         return JsonResponse([], safe=False)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def favourite_events(request) -> JsonResponse:
+    user_id = request.query_params.get('userId')
+
+    if request.user.id != int(user_id):
+        return JsonResponse({'error': 'Favourite events can only be accessed for oneself.'},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+    user = User.objects.get(pk=user_id)
+    favourite = NgoFavourites.objects.get(user=user)
+
+    relevant_ngos = favourite.favourite_ngo.all()
+
+    organized_events = NgoEvent.objects.filter(organizer__in=relevant_ngos)\
+        .union(NgoEvent.objects.filter(pk__in=NgoEventCollaborator.objects.filter(collaborator__in=relevant_ngos, pending=False).values('event'))).distinct()
+
+    serializer = NgoEventSerializer(organized_events, many=True)
+
+    return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)

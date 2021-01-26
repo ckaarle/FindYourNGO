@@ -104,8 +104,17 @@ export interface NgoConnection {
     connected_ngo_id: string;
 }
 
+export interface NgoShortItem {
+  id: number;
+  name: string;
+}
+
 export interface NgoEvent {
+    id: number;
     name: string;
-    date: Date;
-    organizer: NgoDetailItem;
+    start_date: Date;
+    end_date: Date;
+    organizer: NgoShortItem;
+    description: string;
+    tags: string;
 }
