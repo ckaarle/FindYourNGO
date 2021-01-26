@@ -14,14 +14,14 @@ export class FavouriteService {
   }
 
   isUserFavourite(ngoId: string | number): Observable<boolean> {
-    if (this.apiService.userid.getValue() === '') {
+    if (this.apiService.userid.getValue() < 0) {
       return of(false);
     }
     return this.apiService.get('userFavourite', {ngoId: ngoId, userId: this.apiService.userid.getValue()});
   }
 
   getUserFavourites(): Observable<NgoOverviewItem[]> {
-    if (this.apiService.userid.getValue() === '') {
+    if (this.apiService.userid.getValue() < 0) {
       return of([]);
     }
     return this.apiService.get('userFavourites', {userId: this.apiService.userid.getValue()});

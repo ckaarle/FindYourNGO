@@ -160,4 +160,3 @@ class NgoEventCollaborator(models.Model):
 class NgoFavourites(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favourite_ngo = models.ManyToManyField(Ngo)
-    favourite_ngo = models.ManyToManyField(Ngo)

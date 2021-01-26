@@ -10,6 +10,13 @@
   margin: 24px auto auto auto;
 }
 
+.ngo-header {
+  mat-divider {
+    position: relative;
+    margin: 16px 0 32px 0;
+  }
+}
+
 .ngo-detail-item {
 
   padding: 32px 32px 16px 32px;
@@ -18,12 +25,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .ngo-header {
-      mat-divider {
-        position: relative;
-        margin: 16px 0 32px 0;
-      }
-    }
   }
 
   .ngo-content {
@@ -93,4 +94,6 @@
 .invisible {
   background-color: white;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0), 0px 1px 1px 0px rgba(0, 0, 0, 0), 0px 1px 3px 0px rgba(0, 0, 0, 0);
+  margin-right: auto;
+  margin-bottom: 20px;
 }

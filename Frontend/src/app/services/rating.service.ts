@@ -31,7 +31,7 @@ export class RatingService {
     return this.apiService.get('review', {id: reviewId});
   }
 
-  getUserHasWrittenReviewForNgo(ngoId: number, userId: string): Observable<boolean> {
+  getUserHasWrittenReviewForNgo(ngoId: number, userId: number): Observable<boolean> {
     return this.apiService.get('userReviewPresent', {ngoId: ngoId, userId: userId});
   }
 }

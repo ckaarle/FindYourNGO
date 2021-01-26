@@ -42,15 +42,8 @@ export class NgoDetailItemComponent {
       private favouriteService: FavouriteService,
       private location: Location,
       ) {
-    let id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
-    
-    this.apiService.get('ngoDetailItem', {id: id}).subscribe(data => {
-      this.ngoDetailItem = data;
-      this.ngoDetailItem = Utils.mapDataToNgoDetailItem(this.ngoDetailItem);
-      this.generateContentContainers();
-    });
-    
     this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
     this.refreshNgoDetailItem(id);
 

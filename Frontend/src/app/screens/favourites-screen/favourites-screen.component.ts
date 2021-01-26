@@ -27,9 +27,9 @@ export class FavouritesScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userLoggedIn = this.apiService.userid.getValue() !== '';
-    this.apiService.userid.subscribe((id: string) => {
-      this.userLoggedIn = id !== '';
+    this.userLoggedIn = this.apiService.userid.getValue() >= 0;
+    this.apiService.userid.subscribe((id: number) => {
+      this.userLoggedIn = id >= 0;
 
       if (this.userLoggedIn) {
         this.load_favourite_ngos();
