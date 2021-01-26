@@ -99,3 +99,13 @@ export interface NgoFavourite {
   ngoId: number;
   favourite: boolean;
 }
+
+export interface NgoConnection {
+    connected_ngo_id: string;
+}
+
+export interface NgoEvent {
+    name: string;
+    date: Date;
+    organizer: NgoDetailItem;
+}

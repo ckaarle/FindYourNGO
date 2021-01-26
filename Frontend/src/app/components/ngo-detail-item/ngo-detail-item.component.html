@@ -3,28 +3,39 @@
     </div>
 <div class="card">
   <mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
-    <div class="ngo-header">
-      <div>
-        <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
-        <span fxFlex></span>
-        <button mat-icon-button *ngIf="apiService.userid.getValue() != ''" (click)="toggleFavouriteStatus()" class="invisible">
-          <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
-          <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
-        </button>
-      </div>
-
-      <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
-      <div class="ngo-rating">
-        <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
-                     [editable]="false"></star-rating>
-        <div class="rating-values">
-          <div
-              class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
-          <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
+    <div class="ngo-header-button-wrapper">
+            <div class="ngo-header">
+                <div>
+		       	 <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
+		        <span fxFlex></span>
+		        <button mat-icon-button *ngIf="apiService.userid.getValue() != ''" (click)="toggleFavouriteStatus()" class="invisible">
+		          <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
+		          <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
+		        </button>
+		      </div>
+		      
+                <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
+                <div class="ngo-rating">
+                    <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1" [editable]="false"></star-rating>
+                    <div class="rating-values">
+                        <div class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
+                        <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+            <div *ngIf="apiService.ngoid.value !== -1">
+                <div *ngIf="$ngoRelation.value === 'self'">
+                    <button mat-button *ngIf="!editMode" (click)="startEditMode()">Edit Profile</button>
+                    <button mat-button *ngIf="editMode" (click)="submit()">Save Profile</button>
+                </div>
+                <button mat-button *ngIf="$ngoRelation.value === 'none'" (click)="addConnection()">Send Connection Request</button>
+                <button mat-button *ngIf="$ngoRelation.value === 'requesting'" (click)="removeConnection()">Cancel Connection Request</button>
+                <button mat-button *ngIf="$ngoRelation.value === 'requested'" (click)="addConnection()">Accept Connection</button>
+                <button mat-button *ngIf="$ngoRelation.value === 'requested'" (click)="removeConnection()">Reject Connection</button>
+                <button mat-button *ngIf="$ngoRelation.value === 'connected'" (click)="removeConnection()">Break Up Connection</button>
+            </div>
         </div>
-      </div>
-      <mat-divider></mat-divider>
-    </div>
 
     <div class="ngo-content">
       <mat-tab-group mat-align-tabs="start">
@@ -36,16 +47,32 @@
                   *ngIf="containerHasValues(ngoContentContainer)">{{ngoContentContainer.icon}}</mat-icon>
               <div class="content-column" *ngIf="containerHasValues(ngoContentContainer)">
                 <div *ngFor="let ngoTitle of ngoContentContainer.values | keyvalue">
-                  <div class="title-row" *ngIf="titleRowHasValues($any(ngoTitle.value).values)">
-                    <span class="title">{{$any(ngoTitle.value).displayName}}</span>
-                    <span class="content">{{$any(ngoTitle.value).values}}</span>
-                  </div>
+                  <div *ngIf="$ngoId.value !== apiService.ngoid.value || !editMode; else editView">
+                            <div class="title-row" *ngIf="titleRowHasValues($any(ngoTitle.value).values)">
+                                <span class="title">{{$any(ngoTitle.value).displayName}}</span>
+                                <span class="content">{{$any(ngoTitle.value).values}}</span>
+                            </div>
+                        </div>
+                        <ng-template #editView>
+                            <form [formGroup]="ngoForm">
+                                <mat-form-field>
+                                    <mat-label>{{ngoTitle.value.displayName}}</mat-label>
+                                    <input matInput type="text" [formControlName]="ngoTitle.value.displayName">
+                                </mat-form-field>
+                            </form>
+                        </ng-template>
                 </div>
               </div>
             </div>
 
             <ngo-rating [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
           </div>
+        </mat-tab>
+        <mat-tab label="Events">
+            <app-ngo-event [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
+        </mat-tab>
+        <mat-tab label="Connections">
+            <app-ngo-connection [currentNgoId]="ngoDetailItem.id"></app-ngo-connection>
         </mat-tab>
       </mat-tab-group>
     </div>

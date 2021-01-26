@@ -35,12 +35,9 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
               private authService: SocialAuthService,
               private apiService: ApiService) {
     this.isNgo = false;
-    this.apiService.get('names').subscribe((data: Names) => {
-      this.names = data.names;
-    });
-    this.$names = this.ngoControl.valueChanges.pipe(
-        startWith(''), map(value => Utils.filter(value, this.names))
-    );
+    this.apiService.get('names').subscribe((data: Names) =>
+      this.$names = this.ngoControl.valueChanges.pipe(startWith(''),
+          map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.updateQuery();
@@ -48,8 +45,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
         this.apiService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
       }
     });
-    this.apiService.userid.subscribe((id: string) => {
-      if (id !== '') {  // The dialog is automatically closed if a user is signed in
+    this.apiService.userid.subscribe((id: number) => {
+      if (id !== -1) {  // The dialog is automatically closed if a user is signed in
         this.dialogRef.close(this.user?.photoUrl);  // and it returns the photo url if there is one
       }
     });
