@@ -50,6 +50,3 @@ urlpatterns = [
     url('test/', views.TestView.as_view(), name='test'),
     url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
-
-
-start_background_tasks()
