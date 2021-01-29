@@ -18,7 +18,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
 
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller, connection_controller, event_controller
 from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
