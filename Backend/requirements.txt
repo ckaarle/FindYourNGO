@@ -9,3 +9,4 @@ matplotlib
 pytest-django
 djangorestframework_simplejwt
 requests
+django-background-tasks

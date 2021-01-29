@@ -17,8 +17,9 @@ from django.urls import include, path
 from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller,\
-    rating_controller, connection_controller, event_controller
+
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
+from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -37,6 +38,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
+    path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
     url(r'idNames', ngo_controller.ngo_short_list),
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
@@ -65,4 +67,3 @@ urlpatterns = [
     path('events/reject/', event_controller.reject_event),
     url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
-
