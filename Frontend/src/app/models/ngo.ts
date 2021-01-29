@@ -93,3 +93,13 @@ export interface NgoSortingSelection {
 export interface Names {
     names: string[];
 }
+
+export interface NgoConnection {
+    connected_ngo_id: string;
+}
+
+export interface NgoEvent {
+    name: string;
+    date: Date;
+    organizer: NgoDetailItem;
+}

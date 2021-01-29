@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from findyourngo.data_import.data_importer import run_initial_data_import
-from findyourngo.data_import.db_sql_queries import delete_all_query
+from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoAccount
@@ -53,6 +53,13 @@ def clearDatabase(request):
     cursor.execute(delete_all_query)
     transaction.commit()
     return HttpResponse('Database has been cleared')
+
+
+def clearBackgroundTasks(request):
+    cursor = connection.cursor()
+    cursor.execute(delete_background_tasks_query)
+    transaction.commit()
+    return HttpResponse('Background tasks have been cleared')
 
 
 def twUpdate(request):
@@ -106,6 +113,12 @@ class FacebookView(APIView):
         return create_user(data, request.query_params.get('ngo_name'))
 
 
+class RefreshView(APIView):
+    def post(self, request):
+        refresh_token = RefreshToken(token=request.data.get('refresh_token'))
+        return Response({'access_token': str(refresh_token.access_token)})
+
+
 def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
@@ -129,7 +142,7 @@ def create_user(data, ngo_name, mode=None):
             user.username = data['username']
         else:
             user.username = data['email']
-        if data['password']:
+        if data.get('password'):
             user.password = make_password(data['password'])
         else:  # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
@@ -143,8 +156,15 @@ def create_user(data, ngo_name, mode=None):
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)
 
+    ngo_id = -1
+    try:
+        ngo_id = NgoAccount.objects.get(user=user).ngo_id
+    except Exception:
+        pass
+
     token = RefreshToken.for_user(user)  # generate token without username & password
     response = {'username': user.username,
+                'ngo_id': ngo_id,
                 'access_token': str(token.access_token),
                 'refresh_token': str(token),
                 }

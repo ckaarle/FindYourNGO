@@ -1,0 +1,23 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+}
+
+button, p {
+  margin-bottom: 10px;
+}
+
+.mat-card {
+  width: 180px;
+  margin-bottom: 4px;
+}
+
+.event-type-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.inv-button {
+  margin-left: 16px;
+}

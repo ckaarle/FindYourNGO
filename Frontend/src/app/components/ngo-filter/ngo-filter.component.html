@@ -14,6 +14,7 @@
                 </mat-select>
             </mat-form-field>
     </mat-chip>
+
     <div *ngFor="let filterOption of filterOptions | keyvalue;">
       <mat-chip class="filter-option-item" *ngIf="checkIfFilterSet(filterOption.key)"
                 [removable]="true"
@@ -54,4 +55,9 @@
       <mat-icon>filter_list</mat-icon>
     </button>
   </mat-chip-list>
+
+  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount && totalAmountOfNgos.totalAmount !== totalAmountOfNgos.currentAmount"
+       class="currently-filtered-items">
+      {{totalAmountOfNgos.currentAmount}} of {{totalAmountOfNgos.totalAmount}} NGOs displayed.
+  </div>
 </div>

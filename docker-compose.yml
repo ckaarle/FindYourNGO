@@ -13,7 +13,8 @@ services:
       - findyourngovolume:/var/lib/postgresql/data
   web:
     build: ./Backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py process_tasks &
+                      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./Backend:/code
     ports:

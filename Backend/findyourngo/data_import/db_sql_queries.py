@@ -21,3 +21,7 @@ delete_all_query = '''
     DELETE FROM restapi_ngostats;
     DELETE FROM restapi_ngotype;
 '''
+
+delete_background_tasks_query = '''
+    DELETE FROM background_task; 
+'''

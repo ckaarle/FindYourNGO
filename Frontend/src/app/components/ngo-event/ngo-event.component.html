@@ -1,0 +1,60 @@
+<div *ngIf="apiService.ngoid.value === currentNgoId">
+  <h2>Event Creation</h2>
+  <form [formGroup]="eventForm">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="event_name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <input matInput type="text" formControlName="description">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Start Date</mat-label>
+      <input matInput type="date" formControlName="start_date">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>End Date</mat-label>
+      <input matInput type="date" formControlName="end_date">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tags</mat-label>
+      <input matInput type="text" formControlName="tags">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>NGO Name</mat-label>
+        <input type="text"
+           matInput
+           [formControl]="ngoControl"
+           [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
+          <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
+            {{ ngo.name }}
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    <button mat-button (click)="addNgoToEvent()">Invite NGO</button>
+    <p>Currently invited: {{ inviteeNames }}</p>
+  </form>
+  <button mat-button (click)="createEvent()">Create Event</button>
+  <h2>Invitations</h2>
+  <div class="event-type-wrapper" *ngFor="let event of invitations">
+    <mat-card>{{ event.name }}</mat-card>
+    <button class="inv-button" mat-button (click)="acceptEvent(event.id)">Accept Invitation</button>
+    <button class="inv-button" mat-button (click)="rejectEvent(event.id)">Reject Invitation</button>
+  </div>
+</div>
+<h2>Current Events</h2>
+<mat-card *ngFor="let event of currentEvents">
+  <mat-card-header>
+    <mat-card-title>{{ event.name }}</mat-card-title>
+    <mat-card-subtitle>{{ event.start_date | date:'dd/MM/yyyy' }} - {{ event.end_date | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ event.description }}</p>
+  </mat-card-content>
+</mat-card>
+<h2>Past Events</h2>
+<div *ngFor="let event of pastEvents">
+  <mat-card>{{ event.name }}</mat-card>
+</div>

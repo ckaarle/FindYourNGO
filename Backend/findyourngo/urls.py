@@ -17,7 +17,9 @@ from django.urls import include, path
 from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
+
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, rating_controller
+from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -31,21 +33,37 @@ urlpatterns = [
     path('users/register/', views.RegisterView.as_view(), name='email'),
     path('google/', views.GoogleView.as_view(), name='google'),
     path('facebook/', views.FacebookView.as_view(), name='facebook'),
+    path('refresh/', views.RefreshView.as_view(), name='refresh'),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
+    path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
+    url(r'idNames', ngo_controller.ngo_short_list),
     url(r'^ngoDetailItem', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
-    url(r'^ngoOverviewItems', ngo_overview_controller.NgoOverviewItemList.as_view()),
+    url(r'^ngoOverviewItems$', ngo_overview_controller.NgoOverviewItemList.as_view()),
+    url(r'^ngoOverviewItems/totalAmount', ngo_overview_controller.ngo_overview_items_amount),
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
     path('twUpdate', views.twUpdate),
     url(r'names', views.name_list),
     url('test/', views.TestView.as_view(), name='test'),
+    path('connections/', connection_controller.view_connections),
+    path('connections/<int:requested_ngo>', connection_controller.view_connection_type),
+    path('requests/incoming', connection_controller.view_incoming_pending_connections),
+    path('requests/outgoing', connection_controller.view_outgoing_pending_connections),
+    path('connections/add/', connection_controller.add_connection),
+    path('connections/remove/', connection_controller.remove_connection),
+    path('events', event_controller.view_events),
+    path('events/invitations', event_controller.view_invitations),
+    path('events/invite/', event_controller.invite_to_event),
+    path('events/create/', event_controller.create_event),
+    path('events/delete/', event_controller.delete_event),
+    path('events/accept/', event_controller.accept_event),
+    path('events/reject/', event_controller.reject_event),
     url(r'^userReviewPresent', rating_controller.user_review_present)
 ]
-

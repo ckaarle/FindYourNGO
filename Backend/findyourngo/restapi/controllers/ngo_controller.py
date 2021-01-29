@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from findyourngo.restapi.models import Ngo
-from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
+from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -46,3 +46,9 @@ def ngo_detail(request):
         ngo.delete()
         return JsonResponse({'message': 'Ngo was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET'])
+def ngo_short_list(request):
+    ngos = Ngo.objects.all()
+    ngo_serializer = NgoShortSerializer(ngos, many=True)
+    return JsonResponse(ngo_serializer.data, safe=False)
