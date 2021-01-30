@@ -23,6 +23,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatMenuModule} from '@angular/material/menu';
 
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -47,6 +48,7 @@ import { NgoReviewComponent } from './components/ngo-review/ngo-review.component
 import { NgoReviewsComponent } from './components/ngo-reviews/ngo-reviews.component';
 import { NgoNewReviewComponent } from './components/ngo-new-review/ngo-new-review.component';
 import {AppRoutingModule} from './app-routing.module';
+import { UserOptionsComponent } from './components/user-options/user-options.component';
 
 @NgModule({
   imports: [
@@ -54,6 +56,7 @@ import {AppRoutingModule} from './app-routing.module';
     MatTabsModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatMenuModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
@@ -95,11 +98,13 @@ import {AppRoutingModule} from './app-routing.module';
     NgoReviewComponent,
     NgoReviewsComponent,
     NgoNewReviewComponent,
+    UserOptionsComponent
   ],
   exports: [
     MatTabsModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatMenuModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
@@ -114,7 +119,8 @@ import {AppRoutingModule} from './app-routing.module';
     MatProgressSpinnerModule,
     MatProgressBarModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UserOptionsComponent
   ],
   providers: [
     MediaService,
