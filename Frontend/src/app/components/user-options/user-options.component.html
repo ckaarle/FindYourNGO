@@ -1,0 +1,23 @@
+<div class="user-options-container">
+  <div>
+    <div class="user-options-button">
+      <img *ngIf="userService.user?.value?.photoUrl" [src]="userService.user?.value?.photoUrl">
+      <mat-icon class="logged-in" *ngIf="!userService.user?.value?.photoUrl && userService.userid?.value !== -1">account_circle</mat-icon>
+      <mat-icon class="logged-out" *ngIf="userService.userid?.value === -1">account_circle</mat-icon>
+    </div>
+    <div *ngIf="userService.userid?.value !== -1; then userLoggedIn else userNotLoggedIn"></div>
+    <ng-template #userNotLoggedIn>
+      <h4 class="user-options-description">Sign in to Find your NGO!</h4>
+    </ng-template>
+    <ng-template #userLoggedIn>
+      <h4 class="user-options-description" *ngIf="userService.ngoid?.value === -1">Find your NGO, <span class="user-options-name">{{ userService.username?.value !== ''? userService.username.value : userService.userid.value }}</span>!</h4>
+      <div class="user-options-description" *ngIf="userService.ngoid?.value !== -1">
+        <h4 class="user-options-ngo">Make your NGO visible, <span class="user-options-name">{{ userService.username?.value !== ''? userService.username.value : userService.userid.value }}</span>!</h4>
+        <a class="user-options-link" href="" (click)="showDetails()">Click here to edit your NGO.</a>
+      </div>
+    </ng-template>
+  </div>
+  <div *ngIf="userService.userid?.value !== -1; then userLoggedInAction else userNotLoggedInAction"></div>
+  <ng-template #userNotLoggedInAction><button class="user-options-action" (click)="openDialog()" mat-button>Sign In</button></ng-template>
+  <ng-template #userLoggedInAction><button class="user-options-action" (click)="userService.signOut()" mat-button>Sign Out</button></ng-template>
+</div>
