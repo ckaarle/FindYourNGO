@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
-import {Utils} from '../../services/utils';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -31,24 +31,36 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     password: new FormControl(''),
   });
 
-  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
-              private authService: SocialAuthService,
-              private apiService: ApiService) {
+  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private authService: SocialAuthService,
+              private apiService: ApiService, private userService: UserService) {
     this.isNgo = false;
+
     this.apiService.get('names').subscribe((data: Names) =>
       this.$names = this.ngoControl.valueChanges.pipe(startWith(''),
           map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
+
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.updateQuery();
       if (this.endpoint) {
-        this.apiService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
+        this.userService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
       }
     });
-    this.apiService.userid.subscribe((id: number) => {
-      if (id !== -1) {  // The dialog is automatically closed if a user is signed in
+
+    this.userService.user.subscribe((user: SocialUser) => {
+      this.user = user;
+    });
+
+    this.userService.userid.subscribe((id: number) => {
+     if (id !== -1) {  // The dialog is automatically closed if a user is signed in
         this.dialogRef.close(this.user?.photoUrl);  // and it returns the photo url if there is one
       }
+    });
+  }
+
+  ngOnInit(): void {
+    this.authService.authState.subscribe((user) => {
+      this.userService.user.next(user);
     });
   }
 
@@ -68,24 +80,13 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.endpoint = '';
-    this.signOut();
-  }
-
   submit(): void {
     if (this.status === 'register') {
       this.updateQuery();
-      this.apiService.register(this.userForm.value, this.query);
+      this.userService.register(this.userForm.value, this.query);
     }
     if (this.status === 'login') {
-      this.apiService.login(this.userForm.value);
+      this.userService.login(this.userForm.value);
     }
   }
 
@@ -109,5 +110,10 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     else {
       this.status = status;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.endpoint = '';
+    //this.signOut(); //Why do we signOut every time the component is destroyed (which is the case when we sign in or up)?
   }
 }
