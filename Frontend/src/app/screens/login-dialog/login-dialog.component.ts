@@ -114,6 +114,6 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.endpoint = '';
-    //this.signOut(); //Why do we signOut every time the component is destroyed (which is the case when we sign in or up)?
+    // this.signOut(); // Why do we signOut every time the component is destroyed (which is the case when we sign in or up)?
   }
 }

@@ -5,6 +5,7 @@ import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 import {BehaviorSubject} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
+import {UserService} from '../../services/user.service';
 
 export interface NgoContentContainer {
   icon: string;
@@ -29,7 +30,7 @@ export class NgoDetailItemComponent {
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+  constructor(private route: ActivatedRoute, private apiService: ApiService, public userService: UserService, private router: Router) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
     this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));

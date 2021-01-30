@@ -33,6 +33,6 @@ export class UserOptionsComponent implements OnInit, OnDestroy {
   }
 
   showDetails(): void {
-    this.router.navigate(['/detailView', this.userService.ngoid.value]);
+    this.router.navigate(['/detailView', this.userService.ngoid.value.toString()]); // this navigates to detail page and automatically redirects to overview page.. why?
   }
 }

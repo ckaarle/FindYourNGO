@@ -39,15 +39,15 @@ export class NgoRatingComponent implements OnInit {
     });
   }
 
-  private isOwnUserId(userId: string): boolean {
-    return userId !== '' && userId === this.userService.userid.getValue();
+  private isOwnUserId(userId: number): boolean {
+    return userId !== -1 && userId === this.userService.userid.getValue();
   }
 
   writeNewReview(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
 
-      if (this.userService.userid.getValue() === '') {
+      if (this.userService.userid.getValue() === -1) {
         console.log('User Login Dialog was exited. Aborting.');
         return;
       }
