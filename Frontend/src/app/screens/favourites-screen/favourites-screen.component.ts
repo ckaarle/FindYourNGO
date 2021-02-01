@@ -6,6 +6,7 @@ import {FavouriteService} from '../../services/favourite.service';
 import {NgoFavourite, NgoOverviewItem} from '../../models/ngo';
 import {Router} from '@angular/router';
 import {CalendarComponent} from '../../components/calendar/calendar.component';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-favourites-screen',
@@ -24,12 +25,13 @@ export class FavouritesScreenComponent implements OnInit {
       private dialog: MatDialog,
       private favouriteService: FavouriteService,
       private router: Router,
+      private userService: UserService
   ) {
   }
 
   ngOnInit(): void {
-    this.userLoggedIn = this.apiService.userid.getValue() >= 0;
-    this.apiService.userid.subscribe((id: number) => {
+    this.userLoggedIn = this.userService.userid.getValue() >= 0;
+    this.userService.userid.subscribe((id: number) => {
       this.userLoggedIn = id >= 0;
 
       if (this.userLoggedIn) {
@@ -60,11 +62,14 @@ export class FavouritesScreenComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(): void {
-    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
-    this.filter.editSelectedFilters({}, selectedSorting);
-    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
-        this.filter.displayFilteredNgoItems(data);
+  // ngOnDestroy(): void {
+  //   const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
+  //   this.filter.editSelectedFilters({}, selectedSorting);
+  //   this.filter.applyFilter({}, selectedSorting).subscribe(data => {
+  //     this.filter.displayFilteredNgoItems(data);
+  //   });
+  // }
+
   private load_favourite_ngos(): void {
     this.favouriteService.getUserFavourites().subscribe(ngos => {
       this.favouriteService.getUserFavourites().subscribe(
