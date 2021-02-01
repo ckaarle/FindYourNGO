@@ -132,7 +132,7 @@ class NgoFilter:
 
     def _sort(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
         sorting_option_value = sorting_option["keyToSort"]
-        print(f'SORTING OPTION {sorting_option_value}')
+        
         if sorting_option_value == "name":
             query_set = self._sort_by_default_condition(query_set, sorting_option)
         elif sorting_option_value == "countries":

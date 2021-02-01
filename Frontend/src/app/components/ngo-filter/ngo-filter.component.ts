@@ -48,7 +48,6 @@ export class NgoFilterComponent {
       return;
     }
 
-    console.log('OPENING FILTER');
     this.openFilterSelectionDrawer.emit(true);
   }
 
