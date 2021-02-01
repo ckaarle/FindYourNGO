@@ -1,6 +1,6 @@
 <div class="back-button">
     <button mat-button (click)="back()">Back</button>
-    </div>
+</div>
 <div class="card">
   <mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
     <div class="ngo-header-button-wrapper">
@@ -57,14 +57,14 @@
               </div>
             </div>
 
-            <ngo-rating [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
+            <ngo-rating *ngIf="ngoDetailItem" [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
           </div>
         </mat-tab>
         <mat-tab label="Events">
-            <app-ngo-event [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
+            <app-ngo-event *ngIf="ngoDetailItem" [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
         </mat-tab>
         <mat-tab label="Connections">
-            <app-ngo-connection [currentNgoId]="ngoDetailItem.id"></app-ngo-connection>
+            <app-ngo-connection *ngIf="ngoDetailItem" [currentNgoId]="ngoDetailItem.id"></app-ngo-connection>
         </mat-tab>
       </mat-tab-group>
     </div>
