@@ -4,7 +4,7 @@
       <mat-card-title>{{ngoOverviewItem.name}}</mat-card-title>
       <mat-card-subtitle>{{ngoOverviewItem.acronym}}</mat-card-subtitle>
 
-      <button mat-icon-button *ngIf="apiService.userid.getValue() >= 0"
+      <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
               (click)="toggleFavouriteStatus($event)" class="invisible">
         <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
         <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>

@@ -7,7 +7,7 @@
       <div>
         <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
         <span fxFlex></span>
-        <button mat-icon-button *ngIf="apiService.userid.getValue() >= 0"
+        <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
                 (click)="toggleFavouriteStatus()" class="invisible">
           <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
           <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
@@ -26,7 +26,7 @@
           </div>
         </div>
         <span fxFlex></span>
-        <div *ngIf="apiService.ngoid.value !== -1">
+        <div *ngIf="userService.ngoid.value !== -1">
           <div *ngIf="$ngoRelation.value === 'self'">
             <button mat-button *ngIf="!editMode" (click)="startEditMode()">Edit Profile</button>
             <button mat-button *ngIf="editMode" (click)="submit()">Save Profile</button>

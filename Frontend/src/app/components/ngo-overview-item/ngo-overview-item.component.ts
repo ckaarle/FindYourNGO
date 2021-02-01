@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgoFavourite, NgoOverviewItem} from '../../models/ngo';
-import {ApiService} from '../../services/api.service';
 import {FavouriteService} from '../../services/favourite.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'ngo-overview-item',
@@ -14,7 +14,7 @@ export class NgoOverviewItemComponent implements OnInit {
 
   @Input() userFavourite: boolean = true;
 
-  constructor(public apiService: ApiService, private favouriteService: FavouriteService) {
+  constructor(private favouriteService: FavouriteService, public userService: UserService) {
   }
 
   ngOnInit(): void {
