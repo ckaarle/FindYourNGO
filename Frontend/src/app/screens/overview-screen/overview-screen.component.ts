@@ -45,7 +45,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       public router: Router,
   ) {
     super();
-    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness'];
+    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness', '# Reviews'];
   }
 
   ngOnInit(): void {

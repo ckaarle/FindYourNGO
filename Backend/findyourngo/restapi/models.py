@@ -99,6 +99,8 @@ class Ngo(models.Model):
     meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT) # meta data should not be deleted if a ngo is referencing them (we need the data source)
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
+    number_of_reviews = models.IntegerField(default=0)
+
 
 class NgoAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
