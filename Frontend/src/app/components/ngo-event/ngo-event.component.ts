@@ -5,6 +5,7 @@ import {NgoOverviewItem} from '../../models/ngo';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {UserService} from '../../services/user.service';
 
 export interface NgoEvent {
   id: number;
@@ -39,7 +40,7 @@ export class NgoEventComponent {
     tags: new FormControl(null),
   });
 
-  constructor(public apiService: ApiService, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {
+  constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {
     this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
     this.updateEvents();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
