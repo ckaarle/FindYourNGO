@@ -181,3 +181,35 @@ class NgoEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = NgoEvent
         fields = ['id', 'name', 'start_date', 'end_date', 'organizer_id', 'description', 'tags']
+
+
+def update_ngo_instance(ngo: Ngo, ngo_update):
+    ngo.activities = ngo_update['activities']
+    ngo.aim = ngo_update['aim']
+
+    ngo_contact = NgoContact.objects.get(pk=ngo.contact_id)
+    ngo_contact.ngo_phone_number = ngo_update['ngoPhoneNumber']
+    ngo_contact.ngo_email = ngo_update['ngoEmail']
+    ngo_contact.website = ngo_update['website']
+    # TODO ngo_contact.representative = ngo_update['representative']
+    # TODO ngo_contact.address = ngo_update['address']
+    ngo_contact.save()
+
+    ngo_stats = NgoStats.objects.get(pk=ngo.stats_id)
+    ngo_stats.founding_year = ngo_update['foundingYear']
+    ngo_stats.staff_number = ngo_update['staffNumber']
+    ngo_stats.member_number = ngo_update['memberNumber']
+    ngo_stats.working_languages = ngo_update['workingLanguages']
+    ngo_stats.funding = ngo_update['funding']
+    # TODO ngo_stats.president = ngo_update['president']
+    ngo_stats.yearly_income = ngo_update['yearlyIncome']
+    ngo_stats.save()
+
+    # TODO how to handle many-to-many fields?
+    # accreditations
+    # branches
+    # typeOfOrganization
+    # topics
+    # workingLanguages
+
+    ngo.save()
