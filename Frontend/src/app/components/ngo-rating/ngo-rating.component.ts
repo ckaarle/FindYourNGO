@@ -5,6 +5,7 @@ import {ApiService} from '../../services/api.service';
 import {Router} from '@angular/router';
 import {LoginDialogComponent} from '../../screens/login-dialog/login-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'ngo-rating',
@@ -22,7 +23,7 @@ export class NgoRatingComponent implements OnInit {
   ownUserReview: TwReview = null;
   otherUserReviews: TwReview[] = [];
 
-  constructor(private ratingService: RatingService, private apiService: ApiService, private router: Router, public dialog: MatDialog) {
+  constructor(private ratingService: RatingService, private userService: UserService, private apiService: ApiService, private router: Router, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -39,19 +40,19 @@ export class NgoRatingComponent implements OnInit {
   }
 
   private isOwnUserId(userId: number): boolean {
-    return userId >= 0 && userId === this.apiService.userid.getValue();
+    return userId !== -1 && userId === this.userService.userid.getValue();
   }
 
   writeNewReview(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
 
-      if (this.apiService.userid.getValue() < 0) {
+      if (this.userService.userid.getValue() === -1) {
         console.log('User Login Dialog was exited. Aborting.');
         return;
       }
 
-      this.ratingService.getUserHasWrittenReviewForNgo(this.ngoId, this.apiService.userid.getValue()).subscribe(data => {
+      this.ratingService.getUserHasWrittenReviewForNgo(this.ngoId, this.userService.userid.getValue()).subscribe(data => {
         if (data) {
           // simply reload
           this.router.navigate(['/detailView', this.ngoId]).then(() => window.location.reload());

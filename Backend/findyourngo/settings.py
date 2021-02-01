@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'findyourngo.restapi',
     'corsheaders',
+    'background_task',
 ]
 
 MIDDLEWARE = [

@@ -6,6 +6,7 @@ import {Utils} from '../../services/utils';
 import {BehaviorSubject} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {FavouriteService} from '../../services/favourite.service';
+import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
 
 export interface NgoContentContainer {
@@ -41,6 +42,7 @@ export class NgoDetailItemComponent {
       private router: Router,
       private favouriteService: FavouriteService,
       private location: Location,
+      public userService: UserService
       ) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));

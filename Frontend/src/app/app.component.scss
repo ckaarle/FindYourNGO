@@ -19,6 +19,10 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
   }
 }
 
+.userOptions {
+    width: 250px;
+}
+
 .navbar {
   height: 80px;
   border: unset;
@@ -57,6 +61,42 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
         justify-content: space-around;
         overflow: hidden;
         height: 64px;
+      }
+    }
+
+    .user-options {
+      display: flex;
+      position: absolute;
+      right: 32px;
+
+      .user-options-button {
+        height: 40px;
+        width: 40px;
+        cursor: pointer;
+
+        img {
+          width: 40px;
+          border-radius: 50%;
+          box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
+        }
+
+        .logged-in, .logged-out {
+          color: whitesmoke;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          font-size: 40px;
+          border-radius: 50%;
+          box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
+        }
+
+        .logged-in {
+          background-color: var(--primary-color);
+        }
+
+        .logged-out {
+          background-color: lightgrey;
+        }
       }
     }
 

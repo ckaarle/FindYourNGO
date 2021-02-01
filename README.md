@@ -67,6 +67,15 @@ The data will then be persisted into this volume.
 Postgres in docker is mapped to port 5433 (not the default 5432, since this can clash with local installations of postgres). Open the database menu in PyCharm, click on '+', 'PostgreSQL', enter correct port, username (postgres) and password (postgres). Use the 'test connection' button to make sure it actually works.
 Alternatively, you can also connect via pgAdmin.
 
+### Django Background Tasks
+All tasks that have to be performed periodically (recalculation of TW, recalculation of PageRank, ...) are managed via the
+database-backed work queue 'Django Background Tasks'. This queue is processed by calling 'python manage.py process_tasks' 
+(this happens automatically by starting the tasks container).
+It is reset every time the server is restarted to avoid double processing of tasks. It can be reset manually by calling 
+localhost:8000/clearBackgroundTasks.
+The recalculation of the TW score and PageRank is performed hourly. 
+Additional background tasks should be initialized in background_tasks.py.
+Django Background Tasks Docs: https://django-background-tasks.readthedocs.io/
 
 ## Architecture
 

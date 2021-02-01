@@ -60,6 +60,11 @@ export class FavouritesScreenComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
+    this.filter.editSelectedFilters({}, selectedSorting);
+    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
+        this.filter.displayFilteredNgoItems(data);
   private load_favourite_ngos(): void {
     this.favouriteService.getUserFavourites().subscribe(ngos => {
       this.favouriteService.getUserFavourites().subscribe(

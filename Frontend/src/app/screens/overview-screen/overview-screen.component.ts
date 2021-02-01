@@ -49,7 +49,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       private favouriteService: FavouriteService,
   ) {
     super();
-    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness'];
+    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness', '# Reviews'];
   }
 
   ngOnInit(): void {
@@ -67,6 +67,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     if (!this.isNull(filter)) {
       // @ts-ignore
       this.filterActive = filter.toLowerCase() === 'true';
+      this.filter.filterActive = this.filterActive;
     }
     const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
     if (!this.isNull(filterSelection)) {
@@ -175,6 +176,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     }
     this.filter.selectedFiltersChanged.subscribe((selectedFilter: NgoFilterSelection) => {
       this.filterActive = selectedFilter !== {};
+      this.filter.filterActive = this.filterActive;
       this.selectedFilters = selectedFilter;
     });
   }
@@ -192,6 +194,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   showDetail(overviewItem: NgoOverviewItem): void {
+    console.log(this.selectedFilters);
     this.router.navigate(['/detailView', overviewItem.id, {
       currentPage: this.currentPageNumber,
       filter: this.filterActive,

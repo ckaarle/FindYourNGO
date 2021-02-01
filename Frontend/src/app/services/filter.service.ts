@@ -8,6 +8,7 @@ import {Utils} from './utils';
     providedIn: 'root'
 })
 export class FilterService {
+    filterActive: boolean = false;
     selectedFilters: NgoFilterSelection = {} as NgoFilterSelection;
     selectedSorting: NgoSortingSelection = {} as NgoSortingSelection;
     filteredNgoItems: NgoOverviewItemPagination = {} as NgoOverviewItemPagination;
