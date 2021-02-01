@@ -20,6 +20,7 @@ export class NgoOverviewItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
   toggleFavouriteStatus(event: MouseEvent): void {
     event.stopPropagation();
 

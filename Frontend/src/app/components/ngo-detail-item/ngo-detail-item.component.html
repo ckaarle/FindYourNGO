@@ -7,7 +7,7 @@
       <div>
         <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
         <span fxFlex></span>
-        <button mat-icon-button *ngIf="apiService.userid.getValue() != ''"
+        <button mat-icon-button *ngIf="apiService.userid.getValue() >= 0"
                 (click)="toggleFavouriteStatus()" class="invisible">
           <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
           <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
