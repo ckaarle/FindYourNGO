@@ -3,7 +3,7 @@ import {StarRatingComponent} from '../star-rating/star-rating.component';
 import {NewTwReview} from '../../models/ratings';
 import {RatingService} from '../../services/rating.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApiService} from '../../services/api.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'ngo-new-review',
@@ -23,7 +23,7 @@ export class NgoNewReviewComponent implements OnInit {
   // @ts-ignore
   @ViewChild('starRatingComponent') starRatingComponent: StarRatingComponent;
 
-  constructor(private ratingService: RatingService, private route: ActivatedRoute, private router: Router, private apiService: ApiService) {
+  constructor(private ratingService: RatingService, private route: ActivatedRoute, private router: Router, private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class NgoNewReviewComponent implements OnInit {
     const newReview: NewTwReview = {
       reviewId: this.reviewId,
       ngoId: this.ngoId,
-      userId: this.apiService.userid.getValue(),
+      userId: this.userService.userid.getValue(),
       rating: userRating,
       text: this.reviewText
     };
