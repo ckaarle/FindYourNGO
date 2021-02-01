@@ -47,6 +47,7 @@ export class Utils {
             id: ngoDetailItem.id,
             name: ngoDetailItem.name,
             acronym: ngoDetailItem.acronym,
+            metaData: ngoDetailItem.metaData,
             description: {
                 aim: {displayName: 'Description', values: ngoDetailItem.aim},
                 typeOfOrganization: {displayName: 'Organization type', values: ngoDetailItem.stats.typeOfOrganization},
@@ -77,6 +78,30 @@ export class Utils {
                 trustworthiness: {displayName: 'Trustworthiness', values: ngoDetailItem.trustworthiness},
                 amount: {displayName: 'Amount', values: ngoDetailItem.amount}
             }
+        };
+    }
+
+    static retrieveObjectKeyFromDetailItemDisplayName(editedNgo: any): any {
+        // @ts-ignore
+        return {
+            accreditations: editedNgo['Accreditations'],
+            activities: editedNgo['Activities'],
+            aim: editedNgo['Description'],
+            branches: editedNgo['Branches'],
+            address: editedNgo['Address'],
+            ngoEmail: editedNgo['Email'],
+            ngoPhoneNumber: editedNgo['Phone number'],
+            representative: editedNgo['Representative'],
+            website: editedNgo['Website'],
+            foundingYear: editedNgo['Founding year'],
+            funding: editedNgo['Funding'],
+            memberNumber: editedNgo['Member number'],
+            president: editedNgo['President'],
+            staffNumber: editedNgo['Staff number'],
+            typeOfOrganization: editedNgo['Organization type'],
+            workingLanguages: editedNgo['Working languages'],
+            yearlyIncome: editedNgo['Yearly income'],
+            topics: editedNgo['Topics']
         };
     }
 

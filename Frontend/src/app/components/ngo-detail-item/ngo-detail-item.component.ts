@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 
+
 export interface NgoContentContainer {
   icon: string;
   values: any;
@@ -127,9 +128,10 @@ export class NgoDetailItemComponent {
 
   submit(): void {
     this.editMode = false;
-    console.log(this.ngoForm.value);
-    this.apiService.put('ngoDetailItem', this.ngoForm.value).subscribe(
+    const editedNgo = Utils.retrieveObjectKeyFromDetailItemDisplayName(this.ngoForm.value);
+    this.apiService.put('ngoDetailItem/', editedNgo, {id: this.$ngoId.value}).subscribe(
         data => this.refreshNgoDetailItem(this.$ngoId.value.toString()));
+
   }
 
 }

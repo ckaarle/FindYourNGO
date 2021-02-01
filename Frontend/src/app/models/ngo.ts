@@ -4,6 +4,7 @@ export interface NgoDetailItem {
   id: number;
   name: string;
   acronym: string;
+  metaData: any;
   description: NgoDetailItemDescription;
   fieldOfActivity: NgoDetailItemFieldOfActivity;
   stats: NgoDetailItemStats;
