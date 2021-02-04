@@ -1,5 +1,3 @@
-from typing import Any
-
 from django.http.response import JsonResponse
 
 from rest_framework.parsers import JSONParser

@@ -157,3 +157,8 @@ class NgoEventCollaborator(models.Model):
         constraints = [
             UniqueConstraint(fields=['event', 'collaborator'], name='unique_collaboration'),
         ]
+
+
+class NgoFavourites(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    favourite_ngo = models.ManyToManyField(Ngo)

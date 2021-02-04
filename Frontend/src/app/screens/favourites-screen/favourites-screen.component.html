@@ -1,0 +1,31 @@
+<div class="card" *ngIf="!userLoggedIn">
+  <mat-card>
+    <mat-card-content>
+      <p>Favourites are only accessible for registered users. Please login first.</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="userLoggedIn">
+  <div>
+    <h1>My favourite NGOs</h1>
+    <span fxFlex></span>
+    <button mat-button (click)="openCalendar()" class="calendar-button">Upcoming Events</button>
+  </div>
+
+  <div *ngIf="overviewItems.length === 0">
+    <h4>None yet.</h4>
+  </div>
+
+  <div class="content" fxLayoutGap="16px grid" fxLayout="row wrap">
+    <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
+         *ngFor="let overviewItem of overviewItems">
+      <ngo-overview-item [ngoOverviewItem]="overviewItem"
+                         [editableRating]="false"
+                         [userFavourite]="userFavourites.includes(overviewItem.id)"
+                         (click)="showDetail(overviewItem)" class="pointer"></ngo-overview-item>
+
+    </div>
+  </div>
+</div>
+

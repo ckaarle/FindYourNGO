@@ -1,24 +1,31 @@
 <div class="ngo-overview-item">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>{{ngoOverviewItem.name}}</mat-card-title>
-            <mat-card-subtitle>{{ngoOverviewItem.acronym}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-            <div class="location">
-                <mat-icon *ngIf="ngoOverviewItem.city">location_on</mat-icon>
-                <div class="city" *ngIf="ngoOverviewItem.city">{{ngoOverviewItem.city}}</div>
-                <div class="city-unavailable" *ngIf="!ngoOverviewItem.city">No location available</div>
-            </div>
-            <div class="rating">
-                <star-rating
-                [value]="ngoOverviewItem.trustworthiness - 1"
-                [editable]="editableRating"></star-rating>
-                <div class="rating-values">
-                    <div class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness}}</div>
-                    <div class="rating-values-amount">( {{ngoOverviewItem.amount}} )</div>
-                </div>
-            </div>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ngoOverviewItem.name}}</mat-card-title>
+      <mat-card-subtitle>{{ngoOverviewItem.acronym}}</mat-card-subtitle>
+
+      <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
+              (click)="toggleFavouriteStatus($event)" class="invisible">
+        <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
+        <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
+      </button>
+
+    </mat-card-header>
+    <mat-card-content>
+      <div class="location">
+        <mat-icon *ngIf="ngoOverviewItem.city">location_on</mat-icon>
+        <div class="city" *ngIf="ngoOverviewItem.city">{{ngoOverviewItem.city}}</div>
+        <div class="city-unavailable" *ngIf="!ngoOverviewItem.city">No location available</div>
+      </div>
+      <div class="rating">
+        <star-rating
+            [value]="ngoOverviewItem.trustworthiness - 1"
+            [editable]="editableRating"></star-rating>
+        <div class="rating-values">
+          <div class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness}}</div>
+          <div class="rating-values-amount">( {{ngoOverviewItem.amount}} )</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -178,6 +178,8 @@ class NgoShortSerializer(serializers.ModelSerializer):
 
 
 class NgoEventSerializer(serializers.ModelSerializer):
+    organizer = NgoShortSerializer(read_only=True)
+
     class Meta:
         model = NgoEvent
-        fields = ['id', 'name', 'start_date', 'end_date', 'organizer_id', 'description', 'tags']
+        fields = ['id', 'name', 'start_date', 'end_date', 'organizer', 'description', 'tags']

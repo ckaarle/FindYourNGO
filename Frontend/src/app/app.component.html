@@ -54,8 +54,12 @@
         </mat-menu>
         <div class="user-options-button" [matMenuTriggerFor]="userOptions">
           <img *ngIf="userService.user?.value?.photoUrl" [src]="userService.user?.value?.photoUrl">
-          <mat-icon class="logged-in" *ngIf="!userService.user?.value?.photoUrl && userService.userid?.value !== -1">account_circle</mat-icon>
-          <mat-icon class="logged-out" *ngIf="userService.userid?.value === -1">account_circle</mat-icon>
+          <mat-icon class="logged-in"
+                    *ngIf="!userService.user?.value?.photoUrl && userService.userid?.value !== -1">
+            account_circle
+          </mat-icon>
+          <mat-icon class="logged-out" *ngIf="userService.userid?.value === -1">account_circle
+          </mat-icon>
         </div>
       </div>
 
