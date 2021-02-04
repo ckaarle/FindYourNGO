@@ -71,9 +71,18 @@
 
         <mat-select *ngIf="filterOption.values | typeEvaluator: 'isStringArray'" multiple
             [(ngModel)]="filterSelection[key]" (selectionChange)="addValue(key, $event.value)">
-            <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue">{{optionValue}}
-            </mat-option>
+            <div *ngIf="filterOption.displayName !== 'Cities'; else cityBlock">
+                <mat-option *ngFor="let optionValue of filterOption.values" [value]="optionValue">
+                    {{optionValue}}
+                </mat-option>
+            </div>
+            <ng-template #cityBlock>
+                <mat-option *ngFor="let optionValue of getAvailableCities()" [value]="optionValue">
+                    {{optionValue}}
+                </mat-option>
+            </ng-template>
         </mat-select>
+
     </mat-form-field>
 
     <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'" (change)="addValue(key, $event.checked)" [checked]="filterSelection[key]">{{key}}</mat-checkbox>

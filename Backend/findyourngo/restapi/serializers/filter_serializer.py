@@ -42,7 +42,9 @@ def hq_countries():
 
 
 def hq_cities():
-    hq_cities = list(map(lambda ngo_hq_address: ngo_hq_address['city'], NgoAddress.objects.all().order_by('city').values('city').distinct()))
+    hq_cities = []
+    for country in hq_countries():
+        hq_cities.append({country: list(map(lambda ngo_hq_address: ngo_hq_address['city'], NgoAddress.objects.filter(country=country).order_by('city').values('city').distinct()))})
     return hq_cities
 
 

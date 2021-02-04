@@ -76,7 +76,7 @@ export interface NgoFilterOptions {
   isCredible: { values: boolean, displayName?: string, icon?: string };
   trustworthiness: { values: number, displayName?: string, icon?: string };
   countries: { values: string[], displayName?: string, icon?: string };
-  cities: { values: string, displayName?: string, icon?: string };
+  cities: { values: {[index: string]: string[]}, displayName?: string, icon?: string };
   contactOptionPresent: { values: boolean, displayName?: string, icon?: string };
 
   [key: string]: any;
