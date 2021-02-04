@@ -6,13 +6,14 @@
     <div class="ngo-header">
       <div>
         <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
-        <span fxFlex></span>
-        <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
-                (click)="toggleFavouriteStatus()" class="invisible">
-          <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
-          <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
-        </button>
+<!--        <span fxFlex></span>-->
       </div>
+
+      <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
+              (click)="toggleFavouriteStatus()" class="invisible">
+        <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
+        <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
+      </button>
 
       <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
       <div>
