@@ -58,4 +58,31 @@ export class NgoFilterComponent {
       this.filterUpdated = false;
     });
   }
+
+  getAvailableCities(): string[] {
+    let result: string[] = [];
+    const cities = this.filterOptions.cities.values;
+    if (this.filterSelection.hasOwnProperty('countries')) {
+      for (const country of this.filterSelection.countries) {
+        for (const key in cities) {
+          if (cities[key][country]) {
+            result = result.concat(cities[key][country]);
+            break;
+          }
+        }
+      }
+    }
+    if (this.filterSelection.hasOwnProperty('cities')) {
+      const prevCities = this.filterSelection.cities;
+      for (const prevCity of prevCities) {
+        if (!result.includes(prevCity)) {
+          const index = prevCities.indexOf(prevCity, 0);
+          if (index > -1) {
+             prevCities.splice(index, 1);
+          }
+        }
+      }
+    }
+    return result.filter(str => str != null && str.length !== 0);
+  }
 }

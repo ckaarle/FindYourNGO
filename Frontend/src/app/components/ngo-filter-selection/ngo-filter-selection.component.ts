@@ -57,9 +57,13 @@ export class NgoFilterSelectionComponent {
       }
     }
     if (this.filterSelection.hasOwnProperty('cities')) {
-      for (const prevCity of this.filterSelection.cities) {
+      const prevCities = this.filterSelection.cities;
+      for (const prevCity of prevCities) {
         if (!result.includes(prevCity)) {
-          this.filterSelection.cities.pop(prevCity);
+          const index = prevCities.indexOf(prevCity, 0);
+          if (index > -1) {
+             prevCities.splice(index, 1);
+          }
         }
       }
     }

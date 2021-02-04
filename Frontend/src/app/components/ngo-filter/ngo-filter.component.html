@@ -34,11 +34,17 @@
                  [max]="filterOption.key?.toString() == 'trustworthiness'? 5: undefined"/>
 
           <mat-select *ngIf="filterOption.value?.values | typeEvaluator: 'isStringArray'" multiple
-                      [(ngModel)]="filterSelection[filterOption.key]"
-                      (selectionChange)="addValue(filterOption.key, $event.value)">
-            <mat-option *ngFor="let optionValue of filterOption.value?.values"
-                        [value]="optionValue">{{optionValue}}
-            </mat-option>
+            [(ngModel)]="filterSelection[filterOption.key]" (selectionChange)="addValue(filterOption.key, $event.value)">
+            <div *ngIf="filterOption.value?.displayName !== 'Cities'; else cityBlock">
+                <mat-option *ngFor="let optionValue of filterOption.value?.values" [value]="optionValue">
+                    {{optionValue}}
+                </mat-option>
+            </div>
+            <ng-template #cityBlock>
+                <mat-option *ngFor="let optionValue of getAvailableCities()" [value]="optionValue">
+                    {{optionValue}}
+                </mat-option>
+            </ng-template>
           </mat-select>
         </mat-form-field>
 
