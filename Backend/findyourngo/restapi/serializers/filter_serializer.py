@@ -13,7 +13,7 @@ def filter_object():
             'hasEcosoc': False,
             'isCredible': False,
             'countries': hq_countries(),
-            'cities': None,
+            'cities': hq_cities(),
             'contactOptionPresent': False,
             'typeOfOrganization': types_of_organization(),
             'workingLanguages': working_languages(),
@@ -41,6 +41,11 @@ def hq_countries():
     return hq_countries
 
 
+def hq_cities():
+    hq_cities = list(map(lambda ngo_hq_address: ngo_hq_address['city'], NgoAddress.objects.all().order_by('city').values('city').distinct()))
+    return hq_cities
+
+
 def types_of_organization():
     types_of_organization = list(map(lambda ngo_type: ngo_type['type'], NgoType.objects.all().order_by('type').values('type').distinct()))
     return types_of_organization
@@ -63,7 +68,7 @@ class FilterSerializer(serializers.Serializer):
     hasEcosoc = serializers.BooleanField(required=False)
     isCredible = serializers.BooleanField(required=False)
     countries = serializers.ListField(required=False)
-    cities = serializers.CharField(required=False)
+    cities = serializers.ListField(required=False)
     contactOptionPresent = serializers.BooleanField(required=False)
     typeOfOrganization = serializers.ListField(required=False)
     workingLanguages = serializers.ListField(required=False)
