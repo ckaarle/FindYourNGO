@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from findyourngo.filtering.filter_util import FilterConfig
-from findyourngo.restapi.models import NgoTopic, NgoBranch, NgoAddress, NgoType, NgoStats
+from findyourngo.restapi.models import NgoTopic, NgoType, NgoStats, NgoCountry
 
 
 def filter_object():
@@ -9,6 +9,7 @@ def filter_object():
             'name': None,
             'branches': branches(),
             'regions': regions(),
+            'sub_regions': sub_regions(),
             'topics': topics(),
             'hasEcosoc': False,
             'isCredible': False,
@@ -23,12 +24,20 @@ def filter_object():
 
 
 def branches():
-    branches = list(map(lambda ngo_branch: ngo_branch['country'], NgoBranch.objects.all().order_by('country').values('country').distinct()))
+    branches = list(map(lambda ngo_country: ngo_country['name'], NgoCountry.objects.filter(ngobranch__isnull=False).order_by('name').values('name').distinct()))
     return branches
 
 
 def regions():
-    return ["Africa", "Asia", "Europe"]
+    regions = list(map(lambda ngo_country: ngo_country['region'], NgoCountry.objects.all().order_by('region').values('region').distinct()))
+    return regions
+
+
+def sub_regions():
+    sub_regions = []
+    for region in regions():
+        sub_regions.append({region: list(map(lambda ngo_country: ngo_country['sub_region'], NgoCountry.objects.filter(region=region).order_by('sub_region').values('sub_region').distinct()))})
+    return sub_regions
 
 
 def topics():
@@ -37,7 +46,7 @@ def topics():
 
 
 def hq_countries():
-    hq_countries = list(map(lambda ngo_hq_address: ngo_hq_address['country'], NgoAddress.objects.all().order_by('country').values('country').distinct()))
+    hq_countries = list(map(lambda ngo_hq_address: ngo_hq_address['name'], NgoCountry.objects.filter(ngoaddress__isnull=False).order_by('name').values('name').distinct()))
     return hq_countries
 
 

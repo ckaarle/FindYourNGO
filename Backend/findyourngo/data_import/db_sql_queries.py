@@ -20,6 +20,7 @@ delete_all_query = '''
     DELETE FROM restapi_ngostats_type_of_organization;
     DELETE FROM restapi_ngostats;
     DELETE FROM restapi_ngotype;
+    DELETE FROM restapi_ngocountry;
 '''
 
 delete_background_tasks_query = '''
