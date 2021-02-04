@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FilterService} from '../../services/filter.service';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from '../../screens/login-dialog/login-dialog.component';
@@ -20,7 +20,7 @@ export class UserOptionsComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(LoginDialogComponent);
+    this.dialog.open(LoginDialogComponent);
   }
 
   showDetails(): void {
@@ -29,6 +29,6 @@ export class UserOptionsComponent implements OnInit {
       filter: this.filter.filterActive,
       filterSelection: JSON.stringify(this.filter.selectedFilters),
       sortingSelection: JSON.stringify(this.filter.selectedSorting),
-    }]); // this navigates to detail page and automatically redirects to overview page.. why?
+    }]);
   }
 }
