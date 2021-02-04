@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from '../login-dialog/login-dialog.component';
@@ -14,7 +14,7 @@ import {FilterService} from '../../services/filter.service';
   templateUrl: './favourites-screen.component.html',
   styleUrls: ['./favourites-screen.component.scss']
 })
-export class FavouritesScreenComponent implements OnInit {
+export class FavouritesScreenComponent implements OnInit, OnDestroy {
 
   overviewItems: NgoOverviewItem[] = [];
   userFavourites: number[] = [];
@@ -74,14 +74,8 @@ export class FavouritesScreenComponent implements OnInit {
 
   private load_favourite_ngos(): void {
     this.favouriteService.getUserFavourites().subscribe(ngos => {
-      this.favouriteService.getUserFavourites().subscribe(
-          result => {
-            this.userFavourites = [];
-
-            for (const ngoOverViewItem of result) {
-              this.userFavourites.push(ngoOverViewItem.id);
-            }
-          });
+      this.userFavourites = [];
+      ngos.map(ngoOverViewItem => this.userFavourites.push(ngoOverViewItem.id));
       this.overviewItems = ngos;
     });
   }

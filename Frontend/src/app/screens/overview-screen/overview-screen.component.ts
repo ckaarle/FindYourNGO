@@ -119,10 +119,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.favouriteService.getUserFavourites().subscribe(
         result => {
           this.userFavourites = [];
-
-          for (const ngoOverViewItem of result){
-            this.userFavourites.push(ngoOverViewItem.id);
-          }
+          result.map(ngoOverviewItem => this.userFavourites.push(ngoOverviewItem.id));
         });
 
     this.overviewItems = data.results;

@@ -1,25 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {CalendarOptions, DateSelectArg, EventClickArg, EventInput, FullCalendarComponent} from '@fullcalendar/angular';
+import {Component, ViewChild} from '@angular/core';
+import {CalendarOptions, EventClickArg, EventInput, FullCalendarComponent} from '@fullcalendar/angular';
 import {FavouriteService} from '../../services/favourite.service';
 import {NgoEvent} from '../../models/ngo';
 import {MatDialog} from '@angular/material/dialog';
 import {NgoEventOverviewComponent} from '../ngo-event-overview/ngo-event-overview.component';
 
-let eventGuid = 0;
-const TODAY_STR = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-
-export const INITIAL_EVENTS: EventInput[] = [
-  {
-    id: '0',
-    title: 'All-day event',
-    start: TODAY_STR
-  },
-  {
-    id: '1',
-    title: 'Timed event',
-    start: TODAY_STR + 'T12:00:00'
-  }
-];
 
 @Component({
   selector: 'app-calendar',
