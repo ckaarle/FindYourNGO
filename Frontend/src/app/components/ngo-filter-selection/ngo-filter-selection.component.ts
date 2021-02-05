@@ -15,7 +15,7 @@ export class NgoFilterSelectionComponent {
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
-  hqDetails: string[] = ['cities', 'countries', 'workingLanguages', 'contactOptionPresent'];
+  hqDetails: string[] = ['countries', 'cities', 'workingLanguages', 'contactOptionPresent'];
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
 
   constructor(private filter: FilterService) { }
@@ -41,5 +41,9 @@ export class NgoFilterSelectionComponent {
     this.filter.applyFilter(this.filterSelection, this.sortingSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
     });
+  }
+
+  getAvailableCities(): string[] {
+    return this.filter.getAvailableCities(this.filterOptions.cities.values, this.filterSelection);
   }
 }

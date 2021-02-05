@@ -58,4 +58,8 @@ export class NgoFilterComponent {
       this.filterUpdated = false;
     });
   }
+
+  getAvailableCities(): string[] {
+    return this.filter.getAvailableCities(this.filterOptions.cities.values, this.filterSelection);
+  }
 }
