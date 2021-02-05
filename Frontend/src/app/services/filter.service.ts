@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {NgoFilterSelection, NgoOverviewItemPagination, NgoSortingSelection} from '../models/ngo';
+import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItemPagination, NgoSortingSelection} from '../models/ngo';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Utils} from './utils';
@@ -54,4 +54,30 @@ export class FilterService {
                 sorting_selection: encodeURIComponent(JSON.stringify(tempSortingSelection)),
                 page: pageNumber});
     }
+
+    public getAvailableCities(cities: {[index: string]: string[]}, filterSelection: NgoFilterSelection ): string[] {
+    let result: string[] = [];
+    if (filterSelection.hasOwnProperty('countries')) {
+      for (const country of filterSelection.countries) {
+        for (const key in cities) {
+          if (cities[key][country]) {
+            result = result.concat(cities[key][country]);
+            break;
+          }
+        }
+      }
+    }
+    if (filterSelection.hasOwnProperty('cities')) {
+      const prevCities = filterSelection.cities;
+      for (const prevCity of prevCities) {
+        if (!result.includes(prevCity)) {
+          const index = prevCities.indexOf(prevCity, 0);
+          if (index > -1) {
+             prevCities.splice(index, 1);
+          }
+        }
+      }
+    }
+    return result.filter(str => str != null && str.length !== 0);
+  }
 }
