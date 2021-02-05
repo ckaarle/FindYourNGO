@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NgoDetailItem, NgoFilterSelection} from 'src/app/models/ngo';
+import {NgoDetailItem, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
@@ -31,6 +31,7 @@ export class NgoDetailItemComponent {
 
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
+  sortingSelection: NgoSortingSelection = {};
 
   userFavourite: boolean = true;
 
@@ -63,6 +64,12 @@ export class NgoDetailItemComponent {
     }
     if (filterSelection != null) {
       this.filterSelection = JSON.parse(filterSelection);
+    }
+
+    const sortingSelection = this.route.snapshot.paramMap.get('sortingSelection');
+
+    if (sortingSelection != null) {
+      this.sortingSelection = JSON.parse(sortingSelection);
     }
 
     const pageBeforePaginated = this.route.snapshot.paramMap.get('pageBeforePaginated');
@@ -117,7 +124,8 @@ export class NgoDetailItemComponent {
       this.router.navigate(['/overview', {
         startPage: this.previousPageNumber,
         filter: this.filter,
-        filterSelection: JSON.stringify(this.filterSelection)
+        filterSelection: JSON.stringify(this.filterSelection),
+        sortingSelection: JSON.stringify(this.sortingSelection)
       }]);
     }
     else {
