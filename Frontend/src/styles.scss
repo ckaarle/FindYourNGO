@@ -42,7 +42,7 @@ $custom-typography: mat-typography-config(
     $font-family: "Roboto, Helvetiva Neue, sans-serif",
     $headline: mat-typography-level(var(--font-size-big), var(--line-height-big), 500), //h1
     $title: mat-typography-level(var(--font-size-medium), var(--line-height-medium), 500), //h2
-    $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300), //text-body
+    $body-1: mat-typography-level(var(--font-size-normal), var(--line-size-normal), 300) //text-body
 );
 
 @include mat-core($custom-typography);
