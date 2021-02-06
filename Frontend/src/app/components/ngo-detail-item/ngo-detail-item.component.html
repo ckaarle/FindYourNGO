@@ -6,13 +6,12 @@
     <div class="ngo-header">
       <div>
         <h1>{{ngoDetailItem ? ngoDetailItem.name : ''}}</h1>
-<!--        <span fxFlex></span>-->
       </div>
 
       <button mat-icon-button *ngIf="userService.userid.getValue() >= 0"
-              (click)="toggleFavouriteStatus()" class="invisible">
-        <mat-icon *ngIf="!userFavourite" class="icon">favorite_outlined</mat-icon>
-        <mat-icon *ngIf="userFavourite" class="icon">favorite</mat-icon>
+              (click)="toggleFavouriteStatus()" class="invisible favourites-button">
+        <mat-icon *ngIf="!userFavourite" class="favourites-icon">favorite_outlined</mat-icon>
+        <mat-icon *ngIf="userFavourite" class="favourites-icon">favorite</mat-icon>
       </button>
 
       <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
@@ -28,27 +27,14 @@
         </div>
         <span fxFlex></span>
         <div *ngIf="userService.ngoid.value !== -1">
-          <div *ngIf="$ngoRelation.value === 'self'">
-            <button mat-button *ngIf="!editMode" (click)="startEditMode()">Edit Profile</button>
-            <button mat-button *ngIf="editMode" (click)="submit()">Save Profile</button>
-          </div>
-          <button mat-button *ngIf="$ngoRelation.value === 'none'" (click)="addConnection()">Send
-            Connection Request
-          </button>
-          <button mat-button *ngIf="$ngoRelation.value === 'requesting'"
-                  (click)="removeConnection()">
-            Cancel Connection Request
-          </button>
-          <button mat-button *ngIf="$ngoRelation.value === 'requested'" (click)="addConnection()">
-            Accept Connection
-          </button>
-          <button mat-button *ngIf="$ngoRelation.value === 'requested'"
-                  (click)="removeConnection()">
-            Reject Connection
-          </button>
-          <button mat-button *ngIf="$ngoRelation.value === 'connected'"
-                  (click)="removeConnection()">
-            Break Up Connection
+          <button class="invisible action-button">
+            <mat-icon *ngIf="$ngoRelation.value === 'self' && !editMode" class="action-icon" (click)="startEditMode()">create</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'self' && editMode" class="action-icon" (click)="submit()">edit_off</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'none'" class="action-icon" (click)="addConnection()">person_add</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'requesting'" class="action-icon" (click)="removeConnection()">delete</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'connected'" class="action-icon" (click)="removeConnection()">link_off</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'requested'" class="action-icon" (click)="addConnection()">thumb_up</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'requested'" class="action-icon" (click)="removeConnection()">thumb_down</mat-icon>
           </button>
         </div>
       </div>
@@ -89,10 +75,10 @@
           </div>
         </mat-tab>
         <mat-tab label="Events">
-          <app-ngo-event *ngIf="ngoDetailItem" [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
+          <app-ngo-event class="ngo-events" *ngIf="ngoDetailItem" [currentNgoId]="ngoDetailItem.id"></app-ngo-event>
         </mat-tab>
         <mat-tab label="Connections">
-          <app-ngo-connection *ngIf="ngoDetailItem"
+          <app-ngo-connection class="ngo-connections" *ngIf="ngoDetailItem"
                               [currentNgoId]="ngoDetailItem.id"></app-ngo-connection>
         </mat-tab>
       </mat-tab-group>
