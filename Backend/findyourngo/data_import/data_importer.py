@@ -82,10 +82,7 @@ def convert_ngo_branch(info: Info) -> List[NgoBranch]:
         if _invalid_country(country):
             continue
 
-        try:
-            country_object = NgoCountry.objects.get(name=country)
-        except:
-            country_object = NgoCountry.objects.get(name='CHAD')
+        country_object = NgoCountry.objects.get(name=country)
         try:
             existing_branches = NgoBranch.objects.get(country=country_object)
             branch = existing_branches
@@ -299,10 +296,7 @@ def convert_ngo_address(info: Info) -> Optional[NgoAddress]:
     if all_empty_string([street_formatted, post_code_formatted, city_formatted, country_formatted]):
         return None
 
-    try:
-        country_object = NgoCountry.objects.get(name=country_formatted)
-    except:
-        country_object = NgoCountry.objects.get(name='CHAD')
+    country_object = NgoCountry.objects.get(name=country_formatted)
     try:
         address = NgoAddress.objects.get(street=street_formatted, postcode=post_code_formatted, city=city_formatted, country=country_object)
     except:
@@ -690,10 +684,7 @@ def _add_all_branches(info: Info, info_match: Ngo) -> None:
         if _invalid_country(country):
             continue
 
-        try:
-            country_object = NgoCountry.objects.get(name=country)
-        except:
-            country_object = NgoCountry.objects.get(name='CHAD')
+        country_object = NgoCountry.objects.get(name=country)
         try:
             existing_branches = NgoBranch.objects.get(country=country_object)
             branch = existing_branches
