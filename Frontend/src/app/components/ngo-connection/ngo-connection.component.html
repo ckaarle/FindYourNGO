@@ -1,33 +1,65 @@
 <div *ngIf="userService.ngoid.value === currentNgoId">
   <form>
-    <mat-form-field appearance="outline">
-      <mat-label>NGO Name</mat-label>
-      <input type="text"
-           matInput
-           [formControl]="ngoControl"
-           [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
-        <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
-          {{ngo.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <button (click)="addNgo()" mat-button>Add NGO</button>
+    <div class="connection-request-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Choose an NGO to connect to ...</mat-label>
+        <input type="text"
+             matInput
+             [formControl]="ngoControl"
+             [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
+          <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
+            {{ngo.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-icon class="connection-request-action" (click)="addNgo()">person_add</mat-icon>
+    </div>
   </form>
-  <h2>Connection Requests</h2>
-  <div class="connection-type-wrapper" *ngFor="let connection of incomingRequests">
-    <mat-card>{{ connection.name }}</mat-card>
-    <button mat-button (click)="addConnection(connection.id)">Accept Request</button>
-    <button mat-button (click)="removeConnection(connection.id)">Reject Request</button>
+  <div class="connections-wrapper" *ngIf="incomingRequests.length > 0">
+    <div class="title">
+      <mat-icon>call_received</mat-icon>
+      <span>Incoming Requests</span>
+    </div>
+    <div class="connection-type-wrapper" fxLayoutGap="16px grid" fxLayout="row wrap">
+      <div *ngFor="let connection of incomingRequests" fxFlex="25%" fxFlex.xs="50%" fxFlex.sm="25%">
+        <mat-card class="connection-item">
+          <u (click)="filter.showDetails(connection.id)">{{ connection.name }}</u>
+          <div>
+            <mat-icon (click)="addConnection(connection.id)">thumb_up</mat-icon>
+            <mat-icon (click)="removeConnection(connection.id)">thumb_down</mat-icon>
+          </div>
+        </mat-card>
+      </div>
+    </div>
   </div>
-  <h2>Sent Requests</h2>
-  <div class="connection-type-wrapper" *ngFor="let connection of outgoingRequests">
-    <mat-card>{{ connection.name }}</mat-card>
-    <button mat-button (click)="removeConnection(connection.id)">Cancel Request</button>
+  <div class="connections-wrapper" *ngIf="outgoingRequests.length > 0">
+    <div class="title">
+      <mat-icon>call_made</mat-icon>
+      <span>Outgoing Requests</span>
+    </div>
+    <div class="connection-type-wrapper" fxLayoutGap="16px grid" fxLayout="row wrap">
+      <div *ngFor="let connection of outgoingRequests" fxFlex="25%" fxFlex.xs="50%" fxFlex.sm="25%">
+        <mat-card class="connection-item">
+          <u (click)="filter.showDetails(connection.id)">{{ connection.name }}</u>
+          <mat-icon (click)="removeConnection(connection.id)">delete_outline</mat-icon>
+        </mat-card>
+      </div>
+    </div>
   </div>
 </div>
-<h2>Connections</h2>
-<div class="connection-type-wrapper" *ngFor="let connection of connections">
-  <mat-card>{{ connection.name }}</mat-card>
-  <button mat-button (click)="removeConnection(connection.id)" *ngIf="userService.ngoid.value === currentNgoId">Remove Connection</button>
+<div class="connections-wrapper">
+  <div class="title">
+    <mat-icon>link</mat-icon>
+    <span>Connections</span>
+  </div>
+  <div class="connection-type-wrapper" fxLayoutGap="16px grid" fxLayout="row wrap">
+    <div *ngFor="let connection of connections" fxFlex="25%" fxFlex.xs="50%" fxFlex.sm="25%">
+      <mat-card  class="connection-item">
+        <u (click)="filter.showDetails(connection.id)">{{ connection.name }}</u>
+        <mat-icon *ngIf="userService.ngoid.value === currentNgoId" (click)="removeConnection(connection.id)">link_off</mat-icon>
+      </mat-card>
+    </div>
+  </div>
+  <div class="connection-type-wrapper connections-unavailable" *ngIf="connections.length === 0">No connections have been established with this NGO so far.</div>
 </div>
