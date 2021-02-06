@@ -9,7 +9,7 @@ def start_background_tasks():
     run_tw_update(repeat=3600, repeat_until=None)  # hourly update
 
 
-@background(schedule=10)
+@background(schedule=300)
 def run_tw_update():
     print('Recalculate TW and PageRank')
     TWUpdater().update()

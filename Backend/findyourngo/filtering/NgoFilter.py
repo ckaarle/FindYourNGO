@@ -25,7 +25,7 @@ class NgoFilter:
         query_set = Ngo.objects.all()
         query_set = query_set.filter(self._filter_name_condition)
         query_set = query_set.filter(self._filter_branches_condition)
-        # TODO when mapping available query_set = query_set.filter(self._filter_regions_condition)
+        query_set = query_set.filter(self._filter_regions_condition)
         query_set = query_set.filter(self._filter_topics_condition)
         query_set = query_set.filter(self._filter_ecosoc_condition)
         query_set = query_set.filter(self._filter_credible_source_condition)
@@ -48,7 +48,14 @@ class NgoFilter:
     @property
     def _filter_branches_condition(self) -> Q:
         if self._filter_config.branches_to_include:
-            return reduce(operator.or_, [Q(branches__country=b) for b in self._filter_config.branches_to_include])
+            return reduce(operator.or_, [Q(branches__country__name=b) for b in self._filter_config.branches_to_include])
+        else:
+            return self._default_condition
+
+    @property
+    def _filter_regions_condition(self) -> Q:
+        if self._filter_config.regions_to_include:
+            return reduce(operator.or_, [Q(branches__country__region=r) for r in self._filter_config.regions_to_include])
         else:
             return self._default_condition
 

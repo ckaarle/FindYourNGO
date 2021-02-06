@@ -13,8 +13,19 @@ from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_
     PAGERANK_MAX_BOOST
 
 
+class NgoCountry(models.Model):
+    name = models.CharField(max_length=200)
+    sub_region = models.CharField(max_length=200)
+    region = models.CharField(max_length=200)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name'], name='unique_country_name'),
+        ]
+
+
 class NgoBranch(models.Model):
-    country = models.CharField(max_length=200)
+    country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
 
 
 class NgoTopic(models.Model):
@@ -39,7 +50,7 @@ class NgoAddress(models.Model):
     street = models.CharField(max_length=200)
     postcode = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
+    country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
 
 
 class NgoRepresentative(models.Model):

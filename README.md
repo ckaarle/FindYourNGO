@@ -90,3 +90,8 @@ django-admin can be used inside the cli with docker-compose exec web /bin/bash
 #### Trustworthiness Calculation
 Please refer to [this](./Backend/findyourngo/README.md) document.
 
+
+
+## References
+
+https://unstats.un.org/unsd/methodology/m49/overview has been used to categorize ngos to correct countries, regions and sub-regions.
