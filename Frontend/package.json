@@ -27,6 +27,7 @@
     "@fullcalendar/interaction": "^5.5.0",
     "@fullcalendar/list": "^5.5.0",
     "@fullcalendar/timegrid": "^5.5.1",
+    "@types/jquery": "^3.5.5",
     "angularx-social-login": "^3.5.4",
     "jquery": "^3.5.1",
     "jquery-mapael": "^2.2.0",

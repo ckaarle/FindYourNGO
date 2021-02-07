@@ -1,6 +1,8 @@
+import random
+
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoBranch
+    NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoBranch, NgoConnection
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -190,3 +192,29 @@ class NgoEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = NgoEvent
         fields = ['id', 'name', 'start_date', 'end_date', 'organizer', 'description', 'tags']
+
+
+coordinates = {}
+with open('findyourngo/data_import/coordinates.csv', 'r') as f:
+    for line in f:
+        props = line.upper().split(',')
+        coordinates[props[3].strip()] = (props[1], props[2])
+
+
+class NgoPlotSerializer(serializers.ModelSerializer):
+    coordinates = serializers.SerializerMethodField()
+
+    def get_coordinates(self, obj):
+        lat = float(coordinates[obj.contact.address.country.name][0]) + random.uniform(-2.0, 2.0)
+        long = float(coordinates[obj.contact.address.country.name][1]) + random.uniform(-2.0, 2.0)
+        return lat, long
+
+    class Meta:
+        model = Ngo
+        fields = ['id', 'name', 'aim', 'coordinates']
+
+
+class NgoLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NgoConnection
+        fields = ['id', 'connected_ngo_id', 'reporter_id']
