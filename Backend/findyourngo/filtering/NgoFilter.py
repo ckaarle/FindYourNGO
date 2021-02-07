@@ -83,7 +83,7 @@ class NgoFilter:
     @property
     def _filter_hq_countries_condition(self) -> Q:
         if self._filter_config.hq_country_to_include:
-            return reduce(operator.or_, [Q(contact__address__country=c) for c in self._filter_config.hq_country_to_include])
+            return reduce(operator.or_, [Q(contact__address__country__name=c) for c in self._filter_config.hq_country_to_include])
         else:
             return self._default_condition
 

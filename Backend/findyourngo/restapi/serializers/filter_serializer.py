@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from findyourngo.filtering.filter_util import FilterConfig
-from findyourngo.restapi.models import NgoTopic, NgoType, NgoStats, NgoCountry
+from findyourngo.restapi.models import NgoTopic, NgoType, NgoStats, NgoCountry, NgoAddress
 
 
 def filter_object():
@@ -53,7 +53,7 @@ def hq_countries():
 def hq_cities():
     hq_cities = []
     for country in hq_countries():
-        hq_cities.append({country: list(map(lambda ngo_hq_address: ngo_hq_address['city'], NgoAddress.objects.filter(country=country).order_by('city').values('city').distinct()))})
+        hq_cities.append({country: list(map(lambda ngo_hq_address: ngo_hq_address['city'], NgoAddress.objects.filter(country__name=country).order_by('city').values('city').distinct()))})
     return hq_cities
 
 
