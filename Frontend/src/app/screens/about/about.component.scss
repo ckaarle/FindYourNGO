@@ -8,6 +8,14 @@
   align-self: center;
   max-width: 1000px;
   margin: 24px auto auto auto;
+
+  ::ng-deep .mat-card-title {
+    font-size: 32px !important;
+  }
+
+  ::ng-deep .mat-card-header {
+    justify-content: center;
+  }
 }
 
 .header-icon {
@@ -16,13 +24,6 @@
   margin-top: -3px !important;
 }
 
-::ng-deep .mat-card-title {
-  font-size: 32px !important;
-}
-
-::ng-deep .mat-card-header {
-  justify-content: center;
-}
 
 .content {
   margin-top: 48px;
