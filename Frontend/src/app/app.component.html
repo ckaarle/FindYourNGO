@@ -45,6 +45,10 @@
              [active]="activeScreen == screens[1]" [routerLink]="getRouterLink(screens[1])">
             <span class="navbar-label">{{screens[1]}}</span>
           </a>
+          <a mat-tab-link (click)="activeScreen = screens[2]"
+             [active]="activeScreen == screens[2]" [routerLink]="getRouterLink(screens[2])">
+            <span class="navbar-label">{{screens[2]}}</span>
+          </a>
         </nav>
       </ng-container>
 

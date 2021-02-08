@@ -3,7 +3,7 @@ import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {MediaService} from './services/media.service';
-import {UserService} from "./services/user.service";
+import {UserService} from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ import {UserService} from "./services/user.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  screens = ['Overview', 'Favourites', 'User'];
+  screens = ['Overview', 'Favourites', 'About'];
   activeScreen = this.screens[0];
   currentTitle: string = 'Find your NGO';
 
@@ -56,8 +56,8 @@ export class AppComponent {
         return 'list';
       case 'Favourites':
         return 'star';
-      case 'User':
-        return 'star';
+      case 'About':
+        return 'info';
     }
     return '';
   }
@@ -72,8 +72,8 @@ export class AppComponent {
         return 'favourites';
       case 'Search':
         return 'search';
-      case 'User':
-        return 'user';
+      case 'About':
+        return 'about';
     }
     return '';
   }
