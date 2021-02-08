@@ -1,1 +1,91 @@
-<p>about works!</p>
+<div class="card">
+  <mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="header-icon">info</mat-icon>
+      <mat-card-title>About Find your NGO</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="content">
+      <div>
+        <div class="section-header">
+          <mat-icon>manage_search</mat-icon>
+          <span>What is our goal?</span>
+        </div>
+
+        <p class="text">
+          We want to provide a user-friendly, easy-to-use way to discover NGOs that match your
+          interests and/or your location. Our main focus is to also offer the user an approximation
+          of how trustworthy the NGOs listed in our database are.
+          For information on how this trustworthiness score is
+          calculated, please see below.
+        </p>
+        <p class="text">
+          In addition, we strive to provide our users with a platform where they can
+          connect and share their experiences with the NGOs listed in out database. This includes
+          rating an NGOs trustworthiness and adding comments.
+        </p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div>
+        <div class="section-header">
+          <mat-icon>folder_open</mat-icon>
+          <span>What are our data sources?</span>
+        </div>
+
+        <p class="text">
+          Currently, we have access to three sources compiling lists of NGOs:
+        </p>
+        <ul class="text">
+          <li><a href="http://coe-ngo.org/#/ingos">Conference of INGOs</a> of the Council of Europe
+          </li>
+          <li><a href="https://www.ngoadvisor.net/ong">NgoAdvisor</a>, a commercial NGO database
+          </li>
+          <li><a href="https://www.wango.org/">Wango</a>, the World Association of Non-Governmental
+            Organizations
+          </li>
+        </ul>
+        <p class="text">
+          Among these three sources, we consider only the first one (the Council of Europe) to be
+          absolutely trustworthy. Combined, we have over 50.000 NGOs in our database.
+        </p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div>
+        <div class="section-header">
+          <mat-icon>star</mat-icon>
+          <span>How is the trustworthiness score calculated?</span>
+        </div>
+
+        <p class="text">
+          There are five factors included in the calculation of the trustworthiness score, resulting
+          in a value between 0 and 5:
+        </p>
+        <ul class="text">
+          <li>Credibility of the data source</li>
+          <li>Accreditation with one of the following
+            organizations
+          </li>
+          <ul>
+            <li>United Nations Economic and Social Council (<a
+                href="https://www.un.org/ecosoc/en/home">ECOSOC</a>)
+            </li>
+            <li>International Labour Organization (<a
+                href="https://www.ilo.org/global/lang--en/index.htm">ILO</a>)
+            </li>
+            <li><a href="https://commonwealthfoundation.com/">Commonwealth Foundation</a></li>
+          </ul>
+          <li>Adherence to the <a href="https://www.wango.org/codeofethics.aspx">Wango Code of
+            Ethics</a></li>
+          <li>Connections to other NGOs</li>
+          <li>User Ratings</li>
+        </ul>
+
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
