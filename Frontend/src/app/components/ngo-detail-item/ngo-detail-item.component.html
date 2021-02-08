@@ -20,11 +20,15 @@
         <div class="ngo-rating">
           <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
                        [editable]="false"></star-rating>
+
           <div class="rating-values">
             <div
                 class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
             <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
           </div>
+
+          <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
+
         </div>
         <span fxFlex></span>
         <div *ngIf="userService.ngoid.value !== -1">
