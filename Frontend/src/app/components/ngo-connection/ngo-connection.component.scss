@@ -6,9 +6,20 @@
   width: 210px;
 }
 
+.ngo-details {
+  margin: 32px 0 16px 0;
+}
+
 .connection-request-container {
   display: flex;
   flex-direction: row;
+  margin-bottom: 16px;
+
+  .connection-request-title {
+    color: var(--primary-color);
+    font-size: 30px;
+    padding: 16px 16px 0 0;
+  }
 
   .connection-request-action {
     color: var(--secondary-color);

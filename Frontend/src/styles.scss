@@ -79,6 +79,14 @@ html, body {
   justify-content: space-between;
 }
 
+.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.mat-tab-body-content {
+  overflow-x: hidden !important;
+}
+
 span, p :not(.mat-raised-button.mat-accent) {
   color: var(--primary-contrast-bw)
 }

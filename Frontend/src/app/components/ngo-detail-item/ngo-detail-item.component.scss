@@ -24,6 +24,10 @@
     overflow-y: auto;
     overflow-x: hidden;
 
+    .ngo-details {
+      margin: 32px 0 16px 0;
+    }
+
     .ngo-content-container {
       display: flex;
       flex-direction: row;
