@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>Tell us who you are!</h1>
 <div mat-dialog-content class="limit-width" (keydown.enter)="submit()">
-  <mat-checkbox (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
-  <br>
+  <mat-checkbox *ngIf="this.status === 'register'" (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
   <form *ngIf="isNgo">
     <mat-form-field>
       <mat-label>NGO Name</mat-label>
