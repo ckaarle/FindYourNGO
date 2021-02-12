@@ -2,7 +2,7 @@ import decimal
 from typing import Iterable
 from django.db.models import Sum
 
-from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation, NgoReview
+from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation, NgoReview, NgoAccount
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import RAW_SCORE_MIN_VALUE, RAW_SCORE_MAX_VALUE, \
     TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS
 from findyourngo.type_variables import TWScore
@@ -36,8 +36,9 @@ class TWCalculator:
             number_data_sources_score: float,
             credible_source_score: float,
             ecosoc_score: float,
+            ngo_account_score: float,
     ) -> float:
-        return number_data_sources_score + credible_source_score + ecosoc_score
+        return number_data_sources_score + credible_source_score + ecosoc_score + ngo_account_score
 
     def calculate_base_tw_from_partial_scores(
             self,
@@ -45,15 +46,16 @@ class TWCalculator:
             credible_source_score: float,
             ecosoc_score: float,
     ) -> TWScore:
-        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, 0)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_base_tw_from_ngo_tw_score(self, ngo_tw_score: NgoTWScore) -> TWScore:
         number_data_sources_score = ngo_tw_score.number_data_sources_score
         credible_source_score = ngo_tw_score.credible_source_score
         ecosoc_score = ngo_tw_score.ecosoc_score
+        ngo_account_score = ngo_tw_score.ngo_account_score
 
-        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score)
+        raw_score = self._calculate_raw_base_score(number_data_sources_score, credible_source_score, ecosoc_score, ngo_account_score)
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_user_tw_from_ngo_id(self, ngo_id: int) -> TWScore:
@@ -113,3 +115,12 @@ class TWCalculator:
     # round(0.5) == 0, round(1.5) == 2
     def _round(self, value: float) -> float:
         return float(decimal.Decimal(value).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_HALF_UP))
+
+    def calculate_ngo_account_score(self, ngo_id) -> float:
+        accounts = NgoAccount.objects.filter(ngo_id=ngo_id, user__is_active=True)
+
+        if len(accounts) > 0:
+            return 1
+        else:
+            return 0
+
