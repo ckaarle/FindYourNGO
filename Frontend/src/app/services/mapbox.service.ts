@@ -7,9 +7,14 @@ import {ApiService} from './api.service';
 })
 export class MapboxService {
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) {
+  }
 
   getNgoCoordinates(): Observable<any> {
     return this.apiService.get('map/plots');
+  }
+
+  getNgoLinks(): Observable<any> {
+    return this.apiService.get('map/links');
   }
 }
