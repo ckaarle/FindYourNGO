@@ -1,60 +1,136 @@
-<div *ngIf="userService.ngoid.value === currentNgoId">
-  <h2>Event Creation</h2>
-  <form [formGroup]="eventForm">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput type="text" formControlName="event_name">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <input matInput type="text" formControlName="description">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Start Date</mat-label>
-      <input matInput type="date" formControlName="start_date">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>End Date</mat-label>
-      <input matInput type="date" formControlName="end_date">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Tags</mat-label>
-      <input matInput type="text" formControlName="tags">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>NGO Name</mat-label>
-        <input type="text"
-           matInput
-           [formControl]="ngoControl"
-           [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
-          <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
-            {{ ngo.name }}
-          </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
-    <button mat-button (click)="addNgoToEvent()">Invite NGO</button>
-    <p>Currently invited: {{ inviteeNames }}</p>
-  </form>
-  <button mat-button (click)="createEvent()">Create Event</button>
-  <h2>Invitations</h2>
-  <div class="event-type-wrapper" *ngFor="let event of invitations">
-    <mat-card>{{ event.name }}</mat-card>
-    <button class="inv-button" mat-button (click)="acceptEvent(event.id)">Accept Invitation</button>
-    <button class="inv-button" mat-button (click)="rejectEvent(event.id)">Reject Invitation</button>
+<div class="ngo-details">
+  <div class="events-wrapper"*ngIf="userService.ngoid.value === currentNgoId">
+    <form [formGroup]="eventForm">
+      <mat-icon class="event-request-title">event</mat-icon>
+      <div class="event-request-container">
+        <div class="form-container">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="event_name">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput type="text" formControlName="description">
+          </mat-form-field>
+        </div>
+        <div class="form-container">
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input matInput type="date" formControlName="start_date">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>End Date</mat-label>
+            <input matInput type="date" formControlName="end_date">
+          </mat-form-field>
+        </div>
+        <div class="form-container">
+          <mat-form-field>
+            <mat-label>Tags</mat-label>
+            <input matInput type="text" formControlName="tags">
+          </mat-form-field>
+        </div>
+        <div class="form-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Add an NGO to your event ...</mat-label>
+              <input type="text"
+                 matInput
+                 [formControl]="ngoControl"
+                 [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="ngoName">
+                <mat-option *ngFor="let ngo of $allNgos | async | slice : 0 : 5" [value]="ngo">
+                  {{ ngo.name }}
+                </mat-option>
+              </mat-autocomplete>
+          </mat-form-field>
+          <mat-icon class="event-request-action" (click)="addNgoToEvent()">person_add</mat-icon>
+        </div>
+        <div class="invitee-container">
+          <mat-chip-list>
+          <mat-chip class="invitee-item"
+                    *ngFor="let invitee of inviteeNames"
+                    [removable]="true"
+                    (removed)="removeInvitee(invitee)">
+            <mat-label>{{invitee}}</mat-label>
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+      <mat-icon class="event-request-action" (click)="createEvent()">add_circle</mat-icon>
+    </form>
+    <mat-divider></mat-divider>
   </div>
-</div>
-<h2>Current Events</h2>
-<mat-card *ngFor="let event of currentEvents">
-  <mat-card-header>
-    <mat-card-title>{{ event.name }}</mat-card-title>
-    <mat-card-subtitle>{{ event.start_date | date:'dd/MM/yyyy' }} - {{ event.end_date | date:'dd/MM/yyyy' }}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{ event.description }}</p>
-  </mat-card-content>
-</mat-card>
-<h2>Past Events</h2>
-<div *ngFor="let event of pastEvents">
-  <mat-card>{{ event.name }}</mat-card>
+  <div class="events-wrapper" *ngIf="invitations.length > 0">
+      <div class="title">
+        <mat-icon>inbox</mat-icon>
+        <span>Invitations</span>
+      </div>
+      <div class="event-type-wrapper" fxLayoutGap="16px grid" fxLayout="row wrap">
+        <div *ngFor="let event of invitations" fxFlex="25%" fxFlex.xs="50%" fxFlex.sm="25%">
+          <mat-card class="event-item">
+            <mat-card-header>
+              <mat-card-title>{{ event.name }}</mat-card-title>
+              <mat-card-subtitle>{{ event.start_date | date:'dd/MM/yyyy' }} - {{ event.end_date | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+              <div>
+                <mat-icon (click)="rejectEvent(event.id)">clear</mat-icon>
+                <mat-icon (click)="acceptEvent(event.id)">done</mat-icon>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <p>{{ event.description }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+  </div>
+  <div class="events-wrapper scheduled-events" fxLayoutGap="16px grid" fxLayout="row wrap">
+    <div class="events-wrapper future-events" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>today</mat-icon>
+            <span>Current Events</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="event-type-wrapper">
+          <div *ngFor="let event of currentEvents">
+            <mat-card class="event-item">
+              <mat-card-header>
+                <mat-card-title>{{ event.name }}</mat-card-title>
+                <mat-card-subtitle>{{ event.start_date | date:'dd/MM/yyyy' }} - {{ event.end_date | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ event.description }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="event-type-wrapper events-unavailable" *ngIf="currentEvents.length === 0">No upcoming events so far.</div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="events-wrapper past-events" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>calendar_today</mat-icon>
+            <span>Past Events</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="event-type-wrapper">
+          <div *ngFor="let event of pastEvents">
+            <mat-card class="event-item">
+              <mat-card-header>
+                <mat-card-title>{{ event.name }}</mat-card-title>
+                <mat-card-subtitle>{{ event.start_date | date:'dd/MM/yyyy' }} - {{ event.end_date | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ event.description }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="event-type-wrapper events-unavailable" *ngIf="pastEvents.length === 0">No past events so far.</div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
 </div>

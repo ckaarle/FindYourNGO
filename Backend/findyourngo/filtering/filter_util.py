@@ -27,7 +27,7 @@ class FilterConfig:
 
         self.name_to_include = name_to_include if name_to_include is not None else []
         self.branches_to_include = branches_to_include if branches_to_include is not None else []
-        self.regions_to_include = ['Asia', 'Africa', 'Europe'] if regions_to_include is not None else []  # TODO when mapping available
+        self.regions_to_include = regions_to_include if regions_to_include is not None else []
         self.topics_to_include = topics_to_include if topics_to_include is not None else []
         self.use_ecosoc = use_ecosoc
         self.use_credible_source = use_credible_source

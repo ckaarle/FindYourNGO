@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FilterService} from '../../services/filter.service';
 import {MatDialog} from '@angular/material/dialog';
-import {NgoSortingSelection} from '../../models/ngo';
 import {LoginDialogComponent} from '../../screens/login-dialog/login-dialog.component';
 import {UserService} from '../../services/user.service';
 import {ApiService} from '../../services/api.service';
@@ -12,27 +11,15 @@ import {Router} from '@angular/router';
   templateUrl: './user-options.component.html',
   styleUrls: ['./user-options.component.scss']
 })
-export class UserOptionsComponent implements OnInit, OnDestroy {
+export class UserOptionsComponent implements OnInit {
 
-  constructor(private filter: FilterService, public router: Router, public userService: UserService, public apiService: ApiService, public dialog: MatDialog) {
+  constructor(public filter: FilterService, public router: Router, public userService: UserService, public apiService: ApiService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
   }
 
-  ngOnDestroy(): void {
-    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
-    this.filter.editSelectedFilters({}, selectedSorting);
-    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
-        this.filter.displayFilteredNgoItems(data);
-    });
-  }
-
   openDialog(): void {
-    const dialogRef = this.dialog.open(LoginDialogComponent);
-  }
-
-  showDetails(): void {
-    this.router.navigate(['/detailView', this.userService.ngoid.value.toString()]); // this navigates to detail page and automatically redirects to overview page.. why?
+    this.dialog.open(LoginDialogComponent);
   }
 }

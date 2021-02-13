@@ -13,8 +13,19 @@ from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_
     PAGERANK_MAX_BOOST
 
 
+class NgoCountry(models.Model):
+    name = models.CharField(max_length=200)
+    sub_region = models.CharField(max_length=200)
+    region = models.CharField(max_length=200)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name'], name='unique_country_name'),
+        ]
+
+
 class NgoBranch(models.Model):
-    country = models.CharField(max_length=200)
+    country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
 
 
 class NgoTopic(models.Model):
@@ -39,7 +50,7 @@ class NgoAddress(models.Model):
     street = models.CharField(max_length=200)
     postcode = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
+    country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
 
 
 class NgoRepresentative(models.Model):
@@ -99,6 +110,8 @@ class Ngo(models.Model):
     meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT) # meta data should not be deleted if a ngo is referencing them (we need the data source)
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
+    number_of_reviews = models.IntegerField(default=0)
+
 
 class NgoAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -155,3 +168,8 @@ class NgoEventCollaborator(models.Model):
         constraints = [
             UniqueConstraint(fields=['event', 'collaborator'], name='unique_collaboration'),
         ]
+
+
+class NgoFavourites(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    favourite_ngo = models.ManyToManyField(Ngo)

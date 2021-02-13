@@ -1,0 +1,38 @@
+.header {
+  font-size: var(--font-size-big);
+}
+
+.content-container {
+
+  .content-row {
+    padding-bottom: 16px;
+  }
+
+  .mat-icon {
+    color: var(--primary-color);
+    vertical-align: middle;
+  }
+
+  .title {
+    font-weight: 400;
+    font-size: var(--font-size-medium);
+  }
+
+  .content {
+    padding-top: 10px;
+    font-size: var(--font-size-normal);
+    display: flex;
+    flex-direction: row;
+    word-break: break-word;
+    width: 80%;
+  }
+
+  .content-unwrap {
+    padding-top: 10px;
+    font-size: var(--font-size-normal);
+  }
+}
+
+.date {
+  padding-left: 10px;
+}

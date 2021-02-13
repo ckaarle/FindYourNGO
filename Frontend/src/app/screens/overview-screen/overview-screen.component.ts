@@ -12,6 +12,8 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import {ApiService} from '../../services/api.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Utils} from '../../services/utils';
+import {FavouriteService} from '../../services/favourite.service';
+import {UserService} from '../../services/user.service';
 
 export interface FilteredNgosCount {
   currentAmount: number;
@@ -37,15 +39,19 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   initialized: boolean = false;
 
+  userFavourites: number[] = [];
+
   constructor(
       private filter: FilterService,
       protected paginationService: PaginationService,
       public apiService: ApiService,
       public route: ActivatedRoute,
       public router: Router,
+      private favouriteService: FavouriteService,
+      private userService: UserService,
   ) {
     super();
-    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness'];
+    this.sortingOptions = ['Name', 'Countries', 'Cities', 'Trustworthiness', '# Reviews'];
   }
 
   ngOnInit(): void {
@@ -54,6 +60,14 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.getFilterOptions();
     this.subscribeOverviewItemChanges();
     this.subscribeSelectedFilterChanges();
+
+    this.userService.userid.subscribe(newValue => {
+      if (newValue === -1) {
+        this.userFavourites = [];
+      } else {
+        this.loadFavouriteNgos();
+      }
+    });
   }
 
   private _restorePreviousPaginationStatus(): void {
@@ -63,6 +77,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     if (!this.isNull(filter)) {
       // @ts-ignore
       this.filterActive = filter.toLowerCase() === 'true';
+      this.filter.filterActive = this.filterActive;
     }
     const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
     if (!this.isNull(filterSelection)) {
@@ -110,8 +125,19 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
 
   private processPaginatedResults(data: NgoOverviewItemPagination): void {
     this.paginationService.update(data, this);
+
+    this.loadFavouriteNgos();
+
     this.overviewItems = data.results;
     this.totalAmountOverviewItems.currentAmount = data.count;
+  }
+
+  private loadFavouriteNgos(): void {
+    this.favouriteService.getUserFavourites().subscribe(
+        result => {
+          this.userFavourites = [];
+          result.map(ngoOverviewItem => this.userFavourites.push(ngoOverviewItem.id));
+        });
   }
 
   getNgoOverviewItemsForPageNumber(pageNumber: number): void {
@@ -161,6 +187,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     }
     this.filter.selectedFiltersChanged.subscribe((selectedFilter: NgoFilterSelection) => {
       this.filterActive = selectedFilter !== {};
+      this.filter.filterActive = this.filterActive;
       this.selectedFilters = selectedFilter;
     });
   }
@@ -178,11 +205,13 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   showDetail(overviewItem: NgoOverviewItem): void {
+    console.log(this.selectedFilters);
     this.router.navigate(['/detailView', overviewItem.id, {
       currentPage: this.currentPageNumber,
       filter: this.filterActive,
       filterSelection: JSON.stringify(this.selectedFilters),
       sortingSelection: JSON.stringify(this.selectedSorting),
+      pageBeforePaginated: true,
     }]);
   }
 }

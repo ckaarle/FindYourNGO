@@ -48,7 +48,6 @@ export class NgoFilterComponent {
       return;
     }
 
-    console.log('OPENING FILTER');
     this.openFilterSelectionDrawer.emit(true);
   }
 
@@ -58,5 +57,9 @@ export class NgoFilterComponent {
       this.filter.displayFilteredNgoItems(data);
       this.filterUpdated = false;
     });
+  }
+
+  getAvailableCities(): string[] {
+    return this.filter.getAvailableCities(this.filterOptions.cities.values, this.filterSelection);
   }
 }

@@ -25,7 +25,7 @@ class NgoFilter:
         query_set = Ngo.objects.all()
         query_set = query_set.filter(self._filter_name_condition)
         query_set = query_set.filter(self._filter_branches_condition)
-        # TODO when mapping available query_set = query_set.filter(self._filter_regions_condition)
+        query_set = query_set.filter(self._filter_regions_condition)
         query_set = query_set.filter(self._filter_topics_condition)
         query_set = query_set.filter(self._filter_ecosoc_condition)
         query_set = query_set.filter(self._filter_credible_source_condition)
@@ -48,7 +48,14 @@ class NgoFilter:
     @property
     def _filter_branches_condition(self) -> Q:
         if self._filter_config.branches_to_include:
-            return reduce(operator.or_, [Q(branches__country=b) for b in self._filter_config.branches_to_include])
+            return reduce(operator.or_, [Q(branches__country__name=b) for b in self._filter_config.branches_to_include])
+        else:
+            return self._default_condition
+
+    @property
+    def _filter_regions_condition(self) -> Q:
+        if self._filter_config.regions_to_include:
+            return reduce(operator.or_, [Q(branches__country__region=r) for r in self._filter_config.regions_to_include])
         else:
             return self._default_condition
 
@@ -76,14 +83,14 @@ class NgoFilter:
     @property
     def _filter_hq_countries_condition(self) -> Q:
         if self._filter_config.hq_country_to_include:
-            return reduce(operator.or_, [Q(contact__address__country=c) for c in self._filter_config.hq_country_to_include])
+            return reduce(operator.or_, [Q(contact__address__country__name=c) for c in self._filter_config.hq_country_to_include])
         else:
             return self._default_condition
 
     @property
     def _filter_hq_cities_condition(self) -> Q:
         if self._filter_config.hq_city_to_include:
-            return Q(contact__address__city=self._filter_config.hq_city_to_include)
+            return reduce(operator.or_, [Q(contact__address__city=c) for c in self._filter_config.hq_city_to_include])
         else:
             return self._default_condition
 
@@ -132,7 +139,7 @@ class NgoFilter:
 
     def _sort(self, query_set: QuerySet, sorting_option: SortingOption) -> QuerySet:
         sorting_option_value = sorting_option["keyToSort"]
-
+        
         if sorting_option_value == "name":
             query_set = self._sort_by_default_condition(query_set, sorting_option)
         elif sorting_option_value == "countries":
@@ -141,6 +148,8 @@ class NgoFilter:
             query_set = self._sort_by_default_condition(query_set, self._get_ngo_address_condition(sorting_option, "city"))
         elif sorting_option_value == "trustworthiness":
             query_set = self._sort_by_default_condition(query_set, self._get_trustworthiness_condition(sorting_option))
+        elif sorting_option_value == 'reviewNumber':
+            query_set = self._sort_by_ngo_number_of_reviews(sorting_option, query_set)
         else:
             query_set = self._sort_by_default_condition(query_set, sorting_option)
 
@@ -160,6 +169,9 @@ class NgoFilter:
     def _get_trustworthiness_condition(self, sorting_option: SortingOption) -> SortingOption:
         sorting_option["keyToSort"] = 'tw_score__total_tw_score'
         return sorting_option
+
+    def _sort_by_ngo_number_of_reviews(self, sorting_option: SortingOption, query_set: QuerySet) -> QuerySet:
+        return query_set.order_by(f'{"-" if sorting_option["orderToSort"] =="desc" else ""}number_of_reviews')
 
 
 

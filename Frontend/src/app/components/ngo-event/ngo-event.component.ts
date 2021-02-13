@@ -1,6 +1,6 @@
 import {Component, Input, ChangeDetectorRef} from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, UrlSerializer} from '@angular/router';
 import {NgoOverviewItem} from '../../models/ngo';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -96,5 +96,12 @@ export class NgoEventComponent {
 
   ngoName(ngo: NgoOverviewItem): string {
     return ngo?.name;
+  }
+
+  removeInvitee(invitee: any): void {
+    const index = this.inviteeNames.indexOf(invitee);
+    if (index >= 0) {
+      this.inviteeNames.splice(index, 1);
+    }
   }
 }

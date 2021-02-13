@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {NgoDetailItem, NgoFilterSelection} from 'src/app/models/ngo';
+import {Component} from '@angular/core';
+import {NgoDetailItem, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 import {BehaviorSubject} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
+import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
+import {Location} from '@angular/common';
 
 
 export interface NgoContentContainer {
@@ -30,11 +32,24 @@ export class NgoDetailItemComponent {
 
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
+  sortingSelection: NgoSortingSelection = {};
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, public userService: UserService, private router: Router) {
+  userFavourite: boolean = true;
+
+  pageBeforePaginated: boolean = true;
+
+  constructor(
+      private route: ActivatedRoute,
+      public apiService: ApiService,
+      private router: Router,
+      private favouriteService: FavouriteService,
+      private location: Location,
+      public userService: UserService
+      ) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
     this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
+    // @ts-ignore
     this.refreshNgoDetailItem(id);
 
     const pageBefore = this.route.snapshot.paramMap.get('currentPage');
@@ -51,6 +66,22 @@ export class NgoDetailItemComponent {
     if (filterSelection != null) {
       this.filterSelection = JSON.parse(filterSelection);
     }
+
+    const sortingSelection = this.route.snapshot.paramMap.get('sortingSelection');
+
+    if (sortingSelection != null) {
+      this.sortingSelection = JSON.parse(sortingSelection);
+    }
+
+    const pageBeforePaginated = this.route.snapshot.paramMap.get('pageBeforePaginated');
+    if (pageBeforePaginated != null) {
+      this.pageBeforePaginated = pageBeforePaginated.toLowerCase() === 'true';
+    }
+
+    // @ts-ignore
+    this.favouriteService.isUserFavourite(id).subscribe(result => {
+      this.userFavourite = result;
+    });
   }
 
   refreshNgoDetailItem(id: string): void {
@@ -90,11 +121,23 @@ export class NgoDetailItemComponent {
   }
 
   back(): void {
-    this.router.navigate(['/overview', {
-      startPage: this.previousPageNumber,
-      filter: this.filter,
-      filterSelection: JSON.stringify(this.filterSelection)
-    }]);
+    if (this.pageBeforePaginated) {
+      this.router.navigate(['/overview', {
+        startPage: this.previousPageNumber,
+        filter: this.filter,
+        filterSelection: JSON.stringify(this.filterSelection),
+        sortingSelection: JSON.stringify(this.sortingSelection)
+      }]);
+    }
+    else {
+      this.location.back();
+    }
+  }
+
+  toggleFavouriteStatus(): void {
+    this.favouriteService.setUserFavourite(!this.userFavourite, this.ngoDetailItem.id).subscribe(newStatus => {
+      this.userFavourite = newStatus;
+    });
   }
 
   generateFormControls(): { [key: string]: AbstractControl; } {

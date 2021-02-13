@@ -4,7 +4,7 @@ from typing import List, Optional, Iterable
 from findyourngo.data_import.InfoClasses import Info
 from findyourngo.data_import.european_council.parser import parse_european_council
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccreditation, NgoDataSource, NgoMetaData, \
-    NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore
+    NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore, NgoCountry
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 
@@ -56,6 +56,15 @@ def _invalid_country(country: str) -> bool:
     if country == 'AFRICA':
         return True
 
+    if country == 'GLOBAL' or country == 'WORLDWIDE':
+        return True
+
+    if country == 'NORTH AFRICA':
+        return True
+
+    if country == 'QUETSCOPE':  # there is an ngo called QuestScope, and only its results are found in google
+        return True
+
     return False
 
 
@@ -72,11 +81,13 @@ def convert_ngo_branch(info: Info) -> List[NgoBranch]:
 
         if _invalid_country(country):
             continue
+
+        country_object = NgoCountry.objects.get(name=country)
         try:
-            existing_branches = NgoBranch.objects.get(country=country)
+            existing_branches = NgoBranch.objects.get(country=country_object)
             branch = existing_branches
         except:
-            branch = NgoBranch.objects.create(country=country)
+            branch = NgoBranch.objects.create(country=country_object)
 
         branches.append(branch)
 
@@ -280,14 +291,16 @@ def convert_ngo_address(info: Info) -> Optional[NgoAddress]:
     city_formatted = set_to_empty_string_if_none(info.main_info.address.city)
     country_formatted = set_to_empty_string_if_none_upper_else(info.main_info.address.country).upper()
     country_formatted = _fix_address_country(country_formatted)
+    country_formatted = _fix_country(country_formatted)
 
     if all_empty_string([street_formatted, post_code_formatted, city_formatted, country_formatted]):
         return None
 
+    country_object = NgoCountry.objects.get(name=country_formatted)
     try:
-        address = NgoAddress.objects.get(street=street_formatted, postcode=post_code_formatted, city=city_formatted, country=country_formatted)
+        address = NgoAddress.objects.get(street=street_formatted, postcode=post_code_formatted, city=city_formatted, country=country_object)
     except:
-        address = NgoAddress.objects.create(street=street_formatted, postcode=post_code_formatted, city=city_formatted, country=country_formatted)
+        address = NgoAddress.objects.create(street=street_formatted, postcode=post_code_formatted, city=city_formatted, country=country_object)
 
     return address
 
@@ -429,7 +442,7 @@ def convert_ngo(
     try:
         # do not use this for subsequent imports as default (obviously, ngos might already be in the database)
         Ngo.objects.get(name=name, acronym=acronym)
-        print(f'XXXXXXXXXXXXXXXXXXXXXXXX --- Ngo with name {name} and acronym {acronym} already in database -- skipping')
+        #print(f'XXXXXXXXXXXXXXXXXXXXXXXX --- Ngo with name {name} and acronym {acronym} already in database -- skipping')
     except:
         tw_score = _get_ngo_tw_score(accreditation, meta_data)
 
@@ -476,7 +489,7 @@ def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoM
 def convert_to_model_classes(infos: List[Info], data_source: str, source_credible: bool = False, index: Optional[int] = None) -> None:
     for idx, info in enumerate(infos):
         i = idx if index is None else index
-        print(f'STARTING TO IMPORT ({data_source}) info # {i}')
+        #print(f'STARTING TO IMPORT ({data_source}) info # {i}')
         branch = convert_ngo_branch(info) # can be empty
         topic = convert_ngo_topic(info) # can be empty
         accreditation = convert_ngo_accreditation(info) # can be empty
@@ -496,7 +509,7 @@ def convert_to_model_classes(infos: List[Info], data_source: str, source_credibl
         after = Ngo.objects.all()
 
         assert len_before + 1 == len(after)
-        print(f'IMPORT info # {idx} FINISHED')
+        #print(f'IMPORT info # {idx} FINISHED')
 
 
 def deserialize(filename: str) -> List[Info]:
@@ -566,78 +579,81 @@ def update_ngo_tw_score(ngo: Ngo) -> None:
 
 
 def _update_with_ngo_advisor_info(info_match: Ngo, info: Info, source: str, credible: bool) -> None:
-    if info_match.name == 'AMNESTY INTERNATIONAL':
-        info_match.contact.address.country = info.main_info.address.country.strip().upper()
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'ASSOCIATION FOR THE PREVENTION OF TORTURE':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK':
-        _add_all_types(info, info_match)
-    elif info_match.name == 'CHILD HELPLINE INTERNATIONAL':
-        _add_all_branches(info, info_match)
+    try:
+        if 'AMNESTY INTERNATIONAL' in info_match.name:
+            info_match.contact.address.country = NgoCountry.objects.get(name='UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND')
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'ASSOCIATION FOR THE PREVENTION OF TORTURE':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK':
+            _add_all_types(info, info_match)
+        elif info_match.name == 'CHILD HELPLINE INTERNATIONAL':
+            _add_all_branches(info, info_match)
 
-        # just to make sure it has actual numbers and not None
-        info.detail_info.hard_facts.staff_number = 0
-        info.detail_info.hard_facts.members = 0
-        stats = convert_ngo_stats(info)
-        info_match.stats = stats
+            # just to make sure it has actual numbers and not None
+            info.detail_info.hard_facts.staff_number = 0
+            info.detail_info.hard_facts.members = 0
+            stats = convert_ngo_stats(info)
+            info_match.stats = stats
 
-        _add_all_topics(info, info_match)
-        _add_all_types(info, info_match)
-    elif info_match.name == 'DEFENCE FOR CHILDREN INTERNATIONAL':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'HUMAN RIGHTS WATCH':
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'INTERNATIONAL COMMISSION OF JURISTS':
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        info_match.contact.website = info.detail_info.hard_facts.website.strip()
-        info_match.contact.address.city = info.main_info.address.city.strip()
-        info_match.contact.address.country = info.main_info.address.country.strip().upper()
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'TRANSPARENCY INTERNATIONAL':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'WORLD ORGANISATION AGAINST TORTURE':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'INTERNATIONAL DETENTION COALITION':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'CHILD RIGHTS INTERNATIONAL NETWORK':
-        info.detail_info.hard_facts.staff_number = 0
-        info.detail_info.hard_facts.members = 0
-        stats = convert_ngo_stats(info)
-        info_match.stats = stats
+            _add_all_topics(info, info_match)
+            _add_all_types(info, info_match)
+        elif info_match.name == 'DEFENCE FOR CHILDREN INTERNATIONAL':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'HUMAN RIGHTS WATCH':
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif 'INTERNATIONAL COMMISSION OF JURISTS' in info_match.name:
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            info_match.contact.website = info.detail_info.hard_facts.website.strip()
+            info_match.contact.address.city = info.main_info.address.city.strip()
+            info_match.contact.address.country = NgoCountry.objects.get(name=info.main_info.address.country.strip().upper())
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'TRANSPARENCY INTERNATIONAL':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'WORLD ORGANISATION AGAINST TORTURE':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'INTERNATIONAL DETENTION COALITION':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'CHILD RIGHTS INTERNATIONAL NETWORK':
+            info.detail_info.hard_facts.staff_number = 0
+            info.detail_info.hard_facts.members = 0
+            stats = convert_ngo_stats(info)
+            info_match.stats = stats
 
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        info_match.contact.website = info.detail_info.hard_facts.website.strip()
-        info_match.contact.address.city = info.main_info.address.city.strip()
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            info_match.contact.website = info.detail_info.hard_facts.website.strip()
+            info_match.contact.address.city = info.main_info.address.city.strip()
 
-        _add_all_types(info, info_match)
-        _add_all_topics(info, info_match)
-    else:
-        raise ValueError(f'Unexpected NGO match found: {info_match.name}')
+            _add_all_types(info, info_match)
+            _add_all_topics(info, info_match)
+        else:
+            raise ValueError(f'Unexpected NGO match found: {info_match.name}')
 
-    data_source = convert_ngo_data_source(source, credible)[0]
+        data_source = convert_ngo_data_source(source, credible)[0]
 
-    info_match.meta_data.info_source.add(data_source)
-    info_match.meta_data.save()
-    update_ngo_tw_score(info_match)
-    info_match.save()
+        info_match.meta_data.info_source.add(data_source)
+        info_match.meta_data.save()
+        update_ngo_tw_score(info_match)
+        info_match.save()
+    except Exception as e:
+        print(e)
 
 
 def _add_all_types(info: Info, info_match: Ngo) -> None:
@@ -670,11 +686,13 @@ def _add_all_branches(info: Info, info_match: Ngo) -> None:
 
         if _invalid_country(country):
             continue
+
+        country_object = NgoCountry.objects.get(name=country)
         try:
-            existing_branches = NgoBranch.objects.get(country=country)
+            existing_branches = NgoBranch.objects.get(country=country_object)
             branch = existing_branches
         except:
-            branch = NgoBranch.objects.create(country=country)
+            branch = NgoBranch.objects.create(country=country_object)
         info_match.branches.add(branch)
 
 
@@ -695,8 +713,8 @@ def _fix_country(country):
         country = 'Iraq'.upper()
     if country == 'ISREAL' or country == 'JERUSALEM':
         country = 'Israel'.upper()
-    if country == 'LAO P.D.R.' or country == 'LAO PDR':
-        country = 'Lao'.upper()
+    if country == 'LAO P.D.R.' or country == 'LAO PDR' or country == 'LAO' or country == 'LAOS':
+        country = "Lao People's Democratic Republic".upper()
     if 'MACEDONIA (' in country:
         country = 'Macedonia'.upper()
     if '(SOUTH AFRICA Q2' in country:
@@ -705,8 +723,8 @@ def _fix_country(country):
         country = 'Kenya'.upper()
     if 'OCCUPIED' in country:
         country = 'Palestine'.upper()
-    if country == 'RUSSIAN FEDERATION':
-        country = 'Russia'.upper()
+    if country == 'RUSSIA':
+        country = 'RUSSIAN FEDERATION'
     if country == 'SLOVAK REPUBLIC':
         country = 'Slovakia'.upper()
     if '(INCL. SOMALILAND' in country or country == 'SOMALI REGION':
@@ -719,14 +737,15 @@ def _fix_country(country):
         country = 'Uganda'.upper()
     if 'UKRAINA' in country:
         country = 'Ukraine'.upper()
-    if country == 'UNITED STATES' or country == 'US':
-        country = 'USA'
+    if country == 'UNITED STATES' or country == 'US' or country == 'USA' or country == 'NAVAJO NATION':
+        country = 'UNITED STATES OF AMERICA'
     if country == 'US-IRAN':
         country = 'Iran'.upper()
     if country == 'WORLD':
         country = 'WORLDWIDE'
-    if country == 'UK':
-        country = 'UNITED KINGDOM'
+    if country == 'UK' or country == 'UNITED KINGDOM' or country == 'ENGLAND' or country == 'THE UNITED KINGDOM'\
+            or country == 'WALES' or country == 'NORTHERN IRELAND' or country == 'SCOTLAND' or country == 'U.K.':
+        country = 'UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND'
     if country == 'THE PHILIPPINES':
         country = 'PHILIPPINES'
     if country == 'THE NETHERLANDS':
@@ -734,8 +753,99 @@ def _fix_country(country):
     if country == 'ETHIPIA':
         country = 'ETHIOPIA'
     if 'IVOIRE' in country or 'IVORY' in country:
-        country = 'IVORY COAST'
+        country = 'Côte d’Ivoire'.upper()
+    if country == 'SYRIA':
+        country = 'SYRIAN ARAB REPUBLIC'
+    if country == 'SUDAN-DARFUR':
+        country = 'SUDAN'
+    if country == 'VATICAN CITY STATE':
+        country = 'HOLY SEE'
+    if country == 'SOMALILAND':
+        country = 'SOMALIA'
+    if country == 'TANZANIA':
+        country = 'UNITED REPUBLIC OF TANZANIA'
+    if country == 'VIETNAM':
+        country = 'VIET NAM'
+    if country == 'CZECH REPUBLIC':
+        country = 'CZECHIA'
+    if country == 'MOLDOVA':
+        country = 'REPUBLIC OF MOLDOVA'
+    if country == 'MACEDONIA' or country == 'REPUBLIC OF NORTH MACEDONIA':
+        country = 'NORTH MACEDONIA'
+    if country == 'PALESTINE':
+        country = 'STATE OF PALESTINE'
+    if country == 'BURMA':
+        country = 'MYANMAR'
+    if country == 'KOREA' or country == 'SOUTH KOREA':
+        country = 'REPUBLIC OF KOREA'
+    if country == 'TAIWAN':  # oh...
+        country = 'CHINA'
+    if country == 'BOSNIA HERZEGOVINA':
+        country = 'BOSNIA AND HERZEGOVINA'
+    if country in 'THE DEMOCRATIC REPUBLIC OF CONGO' or country == 'DR CONGO':
+        country = 'DEMOCRATIC REPUBLIC OF THE CONGO'
+    if country == 'IRAN':
+        country = 'Iran (Islamic Republic of)'.upper()
+    if country == 'THE GAMBIA':
+        country = 'GAMBIA'
+    if country == 'BOLIVIA':
+        country = 'Bolivia (Plurinational State of)'.upper()
+    if country == 'SWAZILAND':
+        country = 'ESWATINI'
+    if country == 'CAPO VERDE' or country == 'CAPE VERDE':
+        country = 'CABO VERDE'
+    if country == 'KIRGHIZSTAN' or country == 'KYRGYZ REPUBLIC':
+        country = 'Kyrgyzstan'.upper()
+    if country == 'POPULAR DEMOCRATIC REPUBLIC OF KOREAN' or country == 'DPRK':
+        country = "Democratic People's Republic of Korea".upper()
+    if country == 'REPUBLIC OF SOUTH SUDAN':
+        country = 'SOUTH SUDAN'
+    if country == 'TIMOR-ORIENTAL':
+        country = 'TIMOR-LESTE'
+    if country == 'SOUDAN':
+        country = 'SUDAN'
+    if country == 'PAPA NEW GUINEA':
+        country = 'PAPUA NEW GUINEA'
+    if country == 'FALKLAND ISLANDS':
+        country = 'Falkland Islands (Malvinas)'.upper()
+    if country == 'HENDERSON' or country == 'DUCIE AND OENO ISLANDS':
+        country = 'PITCAIRN'
+    if country == 'KOSOVO':  # oh
+        country = 'SERBIA'
+    if country == 'VENEZUELA':
+        country = 'Venezuela (Bolivarian Republic of)'.upper()
+    if country == 'LYBIA':
+        country = 'LIBYA'
+    if country == 'MAROCCO':
+        country = 'MOROCCO'
+    if country == 'SINGAPORE 218674':
+        country = 'SINGAPORE'
+
+
     return country.strip()
+
+
+# import country and regions using https://unstats.un.org/unsd/methodology/m49/overview
+def import_countries():
+    countries = []
+    with open('findyourngo/data_import/UNSD.csv', 'r') as f:
+        first_line = True
+        china_found = False
+        for line in f:
+            if first_line:
+                first_line = False
+                continue
+            props = line.upper().split(',')
+            if props[8] == 'ANTARCTICA':
+                countries.append(NgoCountry(name=props[8], region='OTHER', sub_region='OTHER'))
+                continue
+            if props[8] == 'CHINA':
+                if china_found:
+                    continue
+                china_found = True
+            countries.append(NgoCountry(name=props[8], region=props[3], sub_region=props[5]))
+            # print(f'Country={props[8]}, Region={props[3]}, Sub-Region={props[5]}')
+    NgoCountry.objects.bulk_create(countries)
 
 
 def run_initial_data_import() -> bool:
@@ -743,6 +853,8 @@ def run_initial_data_import() -> bool:
     if database_not_empty():
         return False
     print('STARTING THE DATA IMPORT')
+    import_countries()
+
     european_council_info = parse_european_council()
 
     # do not use this method for other, secondary data sources
@@ -758,23 +870,28 @@ def run_initial_data_import() -> bool:
     skipped = 0
     already_imported_entries = len(european_council_info)
     for idx, info in enumerate(ngo_advisor_info):
-        print(f'Current idx: {idx}')
+        #print(f'Current idx: {idx}')
+        # if 'AMNESTY INTERNATIONAL' in info.main_info.name.name.upper():
+        #     # does not contain any new information
+        #     print('SKIPPING DUPLICATE AMNESTY')
+        #     skipped += 1
+        #     continue
 
         if info.main_info.name.type_of_organization is not None and ('social_enterprise' in info.main_info.name.type_of_organization or 'corporation' in info.main_info.name.type_of_organization \
             or 'academic_institution' in info.main_info.name.type_of_organization):
-            print('Skipping because NGO type is weird')
+            #print('Skipping because NGO type is weird')
             skipped += 1
             continue
         try:
-            print(f'Trying to find NGO {info.main_info.name.name.upper()} in database ...')
-            info_match = Ngo.objects.get(name=info.main_info.name.name.upper()) # Achtung Name noch nicht upper()
-            print(f'Match in database found for {info.main_info.name.name}')
-            _print_comparison(info_match, info)
+            #print(f'Trying to find NGO {info.main_info.name.name.upper()} in database ...')
+            info_match = Ngo.objects.get(name=info.main_info.name.name.upper().strip()) # Achtung Name noch nicht upper()
+            #print(f'Match in database found for {info.main_info.name.name}')
+            #_print_comparison(info_match, info)
 
             match_count += 1
             _update_with_ngo_advisor_info(info_match, info, 'NgoAdvisor', False)
         except:
-            print('No match found, creating new entry')
+            #print('No match found, creating new entry')
             convert_to_model_classes([info], 'NgoAdvisor', False, idx + already_imported_entries)
 
     print(f'Total number of matches: {match_count}')

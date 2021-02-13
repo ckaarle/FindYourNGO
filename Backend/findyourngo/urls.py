@@ -19,7 +19,7 @@ from django.contrib import admin
 from rest_framework import routers
 
 from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller,\
-    rating_controller, connection_controller, event_controller
+    rating_controller, connection_controller, event_controller, favourite_controller
 from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
@@ -66,5 +66,8 @@ urlpatterns = [
     path('events/delete/', event_controller.delete_event),
     path('events/accept/', event_controller.accept_event),
     path('events/reject/', event_controller.reject_event),
-    url(r'^userReviewPresent', rating_controller.user_review_present)
+    url(r'^userReviewPresent', rating_controller.user_review_present),
+    url(r'^userFavourite$', favourite_controller.user_favourite),
+    url(r'^userFavourites$', favourite_controller.user_favourites),
+    url(r'^userFavouriteEvents', favourite_controller.favourite_events),
 ]

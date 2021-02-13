@@ -1,0 +1,40 @@
+<p class="header">{{event.name}}</p>
+
+<mat-divider></mat-divider>
+
+<div class="content-container">
+  <div class="content-row">
+    <div class="content-unwrap">
+      <mat-icon>calendar_today</mat-icon>
+      <span class="date">{{event.start_date | date:'dd/MM/yyyy'}}
+        -- {{event.end_date | date:'dd/MM/yyyy'}}</span>
+    </div>
+  </div>
+
+  <div class="content-row">
+    <div class="title">
+      <span>Organizer</span>
+    </div>
+    <div class="content">
+      <span>{{event.organizer.name}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="event.description" class="content-row">
+    <div class="title">
+      <span>Description</span>
+    </div>
+    <div class="content">
+      <span>{{event.description}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="event.tags" class="content-row">
+    <div class="title">
+      <span>Tags</span>
+    </div>
+    <div class="content">
+      <span>{{event.tags}}</span>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore, NgoReview, NgoEvent
+    NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoBranch
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -15,19 +15,19 @@ class NgoAddressSerializer(serializers.ModelSerializer):
     def get_address(self, obj):
         if obj.street == '':
             if obj.postcode == '' or obj.city == '':
-                if obj.country == '':
+                if obj.country is None:
                     return ''
-                return obj.country
+                return obj.country.name
             elif obj.country == '':
                 return f"{obj.postcode} {obj.city}"
-            return f"{obj.postcode} {obj.city}, {obj.country}"
+            return f"{obj.postcode} {obj.city}, {obj.country.name}"
         elif obj.postcode == '' or obj.city == '':
-            if obj.country == '':
+            if obj.country is None:
                 return obj.street
-            return f"{obj.street}, {obj.country}"
-        elif obj.country == '':
+            return f"{obj.street}, {obj.country.name}"
+        elif obj.country is None:
             return f"{obj.street}, {obj.postcode} {obj.city}"
-        return f"{obj.street}, {obj.postcode} {obj.city}, {obj.country}"
+        return f"{obj.street}, {obj.postcode} {obj.city}, {obj.country.name}"
 
     class Meta:
         model = NgoAddress
@@ -132,12 +132,19 @@ class NgoMetaDataSerializer(serializers.ModelSerializer):
         fields = ['lastUpdated', 'infoSource']
 
 
-class NgoSerializer(serializers.ModelSerializer):
-    branches = serializers.SlugRelatedField(
-        many=True,
+class NgoBranchSerializer(serializers.ModelSerializer):
+    country = serializers.SlugRelatedField(
         read_only=True,
-        slug_field='country'
+        slug_field='name'
     )
+
+    class Meta:
+        model = NgoBranch
+        fields = ['country']
+
+
+class NgoSerializer(serializers.ModelSerializer):
+    branches = NgoBranchSerializer(read_only=True)
 
     topics = serializers.SlugRelatedField(
         many=True,
@@ -178,9 +185,11 @@ class NgoShortSerializer(serializers.ModelSerializer):
 
 
 class NgoEventSerializer(serializers.ModelSerializer):
+    organizer = NgoShortSerializer(read_only=True)
+
     class Meta:
         model = NgoEvent
-        fields = ['id', 'name', 'start_date', 'end_date', 'organizer_id', 'description', 'tags']
+        fields = ['id', 'name', 'start_date', 'end_date', 'organizer', 'description', 'tags']
 
 
 def update_ngo_instance(ngo: Ngo, ngo_update):

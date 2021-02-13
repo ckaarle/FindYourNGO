@@ -5,6 +5,9 @@ delete_all_query = '''
     DELETE FROM restapi_ngo_accreditations;
     DELETE FROM restapi_ngoreview;
     DELETE FROM restapi_ngoconnection;
+    DELETE FROM restapi_ngoaccount;
+    DELETE FROM restapi_ngofavourites;
+    DELETE FROM restapi_ngofavourites_favourite_ngo;
     DELETE FROM restapi_ngopendingconnection;
     DELETE FROM restapi_ngo;
     DELETE FROM restapi_ngoaccreditation;
@@ -20,6 +23,7 @@ delete_all_query = '''
     DELETE FROM restapi_ngostats_type_of_organization;
     DELETE FROM restapi_ngostats;
     DELETE FROM restapi_ngotype;
+    DELETE FROM restapi_ngocountry;
 '''
 
 delete_background_tasks_query = '''

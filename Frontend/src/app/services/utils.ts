@@ -39,6 +39,7 @@ export class Utils {
             workingLanguages: {displayName: 'Working languages', values: ngoOverviewItem.workingLanguages, icon: 'translate'},
             funding: {displayName: 'Funding', values: ngoOverviewItem.funding, icon: 'attach_money'},
             trustworthiness: {displayName: 'Trustworthiness', values: ngoOverviewItem.trustworthiness, icon: 'star'},
+            reviewNumber: {displayName: '# Reviews'},
         };
     }
 

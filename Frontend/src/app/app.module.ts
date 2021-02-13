@@ -1,12 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { SharedModule } from './shared.module';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
+import {SharedModule} from './shared.module';
 
 
 @NgModule({
@@ -30,7 +29,7 @@ import { SharedModule } from './shared.module';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '906104192577-r1l6ou12761b53km48jn4p8imnqvbv0f.apps.googleusercontent.com'
+                '906104192577-r1l6ou12761b53km48jn4p8imnqvbv0f.apps.googleusercontent.com'
             )
           },
           {
@@ -44,4 +43,5 @@ import { SharedModule } from './shared.module';
   bootstrap: [AppComponent]
 })
 
-export class AppModule { }
+export class AppModule {
+}
