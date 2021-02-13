@@ -57,6 +57,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {NgoEventOverviewComponent} from './components/ngo-event-overview/ngo-event-overview.component';
 import {UserOptionsComponent} from './components/user-options/user-options.component';
+import { MapboxComponent } from './components/mapbox/mapbox.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -117,6 +118,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     CalendarComponent,
     NgoEventOverviewComponent,
     UserOptionsComponent,
+    MapboxComponent,
   ],
   exports: [
     MatTabsModule,

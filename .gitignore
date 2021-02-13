@@ -23,3 +23,4 @@ Backend/findyourngo/restapi/serializers/__pycache__
 Backend/findyourngo/restapi/paginators/__pycache__
 Frontend/package-lock.json
 Backend/findyourngo/restapi/tasks/__pycache__
+Frontend/src/environments/environment.ts
