@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject, interval} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {SocialUser} from "angularx-social-login";
+import {SocialUser} from 'angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -102,7 +102,7 @@ export class UserService {
     this.userid.next(-1);
     this.username.next('');
     this.ngoid.next(-1);
-    this.user.next({} as SocialUser)
+    this.user.next({} as SocialUser);
     localStorage.removeItem('refresh-token');
     localStorage.removeItem('token');
     localStorage.removeItem('token-expiration');
@@ -122,5 +122,4 @@ export class UserService {
     this.userid.next(tokenDecoded.user_id);
     localStorage.setItem('userid', tokenDecoded.user_id);
   }
-
 }
