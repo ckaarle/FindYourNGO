@@ -12,7 +12,7 @@ export class MapboxService {
   style = 'mapbox://styles/mapbox/streets-v11';
   lat = 48.137154;
   lng = 11.576124;
-  zoom = 12;
+  zoom = 1.5;
 
   constructor() {
     // @ts-ignore
