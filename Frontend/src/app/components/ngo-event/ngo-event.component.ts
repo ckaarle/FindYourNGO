@@ -29,7 +29,7 @@ export class NgoEventComponent {
   pastEvents: NgoEvent[] = [];
   invitations: NgoEvent[] = [];
   ngoControl = new FormControl();
-  $allNgos: Observable<NgoOverviewItem[]>;
+  $allNgos: Observable<NgoOverviewItem[]> | undefined;
   inviteeIds: number[] = [];
   inviteeNames: string[] = [];
   eventForm = new FormGroup({

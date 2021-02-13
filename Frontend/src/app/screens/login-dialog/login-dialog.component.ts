@@ -22,7 +22,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   isNgo: boolean;
   query: any;
   names: string[] = [];
-  $names: Observable<string[]>;
+  $names: Observable<string[]> | undefined;
   ngoControl = new FormControl();
   status = '';
   userForm = new FormGroup({

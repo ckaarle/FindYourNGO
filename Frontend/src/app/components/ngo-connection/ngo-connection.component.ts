@@ -19,7 +19,7 @@ export class NgoConnectionComponent {
   incomingRequests: NgoOverviewItem[] = [];
   outgoingRequests: NgoOverviewItem[] = [];
   ngoControl = new FormControl();
-  $allNgos: Observable<NgoOverviewItem[]>;
+  $allNgos: Observable<NgoOverviewItem[]> | undefined;
 
   constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute) {
     this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
