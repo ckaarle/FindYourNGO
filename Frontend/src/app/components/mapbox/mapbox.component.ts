@@ -3,13 +3,17 @@ import {MapboxService} from '../../services/mapbox.service';
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from '../../../environments/environment';
 import * as turf from '@turf/turf';
+import {NgoCoordinates} from '../../models/ngo';
 
 @Component({
   selector: 'app-mapbox',
   templateUrl: './mapbox.component.html',
   styleUrls: ['./mapbox.component.scss']
 })
-export class MapboxComponent implements OnInit {
+export class MapboxComponent {
+
+  // TODO cluster instead of marker?
+  // TODO only one layer for links (speedup?)
 
   // @ts-ignore
   map: mapboxgl.Map;
@@ -20,6 +24,12 @@ export class MapboxComponent implements OnInit {
 
   color = '#fffff';
 
+  ngos: {[id: number]: NgoCoordinates} = {};
+
+  mapMarkers = [];
+  mapSources = [];
+  mapLayers = [];
+
   constructor(private mapboxService: MapboxService) {
     this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
 
@@ -27,29 +37,41 @@ export class MapboxComponent implements OnInit {
     mapboxgl.accessToken = environment.mapbox.accessToken;
 
     this.mapboxService.getNgoCoordinates().subscribe(data => {
-      data.forEach((plot: any) => this.addMarker(plot.coordinates[1], plot.coordinates[0]));
+      data.forEach(
+          (plot: any) => {
+            const name = plot.name;
+            const id = plot.id;
+            const longitude = plot.coordinates[1];
+            const latitude = plot.coordinates[0];
+
+            this.ngos[id] = {
+              id,
+              name,
+              longitude,
+              latitude,
+            };
+
+            this.addMarker(longitude, latitude);
+          });
 
       this.mapboxService.getNgoLinks().subscribe(linkData => {
         linkData.forEach((link: any) => {
-
-          // TODO
-
-
           if (link.connected_ngo_id > link.reporter_id) {
+            const connectedNgoId = link.connected_ngo_id;
+            const reporterNgoId = link.reporter_id;
 
-            this.links[link.id] = {
-              between: [String(link.connected_ngo_id), String(link.reporter_id)],
-              tooltip: {content: link.id}
-            };
+            const coordinatesNgo = this.ngos[connectedNgoId];
+            const coordinatesReporter = this.ngos[reporterNgoId];
+
+            this.addLink(coordinatesNgo.longitude, coordinatesNgo.latitude, coordinatesReporter.longitude, coordinatesReporter.latitude,
+                coordinatesNgo.name, coordinatesReporter.name);
           }
         });
+
+        this.buildMap();
+        this.initialiseMap();
       });
     });
-  }
-
-  ngOnInit(): void {
-    this.buildMap();
-    this.addLink(this.lng, this.lat, -73.935242, 40.730610);
   }
 
   buildMap(): void {
@@ -58,18 +80,16 @@ export class MapboxComponent implements OnInit {
   }
 
   addMarker(longitude: number, latitude: number): void {
-    new mapboxgl.Marker({
-      color: this.color
-    }).setLngLat([longitude, latitude]).addTo(this.map);
+    // @ts-ignore
+    this.mapMarkers.push([longitude, latitude]);
   }
 
-  addLink(lng1: number, lat1: number, lng2: number, lat2: number): void {
+  addLink(lng1: number, lat1: number, lng2: number, lat2: number, name1: string, name2: string): void {
     const origin = turf.point([lng1, lat1]);
     const destination = turf.point([lng2, lat2]);
 
-    const curvedLine = turf.greatCircle(origin, destination, {properties: {name: 'Name of this line'}});
+    const curvedLine = turf.greatCircle(origin, destination, {properties: {name: name1 + ' --- ' + name2}});
 
-    // A simple line from origin to destination.
     const route = {
       type: 'FeatureCollection',
       features: [
@@ -86,24 +106,43 @@ export class MapboxComponent implements OnInit {
     // @ts-ignore
     route.features[0].geometry.coordinates = curvedLine.geometry.coordinates;
 
+    const name = name1 + '-' + name2;
 
+    // @ts-ignore
+    this.mapSources.push({id: name, data: route});
+
+    // @ts-ignore
+    this.mapLayers.push({id: name, source: name});
+
+  }
+
+  private initialiseMap(): void {
     this.map.on('load', () => {
-      this.map.addSource('route', {
-        type: 'geojson',
-        // @ts-ignore
-        data: route
+      this.mapSources.forEach((source: any) => {
+        this.map.addSource(source.id, {
+          type: 'geojson',
+          // @ts-ignore
+          data: source.data
+        });
       });
 
-      this.map.addLayer({
-        id: 'route',
-        source: 'route',
-        type: 'line',
-        paint: {
-          'line-width': 3,
-          'line-color': this.color,
-        }
+      this.mapLayers.forEach((layer: any) => {
+        this.map.addLayer({
+          id: layer.id,
+          source: layer.source,
+          type: 'line',
+          paint: {
+            'line-width': 3,
+            'line-color': this.color,
+          }
+        });
       });
+    });
 
-  });
+    this.mapMarkers.forEach(marker => {
+      new mapboxgl.Marker({
+        color: this.color
+      }).setLngLat(marker).addTo(this.map);
+    });
   }
 }

@@ -118,3 +118,10 @@ export interface NgoEvent {
     description: string;
     tags: string;
 }
+
+export interface NgoCoordinates {
+  id: number;
+  longitude: number;
+  latitude: number;
+  name: string;
+}
