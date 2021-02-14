@@ -34,7 +34,7 @@ export class UserService {
     this.token = localStorage.getItem('token');
     const expiration = localStorage.getItem('token-expiration');
     if (this.token && expiration) {
-      if (Date.parse(expiration) - 120000 < Date.now()) {
+      if (Date.parse(expiration) + 120000 > Date.now()) {
         this.refreshToken();
       }
       interval(120000).subscribe(x => this.refreshToken());
@@ -92,6 +92,7 @@ export class UserService {
       },
       err => {
         this.errors = err.error;
+        this.signOut();
       }
     );
   }
@@ -108,6 +109,7 @@ export class UserService {
     localStorage.removeItem('token-expiration');
     localStorage.removeItem('username');
     localStorage.removeItem('ngoid');
+    localStorage.removeItem('userid');
   }
 
   private updateData(token: string): void {
