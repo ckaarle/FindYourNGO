@@ -6,6 +6,7 @@ import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../services/user.service';
+import {FilterService} from '../../services/filter.service';
 
 @Component({
   selector: 'app-ngo-connection',
@@ -21,7 +22,7 @@ export class NgoConnectionComponent {
   ngoControl = new FormControl();
   $allNgos: Observable<NgoOverviewItem[]>;
 
-  constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute) {
+  constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, public filter: FilterService) {
     this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
     this.updateConnections();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>

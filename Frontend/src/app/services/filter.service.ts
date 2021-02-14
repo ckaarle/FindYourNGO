@@ -3,6 +3,7 @@ import {NgoFilterOptions, NgoFilterSelection, NgoOverviewItemPagination, NgoSort
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Utils} from './utils';
+import {Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class FilterService {
     public filteredNgoOverviewItemsChanged: EventEmitter<NgoOverviewItemPagination> = new EventEmitter<NgoOverviewItemPagination>();
     public loadingNgoOverviewItems: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(public apiService: ApiService) {
+    constructor(public apiService: ApiService, private router: Router) {
     }
 
     getSelectedFilters(): NgoFilterSelection {
@@ -79,5 +80,14 @@ export class FilterService {
       }
     }
     return result.filter(str => str != null && str.length !== 0);
+  }
+
+  showDetails(ngoId: number): void {
+    this.router.navigate(['/detailView', ngoId, {
+      currentPage: 1,
+      filter: this.filterActive,
+      filterSelection: JSON.stringify(this.selectedFilters),
+      sortingSelection: JSON.stringify(this.selectedSorting),
+    }]);
   }
 }

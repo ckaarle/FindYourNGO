@@ -97,4 +97,11 @@ export class NgoEventComponent {
   ngoName(ngo: NgoOverviewItem): string {
     return ngo?.name;
   }
+
+  removeInvitee(invitee: any): void {
+    const index = this.inviteeNames.indexOf(invitee);
+    if (index >= 0) {
+      this.inviteeNames.splice(index, 1);
+    }
+  }
 }

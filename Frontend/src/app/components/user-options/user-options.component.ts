@@ -13,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class UserOptionsComponent implements OnInit {
 
-  constructor(private filter: FilterService, public router: Router, public userService: UserService, public apiService: ApiService, public dialog: MatDialog) {
+  constructor(public filter: FilterService, public router: Router, public userService: UserService, public apiService: ApiService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -21,14 +21,5 @@ export class UserOptionsComponent implements OnInit {
 
   openDialog(): void {
     this.dialog.open(LoginDialogComponent);
-  }
-
-  showDetails(): void {
-    this.router.navigate(['/detailView', this.userService.ngoid.value, {
-      currentPage: 1,
-      filter: this.filter.filterActive,
-      filterSelection: JSON.stringify(this.filter.selectedFilters),
-      sortingSelection: JSON.stringify(this.filter.selectedSorting),
-    }]);
   }
 }
