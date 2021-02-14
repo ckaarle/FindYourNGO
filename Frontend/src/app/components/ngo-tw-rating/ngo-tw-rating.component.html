@@ -2,7 +2,11 @@
 
   <div class="tw-rating" fxFlex="33%" fxFlex.sm="33%"
        fxFlex.xs="100%">
-    <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
+    <div class="rating">
+      <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
+      <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
+    </div>
+
     <ngo-rating-table [reviewNumberIndexedByRating]="reviewNumberIndexedByRating"
                       [totalReviewNumber]="totalReviewNumber"
     ></ngo-rating-table>

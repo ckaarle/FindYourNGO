@@ -177,4 +177,7 @@ export class NgoDetailItemComponent {
         data => this.refreshNgoDetailItem(this.$ngoId.value.toString()));
   }
 
+  showInformation(): void {
+    this.router.navigate(['/about'], {fragment: 'tw-explanation'});
+  }
 }

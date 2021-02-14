@@ -24,6 +24,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -57,6 +58,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {NgoEventOverviewComponent} from './components/ngo-event-overview/ngo-event-overview.component';
 import {UserOptionsComponent} from './components/user-options/user-options.component';
+import { AboutComponent } from './screens/about/about.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -90,7 +92,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FlexLayoutModule,
     AppRoutingModule,
     MatAutocompleteModule,
-    FullCalendarModule
+    FullCalendarModule,
+    MatTooltipModule
   ],
   declarations: [
     OverviewScreenComponent,
@@ -117,6 +120,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     CalendarComponent,
     NgoEventOverviewComponent,
     UserOptionsComponent,
+    AboutComponent,
   ],
   exports: [
     MatTabsModule,
@@ -138,7 +142,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
-    UserOptionsComponent
+    UserOptionsComponent,
+    MatTooltipModule
   ],
   providers: [
     MediaService,

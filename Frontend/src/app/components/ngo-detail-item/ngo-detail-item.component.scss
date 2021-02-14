@@ -82,6 +82,12 @@
       font-weight: 500;
     }
   }
+
+  .info-icon {
+    color: var(--primary-color);
+    padding-left: 16px;
+    cursor: pointer;
+  }
 }
 
 .invisible {
@@ -112,3 +118,4 @@
     padding-left: 16px;
   }
 }
+
