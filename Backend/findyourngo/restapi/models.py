@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_MIN_VALUE, TW_MAX_VALUE, \
-    PAGERANK_MAX_BOOST
+    PAGERANK_MAX_BOOST, NGO_ACCOUNT_BOOST
 
 
 class NgoCountry(models.Model):
@@ -91,6 +91,7 @@ class NgoTWScore(models.Model):
     credible_source_score = models.FloatField(default=0)
     ecosoc_score = models.FloatField(default=0)
     pagerank_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(PAGERANK_MAX_BOOST)])
+    ngo_account_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(NGO_ACCOUNT_BOOST)])
 
 
 class Ngo(models.Model):

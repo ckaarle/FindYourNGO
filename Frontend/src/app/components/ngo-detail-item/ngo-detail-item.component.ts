@@ -31,6 +31,8 @@ export class NgoDetailItemComponent {
 
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
+
+  // @ts-ignore
   sortingSelection: NgoSortingSelection = {};
 
   userFavourite: boolean = true;
