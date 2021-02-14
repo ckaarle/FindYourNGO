@@ -68,9 +68,12 @@
 
         .edit-container {
           display: flex;
+          flex-direction: column;
+          padding-bottom: 8px !important;
+          padding-top: 8px !important;
 
           .mat-form-field {
-            width: 200px;
+            width: 100%;
           }
 
           .mat-icon {

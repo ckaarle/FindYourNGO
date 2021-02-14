@@ -73,8 +73,8 @@
 
             <ngo-rating *ngIf="ngoDetailItem && !editMode" [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
 
-            <form class="edit-form" [formGroup]="ngoForm" *ngIf="editMode">
-              <div class="edit-container" *ngFor="let formField of ngoForm.value | keyvalue; trackBy:trackByFn">
+            <form class="edit-form" [formGroup]="ngoForm" *ngIf="editMode" fxLayoutGap="50px grid" fxLayout="row wrap">
+              <div class="edit-container" *ngFor="let formField of ngoForm.value | keyvalue; trackBy:trackByFn" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
                 <mat-form-field *ngIf="(formField.value | typeEvaluator: 'isStringArray')">
                   <mat-label>{{formField.key}}</mat-label>
                   <input matInput type="text"

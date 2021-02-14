@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Prefetch
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
     NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoAccreditation, NgoBranch, NgoCountry, NgoTopic, NgoType
 
@@ -30,18 +31,9 @@ class NgoAddressSerializer(serializers.ModelSerializer):
 
 
 class NgoRepresentativeSerializer(serializers.ModelSerializer):
-    representative_first_name = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='representative_first_name'
-    )
-    representativeLastName = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='representative_last_name'
-    )
-    representativeEmail = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='representative_email'
-    )
+    representativeFirstName = serializers.CharField(source='representative_first_name')
+    representativeLastName = serializers.CharField(source='representative_last_name')
+    representativeEmail = serializers.EmailField(source='representative_email')
 
     class Meta:
         model = NgoRepresentative
@@ -55,14 +47,8 @@ class NgoStatsSerializer(serializers.ModelSerializer):
         slug_field='type',
         source='type_of_organization'
     )
-    presidentFirstName = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='president_first_name'
-    )
-    presidentLastNae = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='president_last_name'
-    )
+    presidentFirstName = serializers.CharField(source='president_first_name')
+    presidentLastName = serializers.CharField(source='president_last_name')
     foundingYear = serializers.IntegerField(source='founding_year')
     staffNumber = serializers.IntegerField(source='staff_number')
     memberNumber = serializers.IntegerField(source='member_number')
@@ -235,49 +221,47 @@ def update_ngo_stats(ngo: Ngo, ngo_update):
 def update_ngo_accreditations(ngo: Ngo, ngo_update):
     ngo.accreditations.clear()
     updated_accreditations = ngo_update['accreditations']
-    if len(updated_accreditations) > 0:
-        for accreditation in updated_accreditations:
-            if NgoAccreditation.objects.filter(accreditation=accreditation).exists():
-                existing_accreditation = NgoAccreditation.objects.filter(accreditation=accreditation).first()
-                ngo.accreditations.add(existing_accreditation)
-            else:
-                new_accreditation = NgoAccreditation.objects.create(accreditation=accreditation)
-                ngo.accreditations.add(new_accreditation)
+    for accreditation in updated_accreditations:
+        if NgoAccreditation.objects.filter(accreditation=accreditation).exists():
+            existing_accreditation = NgoAccreditation.objects.filter(accreditation=accreditation).first()
+            ngo.accreditations.add(existing_accreditation)
+        else:
+            new_accreditation = NgoAccreditation.objects.create(accreditation=accreditation)
+            ngo.accreditations.add(new_accreditation)
 
 
 def update_ngo_branches(ngo: Ngo, ngo_update):
     ngo.branches.clear()
     updated_branches = ngo_update['branches']
-    if len(updated_branches) > 0:
-        for branch in updated_branches:
-            if NgoBranch.objects.filter(country__name=branch).exists():
-                existing_branch = NgoBranch.objects.filter(country__name=branch).first()
-                ngo.branches.add(existing_branch)
-            else:
-                continue  # assuming all countries have been created, no new countries should be creatable
+    for branch in updated_branches:
+        if NgoBranch.objects.filter(country__name=branch)\
+                .prefetch_related(Prefetch('country', queryset=NgoCountry.objects.filter(name=branch))).exists():
+            existing_branch = NgoBranch.objects.filter(country__name=branch)\
+                .prefetch_related(Prefetch('country', queryset=NgoCountry.objects.filter(name=branch))).first()
+            ngo.branches.add(existing_branch)
+        else:
+            continue  # assuming all countries have been created, no new countries should be creatable
 
 
 def update_ngo_topics(ngo: Ngo, ngo_update):
     ngo.topics.clear()
     updated_topics = ngo_update['topics']
-    if len(updated_topics) > 0:
-        for topic in updated_topics:
-            if NgoTopic.objects.filter(topic=topic).exists():
-                existing_topic = NgoTopic.objects.filter(topic=topic).first()
-                ngo.topics.add(existing_topic)
-            else:
-                new_topic = NgoTopic.objects.create(topic=topic)
-                ngo.topics.add(new_topic)
+    for topic in updated_topics:
+        if NgoTopic.objects.filter(topic=topic).exists():
+            existing_topic = NgoTopic.objects.filter(topic=topic).first()
+            ngo.topics.add(existing_topic)
+        else:
+            new_topic = NgoTopic.objects.create(topic=topic)
+            ngo.topics.add(new_topic)
 
 
 def update_ngo_types(ngo_stats: NgoStats, ngo_update):
     ngo_stats.type_of_organization.clear()
     updated_types = ngo_update['typeOfOrganization']
-    if len(updated_types) > 0:
-        for updated_type in updated_types:
-            if NgoType.objects.filter(type=updated_type).exists():
-                existing_type = NgoType.objects.filter(type=updated_type).first()
-                ngo_stats.type_of_organization.add(existing_type)
-            else:
-                new_type = NgoType.objects.create(type=updated_type)
-                ngo_stats.type_of_organization.add(new_type)
+    for updated_type in updated_types:
+        if NgoType.objects.filter(type=updated_type).exists():
+            existing_type = NgoType.objects.filter(type=updated_type).first()
+            ngo_stats.type_of_organization.add(existing_type)
+        else:
+            new_type = NgoType.objects.create(type=updated_type)
+            ngo_stats.type_of_organization.add(new_type)

@@ -150,22 +150,23 @@ export class NgoDetailItemComponent {
       for (const ngoTitle of Object.values(ngoContentContainer.values) as any) {
         // @ts-ignore
         if (ngoTitle.displayName === 'Representative') {
-            absControl['Representative First Name'] = new FormControl(ngoTitle.values.representativeFirstName);
-            absControl['Representative Last Name'] = new FormControl(ngoTitle.values.representativeLastName);
-            absControl['Representative Email'] = new FormControl(ngoTitle.values.representativeEmail);
+            absControl['Edit Representative First Name'] = new FormControl(ngoTitle.values.representativeFirstName);
+            absControl['Edit Representative Last Name'] = new FormControl(ngoTitle.values.representativeLastName);
+            absControl['Edit Representative Email'] = new FormControl(ngoTitle.values.representativeEmail);
         } else if (ngoTitle.displayName === 'President') {
-            absControl['President First Name'] = new FormControl(ngoTitle.values.presidentFirstName);
-            absControl['President Last Name'] = new FormControl(ngoTitle.values.presidentLastName);
+            absControl['Edit President First Name'] = new FormControl(ngoTitle.values.presidentFirstName);
+            absControl['Edit President Last Name'] = new FormControl(ngoTitle.values.presidentLastName);
         } else if (ngoTitle.displayName === 'Address') {
-            absControl['Street'] = new FormControl(ngoTitle.values.street);
-            absControl['City'] = new FormControl(ngoTitle.values.city);
-            absControl['Postcode'] = new FormControl(ngoTitle.values.postcode);
-            absControl['Country'] = new FormControl(ngoTitle.values.country);
+            absControl['Edit Street'] = new FormControl(ngoTitle.values.street);
+            absControl['Edit City'] = new FormControl(ngoTitle.values.city);
+            absControl['Edit Postcode'] = new FormControl(ngoTitle.values.postcode);
+            absControl['Edit Country'] = new FormControl(ngoTitle.values.country);
         } else {
-            absControl[ngoTitle.displayName] = new FormControl(ngoTitle.values);
+            absControl[`Edit ${ngoTitle.displayName}`] = new FormControl(ngoTitle.values);
         }
       }
     }
+
     return absControl;
   }
 
