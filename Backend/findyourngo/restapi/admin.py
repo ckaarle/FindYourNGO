@@ -4,6 +4,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from findyourngo.restapi.models import NgoAccount, Ngo
+from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
+
 
 
 class NgoAccountInline(admin.StackedInline):
@@ -24,6 +26,15 @@ class CategoryChoiceField(forms.ModelChoiceField):
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
     inlines = (NgoAccountInline,)
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.save()
+            # Warning: This line will call all inlines that use NgoAccount
+            if isinstance(instance, NgoAccount):
+                TWUpdater().update_single_ngo(instance.ngo)
+        formset.save_m2m()
 
 
 # Re-register UserAdmin
