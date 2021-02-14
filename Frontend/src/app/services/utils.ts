@@ -61,7 +61,10 @@ export class Utils {
                 workingLanguages: {displayName: 'Working languages', values: ngoDetailItem.stats.workingLanguages}
             },
             stats: {
-                president: {displayName: 'President', values: ngoDetailItem.stats.president},
+                president: {displayName: 'President', values: {
+                    presidentFirstName: ngoDetailItem.stats.presidentFirstName,
+                    presidentLastName: ngoDetailItem.stats.presidentLastName
+                }},
                 foundingYear: {displayName: 'Founding year', values: ngoDetailItem.stats.foundingYear},
                 staffNumber: {displayName: 'Staff number', values: ngoDetailItem.stats.staffNumber},
                 memberNumber: {displayName: 'Member number', values: ngoDetailItem.stats.memberNumber},
@@ -73,7 +76,12 @@ export class Utils {
                 address: {displayName: 'Address', values: ngoDetailItem.contact.address},
                 ngoPhoneNumber: {displayName: 'Phone number', values: ngoDetailItem.contact.ngoPhoneNumber},
                 ngoEmail: {displayName: 'Email', values: ngoDetailItem.contact.ngoEmail},
-                representative: {displayName: 'Representative', values: ngoDetailItem.contact.representative}
+                representative: {displayName: 'Representative', values: ngoDetailItem.contact.representative ?
+                        ngoDetailItem.contact.representative : {
+                            representativeFirstName: '',
+                            representativeLastName: '',
+                            representativeEmail: ''
+                }}
             },
             rating: {
                 trustworthiness: {displayName: 'Trustworthiness', values: ngoDetailItem.trustworthiness},
@@ -89,15 +97,21 @@ export class Utils {
             activities: editedNgo['Activities'],
             aim: editedNgo['Description'],
             branches: editedNgo['Branches'],
-            address: editedNgo['Address'],
+            street: editedNgo['Street'],
+            city: editedNgo['City'],
+            postcode: editedNgo['Postcode'],
+            country: editedNgo['Country'],
             ngoEmail: editedNgo['Email'],
             ngoPhoneNumber: editedNgo['Phone number'],
-            representative: editedNgo['Representative'],
+            representativeFirstName: editedNgo['Representative First Name'],
+            representativeLastName: editedNgo['Representative Last Name'],
+            representativeEmail: editedNgo['Representative Email'],
             website: editedNgo['Website'],
             foundingYear: editedNgo['Founding year'],
             funding: editedNgo['Funding'],
             memberNumber: editedNgo['Member number'],
-            president: editedNgo['President'],
+            presidentFirstName: editedNgo['President First Name'],
+            presidentLastName: editedNgo['President Last Name'],
             staffNumber: editedNgo['Staff number'],
             typeOfOrganization: editedNgo['Organization type'],
             workingLanguages: editedNgo['Working languages'],
@@ -110,5 +124,35 @@ export class Utils {
         const filterValue = value.toLowerCase();
 
         return values.filter(option => option.toLowerCase().includes(filterValue));
+    }
+
+    static getRepresentativeValue(representative: any): string {
+        return representative.representativeLastName ?
+            representative.representativeEmail ?
+              `${representative.representativeFirstName} ${representative.representativeLastName}, ${representative.representativeEmail}` :
+              `${representative.representativeFirstName} ${representative.representativeLastName}` :
+            `${representative.representativeEmail}`;
+    }
+
+    static getPresidentValue(president: any): string {
+        return `${president.presidentFirstName} ${president.presidentLastName}`;
+    }
+
+    static getAddressValue(address: any): string {
+        return address.country ?
+            address.street ?
+                address.city ?
+                    `${address.street}, ${address.postcode} ${address.city}, ${address.country}` :
+                    `${address.country}` :
+                address.city ?
+                    `${address.postcode} ${address.city}, ${address.country}` :
+                    `${address.country}` :
+            address.street ?
+                address.city ?
+                    `${address.street}, ${address.postcode} ${address.city}` :
+                    '' :
+                address.city ?
+                    `${address.postcode} ${address.city}` :
+                    '';
     }
 }

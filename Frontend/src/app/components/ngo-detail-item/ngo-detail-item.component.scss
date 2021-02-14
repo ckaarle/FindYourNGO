@@ -26,38 +26,83 @@
 
     .ngo-details {
       margin: 32px 0 16px 0;
-    }
 
-    .ngo-content-container {
-      display: flex;
-      flex-direction: row;
-
-      .mat-icon {
-        color: var(--primary-color);
-      }
-
-      .content-column {
+      .ngo-content-container {
         display: flex;
-        flex-direction: column;
-        padding: 4px 16px 16px;
-        width: 100%;
+        flex-direction: row;
 
-        .title-row {
+        .mat-icon {
+          color: var(--primary-color);
+        }
+
+        .content-column {
           display: flex;
-          flex-direction: row;
-          padding-bottom: 8px;
+          flex-direction: column;
+          padding: 4px 16px 16px;
+          width: 100%;
 
-          .title {
-            width: 20%;
-            font-weight: 400;
-            font-size: var(--font-size-medium);
-          }
-
-          .content {
+          .title-row {
             display: flex;
             flex-direction: row;
-            width: 80%;
-            word-break: break-word;
+            padding-bottom: 8px;
+
+            .title {
+              width: 20%;
+              font-weight: 400;
+              font-size: var(--font-size-medium);
+            }
+
+            .content {
+              display: flex;
+              flex-direction: row;
+              width: 80%;
+              word-break: break-word;
+            }
+          }
+        }
+      }
+
+      .edit-form {
+        display: flex;
+        flex-direction: column;
+
+        .edit-container {
+          display: flex;
+
+          .mat-form-field {
+            width: 200px;
+          }
+
+          .mat-icon {
+            color: var(--secondary-color);
+          }
+
+          .chip-list {
+            padding-left: 16px;
+
+            .value-item {
+              margin-right: 16px;
+              max-width: 150px;
+              font-size: var(--font-size-small);
+              background-color: var(--background-color);
+              border: var(--background-contrast-color-10) 1px solid;
+              box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
+
+              .mat-icon {
+                  font-size: var(--font-size-medium);
+                  height: var(--font-size-medium);
+                  width: var(--font-size-medium);
+                  line-height: var(--font-size-medium);
+                  margin-right: 8px;
+                  color: var(--primary-color);
+              }
+
+              mat-label {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
           }
         }
       }

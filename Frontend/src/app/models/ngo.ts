@@ -18,14 +18,26 @@ export interface NgoDetailItemRating {
 }
 
 export interface NgoDetailItemContact {
-  address: { displayName: string, values: string };
+  address: { displayName: string, values: {
+    street: string;
+    postcode: string;
+    city: string;
+    country: string;
+  }};
   ngoPhoneNumber: { displayName: string, values: string };
   ngoEmail: { displayName: string, values: string };
-  representative?: { displayName: string, values: string };
+  representative?: { displayName: string, values: {
+    representativeFirstName: string;
+    representativeLastName: string;
+    representativeEmail: string;
+  }};
 }
 
 export interface NgoDetailItemStats {
-  president?: { displayName: string, values: string };
+  president?: { displayName: string, values: {
+    presidentFirstName: string;
+    presidentLastName: string;
+  }};
   foundingYear: { displayName: string, values: number };
   staffNumber: { displayName: string, values: number };
   memberNumber: { displayName: string, values: number };
