@@ -8,6 +8,8 @@ import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 export interface NgoContentContainer {
   icon: string;
@@ -26,6 +28,8 @@ export class NgoDetailItemComponent {
   public ngoForm: FormGroup = new FormGroup({});
   public $ngoRelation = new BehaviorSubject<string>('');
   public editMode = false;
+
+  editModeEnabled = true;
 
   previousPageNumber: null | number = null;
 
@@ -179,5 +183,12 @@ export class NgoDetailItemComponent {
 
   showInformation(): void {
     this.router.navigate(['/about'], {fragment: 'tw-explanation'});
+  }
+
+  setEditMode($event: MatTabChangeEvent): void {
+    if ($event.index > 0 && this.editMode) {
+      this.editMode = false;
+    }
+    this.editModeEnabled = $event.index === 0;
   }
 }
