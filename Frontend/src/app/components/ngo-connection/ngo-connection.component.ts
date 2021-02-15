@@ -20,14 +20,17 @@ export class NgoConnectionComponent {
   incomingRequests: NgoOverviewItem[] = [];
   outgoingRequests: NgoOverviewItem[] = [];
   ngoControl = new FormControl();
-  $allNgos: Observable<NgoOverviewItem[]>;
+  $allNgos: Observable<NgoOverviewItem[]> | undefined;
 
   constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, public filter: FilterService) {
-    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
+    // TODO: This is a hack until ngodetail item does not return undefined
+    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));
     this.updateConnections();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
-          map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value.toLowerCase()) && ngo.id !== this.currentNgoId))));
+        map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())
+          && ngo.id !== this.currentNgoId && !this.connections.some(x => x.id === ngo.id)
+          && !this.outgoingRequests.some(x => x.id === ngo.id)))));
   }
 
   addNgo(): void {
