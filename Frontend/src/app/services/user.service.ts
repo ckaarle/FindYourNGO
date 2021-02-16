@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {BehaviorSubject, interval} from 'rxjs';
+import {BehaviorSubject, interval, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {SocialUser} from 'angularx-social-login';
 
@@ -24,6 +24,8 @@ export class UserService {
 
   // error messages received from the login attempt
   public errors: any = [];
+
+  public $lastErrorMessage = new BehaviorSubject<string>('');
 
   constructor(private httpClient: HttpClient) {
     this.user = new BehaviorSubject<SocialUser>({} as SocialUser);
@@ -79,6 +81,7 @@ export class UserService {
       },
       err => {
         this.errors = err.error;
+        this.$lastErrorMessage.next(err.error.error);
       }
     );
   }
