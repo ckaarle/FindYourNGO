@@ -59,6 +59,8 @@ import {CalendarComponent} from './components/calendar/calendar.component';
 import {NgoEventOverviewComponent} from './components/ngo-event-overview/ngo-event-overview.component';
 import {UserOptionsComponent} from './components/user-options/user-options.component';
 import { AboutComponent } from './screens/about/about.component';
+import { NgoTwHistoryComponent } from './components/ngo-tw-history/ngo-tw-history.component';
+import {NgxEchartsModule} from 'ngx-echarts';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -93,7 +95,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AppRoutingModule,
     MatAutocompleteModule,
     FullCalendarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxEchartsModule.forRoot({echarts: () => import('echarts')}),
   ],
   declarations: [
     OverviewScreenComponent,
@@ -121,6 +124,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     NgoEventOverviewComponent,
     UserOptionsComponent,
     AboutComponent,
+    NgoTwHistoryComponent,
   ],
   exports: [
     MatTabsModule,

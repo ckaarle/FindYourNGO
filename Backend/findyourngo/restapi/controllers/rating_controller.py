@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from findyourngo.restapi.models import Ngo, NgoReview
+from findyourngo.restapi.models import Ngo, NgoReview, NgoTWDataPoint
 from findyourngo.data_import.data_importer import update_ngo_tw_score
 
 
@@ -62,6 +62,19 @@ def convert_reviews(reviews):
             'text': review.text
         }
         result.append(converted_comment)
+
+    return result
+
+
+def convert_data_points(data_points):
+    result = []
+
+    for data_point in data_points:
+        converted_data_point = {
+            'dailyTwScore': data_point.daily_tw_score,
+            'date': data_point.date
+        }
+        result.append(converted_data_point)
 
     return result
 
@@ -187,3 +200,15 @@ def user_review_present(request) -> JsonResponse:
         return JsonResponse(len(reviews) > 0, safe=False)
     except:
         return JsonResponse(False, safe=False)
+
+
+@api_view(['GET'])
+def tw_history(request) -> JsonResponse:
+    ngo_id = request.query_params.get('ngoId')
+
+    try:
+        ngo = Ngo.objects.get(pk=ngo_id)
+        tw_data_points = ngo.tw_score.tw_series.all()
+        return JsonResponse(convert_data_points(tw_data_points), safe=False)
+    except BaseException:
+        return JsonResponse({'error': f'No data points for ngo {ngo_id}'}, status=status.HTTP_400_BAD_REQUEST, safe=False)

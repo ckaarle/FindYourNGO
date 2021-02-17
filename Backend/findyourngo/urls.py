@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
+    url(r'^twHistory', rating_controller.tw_history),
     path('twUpdate', views.twUpdate),
     path('storeDailyTw', views.storeDailyTw),
     url(r'names', views.name_list),
