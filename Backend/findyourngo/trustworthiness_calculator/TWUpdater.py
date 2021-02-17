@@ -24,9 +24,12 @@ class TWUpdater:
             ngo_tw_score = ngo.tw_score
 
             if not ngo_tw_score.tw_series.filter(date=datetime.today()).exists():
-                daily_tw = NgoTWDataPoint.objects.create(daily_tw_score=ngo_tw_score.total_tw_score,
-                                                         date=datetime.today())
-                ngo_tw_score.tw_series.add(daily_tw)
+                last_tw_entry = ngo_tw_score.tw_series.all().last()
+                if last_tw_entry is None or not last_tw_entry.daily_tw_score == ngo_tw_score.total_tw_score:
+
+                    daily_tw = NgoTWDataPoint.objects.create(daily_tw_score=ngo_tw_score.total_tw_score,
+                                                             date=datetime.today())
+                    ngo_tw_score.tw_series.add(daily_tw)
 
     def _calculate_tw_without_pagerank(self) -> None:
         for ngo in Ngo.objects.all():
