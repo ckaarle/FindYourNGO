@@ -96,7 +96,8 @@ def generate_missing_data_points(tw_data_points):
             result.append(data_point)
 
     last_result = result[len(result)-1]
-    while datetime.today().date() > last_result.date and datetime.today().day - last_result.date.day >= 1:
+    today_date = datetime.today().date()
+    while today_date > last_result.date:
         last_result = NgoTWDataPoint(date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(), daily_tw_score=last_result.daily_tw_score)
         result.append(last_result)
     return result
