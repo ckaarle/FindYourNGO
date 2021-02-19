@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from findyourngo.restapi.models import Ngo
-from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer
+from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -34,11 +34,12 @@ def ngo_detail(request):
 
     elif request.method == 'PUT':
         ngo_data = JSONParser().parse(request)
-        ngo_serializer = NgoSerializer(ngo, data=ngo_data)
-        if ngo_serializer.is_valid():
-            ngo_serializer.save()
-            return JsonResponse(ngo_serializer.data)
-        return JsonResponse(ngo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            update_ngo_instance(ngo, ngo_data)
+            ngo_serializer = NgoSerializer(ngo)
+            return JsonResponse(ngo_serializer.data, status=status.HTTP_201_CREATED)
+        except Exception:
+            return JsonResponse({'error': 'Ngo could not be updated.'}, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         ngo.delete()
