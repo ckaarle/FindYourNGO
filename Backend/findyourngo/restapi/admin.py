@@ -28,6 +28,11 @@ class UserAdmin(BaseUserAdmin):
     inlines = (NgoAccountInline,)
 
     def save_formset(self, request, form, formset, change):
+        try:
+            prev_ngo = NgoAccount.objects.get(user_id=formset.instance).ngo
+            TWUpdater().update_single_ngo(prev_ngo)
+        except:
+            print(f'User {formset.instance} previously represented no NGO!')
         instances = formset.save(commit=False)
         for instance in instances:
             instance.save()
