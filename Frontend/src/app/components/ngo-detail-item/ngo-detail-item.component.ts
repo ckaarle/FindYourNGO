@@ -9,7 +9,6 @@ import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {$e} from 'codelyzer/angular/styles/chars';
 
 export interface NgoContentContainer {
   icon: string;
