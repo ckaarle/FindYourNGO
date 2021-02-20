@@ -72,4 +72,5 @@ urlpatterns = [
     url(r'^userFavourite$', favourite_controller.user_favourite),
     url(r'^userFavourites$', favourite_controller.user_favourites),
     url(r'^userFavouriteEvents', favourite_controller.favourite_events),
+    url(r'^registerNgo', ngo_controller.register_ngo)
 ]

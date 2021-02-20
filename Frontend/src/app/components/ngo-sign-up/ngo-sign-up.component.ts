@@ -36,6 +36,8 @@ export class NgoSignUpComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // TODO fetch all ngo names and throw error if one of them is used via a validator (plus message!)
+    // TODO country autocomplete
   }
 
   submit(): void {
@@ -44,9 +46,12 @@ export class NgoSignUpComponent implements OnInit {
     this.ngoRegistrationService.registerNewNgo(newNgo).subscribe((result: any) => {
           const query = {ngo_name: this.group.get('ngoNameControl')?.value};
           // this.userService.register(this.group.get('userForm').value, query); TODO put back in
+          console.log(result.message)
+
+      // TODO redirect back to overview
         },
         (error: any) => {
-          const userMessage = error.message;
+          const userMessage = error.error.error;
           this.snackBar.open(userMessage, '', {
             duration: 3000,
             panelClass: ['login-snackbar']
