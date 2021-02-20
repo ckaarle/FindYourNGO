@@ -32,7 +32,7 @@
         <span fxFlex></span>
         <div *ngIf="userService.ngoid.value !== -1">
           <button class="invisible action-button">
-            <mat-icon *ngIf="$ngoRelation.value === 'self' && !editMode" class="action-icon" (click)="startEditMode()">create</mat-icon>
+            <mat-icon *ngIf="$ngoRelation.value === 'self' && !editMode && editModeEnabled" class="action-icon" (click)="startEditMode()">create</mat-icon>
             <mat-icon *ngIf="$ngoRelation.value === 'self' && editMode" class="action-icon" (click)="submit()">edit_off</mat-icon>
             <mat-icon *ngIf="$ngoRelation.value === 'none'" class="action-icon" (click)="addConnection()">person_add</mat-icon>
             <mat-icon *ngIf="$ngoRelation.value === 'requesting'" class="action-icon" (click)="removeConnection()">delete</mat-icon>
@@ -46,7 +46,7 @@
       <mat-divider></mat-divider>
     </div>
     <div class="ngo-content">
-      <mat-tab-group mat-align-tabs="start">
+      <mat-tab-group mat-align-tabs="start" (selectedTabChange)="setEditMode($event)">
         <mat-tab label="Information">
           <div class="ngo-details">
             <div *ngIf="$ngoId.value !== userService.ngoid?.value || !editMode">
