@@ -70,15 +70,20 @@ export class NgoSignUpComponent implements OnInit {
 
     this.authService.authState.subscribe((user) => {
       this.user = user;
-      this.loginService.trySocialLogin(this.getQuery(), this.user?.authToken);
+
+      if (user) {
+        this.loginService.trySocialLogin(this.getQuery(), this.user?.authToken);
+      }
+
     });
 
     this.userService.user.subscribe(user => this.user = user);
 
     this.userService.username.subscribe(next => {
-      console.log('NEW USER DETECTED');
-
       if (next !== '') {
+        if (this.$errorMessage.getValue() === '') {
+          this.registrationSuccessful = true;
+        }
         this.loginService.fullSignOut(this.user);
       }
     });
@@ -106,10 +111,6 @@ export class NgoSignUpComponent implements OnInit {
     } else {
       const query = this.getQuery();
       this.userService.register(this.group.get('userForm')?.value, query);
-    }
-
-    if (this.$errorMessage.getValue() === '') {
-      this.registrationSuccessful = true;  // TODO this shows up way too early
     }
   }
 
@@ -166,6 +167,3 @@ export class NgoSignUpComponent implements OnInit {
     this.group.get('userForm')?.updateValueAndValidity();
   }
 }
-
-// TODO wrong user signed in
-// TODO: success message shows up too early when using social login

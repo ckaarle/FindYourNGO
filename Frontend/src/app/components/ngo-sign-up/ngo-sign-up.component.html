@@ -11,106 +11,121 @@
           to add further details.</p>
       </div>
 
-      <form [formGroup]="group">
-        <div class="infoGroup">
-          <h4>General Information</h4>
-          <div class="input">
-            <mat-form-field>
-              <mat-label>NGO name</mat-label>
-              <input matInput type="text" formControlName="ngoNameControl"/>
-            </mat-form-field>
-            <div class="validation-error-message"
-                 *ngIf="group.get('ngoNameControl').hasError('ngoNameDuplicate') && (group.touched || group.dirty)">
-              Ngo name
-              already exists.
-            </div>
-          </div>
-
-          <div>
-            <mat-form-field>
-              <mat-label>Country of headquarter</mat-label>
-              <input matInput type="text" formControlName="countryControl"/>
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-      <form [formGroup]="group">
-        <div class="infoGroup">
-          <h4>NGO Representative Information</h4>
-          <div>
-            <mat-form-field>
-              <mat-label>First name</mat-label>
-              <input matInput type="text" formControlName="firstNameControl"/>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <mat-form-field>
-              <mat-label>Last name</mat-label>
-              <input matInput type="text" formControlName="lastNameControl"/>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <mat-form-field>
-              <mat-label>Email address</mat-label>
-              <input matInput type="text" formControlName="emailRepresentativeControl"/>
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-
-      <div>
-        <h4>User Account</h4>
-        <div class="info-container" fxLayoutGap="16px grid" fxLayout="row wrap">
-          <div class="info-column" fxFlex="45%">
-            <form [formGroup]="group">
-              <div class="infoGroup" formGroupName="userForm">
-                <div>
-                  <mat-form-field>
-                    <mat-label>Username</mat-label>
-                    <input matInput type="text" formControlName="username"/>
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field>
-                    <mat-label>Email address</mat-label>
-                    <input matInput type="text" formControlName="email"/>
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input matInput type="text" formControlName="password"/>
-                  </mat-form-field>
+      <div class="info-container" fxLayoutGap="16px grid" fxLayout="row wrap">
+        <div fxFlex="50%">
+          <form [formGroup]="group">
+            <div class="infoGroup">
+              <h4>General Information</h4>
+              <div class="input">
+                <mat-form-field>
+                  <mat-label>NGO name</mat-label>
+                  <input matInput type="text" formControlName="ngoNameControl"/>
+                </mat-form-field>
+                <div class="validation-error-message"
+                     *ngIf="group.get('ngoNameControl').hasError('ngoNameDuplicate') && (group.touched || group.dirty)">
+                  Ngo name
+                  already exists.
                 </div>
               </div>
-            </form>
-          </div>
 
-          <p fxFlex="10%" class="or-text">or</p>
+              <div>
+                <mat-form-field>
+                  <mat-label>Country of headquarter</mat-label>
+                  <input matInput type="text" formControlName="countryControl"/>
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+        </div>
 
-          <div fxFlex="45%" class="info-boxes">
+        <div fxFlex="50%">
+          <form [formGroup]="group" fxFlex="50%">
             <div>
-              <p>Use external provider to log in:</p>
+              <h4>NGO Representative Information</h4>
+              <div>
+                <mat-form-field>
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" formControlName="firstNameControl"/>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field>
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" formControlName="lastNameControl"/>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field>
+                  <mat-label>Email address</mat-label>
+                  <input matInput type="text" formControlName="emailRepresentativeControl"/>
+                </mat-form-field>
+              </div>
             </div>
-            <div>
-              <mat-checkbox [ngModel]="googleLogin.getValue()"
-                            (click)="toogleGoogleLoginStatus($event)"
-                            [class.mat-checkbox-disabled]="facebookLogin.getValue()"
-              >
-                Google
-              </mat-checkbox>
+          </form>
+        </div>
+        <!--      </div>-->
+
+
+        <!--      <div class="info-container" fxLayoutGap="16px grid" fxLayout="row wrap">-->
+        <div fxFlex="100%">
+          <div fxLayoutGap="16px grid" fxLayout="row wrap" class="info-container">
+            <div fxFlex="45%">
+              <div>
+                <h4>User Account</h4>
+                <div>
+                  <form [formGroup]="group">
+                    <div formGroupName="userForm">
+                      <div>
+                        <mat-form-field>
+                          <mat-label>Username</mat-label>
+                          <input matInput type="text" formControlName="username"/>
+                        </mat-form-field>
+                      </div>
+
+                      <div>
+                        <mat-form-field>
+                          <mat-label>Email address</mat-label>
+                          <input matInput type="text" formControlName="email"/>
+                        </mat-form-field>
+                      </div>
+
+                      <div>
+                        <mat-form-field>
+                          <mat-label>Password</mat-label>
+                          <input matInput type="text" formControlName="password"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
             </div>
-            <div>
-              <mat-checkbox [ngModel]="facebookLogin.getValue()"
-                            (click)="toggleFacebookLoginStatus($event)"
-                            [class.mat-checkbox-disabled]="googleLogin.getValue()"
-              >
-                Facebook
-              </mat-checkbox>
+
+            <p fxFlex="10%" class="or-text">or</p>
+
+            <div fxFlex="45%" class="info-boxes">
+              <div>
+                <p>Use external provider to log in:</p>
+              </div>
+              <div>
+                <mat-checkbox [ngModel]="googleLogin.getValue()"
+                              (click)="toogleGoogleLoginStatus($event)"
+                              [class.mat-checkbox-disabled]="facebookLogin.getValue()"
+                >
+                  Google
+                </mat-checkbox>
+              </div>
+              <div>
+                <mat-checkbox [ngModel]="facebookLogin.getValue()"
+                              (click)="toggleFacebookLoginStatus($event)"
+                              [class.mat-checkbox-disabled]="googleLogin.getValue()"
+                >
+                  Facebook
+                </mat-checkbox>
+              </div>
             </div>
           </div>
         </div>
