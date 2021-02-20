@@ -10,6 +10,7 @@ import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-dialog',
@@ -33,7 +34,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   });
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private authService: SocialAuthService,
-              private apiService: ApiService, private userService: UserService, private snackBar: MatSnackBar) {
+              private apiService: ApiService, private userService: UserService, private snackBar: MatSnackBar,
+              private router: Router) {
     this.isNgo = false;
 
     this.apiService.get('names').subscribe((data: Names) =>
@@ -125,7 +127,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     }
 
     const userMessage = 'Error: ' + errorMessage;
-    this.snackBar.open(userMessage, null, {
+    this.snackBar.open(userMessage, '', {
       duration: 3000,
       panelClass: ['login-snackbar']
     });
@@ -133,5 +135,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   registerNewNgo($event: MouseEvent): void {
     $event.stopPropagation();
+    this.dialogRef.close(this.user?.photoUrl);
+    this.router.navigate(['registerNgo']);
   }
 }
