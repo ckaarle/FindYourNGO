@@ -41,7 +41,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    initial_import_necessary = run_initial_data_import()
+    initial_import_necessary = run_initial_data_import(request)
     if initial_import_necessary:
         return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
     else:

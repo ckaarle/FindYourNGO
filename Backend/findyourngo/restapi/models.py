@@ -51,6 +51,8 @@ class NgoAddress(models.Model):
     postcode = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
+    latitude = models.CharField(max_length=200)
+    longitude = models.CharField(max_length=200)
 
 
 class NgoRepresentative(models.Model):
