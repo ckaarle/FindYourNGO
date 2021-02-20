@@ -1,13 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef} from '@angular/core';
 import {NgoDetailItem, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 import {BehaviorSubject} from 'rxjs';
-import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+
 
 export interface NgoContentContainer {
   icon: string;
@@ -20,12 +22,15 @@ export interface NgoContentContainer {
   styleUrls: ['./ngo-detail-item.component.scss']
 })
 export class NgoDetailItemComponent {
+  utils = Utils;
   ngoContentContainers: NgoContentContainer[] = [];
   public ngoDetailItem: any | NgoDetailItem;
   public $ngoId = new BehaviorSubject<number>(-1);
   public ngoForm: FormGroup = new FormGroup({});
   public $ngoRelation = new BehaviorSubject<string>('');
   public editMode = false;
+
+  editModeEnabled = true;
 
   previousPageNumber: null | number = null;
 
@@ -45,7 +50,7 @@ export class NgoDetailItemComponent {
       private router: Router,
       private favouriteService: FavouriteService,
       private location: Location,
-      public userService: UserService
+      public userService: UserService,
       ) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
@@ -102,14 +107,17 @@ export class NgoDetailItemComponent {
         break;
       } else {
         hasValues = ngoContentContainerTitles[title].values &&
-            (ngoContentContainerTitles[title].values !== '' || ngoContentContainerTitles[title].values.length > 0);
+            (Array.isArray(ngoContentContainerTitles[title].values) ?
+                ngoContentContainerTitles[title].values.length > 0 :
+                ngoContentContainerTitles[title].values !== '' &&
+                Object.keys(ngoContentContainerTitles[title].values).length > 0);
       }
     }
     return hasValues;
   }
 
   titleRowHasValues(titleRow: any): boolean {
-    return titleRow && (titleRow !== '' || titleRow.length > 0);
+    return titleRow && (Array.isArray(titleRow) ? titleRow.length > 0 : titleRow !== '' && Object.keys(titleRow).length > 0);
   }
 
   generateContentContainers(): void {
@@ -144,11 +152,26 @@ export class NgoDetailItemComponent {
   generateFormControls(): { [key: string]: AbstractControl; } {
     const absControl: { [key: string]: AbstractControl; } = {};
     for (const ngoContentContainer of this.ngoContentContainers) {
-      for (const ngoTitle of Object.values(ngoContentContainer.values)) {
+      for (const ngoTitle of Object.values(ngoContentContainer.values) as any) {
         // @ts-ignore
-        absControl[ngoTitle.displayName] = new FormControl(ngoTitle.values);
+        if (ngoTitle.displayName === 'Representative') {
+            absControl['Edit Representative First Name'] = new FormControl(ngoTitle.values.representativeFirstName);
+            absControl['Edit Representative Last Name'] = new FormControl(ngoTitle.values.representativeLastName);
+            absControl['Edit Representative Email'] = new FormControl(ngoTitle.values.representativeEmail);
+        } else if (ngoTitle.displayName === 'President') {
+            absControl['Edit President First Name'] = new FormControl(ngoTitle.values.presidentFirstName);
+            absControl['Edit President Last Name'] = new FormControl(ngoTitle.values.presidentLastName);
+        } else if (ngoTitle.displayName === 'Address') {
+            absControl['Edit Street'] = new FormControl(ngoTitle.values.street);
+            absControl['Edit City'] = new FormControl(ngoTitle.values.city);
+            absControl['Edit Postcode'] = new FormControl(ngoTitle.values.postcode);
+            absControl['Edit Country'] = new FormControl(ngoTitle.values.country);
+        } else {
+            absControl[`Edit ${ngoTitle.displayName}`] = new FormControl(ngoTitle.values);
+        }
       }
     }
+
     return absControl;
   }
 
@@ -166,18 +189,47 @@ export class NgoDetailItemComponent {
         x => this.updateRelation());
   }
 
+  trackByFn(index: any, item: any): any {
+    return index;
+  }
+
   startEditMode(): void {
     this.editMode = true;
   }
 
+  removeValue(value: any, formFieldKey: string): void {
+    const index = this.ngoForm.value[formFieldKey].indexOf(value);
+    if (index >= 0) {
+      this.ngoForm.value[formFieldKey].splice(index, 1);
+    }
+  }
+
+  setInputValue(value: string, formFieldKey: string): void {
+    if (Array.isArray(this.ngoForm.value[formFieldKey])) {
+      if (this.ngoForm.value[formFieldKey].length === 0) {
+        this.ngoForm.value[formFieldKey] = [];
+      }
+      this.ngoForm.value[formFieldKey].push(value);
+    }
+    return;
+  }
+
   submit(): void {
     this.editMode = false;
-    console.log(this.ngoForm.value);
-    this.apiService.put('ngoDetailItem', this.ngoForm.value).subscribe(
+    const editedNgo = Utils.retrieveObjectKeyFromDetailItemDisplayName(this.ngoForm.value);
+    this.apiService.put('ngoDetailItem/', editedNgo, {id: this.$ngoId.value}).subscribe(
         data => this.refreshNgoDetailItem(this.$ngoId.value.toString()));
+
   }
 
   showInformation(): void {
     this.router.navigate(['/about'], {fragment: 'tw-explanation'});
+  }
+
+  setEditMode($event: MatTabChangeEvent): void {
+    if ($event.index > 0 && this.editMode) {
+      this.editMode = false;
+    }
+    this.editModeEnabled = $event.index === 0;
   }
 }

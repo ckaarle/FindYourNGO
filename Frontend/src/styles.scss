@@ -145,3 +145,13 @@ mat-progress-bar .mat-progress-bar-buffer {
     opacity: 0.85 !important;
   }
 }
+
+.login-snackbar {
+  background-color: #ffffff;
+}
+
+.login-snackbar span {
+  text-align: center;
+  margin: auto;
+  color: var(--secondary-color) !important;
+}

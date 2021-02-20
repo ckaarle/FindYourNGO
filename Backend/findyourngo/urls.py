@@ -42,7 +42,7 @@ urlpatterns = [
     path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
     url(r'idNames', ngo_controller.ngo_short_list),
-    url(r'^ngoDetailItem', ngo_controller.ngo_detail),
+    url(r'^ngoDetailItem/$', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
     url(r'^ngoOverviewItems$', ngo_overview_controller.NgoOverviewItemList.as_view()),
