@@ -1,0 +1,36 @@
+:host {
+  background: white;
+  border-radius: 4px;
+}
+
+.registerCard {
+  display: flex;
+  align-self: center;
+  max-width: 1000px;
+  margin: 24px auto auto auto;
+
+  ::ng-deep .mat-card-title {
+    font-size: 24px !important;
+  }
+
+  ::ng-deep .mat-card-header {
+    justify-content: center;
+  }
+}
+
+.content {
+  margin-top: 48px;
+}
+
+p {
+  font-size: var(--font-size-medium);
+  line-height: 1.5;
+}
+
+.description {
+  margin-bottom: 16px;
+}
+
+.infoGroup {
+  margin-top: 32px;
+}

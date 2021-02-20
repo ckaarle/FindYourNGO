@@ -1,1 +1,87 @@
-<p>ngo-sign-up works!</p>
+<div class="registerCard">
+  <mat-card fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
+    <mat-card-header>
+      <mat-card-title>Register a new NGO</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="content">
+      <div class="description">
+        <p>Please enter your information below. After we have processed your application, you will
+          be able
+          to add further details.</p>
+      </div>
+
+      <form [formGroup]="group">
+        <div class="infoGroup">
+          <h4>General Information</h4>
+          <div>
+            <mat-form-field>
+              <mat-label>NGO name</mat-label>
+              <input matInput type="text" formControlName="ngoNameControl"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Country of headquarter</mat-label>
+              <input matInput type="text" formControlName="countryControl"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="infoGroup">
+          <h4>NGO Representative Information</h4>
+          <div>
+            <mat-form-field>
+              <mat-label>First name</mat-label>
+              <input matInput type="text" formControlName="firstNameControl"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Last name</mat-label>
+              <input matInput type="text" formControlName="lastNameControl"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Email address</mat-label>
+              <input matInput type="text" formControlName="emailRepresentativeControl"/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="infoGroup" formGroupName="userForm">
+          <h4>User Account</h4>
+          <div>
+            <mat-form-field>
+              <mat-label>Username</mat-label>
+              <input matInput type="text" formControlName="username"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Email address</mat-label>
+              <input matInput type="text" formControlName="email"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input matInput type="text" formControlName="password"/>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button *ngIf="group.valid" (click)="submit()">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
