@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {MapboxService} from '../../services/mapbox.service';
 import * as mapboxgl from 'mapbox-gl';
-import {environment} from '../../../environments/environment';
 import * as turf from '@turf/turf';
 import {NgoCoordinates} from '../../models/ngo';
+import {AnySourceData} from 'mapbox-gl';
 
 @Component({
   selector: 'app-mapbox',
@@ -12,29 +12,11 @@ import {NgoCoordinates} from '../../models/ngo';
 })
 export class MapboxComponent {
 
-  // TODO cluster instead of marker?
-  // TODO only one layer for links (speedup?)
-
-  // @ts-ignore
-  map: mapboxgl.Map;
-  style = 'mapbox://styles/mapbox/streets-v11';
-  lat = 48.137154;
-  lng = 11.576124;
-  zoom = 1.5;
-
-  color = '#fffff';
-
-  ngos: {[id: number]: NgoCoordinates} = {};
-
-  mapMarkers = [];
-  mapSources = [];
-  mapLayers = [];
-
   constructor(private mapboxService: MapboxService) {
     this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
 
     // @ts-ignore
-    mapboxgl.accessToken = environment.mapbox.accessToken;
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZmluZHlvdXJuZ28iLCJhIjoiY2tsM3l2azAzMWpqZzJ2bGI2a2JzNzl0OSJ9.hFUVv4mpv0ySKsCecmuKtQ';
 
     this.mapboxService.getNgoCoordinates().subscribe(data => {
       data.forEach(
@@ -74,13 +56,35 @@ export class MapboxComponent {
     });
   }
 
+  // TODO cluster instead of marker?
+  // TODO only one layer for links (speedup?)
+
+  // @ts-ignore
+  map: mapboxgl.Map;
+  style = 'mapbox://styles/mapbox/streets-v11';
+  lat = 48.137154;
+  lng = 11.576124;
+  zoom = 1.5;
+
+  color = '#fffff';
+
+  ngos: {[id: number]: NgoCoordinates} = {};
+
+  mapMarkers: object[] = [];
+  multiLinkSource = {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [] as object[],
+    }
+  };
+
   buildMap(): void {
     this.map = new mapboxgl.Map({container: 'map', style: this.style, zoom: this.zoom, center: [this.lng, this.lat]});
     this.map.addControl(new mapboxgl.NavigationControl());
   }
 
   addMarker(longitude: number, latitude: number): void {
-    // @ts-ignore
     this.mapMarkers.push([longitude, latitude]);
   }
 
@@ -91,52 +95,30 @@ export class MapboxComponent {
     const curvedLine = turf.greatCircle(origin, destination, {properties: {name: name1 + ' --- ' + name2}});
 
     const route = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: [origin, destination]
-          }
-        }
-      ]
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: [origin, destination],
+      }
     };
-
     // @ts-ignore
-    route.features[0].geometry.coordinates = curvedLine.geometry.coordinates;
-
-    const name = name1 + '-' + name2;
-
-    // @ts-ignore
-    this.mapSources.push({id: name, data: route});
-
-    // @ts-ignore
-    this.mapLayers.push({id: name, source: name});
-
+    route.geometry.coordinates = curvedLine.geometry.coordinates;
+    this.multiLinkSource.data.features.push(route);
   }
 
   private initialiseMap(): void {
     this.map.on('load', () => {
-      this.mapSources.forEach((source: any) => {
-        this.map.addSource(source.id, {
-          type: 'geojson',
-          // @ts-ignore
-          data: source.data
-        });
-      });
-
-      this.mapLayers.forEach((layer: any) => {
-        this.map.addLayer({
-          id: layer.id,
-          source: layer.source,
+      this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
+      this.map.addLayer({
+          id: 'multiple-link-source',
+          source: 'multiple-link-source',
           type: 'line',
           paint: {
             'line-width': 3,
             'line-color': this.color,
           }
         });
-      });
     });
 
     this.mapMarkers.forEach(marker => {
