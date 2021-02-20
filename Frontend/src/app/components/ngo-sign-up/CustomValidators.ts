@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, EmailValidator, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Injectable({
@@ -29,5 +29,50 @@ export class NgoNameValidator implements OnDestroy {
 
   ngOnDestroy(): void {
     this.nameSubscription?.unsubscribe();
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LoginChoiceValidator {
+
+  constructor(private loginChoice1: BehaviorSubject<boolean>, private loginChoice2: BehaviorSubject<boolean>) {
+  }
+
+  validator(): ValidatorFn {
+
+    return (control: AbstractControl): ValidationErrors | null => {
+
+      // console.log(this.loginChoice1.getValue())
+      // console.log(this.loginChoice2.getValue())
+      // console.log('----')
+      if (this.loginChoice1.getValue() || this.loginChoice2.getValue()) {
+        return null;
+      }
+
+      const error = {
+        loginChoiceMissing: true
+      };
+
+      const username = control.get('username');
+      const email = control.get('email');
+      const password = control.get('password');
+
+      if (!username?.value || !email?.value || !password?.value) {
+        return error;
+      }
+
+      const emailValidator = new EmailValidator();
+
+      const emailValidation = emailValidator.validate(email);
+      // console.log(emailValidation)
+
+      if (emailValidation === null) {
+        return null;
+      }
+
+      return error;
+    };
   }
 }

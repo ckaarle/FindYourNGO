@@ -6,18 +6,25 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {NewNgo, NgoOverviewItem} from '../../models/ngo';
 import {BehaviorSubject} from 'rxjs';
 import {ApiService} from '../../services/api.service';
-import {NgoNameValidator} from './CustomValidators';
+import {LoginChoiceValidator, NgoNameValidator} from './CustomValidators';
 import {SocialAuthService, SocialUser} from 'angularx-social-login';
 import {LoginService} from '../../services/login.service';
+import {MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxDefaultOptions} from '@angular/material/checkbox';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 
 @Component({
   selector: 'app-ngo-sign-up',
   templateUrl: './ngo-sign-up.component.html',
-  styleUrls: ['./ngo-sign-up.component.scss']
+  styleUrls: ['./ngo-sign-up.component.scss'],
+  providers: [
+    {provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { clickAction: 'noop' } as MatCheckboxDefaultOptions}
+  ]
 })
 export class NgoSignUpComponent implements OnInit, OnDestroy {
   allNgoNames = new BehaviorSubject<string[]>([]);
+  googleLogin = new BehaviorSubject(false);
+  facebookLogin = new BehaviorSubject(false);
 
   group = new FormGroup({
     ngoNameControl: new FormControl('', [Validators.required, new NgoNameValidator(this.allNgoNames).validator()]),
@@ -28,10 +35,10 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
     emailRepresentativeControl: new FormControl('', [Validators.required, Validators.email]),
 
     userForm: new FormGroup({
-      username: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
-    })
+      username: new FormControl(''),
+      email: new FormControl(''),
+      password: new FormControl(''),
+    }, new LoginChoiceValidator(this.googleLogin, this.facebookLogin).validator())
   });
 
   $errorMessage = new BehaviorSubject<string>('');
@@ -39,9 +46,6 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
   registrationSuccessful = false;
 
   user?: SocialUser;
-
-  googleLogin = false;
-  facebookLogin = false;
 
   constructor(
       private ngoRegistrationService: NgoRegistrationService,
@@ -94,9 +98,9 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
   }
 
   private registerUser(): void {
-    if (this.googleLogin) {
+    if (this.googleLogin.getValue()) {
       this.loginService.googleLogin();
-    } else if (this.facebookLogin) {
+    } else if (this.facebookLogin.getValue()) {
       this.loginService.facebookLogin();
     } else {
       const query = this.getQuery();
@@ -131,31 +135,11 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
   }
 
   toogleGoogleLoginStatus($event: MouseEvent): void {
-    if (this.facebookLogin) {
-      $event.stopPropagation();
-      return;
-    }
-
-    if (this.googleLogin) {
-      this.enableUserForm();
-    } else {
-      this.disableUserForm();
-    }
-    this.googleLogin = !this.googleLogin;
+    this.toggleStatus(this.googleLogin, this.facebookLogin, $event);
   }
 
   toggleFacebookLoginStatus($event: MouseEvent): void {
-    if (this.googleLogin) {
-      $event.stopPropagation();
-      return;
-    }
-
-    if (this.facebookLogin) {
-      this.enableUserForm();
-    } else {
-      this.disableUserForm();
-    }
-    this.facebookLogin = !this.facebookLogin;
+    this.toggleStatus(this.facebookLogin, this.googleLogin, $event);
   }
 
   private disableUserForm(): void {
@@ -165,6 +149,21 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
   private enableUserForm(): void {
     this.group.get('userForm')?.enable();
   }
+
+  private toggleStatus(active: BehaviorSubject<boolean>, other: BehaviorSubject<boolean>, $event: MouseEvent): void {
+    if (other.getValue()) {
+      $event.stopPropagation();
+      return;
+    }
+
+    if (active.getValue()) {
+      this.enableUserForm();
+    } else {
+      this.disableUserForm();
+    }
+    active.next(!active.getValue());
+    this.group.get('userForm')?.updateValueAndValidity();
+  }
 }
 
-// TODO: validation of User Account thing: check for either of two boolean flags or valid form
+// TODO: Email validation not working
