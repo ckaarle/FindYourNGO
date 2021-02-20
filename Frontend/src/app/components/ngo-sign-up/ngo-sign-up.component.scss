@@ -27,10 +27,6 @@ p {
   line-height: 1.5;
 }
 
-.description {
-  margin-bottom: 16px;
-}
-
 .infoGroup {
   margin-top: 32px;
 }
@@ -39,4 +35,12 @@ p {
   display: flex;
   align-self: center;
   margin: 24px auto auto auto;
+}
+
+.validation-error-message {
+  color: var(--secondary-color);
+}
+
+.input {
+  margin-bottom: 16px;
 }

@@ -5,7 +5,7 @@
     </mat-card-header>
 
     <mat-card-content class="content">
-      <div class="description">
+      <div class="input">
         <p>Please enter your information below. After we have processed your application, you will
           be able
           to add further details.</p>
@@ -14,11 +14,16 @@
       <form [formGroup]="group">
         <div class="infoGroup">
           <h4>General Information</h4>
-          <div>
+          <div class="input">
             <mat-form-field>
               <mat-label>NGO name</mat-label>
               <input matInput type="text" formControlName="ngoNameControl"/>
             </mat-form-field>
+            <div class="validation-error-message"
+                 *ngIf="group.get('ngoNameControl').hasError('ngoNameDuplicate') && (group.touched || group.dirty)">
+              Ngo name
+              already exists.
+            </div>
           </div>
 
           <div>

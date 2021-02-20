@@ -3,8 +3,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgoRegistrationService} from '../../services/ngo-registration.service';
 import {UserService} from '../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NewNgo} from '../../models/ngo';
+import {NewNgo, NgoOverviewItem} from '../../models/ngo';
 import {BehaviorSubject} from 'rxjs';
+import {ApiService} from '../../services/api.service';
+import {NgoNameValidator} from './CustomValidators';
+
 
 @Component({
   selector: 'app-ngo-sign-up',
@@ -12,9 +15,10 @@ import {BehaviorSubject} from 'rxjs';
   styleUrls: ['./ngo-sign-up.component.scss']
 })
 export class NgoSignUpComponent implements OnInit {
+  allNgoNames = new BehaviorSubject<string[]>([]);
 
   group = new FormGroup({
-    ngoNameControl: new FormControl('', Validators.required),
+    ngoNameControl: new FormControl('', [Validators.required, new NgoNameValidator(this.allNgoNames).validator()]),
     countryControl: new FormControl('', Validators.required),
 
     firstNameControl: new FormControl('', Validators.required),
@@ -36,6 +40,7 @@ export class NgoSignUpComponent implements OnInit {
       private ngoRegistrationService: NgoRegistrationService,
       private userService: UserService,
       private snackBar: MatSnackBar,
+      private apiService: ApiService
   ) {
   }
 
@@ -47,7 +52,34 @@ export class NgoSignUpComponent implements OnInit {
     });
     this.userService.$lastErrorMessage.subscribe(errorMessage => this.$errorMessage.next(errorMessage));
 
-    // TODO fetch all ngo names and throw error if one of them is used via a validator (plus message!)
+    this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) => {
+      this.allNgoNames.next(data.map(ngo => ngo.name));
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
+    //     this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
+    //         map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())
+    //             && ngo.id !== this.currentNgoId && !this.connections.some(x => x.id === ngo.id)
+    //             && !this.outgoingRequests.some(x => x.id === ngo.id)))));
+
     // TODO country autocomplete
   }
 
