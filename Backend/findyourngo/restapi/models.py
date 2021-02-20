@@ -119,6 +119,8 @@ class Ngo(models.Model):
 
     number_of_reviews = models.IntegerField(default=0)
 
+    confirmed = models.BooleanField(default=True)
+
 
 class NgoAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -180,10 +182,3 @@ class NgoEventCollaborator(models.Model):
 class NgoFavourites(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favourite_ngo = models.ManyToManyField(Ngo)
-
-
-class UnconfirmedNgo(models.Model):
-    name = models.CharField(max_length=200)
-    representative = models.ForeignKey(NgoRepresentative, null=True, on_delete=models.SET_NULL)
-    country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
-    meta_data = models.ForeignKey(NgoMetaData, on_delete=models.PROTECT)  # meta data should not be deleted if a ngo is referencing them (we need the data source)

@@ -156,7 +156,6 @@ def create_user(data, ngo_name, mode=None):
         if ngo_name:
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
-            print(list(NgoAccount.objects.all()))
 
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)

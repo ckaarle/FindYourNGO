@@ -6,7 +6,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMetaData, NgoDataSource, UnconfirmedNgo
+from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMetaData, NgoDataSource, NgoContact, \
+    NgoTWScore
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 
 SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
@@ -84,6 +85,12 @@ def register_ngo(request) -> JsonResponse:
         representative_email=email
     )
 
+    contact = NgoContact.objects.create(
+        ngo_phone_number='',
+        website='',
+        representative=representative
+    )
+
     try:
         info_source = NgoDataSource.objects.get(source=SELF_REPORTED_DATA_SOURCE)
     except:
@@ -98,11 +105,21 @@ def register_ngo(request) -> JsonResponse:
     meta_data.info_source.add(info_source)
     meta_data.save()
 
-    UnconfirmedNgo.objects.create(
+    tw_score = NgoTWScore.objects.create(
+        total_tw_score=0,
+        base_tw_score=0,
+        user_tw_score=0
+    )
+
+    Ngo.objects.create(
         name=ngo_name,
-        representative=representative,
-        country=country,
-        meta_data=meta_data
+        acronym='',
+        aim='',
+        activities='',
+        contact=contact,
+        meta_data=meta_data,
+        tw_score=tw_score,
+        confirmed=False,
     )
 
     return JsonResponse({'message': f'Ngo {ngo_name} was added successfully.'}, status=status.HTTP_200_OK)
