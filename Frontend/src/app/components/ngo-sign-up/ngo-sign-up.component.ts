@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgoRegistrationService} from '../../services/ngo-registration.service';
 import {UserService} from '../../services/user.service';
@@ -10,7 +10,6 @@ import {LoginChoiceValidator, NgoNameValidator} from './CustomValidators';
 import {SocialAuthService, SocialUser} from 'angularx-social-login';
 import {LoginService} from '../../services/login.service';
 import {MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxDefaultOptions} from '@angular/material/checkbox';
-import {$e} from 'codelyzer/angular/styles/chars';
 
 
 @Component({
@@ -21,7 +20,7 @@ import {$e} from 'codelyzer/angular/styles/chars';
     {provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { clickAction: 'noop' } as MatCheckboxDefaultOptions}
   ]
 })
-export class NgoSignUpComponent implements OnInit, OnDestroy {
+export class NgoSignUpComponent implements OnInit {
   allNgoNames = new BehaviorSubject<string[]>([]);
   googleLogin = new BehaviorSubject(false);
   facebookLogin = new BehaviorSubject(false);
@@ -65,7 +64,7 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
     });
     this.userService.$lastErrorMessage.subscribe(errorMessage => this.$errorMessage.next(errorMessage));
 
-    this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) => {
+    this.apiService.get('idNamesFull').subscribe((data: NgoOverviewItem[]) => {
       this.allNgoNames.next(data.map(ngo => ngo.name));
     });
 
@@ -74,13 +73,15 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
       this.loginService.trySocialLogin(this.getQuery(), this.user?.authToken);
     });
 
-    this.userService.user.subscribe((user: SocialUser) => {
-      this.user = user;
-    });
-  }
+    this.userService.user.subscribe(user => this.user = user);
 
-  ngOnDestroy(): void {
-    this.loginService.fullSignOut(this.user); // validate account first
+    this.userService.username.subscribe(next => {
+      console.log('NEW USER DETECTED');
+
+      if (next !== '') {
+        this.loginService.fullSignOut(this.user);
+      }
+    });
   }
 
   submit(): void {
@@ -108,7 +109,7 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
     }
 
     if (this.$errorMessage.getValue() === '') {
-      this.registrationSuccessful = true;
+      this.registrationSuccessful = true;  // TODO this shows up way too early
     }
   }
 
@@ -165,3 +166,6 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
     this.group.get('userForm')?.updateValueAndValidity();
   }
 }
+
+// TODO wrong user signed in
+// TODO: success message shows up too early when using social login

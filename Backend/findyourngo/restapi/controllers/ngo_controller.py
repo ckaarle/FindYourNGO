@@ -58,6 +58,13 @@ def ngo_short_list(request):
     return JsonResponse(ngo_serializer.data, safe=False)
 
 
+@api_view(['GET'])
+def ngo_short_list_all(request):
+    ngos = Ngo.objects.all()
+    ngo_serializer = NgoShortSerializer(ngos, many=True)
+    return JsonResponse(ngo_serializer.data, safe=False)
+
+
 @api_view(['POST'])
 def register_ngo(request) -> JsonResponse:
     new_ngo_request = JSONParser().parse(request)
