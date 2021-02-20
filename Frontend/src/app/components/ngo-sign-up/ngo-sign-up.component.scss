@@ -28,7 +28,7 @@ p {
 }
 
 .infoGroup {
-  margin-top: 32px;
+
 }
 
 .success-card {
@@ -44,3 +44,28 @@ p {
 .input {
   margin-bottom: 16px;
 }
+
+.info-container {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center
+}
+
+.info-column {
+  display: flex;
+  justify-content: center
+}
+
+.info-boxes {
+  margin-top: 12px;
+
+  button {
+    min-width: 200px;
+    margin-bottom: 16px;
+  }
+}
+
+.or-text {
+  margin-top: 48px;
+}
+

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgoRegistrationService} from '../../services/ngo-registration.service';
 import {UserService} from '../../services/user.service';
@@ -7,6 +7,8 @@ import {NewNgo, NgoOverviewItem} from '../../models/ngo';
 import {BehaviorSubject} from 'rxjs';
 import {ApiService} from '../../services/api.service';
 import {NgoNameValidator} from './CustomValidators';
+import {SocialAuthService, SocialUser} from 'angularx-social-login';
+import {LoginService} from '../../services/login.service';
 
 
 @Component({
@@ -14,7 +16,7 @@ import {NgoNameValidator} from './CustomValidators';
   templateUrl: './ngo-sign-up.component.html',
   styleUrls: ['./ngo-sign-up.component.scss']
 })
-export class NgoSignUpComponent implements OnInit {
+export class NgoSignUpComponent implements OnInit, OnDestroy {
   allNgoNames = new BehaviorSubject<string[]>([]);
 
   group = new FormGroup({
@@ -36,11 +38,18 @@ export class NgoSignUpComponent implements OnInit {
 
   registrationSuccessful = false;
 
+  user?: SocialUser;
+
+  googleLogin = false;
+  facebookLogin = false;
+
   constructor(
       private ngoRegistrationService: NgoRegistrationService,
       private userService: UserService,
       private snackBar: MatSnackBar,
-      private apiService: ApiService
+      private apiService: ApiService,
+      private authService: SocialAuthService,
+      private loginService: LoginService
   ) {
   }
 
@@ -55,6 +64,19 @@ export class NgoSignUpComponent implements OnInit {
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) => {
       this.allNgoNames.next(data.map(ngo => ngo.name));
     });
+
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+      this.loginService.trySocialLogin(this.getQuery(), this.user?.authToken);
+    });
+
+    this.userService.user.subscribe((user: SocialUser) => {
+      this.user = user;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.loginService.fullSignOut(this.user); // validate account first
   }
 
   submit(): void {
@@ -72,16 +94,22 @@ export class NgoSignUpComponent implements OnInit {
   }
 
   private registerUser(): void {
-    // TODO social login
-
-    const query = {ngo_name: this.group.get('ngoNameControl')?.value};
-    this.userService.register(this.group.get('userForm')?.value, query);
-    this.userService.signOut(); // validate account first
-    // TODO also sign out from authService for social login!
+    if (this.googleLogin) {
+      this.loginService.googleLogin();
+    } else if (this.facebookLogin) {
+      this.loginService.facebookLogin();
+    } else {
+      const query = this.getQuery();
+      this.userService.register(this.group.get('userForm')?.value, query);
+    }
 
     if (this.$errorMessage.getValue() === '') {
       this.registrationSuccessful = true;
     }
+  }
+
+  private getQuery(): any {
+    return {ngo_name: this.group.get('ngoNameControl')?.value};
   }
 
   private showErrorMessage(): void {
@@ -101,4 +129,42 @@ export class NgoSignUpComponent implements OnInit {
       representativeEmail: this.group.get('emailRepresentativeControl')?.value
     };
   }
+
+  toogleGoogleLoginStatus($event: MouseEvent): void {
+    if (this.facebookLogin) {
+      $event.stopPropagation();
+      return;
+    }
+
+    if (this.googleLogin) {
+      this.enableUserForm();
+    } else {
+      this.disableUserForm();
+    }
+    this.googleLogin = !this.googleLogin;
+  }
+
+  toggleFacebookLoginStatus($event: MouseEvent): void {
+    if (this.googleLogin) {
+      $event.stopPropagation();
+      return;
+    }
+
+    if (this.facebookLogin) {
+      this.enableUserForm();
+    } else {
+      this.disableUserForm();
+    }
+    this.facebookLogin = !this.facebookLogin;
+  }
+
+  private disableUserForm(): void {
+    this.group.get('userForm')?.disable();
+  }
+
+  private enableUserForm(): void {
+    this.group.get('userForm')?.enable();
+  }
 }
+
+// TODO: validation of User Account thing: check for either of two boolean flags or valid form

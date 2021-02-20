@@ -37,4 +37,9 @@ export class LoginService implements OnDestroy {
       this.authService.signOut();
     }
   }
+
+  fullSignOut(user: SocialUser | undefined): void {
+    this.signOut(user);
+    this.userService.signOut();
+  }
 }
