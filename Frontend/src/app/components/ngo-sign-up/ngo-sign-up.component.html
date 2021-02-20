@@ -1,4 +1,4 @@
-<div class="registerCard">
+<div class="registerCard" *ngIf="!registrationSuccessful">
   <mat-card fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
     <mat-card-header>
       <mat-card-title>Register a new NGO</mat-card-title>
@@ -83,5 +83,13 @@
     <mat-card-actions>
       <button mat-button *ngIf="group.valid" (click)="submit()">Submit</button>
     </mat-card-actions>
+  </mat-card>
+</div>
+<div *ngIf="registrationSuccessful" class="success-card">
+  <mat-card>
+    <mat-card-content>
+      <p>Registration was successful. Your application will now be reviewed by the Find your NGO
+        team.</p>
+    </mat-card-content>
   </mat-card>
 </div>
