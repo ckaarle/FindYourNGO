@@ -204,6 +204,12 @@ with open('findyourngo/data_import/coordinates.csv', 'r') as f:
 class NgoPlotSerializer(serializers.ModelSerializer):
     coordinates = serializers.SerializerMethodField()
 
+    trustworthiness = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='total_tw_score',
+        source='tw_score'
+    )
+
     def get_coordinates(self, obj):
         lat = float(coordinates[obj.contact.address.country.name][0]) + random.uniform(-2.0, 2.0)
         long = float(coordinates[obj.contact.address.country.name][1]) + random.uniform(-2.0, 2.0)
@@ -211,7 +217,7 @@ class NgoPlotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ngo
-        fields = ['id', 'name', 'aim', 'coordinates']
+        fields = ['id', 'name', 'coordinates', 'trustworthiness']
 
 
 class NgoLinkSerializer(serializers.ModelSerializer):

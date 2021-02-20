@@ -124,4 +124,5 @@ export interface NgoCoordinates {
   longitude: number;
   latitude: number;
   name: string;
+  trustworthiness: number;
 }
