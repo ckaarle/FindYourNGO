@@ -130,4 +130,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
       panelClass: ['login-snackbar']
     });
   }
+
+  registerNewNgo($event: MouseEvent): void {
+    $event.stopPropagation();
+  }
 }
