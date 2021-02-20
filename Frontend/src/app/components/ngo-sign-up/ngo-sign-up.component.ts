@@ -165,5 +165,3 @@ export class NgoSignUpComponent implements OnInit, OnDestroy {
     this.group.get('userForm')?.updateValueAndValidity();
   }
 }
-
-// TODO: Email validation not working

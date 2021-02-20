@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {AbstractControl, EmailValidator, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, EmailValidator, FormControl, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {BehaviorSubject, Subscription} from 'rxjs';
 
 @Injectable({
@@ -37,6 +37,8 @@ export class NgoNameValidator implements OnDestroy {
 })
 export class LoginChoiceValidator {
 
+  dummyEmail = new FormControl('', Validators.email);
+
   constructor(private loginChoice1: BehaviorSubject<boolean>, private loginChoice2: BehaviorSubject<boolean>) {
   }
 
@@ -44,9 +46,6 @@ export class LoginChoiceValidator {
 
     return (control: AbstractControl): ValidationErrors | null => {
 
-      // console.log(this.loginChoice1.getValue())
-      // console.log(this.loginChoice2.getValue())
-      // console.log('----')
       if (this.loginChoice1.getValue() || this.loginChoice2.getValue()) {
         return null;
       }
@@ -63,12 +62,9 @@ export class LoginChoiceValidator {
         return error;
       }
 
-      const emailValidator = new EmailValidator();
+      this.dummyEmail.setValue(email.value);
 
-      const emailValidation = emailValidator.validate(email);
-      // console.log(emailValidation)
-
-      if (emailValidation === null) {
+      if (this.dummyEmail.valid) {
         return null;
       }
 
