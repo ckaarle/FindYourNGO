@@ -20,15 +20,20 @@ export class MapboxComponent {
   style = 'mapbox://styles/mapbox/dark-v10';
   lat = 48.137154;
   lng = 11.576124;
-  zoom = 1.5;
+  zoom = 1.0;
 
   color = '#fffff';
 
   ngos: {[id: number]: NgoCoordinates} = {};
 
   mapMarkers = {};
-  mapSources = [];
-  mapLayers = [];
+  multiLinkSource = {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [] as object[],
+    }
+  };
 
   constructor(private mapboxService: MapboxService) {
     this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
@@ -44,12 +49,14 @@ export class MapboxComponent {
             const id = plot.id;
             const longitude = plot.coordinates[1];
             const latitude = plot.coordinates[0];
+            const trustworthiness = plot.trustworthiness;
 
             this.ngos[id] = {
               id,
               name,
               longitude,
               latitude,
+              trustworthiness
             };
           });
 
@@ -57,7 +64,7 @@ export class MapboxComponent {
 
       this.mapboxService.getNgoLinks().subscribe(linkData => {
         linkData.forEach((link: any) => {
-          /*if (link.connected_ngo_id > link.reporter_id) {
+          if (link.connected_ngo_id > link.reporter_id) {
             const connectedNgoId = link.connected_ngo_id;
             const reporterNgoId = link.reporter_id;
 
@@ -66,13 +73,10 @@ export class MapboxComponent {
 
             this.addLink(coordinatesNgo.longitude, coordinatesNgo.latitude, coordinatesReporter.longitude, coordinatesReporter.latitude,
                 coordinatesNgo.name, coordinatesReporter.name);
-          }*/
-
+          }
+        });
           this.buildMap();
           this.initialiseMap();
-        });
-
-
       });
     });
   }
