@@ -83,6 +83,11 @@ class NgoStats(models.Model):
     yearly_income = models.CharField(max_length=200)
 
 
+class NgoTWDataPoint(models.Model):
+    daily_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    date = models.DateField()
+
+
 class NgoTWScore(models.Model):
     total_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
     base_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
@@ -92,6 +97,7 @@ class NgoTWScore(models.Model):
     ecosoc_score = models.FloatField(default=0)
     pagerank_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(PAGERANK_MAX_BOOST)])
     ngo_account_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(NGO_ACCOUNT_BOOST)])
+    tw_series = models.ManyToManyField(NgoTWDataPoint)
 
 
 class Ngo(models.Model):

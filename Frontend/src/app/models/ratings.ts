@@ -30,6 +30,11 @@ export interface NewTwReview {
   text: string;
 }
 
+export interface NgoTWDataPoint {
+  dailyTwScore: number;
+  date: Date;
+}
+
 export const EMPTY_TW_REVIEWS: TwReviews = {
   reviews: [],
   reviewNumber: 0

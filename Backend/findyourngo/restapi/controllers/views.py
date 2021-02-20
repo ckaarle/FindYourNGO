@@ -67,6 +67,11 @@ def twUpdate(request):
     return HttpResponse('TW updated with PageRank')
 
 
+def storeDailyTw(request):
+    TWUpdater().store_daily_tw()
+    return HttpResponse('Daily TW stored')
+
+
 # request is a necessary positional parameter for the framework call
 def name_list(request):
     result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
