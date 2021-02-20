@@ -16,7 +16,7 @@ SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
 @api_view(['GET', 'POST', 'DELETE'])
 def ngo_list(request):
     if request.method == 'GET':
-        ngos = Ngo.objects.all()
+        ngos = Ngo.objects.filter(confirmed=True)
         ngo_serializer = NgoSerializer(ngos, many=True)
         return JsonResponse(ngo_serializer.data, safe=False)
 
@@ -53,7 +53,7 @@ def ngo_detail(request):
 
 @api_view(['GET'])
 def ngo_short_list(request):
-    ngos = Ngo.objects.all()
+    ngos = Ngo.objects.filter(confirmed=True)
     ngo_serializer = NgoShortSerializer(ngos, many=True)
     return JsonResponse(ngo_serializer.data, safe=False)
 

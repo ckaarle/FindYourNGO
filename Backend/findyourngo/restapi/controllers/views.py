@@ -74,7 +74,7 @@ def storeDailyTw(request):
 
 # request is a necessary positional parameter for the framework call
 def name_list(request):
-    result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
+    result = list(map(lambda ngo: ngo['name'], Ngo.objects.filter(confirmed=True).order_by('name').values()))
     return JsonResponse({'names': result})
 
 

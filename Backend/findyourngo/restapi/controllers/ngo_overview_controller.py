@@ -15,7 +15,7 @@ class NgoOverviewItemList(GenericAPIView):
         paginator = NgoOverviewItemListPaginator()
         paginator.page_size = 20
 
-        self.queryset = Ngo.objects.all()
+        self.queryset = Ngo.objects.filter(confirmed=True)
         self.queryset = self.queryset.order_by('name')
         result_page = paginator.paginate_queryset(self.queryset, request)
 
@@ -25,6 +25,6 @@ class NgoOverviewItemList(GenericAPIView):
 
 @api_view(['GET'])
 def ngo_overview_items_amount(request: Any):
-    ngo_count = Ngo.objects.count()
+    ngo_count = Ngo.objects.filter(confirmed=True).count()
     return JsonResponse({'count': ngo_count})
 
