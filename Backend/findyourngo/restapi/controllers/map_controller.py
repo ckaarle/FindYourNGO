@@ -15,6 +15,35 @@ def get_plots(request) -> JsonResponse:
 
 @api_view(['GET'])
 def get_links(request) -> JsonResponse:
+    clusters = request.query_params.get('clusters', None)
+    if clusters:
+        clustered_ngos: {int: int} = {}
+        for ngo in Ngo.objects.all():
+            lat = ngo.contact.address.latitude
+            long = ngo.contact.address.longitude
+            if not (lat and long):
+                print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
+                continue
+            for cluster in clusters:
+                if cluster['lat_min'] <= lat <= cluster['lat_max'] and cluster['lng_min'] <= long <= cluster['lng_min']:
+                    clustered_ngos[ngo.id] = int(cluster['id'])
+                    break
+            else:
+                print(f'Ngo {ngo.name} in {lat}, {long} could not be assigned to any cluster')
+
+        link_count = {}
+        for cluster1 in clusters:
+            for cluster2 in clusters:
+                if cluster1.id < cluster2.id:
+                    link_count[(cluster1.id, cluster2.id)] = 0
+        for connection in NgoConnection.objects.all():
+            if connection.reporter_id < connection.connected_ngo_id:
+                cluster1 = clustered_ngos[connection.reporter_id]
+                cluster2 = clustered_ngos[connection.connected_ngo_id]
+                link_count[(cluster1, cluster2)] += 1
+        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in link_count.items()],
+                            safe=False)
+
     link_serializer = NgoLinkSerializer(NgoConnection.objects.all(), many=True)
     return JsonResponse(link_serializer.data, safe=False)
 

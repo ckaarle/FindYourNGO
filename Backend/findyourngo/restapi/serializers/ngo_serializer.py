@@ -211,13 +211,18 @@ class NgoPlotSerializer(serializers.ModelSerializer):
     )
 
     def get_coordinates(self, obj):
-        lat = obj.contact.address.latitude
-        long = obj.contact.address.longitude
+        address = obj.contact.address
+        lat = address.latitude
+        long = address.longitude
         if lat and long:
             return lat, long
 
-        lat = float(coordinates[obj.contact.address.country.name][0]) + random.uniform(-2.0, 2.0)
-        long = float(coordinates[obj.contact.address.country.name][1]) + random.uniform(-2.0, 2.0)
+        lat = float(coordinates[address.name][0]) + random.uniform(-2.0, 2.0)
+        long = float(coordinates[address.country.name][1]) + random.uniform(-2.0, 2.0)
+        # save lat and long after assigning it randomly
+        address.latitude = lat
+        address.longitude = long
+        address.save()
         return lat, long
 
     class Meta:
