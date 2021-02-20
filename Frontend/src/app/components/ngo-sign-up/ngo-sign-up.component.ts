@@ -55,32 +55,6 @@ export class NgoSignUpComponent implements OnInit {
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) => {
       this.allNgoNames.next(data.map(ngo => ngo.name));
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
-    //     this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
-    //         map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())
-    //             && ngo.id !== this.currentNgoId && !this.connections.some(x => x.id === ngo.id)
-    //             && !this.outgoingRequests.some(x => x.id === ngo.id)))));
-
-    // TODO country autocomplete
   }
 
   submit(): void {
@@ -89,18 +63,25 @@ export class NgoSignUpComponent implements OnInit {
     this.$errorMessage.next('');
 
     this.ngoRegistrationService.registerNewNgo(newNgo).subscribe((result: any) => {
-          const query = {ngo_name: this.group.get('ngoNameControl')?.value};
-          this.userService.register(this.group.get('userForm')?.value, query);
-          this.userService.signOut(); // validate account first
-
-          if (this.$errorMessage.getValue() === '') {
-            this.registrationSuccessful = true;
-          }
+          this.registerUser();
         },
         (error: any) => {
           const userMessage = error.error.error;
           this.$errorMessage.next(userMessage);
         });
+  }
+
+  private registerUser(): void {
+    // TODO social login
+
+    const query = {ngo_name: this.group.get('ngoNameControl')?.value};
+    this.userService.register(this.group.get('userForm')?.value, query);
+    this.userService.signOut(); // validate account first
+    // TODO also sign out from authService for social login!
+
+    if (this.$errorMessage.getValue() === '') {
+      this.registrationSuccessful = true;
+    }
   }
 
   private showErrorMessage(): void {
