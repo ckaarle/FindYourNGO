@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMetaData, NgoDataSource, NgoContact, \
-    NgoTWScore
+    NgoTWScore, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 
 SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
@@ -82,6 +82,13 @@ def register_ngo(request) -> JsonResponse:
     except:
         return JsonResponse({'error': f'Country {ngo_country} not found'}, status=status.HTTP_400_BAD_REQUEST)
 
+    address = NgoAddress.objects.create(
+        street='',
+        postcode='',
+        city='',
+        country=country
+    )
+
     first_name = new_ngo_request['representativeFirstName']
     last_name = new_ngo_request['representativeLastName']
     email = new_ngo_request['representativeEmail']
@@ -95,7 +102,8 @@ def register_ngo(request) -> JsonResponse:
     contact = NgoContact.objects.create(
         ngo_phone_number='',
         website='',
-        representative=representative
+        representative=representative,
+        address=address
     )
 
     try:
