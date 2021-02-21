@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {Component} from '@angular/core';
 import {MapboxService} from '../../services/mapbox.service';
 import * as mapboxgl from 'mapbox-gl';
@@ -10,9 +11,8 @@ import {AnySourceData} from 'mapbox-gl';
   templateUrl: './mapbox.component.html',
   styleUrls: ['./mapbox.component.scss']
 })
-export class MapboxComponent {
 
-  // @ts-ignore
+export class MapboxComponent {
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/dark-v10';
   lat = 48.137154;
@@ -35,8 +35,6 @@ export class MapboxComponent {
   constructor(private mapboxService: MapboxService) {
     this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
 
-
-    // @ts-ignore
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmluZHlvdXJuZ28iLCJhIjoiY2tsM3l2azAzMWpqZzJ2bGI2a2JzNzl0OSJ9.hFUVv4mpv0ySKsCecmuKtQ';
 
     this.mapboxService.getNgoCoordinates().subscribe(data => {
@@ -132,7 +130,6 @@ export class MapboxComponent {
         coordinates: [origin, destination],
       }
     };
-    // @ts-ignore
     route.geometry.coordinates = curvedLine.geometry.coordinates;
     this.multiLinkSource.data.features.push(route);
   }
@@ -140,15 +137,9 @@ export class MapboxComponent {
   private initialiseMap(): void {
     this.map.on('load', () => {
       this.addMapCluster();
-    });
-
-    while (!this.map.loaded()){
-        console.log("Loaded: ", this.map.loaded());
-    }
-
-    this.generateCoordinateRanges();
-    this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
-    this.map.addLayer({
+      this.generateCoordinateRanges();
+      this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
+      this.map.addLayer({
         id: 'multiple-link-source',
         source: 'multiple-link-source',
         type: 'line',
@@ -156,6 +147,7 @@ export class MapboxComponent {
             'line-width': 3,
             'line-color': this.color,
         }
+      });
     });
   }
 

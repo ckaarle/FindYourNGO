@@ -1,7 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import * as $ from 'jquery';
-import 'jquery-mapael';
-import 'jquery-mapael/js/maps/world_countries.js';
 import {ApiService} from '../../services/api.service';
 
 @Component({
