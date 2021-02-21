@@ -1,0 +1,93 @@
+:host {
+  background: white;
+  border-radius: 4px;
+}
+
+.registerCard {
+  display: flex;
+  align-items: center;
+  max-width: 900px;
+  margin: 24px auto auto auto;
+
+  ::ng-deep .mat-card-title {
+    font-size: 24px !important;
+  }
+
+  ::ng-deep .mat-card-header {
+    justify-content: center;
+  }
+}
+
+.content {
+  margin-top: 32px;
+}
+
+p {
+  font-size: var(--font-size-medium);
+  line-height: 1.5;
+}
+
+.success-card {
+  display: flex;
+  align-self: center;
+  margin: 24px auto auto auto;
+}
+
+.validation-error-message {
+  color: var(--secondary-color);
+}
+
+.input {
+  margin-bottom: 16px;
+  margin-left: 32px;
+}
+
+.info-container {
+  margin-left: 32px;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: row;
+  padding: 4px 32px 16px;
+
+  .info-column {
+  }
+
+  .info-boxes {
+    margin-top: 48px;
+
+    button {
+      min-width: 200px;
+      margin-bottom: 16px;
+    }
+  }
+
+  .or-text {
+    margin-top: 72px;
+  }
+}
+
+.content-container {
+  margin-left: 32px;
+  display: flex;
+  flex-direction: row;
+
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 32px 16px;
+    width: 100%;
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      padding-bottom: 8px;
+
+      .content {
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+        word-break: break-word;
+      }
+    }
+  }
+}

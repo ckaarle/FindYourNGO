@@ -145,3 +145,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'BLACKLIST_AFTER_ROTATION': True,
 }
+
+# Email service
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

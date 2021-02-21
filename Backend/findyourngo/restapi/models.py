@@ -119,6 +119,8 @@ class Ngo(models.Model):
 
     number_of_reviews = models.IntegerField(default=0)
 
+    confirmed = models.BooleanField(default=True)
+
 
 class NgoAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

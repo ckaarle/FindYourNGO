@@ -63,6 +63,7 @@ import {Utils} from './services/utils';
 import { AboutComponent } from './screens/about/about.component';
 import { NgoTwHistoryComponent } from './components/ngo-tw-history/ngo-tw-history.component';
 import {NgxEchartsModule} from 'ngx-echarts';
+import { NgoSignUpComponent } from './components/ngo-sign-up/ngo-sign-up.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -128,6 +129,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     UserOptionsComponent,
     AboutComponent,
     NgoTwHistoryComponent,
+    NgoSignUpComponent,
   ],
   exports: [
     MatTabsModule,

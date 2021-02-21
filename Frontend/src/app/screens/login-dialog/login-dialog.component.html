@@ -1,6 +1,7 @@
 <h1 mat-dialog-title>Tell us who you are!</h1>
 <div mat-dialog-content class="limit-width" (keydown.enter)="submit()">
-  <mat-checkbox *ngIf="this.status === 'register'" (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
+  <mat-checkbox *ngIf="true" (change)="checkNgo($event)">Do you represent an NGO?</mat-checkbox>
+
   <form *ngIf="isNgo">
     <mat-form-field>
       <mat-label>NGO Name</mat-label>
@@ -52,7 +53,17 @@
     <mat-icon>facebook</mat-icon>
     Sign up with Facebook
   </button>
+  <button mat-button *ngIf="isNgo" (click)="registerNewNgo($event)" class="action-button">
+    <mat-icon>add</mat-icon>
+    Register new NGO
+  </button>
 </div>
 <ng-template #submitBlock mat-dialog-actions>
-  <button (click)="submit()" mat-button>Submit</button>
+  <div class="submit-block">
+    <button (click)="submit()" mat-button>Submit</button>
+    <button mat-button *ngIf="isNgo" (click)="registerNewNgo($event)">
+      <mat-icon>add</mat-icon>
+      Register new NGO
+    </button>
+  </div>
 </ng-template>

@@ -46,7 +46,6 @@ In case of incompatible migrations / an out-of-date state of the database, it ca
 	
 
 In case this does not fix the problem, you can reset the entire database:
-- delete all model classes in models.py
 - manually drop all restapi-tables in the database (!! only the tables starting with restapi_ !!)
 - reset migrations as described above
 - run makemigrations, migrate to let it detect that the database is clean

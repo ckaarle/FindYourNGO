@@ -131,3 +131,11 @@ export interface NgoEvent {
     description: string;
     tags: string;
 }
+
+export interface NewNgo {
+  ngoName: string;
+  ngoCountry: string;
+  representativeFirstName: string;
+  representativeLastName: string;
+  representativeEmail: string;
+}

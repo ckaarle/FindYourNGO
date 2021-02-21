@@ -79,7 +79,7 @@ def storeDailyTw(request):
 
 # request is a necessary positional parameter for the framework call
 def name_list(request):
-    result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
+    result = list(map(lambda ngo: ngo['name'], Ngo.objects.filter(confirmed=True).order_by('name').values()))
     return JsonResponse({'names': result})
 
 
@@ -161,7 +161,6 @@ def create_user(data, ngo_name, mode=None):
         if ngo_name:
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
-            print(list(NgoAccount.objects.all()))
 
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)
