@@ -17,7 +17,6 @@ export class NgoNameValidator implements OnDestroy {
   validator(): ValidatorFn {
 
     return (control: AbstractControl): ValidationErrors | null => {
-      console.log(control.value);
       if (this.allNgoNames.indexOf(control.value.toLowerCase()) >= 0) {
         return {
           ngoNameDuplicate: true

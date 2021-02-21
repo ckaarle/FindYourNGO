@@ -60,7 +60,6 @@ export class NgoSignUpComponent implements OnInit {
     this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
       const filterOptions = Utils.mapDataToNgoFilterOptions(data);
       this.countries = filterOptions.countries.values;
-      console.log(this.countries)
     });
   }
 
