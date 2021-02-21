@@ -17,35 +17,44 @@ def get_plots(request) -> JsonResponse:
 def get_links(request) -> JsonResponse:
     clusters = request.query_params.get('clusters', None)
     if clusters:
-        clustered_ngos: {int: int} = {}
-        for ngo in Ngo.objects.all():
-            lat = ngo.contact.address.latitude
-            long = ngo.contact.address.longitude
-            if not (lat and long):
-                print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
-                continue
-            for cluster in clusters:
-                if cluster['lat_min'] <= lat <= cluster['lat_max'] and cluster['lng_min'] <= long <= cluster['lng_min']:
-                    clustered_ngos[ngo.id] = int(cluster['id'])
-                    break
-            else:
-                print(f'Ngo {ngo.name} in {lat}, {long} could not be assigned to any cluster')
-
-        link_count = {}
-        for cluster1 in clusters:
-            for cluster2 in clusters:
-                if cluster1.id < cluster2.id:
-                    link_count[(cluster1.id, cluster2.id)] = 0
-        for connection in NgoConnection.objects.all():
-            if connection.reporter_id < connection.connected_ngo_id:
-                cluster1 = clustered_ngos[connection.reporter_id]
-                cluster2 = clustered_ngos[connection.connected_ngo_id]
-                link_count[(cluster1, cluster2)] += 1
-        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in link_count.items()],
+        ngo_links = get_links_between_ngos(clusters, Ngo.objects.all(), NgoConnection.objects.all())
+        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in ngo_links.items()],
                             safe=False)
 
     link_serializer = NgoLinkSerializer(NgoConnection.objects.all(), many=True)
     return JsonResponse(link_serializer.data, safe=False)
+
+
+def get_links_between_ngos(clusters, ngos, connections):
+    clustered_ngos: {int: int} = {}
+    for ngo in ngos:
+        lat = ngo.contact.address.latitude
+        long = ngo.contact.address.longitude
+        if not (lat and long):
+            print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
+            continue
+        for cluster in clusters:
+            if float(cluster['lat_min']) <= lat <= float(cluster['lat_max']) \
+                    and float(cluster['lng_min']) <= long <= float(cluster['lng_max']):
+                clustered_ngos[ngo.id] = int(cluster['id'])
+                break
+        else:
+            print(f'Ngo {ngo.name} in {lat}, {long} could not be assigned to any cluster')
+
+    link_count = {}
+    for cluster1 in clusters:
+        for cluster2 in clusters:
+            if int(cluster1['id']) < int(cluster2['id']):
+                link_count[(int(cluster1['id']), int(cluster2['id']))] = 0
+    for connection in connections:
+        rep_id = connection.reporter_id
+        con_id = connection.connected_ngo_id
+        if rep_id < con_id and rep_id in clustered_ngos and con_id in clustered_ngos \
+                and clustered_ngos[rep_id] != clustered_ngos[con_id]:
+            cluster1 = clustered_ngos[rep_id]
+            cluster2 = clustered_ngos[con_id]
+            link_count[(cluster1, cluster2)] += 1
+    return link_count
 
 
 @api_view(['GET'])
