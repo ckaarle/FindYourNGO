@@ -9,6 +9,7 @@ from rest_framework import status
 from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMetaData, NgoDataSource, NgoContact, \
     NgoTWScore, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
+from findyourngo.restapi.utils.email_util import send_email
 
 SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
 
@@ -68,6 +69,7 @@ def ngo_short_list_all(request):
 @api_view(['POST'])
 def register_ngo(request) -> JsonResponse:
     new_ngo_request = JSONParser().parse(request)
+    print(new_ngo_request)
     new_ngo_request = new_ngo_request['ngo']
 
     ngo_name = new_ngo_request['ngoName']
@@ -135,6 +137,23 @@ def register_ngo(request) -> JsonResponse:
         meta_data=meta_data,
         tw_score=tw_score,
         confirmed=False,
+    )
+
+    send_email(
+        'NGO Registration FindyourNgo',
+        f'''
+    Dear {first_name} {last_name}, 
+    
+    FindyourNGO has received an application for the NGO {ngo_name}, listing you as its representative.
+    We are now reviewing the application to ensure that only real NGOs are listed on our platform. To speed
+    up the review process, please provide us with further information regarding your NGO's activities, funding,
+    organizational structure etc by replying to this email.
+
+    Best regards
+    the FindyourNGO-team
+        ''',
+        'registration@findyourngo.org',
+        [email]
     )
 
     return JsonResponse({'message': f'Ngo {ngo_name} was added successfully.'}, status=status.HTTP_200_OK)

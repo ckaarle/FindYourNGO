@@ -31,7 +31,7 @@
               <div>
                 <mat-form-field>
                   <mat-label>Country of headquarter</mat-label>
-                  <mat-select formControlName="countryControl" multiple>
+                  <mat-select formControlName="countryControl">
                     <mat-option *ngFor="let c of countries" [value]="c">{{ c }}</mat-option>
                   </mat-select>
                 </mat-form-field>
