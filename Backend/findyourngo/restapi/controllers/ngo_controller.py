@@ -140,17 +140,17 @@ def register_ngo(request) -> JsonResponse:
     )
 
     send_email(
-        'NGO Registration FindyourNgo',
+        'NGO Registration Find your Ngo',
         f'''
     Dear {first_name} {last_name}, 
     
-    FindyourNGO has received an application for the NGO {ngo_name}, listing you as its representative.
+    Find your NGO has received an application for the NGO {ngo_name}, listing you as its representative.
     We are now reviewing the application to ensure that only real NGOs are listed on our platform. To speed
     up the review process, please provide us with further information regarding your NGO's activities, funding,
     organizational structure etc by replying to this email.
 
     Best regards
-    the FindyourNGO-team
+    the Find your NGO-team
         ''',
         'registration@findyourngo.org',
         [email]
