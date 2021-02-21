@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {MapboxService} from '../../services/mapbox.service';
 import * as mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
@@ -63,22 +63,26 @@ export class MapboxComponent {
     });
   }
 
-  generateCoordinateRanges(): NgoCluster[] {
+  generateCoordinateRanges(): void {
+    this.multiLinkSource.data.features = [];
+
     const ngoCluster: NgoCluster[] = [];
     let cluster: any[] = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'clusters'});
     cluster = cluster.filter((c) => c.id);
-    console.log("Found clusters: ", cluster);
     cluster.forEach((c: any) => {
-      console.log("Current cluster: ", c);
       ngoCluster.push({
          id: c.id,
          lat_min: c.geometry.coordinates[0] - 50,
          lat_max: c.geometry.coordinates[0] + 50,
-         lon_min: c.geometry.coordinates[1] - 50,
-         lon_max: c.geometry.coordinates[1] + 50
+         lng_min: c.geometry.coordinates[1] - 50,
+         lng_max: c.geometry.coordinates[1] + 50
       });
     });
-    return ngoCluster;
+    this.mapboxService.getNgoLinks(ngoCluster).subscribe((linkData: NgoLink[]) => {
+        /*linkData.forEach((link: NgoLink) => {
+          this.addLink(link);
+        });*/
+    });
   }
 
   buildMap(): void {
@@ -108,7 +112,6 @@ export class MapboxComponent {
             }
         );
     });
-    console.log("Marker: ", geoPoints);
     this.mapMarkers = geoPoints;
   }
 
@@ -138,6 +141,22 @@ export class MapboxComponent {
     this.map.on('load', () => {
       this.addMapCluster();
     });
+
+    while (!this.map.loaded()){
+        console.log("Loaded: ", this.map.loaded());
+    }
+
+    this.generateCoordinateRanges();
+    this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
+    this.map.addLayer({
+        id: 'multiple-link-source',
+        source: 'multiple-link-source',
+        type: 'line',
+        paint: {
+            'line-width': 3,
+            'line-color': this.color,
+        }
+    });
   }
 
   addMapCluster(): void {
@@ -155,18 +174,13 @@ export class MapboxComponent {
         source: 'markerPointData',
         filter: ['has', 'point_count'],
         paint: {
-        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-        // with three steps to implement three types of circles:
-        //   * 20px circles when point count is less than 50
-        //   * 30px circles when point count is between 50 and 150
-        //   * 40px circles when point count is greater than or equal to 150
         'circle-color': '#ffc107',
         'circle-radius': [
             'step',
             ['get', 'point_count'],
-            20, 50,
-            30, 150,
-            40
+            20, 50, // when point count is less than 50
+            30, 150, // when point count is between 50 and 150
+            40 // when point count is greater than or equal to 150
         ]
         }
     });
@@ -196,41 +210,22 @@ export class MapboxComponent {
         }
     });
 
-    while (!this.map.loaded){
-        console.log("Loaded: ", this.map.loaded());
-    }
-
-    const currentClusterRanges: NgoCluster[] = this.generateCoordinateRanges();
-    console.log("CurrentRanges: ", currentClusterRanges);
-    this.mapboxService.getNgoLinks(currentClusterRanges).subscribe((linkData: NgoLink[]) => {
-        /*linkData.forEach((link: NgoLink) => {
-          this.addLink(link);
-        });*/
-        this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
-
-        this.map.addLayer({
-            id: 'multiple-link-source',
-            source: 'multiple-link-source',
-            type: 'line',
-            paint: {
-                'line-width': 3,
-                'line-color': this.color,
-            }
-        });
-    });
-
     this.addMapClusterEvents();
   }
 
   addMapClusterEvents(): void {
+    this.registerPointClick();
+    this.registerClusterClick();
+    this.registerHovering();
+    this.registerZooming();
+  }
+
+  registerPointClick(): void {
     this.map.on('click', 'unclustered-point', (e: any) => {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const name = e.features[0].properties.name;
       const twValue = e.features[0].properties.twValue;
 
-      // Ensure that if the map is zoomed out such that
-      // multiple copies of the feature are visible, the
-      // popup appears over the copy being pointed to.
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
@@ -242,7 +237,9 @@ export class MapboxComponent {
           )
           .addTo(this.map);
     });
+  }
 
+  registerClusterClick(): void {
     this.map.on('click', 'clusters', (e: any) => {
       const coordinates = e.features[0].geometry.coordinates.slice();
 
@@ -276,7 +273,9 @@ export class MapboxComponent {
           )
           .addTo(this.map);
     });
+  }
 
+  registerHovering(): void {
     this.map.on('mouseenter', 'clusters', () => {
       this.map.getCanvas().style.cursor = 'pointer';
     });
@@ -284,16 +283,11 @@ export class MapboxComponent {
     this.map.on('mouseleave', 'clusters', () => {
       this.map.getCanvas().style.cursor = '';
     });
+  }
 
+  registerZooming(): void {
     this.map.on('zoomend', () => {
-      console.log("Zoomed");
-      const currentClusterRanges: NgoCluster[] = this.generateCoordinateRanges();
-      console.log("CurrentRanges new: ", currentClusterRanges);
-      this.mapboxService.getNgoLinks(currentClusterRanges).subscribe((linkData: NgoLink[]) => {
-        /*linkData.forEach((link: NgoLink) => {
-          this.addLink(link);
-        });*/
-      });
+      this.generateCoordinateRanges();
     });
   }
 }

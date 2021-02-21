@@ -16,6 +16,6 @@ export class MapboxService {
   }
 
   getNgoLinks(ngoCluster: NgoCluster[]): Observable<NgoLink[]> {
-    return this.apiService.get('map/links', ngoCluster);
+    return this.apiService.post('map/links', {clusters: ngoCluster});
   }
 }

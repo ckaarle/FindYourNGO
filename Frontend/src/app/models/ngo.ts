@@ -131,8 +131,8 @@ export interface NgoCluster {
   id: number;
   lat_min: number;
   lat_max: number;
-  lon_min: number;
-  lon_max: number;
+  lng_min: number;
+  lng_max: number;
 }
 
 export interface NgoLink {

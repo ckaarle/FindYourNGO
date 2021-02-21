@@ -217,7 +217,7 @@ class NgoPlotSerializer(serializers.ModelSerializer):
         if lat and long:
             return lat, long
 
-        lat = float(coordinates[address.name][0]) + random.uniform(-2.0, 2.0)
+        lat = float(coordinates[address.country.name][0]) + random.uniform(-2.0, 2.0)
         long = float(coordinates[address.country.name][1]) + random.uniform(-2.0, 2.0)
         # save lat and long after assigning it randomly
         address.latitude = lat
