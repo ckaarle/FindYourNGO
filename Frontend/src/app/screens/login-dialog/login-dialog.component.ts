@@ -4,7 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { Names } from '../../models/ngo';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
@@ -28,7 +28,7 @@ export class LoginDialogComponent implements OnInit {
   status = '';
   userForm = new FormGroup({
     username: new FormControl(''),
-    email: new FormControl(''),
+    email: new FormControl('', Validators.email),
     password: new FormControl(''),
   });
 
