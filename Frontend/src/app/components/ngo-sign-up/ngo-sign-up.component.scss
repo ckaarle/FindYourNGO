@@ -5,7 +5,7 @@
 
 .registerCard {
   display: flex;
-  align-self: center;
+  align-items: center;
   max-width: 1000px;
   margin: 24px auto auto auto;
 
@@ -19,7 +19,7 @@
 }
 
 .content {
-  margin-top: 48px;
+  margin-top: 32px;
 }
 
 p {
@@ -39,23 +39,55 @@ p {
 
 .input {
   margin-bottom: 16px;
+  margin-left: 32px;
 }
 
 .info-container {
+  margin-left: 32px;
   margin-top: 32px;
   display: flex;
-}
+  flex-direction: row;
+  padding: 4px 32px 16px;
 
-.info-boxes {
-  margin-top: 12px;
+  .info-column {
+  }
 
-  button {
-    min-width: 200px;
-    margin-bottom: 16px;
+  .info-boxes {
+    margin-top: 48px;
+
+    button {
+      min-width: 200px;
+      margin-bottom: 16px;
+    }
+  }
+
+  .or-text {
+    margin-top: 72px;
   }
 }
 
-.or-text {
-  margin-top: 48px;
-}
+.content-container {
+  margin-left: 32px;
+  display: flex;
+  flex-direction: row;
 
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 32px 16px;
+    width: 100%;
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      padding-bottom: 8px;
+
+      .content {
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+        word-break: break-word;
+      }
+    }
+  }
+}
