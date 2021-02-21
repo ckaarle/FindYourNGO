@@ -58,7 +58,7 @@ class PageRank:
         total_tw = sum(connected_tw_sum.values())
 
         connected_tw_sum_percentage = {
-            ngo_name: tw_score / total_tw for ngo_name, tw_score in connected_tw_sum.items()
+            ngo_name: self._get_percentage(tw_score, total_tw) for ngo_name, tw_score in connected_tw_sum.items()
         }
 
         return connected_tw_sum_percentage
@@ -98,3 +98,9 @@ class PageRank:
                 ngos_with_connections.append(ngo)
 
         return ngos_with_connections
+
+    def _get_percentage(self, tw_score, total_tw):
+        if total_tw <= 0:
+            return 0
+
+        return tw_score / total_tw

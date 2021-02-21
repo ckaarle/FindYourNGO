@@ -14,6 +14,7 @@ Stored in the database:
 - score resulting from the credibility of its data source
 - score resulting from the number of data sources it is being derived from
 - score resulting from its accreditations
+- score resulting from an NGO account
 
 Storing these individual factors enables offering a detailed history of the trustworthiness score.
 
@@ -25,34 +26,26 @@ Storing these individual factors enables offering a detailed history of the trus
 - number of data sources
 - [ECOSOC](https://csonet.org/?menu=100) accreditation 
 - PageRank
+- whether or not the NGO is registered with us
 
-
-## What additional features could potentially be used in the future?
-- use more of the accreditations listed in the database
-- query [UN ECOSOC](https://esango.un.org/civilsociety/displayConsultativeStatusSearch.do?method=search&sessionCheck=false)
-for more accreditation information (also lists other accreditations)
-- user ratings
-- reported scandals
-- NGO size (members, staff; could disadvantage smaller NGOs)
-- age of NGO
 
 ## What are the requirements to currently receive an optimal trustworthiness score? 
 
 - listed by one credible source
 - listed by all data sources
 - ECOSOC/ILO/Commonwealth Foundation (CF) accredited
-- PageRank TODO
 
 
 ## What is the current score distribution?
+calculated without user comments and without NGO connections
 | Score | # NGOs |
 | ----- | ------: |
 | 0 | 649 |
 | 1 | 0 |
 | 2 | 0 |
-| 3 | 264 |
-| 4 | 48 |
-| 5 | 2 |
+| 3 | 273 |
+| 4 | 41 |
+| 5 | 0 |
 
 
 ## How is the score calculated?
@@ -80,16 +73,17 @@ The following factors will be used to calculate the raw base tw score:
 | # data sources        | 1 per source | 2 | |
 | one credible source   | (# data sources overall) * 2 + 1  | 5 | one credible source > all (less) credible sources combined + ECOSOC |
 | ECOSOC/ILO/CF              | # data sources overall | 2 | ECOSOC/ILO/CF does not hold as much meaning without a credible source |
+| NGOAccount | 1 | 1 | since we will have to verify the account, it should be a significant boost |
 
 
-score_raw_base(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO)
+score_raw_base(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO) + NGOAccount(NGO)
 
 Since the score has to be scaled into the range [0..5], use the following [formula](https://stats.stackexchange.com/questions/281162/scale-a-number-between-a-range/281164) to achieve this:
 
 | Variable | Value | Description |
 | -------- | ----- | ----------- |
 | r<sub>min</sub> | 1 | min. value of raw base TW score (i.e. one data source and nothing else) |
-| r <sub>max</sub> | 9 | max. value of raw base TW score |
+| r <sub>max</sub> | 10 | max. value of raw base TW score |
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
 
@@ -240,6 +234,6 @@ During the initial data import, the score will be calculated for each NGO. There
  score for all NGOs in the database if necessary (e.g. if the score calculation was modified).
  
 The score is recalculated for a single NGO, when a new user rating is saved to the database and when an existing user
- rating is updated or deleted. In the future, a recalculation of the score for each NGO will be performed automatically
+ rating is updated or deleted. Also, a recalculation of the score for each NGO is performed automatically
  in fixed intervals. This ensures, that the scores will be kept up-to-date, even if no changes are being made to 
  to specific NGOs, which would trigger a single recalculation.

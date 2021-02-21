@@ -9,6 +9,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-dialog',
@@ -32,7 +33,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   });
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private authService: SocialAuthService,
-              private apiService: ApiService, private userService: UserService) {
+              private apiService: ApiService, private userService: UserService, private snackBar: MatSnackBar) {
     this.isNgo = false;
 
     this.apiService.get('names').subscribe((data: Names) =>
@@ -62,6 +63,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     this.authService.authState.subscribe((user) => {
       this.userService.user.next(user);
     });
+
+    this.userService.$lastErrorMessage.subscribe(errorMessage => this.showUserLoginFeedback(errorMessage));
   }
 
   signInWithGoogle(): void {
@@ -114,6 +117,17 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.endpoint = '';
-    // this.signOut(); // Why do we signOut every time the component is destroyed (which is the case when we sign in or up)?
+  }
+
+  private showUserLoginFeedback(errorMessage: string): void {
+    if (errorMessage === '') {
+      return;
+    }
+
+    const userMessage = 'Error: ' + errorMessage;
+    this.snackBar.open(userMessage, null, {
+      duration: 3000,
+      panelClass: ['login-snackbar']
+    });
   }
 }

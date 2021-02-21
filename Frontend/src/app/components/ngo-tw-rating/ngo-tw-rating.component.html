@@ -1,10 +1,16 @@
 <div class="rating-overview" fxLayout="row wrap">
 
-  <div class="tw-rating" fxFlex="33%" fxFlex.sm="33%"
+  <div class="tw-rating"
        fxFlex.xs="100%">
-    <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
-    <ngo-rating-table [reviewNumberIndexedByRating]="reviewNumberIndexedByRating"
-                      [totalReviewNumber]="totalReviewNumber"
-    ></ngo-rating-table>
+    <div class="rating">
+      <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
+      <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
+    </div>
+
+    <div class="stats">
+      <ngo-rating-table [reviewNumberIndexedByRating]="reviewNumberIndexedByRating"
+                        [totalReviewNumber]="totalReviewNumber"></ngo-rating-table>
+      <ngo-tw-history [ngoId]="ngoId"></ngo-tw-history>
+    </div>
   </div>
 </div>

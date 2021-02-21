@@ -474,6 +474,7 @@ def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoM
     number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(meta_data)
     credible_source_score = tw_calculator.calculate_data_source_credibility_score(meta_data)
     ecosoc_score = tw_calculator.calculate_ecosoc_score(accreditation)
+    # no ngo accounts assumed to exist during data import
     total_score = tw_calculator.calculate_base_tw_from_partial_scores(number_data_sources_score, credible_source_score,
                                                                  ecosoc_score)
     tw_score = NgoTWScore.objects.create(
@@ -580,78 +581,81 @@ def update_ngo_tw_score(ngo: Ngo) -> None:
 
 
 def _update_with_ngo_advisor_info(info_match: Ngo, info: Info, source: str, credible: bool) -> None:
-    if info_match.name == 'AMNESTY INTERNATIONAL':
-        info_match.contact.address.country = info.main_info.address.country.strip().upper()
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'ASSOCIATION FOR THE PREVENTION OF TORTURE':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK':
-        _add_all_types(info, info_match)
-    elif info_match.name == 'CHILD HELPLINE INTERNATIONAL':
-        _add_all_branches(info, info_match)
+    try:
+        if 'AMNESTY INTERNATIONAL' in info_match.name:
+            info_match.contact.address.country = NgoCountry.objects.get(name='UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND')
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'ASSOCIATION FOR THE PREVENTION OF TORTURE':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'BALKAN CIVIL SOCIETY DEVELOPMENT NETWORK':
+            _add_all_types(info, info_match)
+        elif info_match.name == 'CHILD HELPLINE INTERNATIONAL':
+            _add_all_branches(info, info_match)
 
-        # just to make sure it has actual numbers and not None
-        info.detail_info.hard_facts.staff_number = 0
-        info.detail_info.hard_facts.members = 0
-        stats = convert_ngo_stats(info)
-        info_match.stats = stats
+            # just to make sure it has actual numbers and not None
+            info.detail_info.hard_facts.staff_number = 0
+            info.detail_info.hard_facts.members = 0
+            stats = convert_ngo_stats(info)
+            info_match.stats = stats
 
-        _add_all_topics(info, info_match)
-        _add_all_types(info, info_match)
-    elif info_match.name == 'DEFENCE FOR CHILDREN INTERNATIONAL':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'HUMAN RIGHTS WATCH':
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'INTERNATIONAL COMMISSION OF JURISTS':
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        info_match.contact.website = info.detail_info.hard_facts.website.strip()
-        info_match.contact.address.city = info.main_info.address.city.strip()
-        info_match.contact.address.country = info.main_info.address.country.strip().upper()
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'TRANSPARENCY INTERNATIONAL':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'WORLD ORGANISATION AGAINST TORTURE':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'INTERNATIONAL DETENTION COALITION':
-        _add_all_types(info, info_match)
-        _add_all_branches(info, info_match)
-        _add_all_topics(info, info_match)
-    elif info_match.name == 'CHILD RIGHTS INTERNATIONAL NETWORK':
-        info.detail_info.hard_facts.staff_number = 0
-        info.detail_info.hard_facts.members = 0
-        stats = convert_ngo_stats(info)
-        info_match.stats = stats
+            _add_all_topics(info, info_match)
+            _add_all_types(info, info_match)
+        elif info_match.name == 'DEFENCE FOR CHILDREN INTERNATIONAL':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'HUMAN RIGHTS WATCH':
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif 'INTERNATIONAL COMMISSION OF JURISTS' in info_match.name:
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            info_match.contact.website = info.detail_info.hard_facts.website.strip()
+            info_match.contact.address.city = info.main_info.address.city.strip()
+            info_match.contact.address.country = NgoCountry.objects.get(name=info.main_info.address.country.strip().upper())
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'TRANSPARENCY INTERNATIONAL':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'WORLD ORGANISATION AGAINST TORTURE':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'INTERNATIONAL DETENTION COALITION':
+            _add_all_types(info, info_match)
+            _add_all_branches(info, info_match)
+            _add_all_topics(info, info_match)
+        elif info_match.name == 'CHILD RIGHTS INTERNATIONAL NETWORK':
+            info.detail_info.hard_facts.staff_number = 0
+            info.detail_info.hard_facts.members = 0
+            stats = convert_ngo_stats(info)
+            info_match.stats = stats
 
-        info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
-        info_match.contact.website = info.detail_info.hard_facts.website.strip()
-        info_match.contact.address.city = info.main_info.address.city.strip()
+            info_match.stats.founding_year = info.detail_info.hard_facts.founding_year
+            info_match.contact.website = info.detail_info.hard_facts.website.strip()
+            info_match.contact.address.city = info.main_info.address.city.strip()
 
-        _add_all_types(info, info_match)
-        _add_all_topics(info, info_match)
-    else:
-        raise ValueError(f'Unexpected NGO match found: {info_match.name}')
+            _add_all_types(info, info_match)
+            _add_all_topics(info, info_match)
+        else:
+            raise ValueError(f'Unexpected NGO match found: {info_match.name}')
 
-    data_source = convert_ngo_data_source(source, credible)[0]
+        data_source = convert_ngo_data_source(source, credible)[0]
 
-    info_match.meta_data.info_source.add(data_source)
-    info_match.meta_data.save()
-    update_ngo_tw_score(info_match)
-    info_match.save()
+        info_match.meta_data.info_source.add(data_source)
+        info_match.meta_data.save()
+        update_ngo_tw_score(info_match)
+        info_match.save()
+    except Exception as e:
+        print(e)
 
 
 def _add_all_types(info: Info, info_match: Ngo) -> None:
@@ -869,6 +873,11 @@ def run_initial_data_import(request) -> bool:
     already_imported_entries = len(european_council_info)
     for idx, info in enumerate(ngo_advisor_info):
         #print(f'Current idx: {idx}')
+        # if 'AMNESTY INTERNATIONAL' in info.main_info.name.name.upper():
+        #     # does not contain any new information
+        #     print('SKIPPING DUPLICATE AMNESTY')
+        #     skipped += 1
+        #     continue
 
         if info.main_info.name.type_of_organization is not None and ('social_enterprise' in info.main_info.name.type_of_organization or 'corporation' in info.main_info.name.type_of_organization \
             or 'academic_institution' in info.main_info.name.type_of_organization):
@@ -877,7 +886,7 @@ def run_initial_data_import(request) -> bool:
             continue
         try:
             #print(f'Trying to find NGO {info.main_info.name.name.upper()} in database ...')
-            info_match = Ngo.objects.get(name=info.main_info.name.name.upper()) # Achtung Name noch nicht upper()
+            info_match = Ngo.objects.get(name=info.main_info.name.name.upper().strip()) # Achtung Name noch nicht upper()
             #print(f'Match in database found for {info.main_info.name.name}')
             #_print_comparison(info_match, info)
 

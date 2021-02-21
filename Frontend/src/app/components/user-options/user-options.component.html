@@ -21,7 +21,7 @@
         <h4 class="user-options-ngo">Make your NGO visible, <span
             class="user-options-name">{{ userService.username?.value !== ''
             ? userService.username.value : userService.userid.value }}</span>!</h4>
-        <u class="user-options-link" (click)="showDetails()">Click here to edit your
+        <u class="user-options-link" (click)="filter.showDetails(userService.ngoid.value)">Click here to edit your
           NGO.</u>
       </div>
     </ng-template>

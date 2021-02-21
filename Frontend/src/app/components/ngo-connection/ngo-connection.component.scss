@@ -1,21 +1,76 @@
-h2 {
-  margin-top: 10px;
-}
-
 .mat-button {
   margin-left: 16px;
-}
-
-.mat-card {
-  width: 180px;
-  margin-bottom: 4px;
 }
 
 .mat-form-field {
   width: 210px;
 }
 
-.connection-type-wrapper {
+.ngo-details {
+  margin: 32px 0 16px 0;
+}
+
+.connection-request-container {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  margin-bottom: 16px;
+
+  .connection-request-title {
+    color: var(--primary-color);
+    font-size: 30px;
+    padding: 16px 16px 0 0;
+  }
+
+  .connection-request-action {
+    color: var(--secondary-color);
+    font-size: 30px;
+    cursor: pointer;
+    padding: 16px 0 0 16px;
+  }
+}
+
+.connections-wrapper {
+  .title {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: var(--font-size-medium);
+    padding-top: 32px;
+
+    .mat-icon {
+      color: var(--primary-color);
+      padding-right: 16px;
+    }
+  }
+
+  .connection-type-wrapper {
+    padding-top: 8px;
+
+    .connection-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      u {
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+          color: var(--secondary-color);
+        }
+      }
+
+      .mat-icon {
+        cursor: pointer;
+        color: var(--secondary-color);
+        padding-left: 4px;
+      }
+    }
+  }
+
+  .connections-unavailable {
+    font-style: italic;
+  }
 }

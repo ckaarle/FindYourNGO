@@ -48,6 +48,7 @@ export class Utils {
             id: ngoDetailItem.id,
             name: ngoDetailItem.name,
             acronym: ngoDetailItem.acronym,
+            metaData: ngoDetailItem.metaData,
             description: {
                 aim: {displayName: 'Description', values: ngoDetailItem.aim},
                 typeOfOrganization: {displayName: 'Organization type', values: ngoDetailItem.stats.typeOfOrganization},
@@ -60,7 +61,10 @@ export class Utils {
                 workingLanguages: {displayName: 'Working languages', values: ngoDetailItem.stats.workingLanguages}
             },
             stats: {
-                president: {displayName: 'President', values: ngoDetailItem.stats.president},
+                president: {displayName: 'President', values: {
+                    presidentFirstName: ngoDetailItem.stats.presidentFirstName,
+                    presidentLastName: ngoDetailItem.stats.presidentLastName
+                }},
                 foundingYear: {displayName: 'Founding year', values: ngoDetailItem.stats.foundingYear},
                 staffNumber: {displayName: 'Staff number', values: ngoDetailItem.stats.staffNumber},
                 memberNumber: {displayName: 'Member number', values: ngoDetailItem.stats.memberNumber},
@@ -72,7 +76,12 @@ export class Utils {
                 address: {displayName: 'Address', values: ngoDetailItem.contact.address},
                 ngoPhoneNumber: {displayName: 'Phone number', values: ngoDetailItem.contact.ngoPhoneNumber},
                 ngoEmail: {displayName: 'Email', values: ngoDetailItem.contact.ngoEmail},
-                representative: {displayName: 'Representative', values: ngoDetailItem.contact.representative}
+                representative: {displayName: 'Representative', values: ngoDetailItem.contact.representative ?
+                        ngoDetailItem.contact.representative : {
+                            representativeFirstName: '',
+                            representativeLastName: '',
+                            representativeEmail: ''
+                }}
             },
             rating: {
                 trustworthiness: {displayName: 'Trustworthiness', values: ngoDetailItem.trustworthiness},
@@ -81,9 +90,69 @@ export class Utils {
         };
     }
 
+    static retrieveObjectKeyFromDetailItemDisplayName(editedNgo: any): any {
+        // @ts-ignore
+        return {
+            accreditations: editedNgo['Edit Accreditations'],
+            activities: editedNgo['Edit Activities'],
+            aim: editedNgo['Edit Description'],
+            branches: editedNgo['Edit Branches'],
+            street: editedNgo['Edit Street'],
+            city: editedNgo['Edit City'],
+            postcode: editedNgo['Edit Postcode'],
+            country: editedNgo['Edit Country'],
+            ngoEmail: editedNgo['Edit Email'],
+            ngoPhoneNumber: editedNgo['Edit Phone number'],
+            representativeFirstName: editedNgo['Edit Representative First Name'],
+            representativeLastName: editedNgo['Edit Representative Last Name'],
+            representativeEmail: editedNgo['Edit Representative Email'],
+            website: editedNgo['Edit Website'],
+            foundingYear: editedNgo['Edit Founding year'],
+            funding: editedNgo['Edit Funding'],
+            memberNumber: editedNgo['Edit Member number'],
+            presidentFirstName: editedNgo['Edit President First Name'],
+            presidentLastName: editedNgo['Edit President Last Name'],
+            staffNumber: editedNgo['Edit Staff number'],
+            typeOfOrganization: editedNgo['Edit Organization type'],
+            workingLanguages: editedNgo['Edit Working languages'],
+            yearlyIncome: editedNgo['Edit Yearly income'],
+            topics: editedNgo['Edit Topics']
+        };
+    }
+
     static filter(value: string, values: string[]): string[] {
         const filterValue = value.toLowerCase();
 
         return values.filter(option => option.toLowerCase().includes(filterValue));
+    }
+
+    static getRepresentativeValue(representative: any): string {
+        return representative.representativeLastName ?
+            representative.representativeEmail ?
+              `${representative.representativeFirstName} ${representative.representativeLastName}, ${representative.representativeEmail}` :
+              `${representative.representativeFirstName} ${representative.representativeLastName}` :
+            `${representative.representativeEmail}`;
+    }
+
+    static getPresidentValue(president: any): string {
+        return `${president.presidentFirstName} ${president.presidentLastName}`;
+    }
+
+    static getAddressValue(address: any): string {
+        return address.country ?
+            address.street ?
+                address.city ?
+                    `${address.street}, ${address.postcode} ${address.city}, ${address.country}` :
+                    `${address.country}` :
+                address.city ?
+                    `${address.postcode} ${address.city}, ${address.country}` :
+                    `${address.country}` :
+            address.street ?
+                address.city ?
+                    `${address.street}, ${address.postcode} ${address.city}` :
+                    '' :
+                address.city ?
+                    `${address.postcode} ${address.city}` :
+                    '';
     }
 }

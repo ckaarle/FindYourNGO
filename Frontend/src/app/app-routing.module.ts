@@ -8,6 +8,7 @@ import {OverviewScreenComponent} from './screens/overview-screen/overview-screen
 import {SearchScreenComponent} from './screens/search-screen/search-screen.component';
 import {NgoNewReviewComponent} from './components/ngo-new-review/ngo-new-review.component';
 import {NgoDetailItemComponent} from './components/ngo-detail-item/ngo-detail-item.component';
+import {AboutComponent} from './screens/about/about.component';
 import {MapboxComponent} from './components/mapbox/mapbox.component';
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'map', component: MapScreenComponent, data: {title: 'Map'}},
   {path: 'newReview/:ngoId', component: NgoNewReviewComponent},
   {path: 'detailView/:id', component: NgoDetailItemComponent},
+  {path: 'about', component: AboutComponent, data: {title: 'About'}},
   {path: 'mapbox', component: MapboxComponent}
 ];
 
