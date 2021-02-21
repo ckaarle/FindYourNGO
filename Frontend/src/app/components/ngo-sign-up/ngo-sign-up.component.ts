@@ -3,13 +3,14 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgoRegistrationService} from '../../services/ngo-registration.service';
 import {UserService} from '../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NewNgo, NgoOverviewItem} from '../../models/ngo';
+import {NewNgo, NgoFilterOptions, NgoOverviewItem} from '../../models/ngo';
 import {BehaviorSubject} from 'rxjs';
 import {ApiService} from '../../services/api.service';
 import {LoginChoiceValidator, NgoNameValidator} from './CustomValidators';
 import {SocialAuthService, SocialUser} from 'angularx-social-login';
 import {LoginService} from '../../services/login.service';
 import {MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxDefaultOptions} from '@angular/material/checkbox';
+import {Utils} from '../../services/utils';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class NgoSignUpComponent implements OnInit {
 
   group = new FormGroup({
     ngoNameControl: new FormControl('', [Validators.required, new NgoNameValidator(this.allNgoNames).validator()]),
-    countryControl: new FormControl('', Validators.required),
+    countryControl: new FormControl(null, Validators.required),
 
     firstNameControl: new FormControl('', Validators.required),
     lastNameControl: new FormControl('', Validators.required),
@@ -46,6 +47,8 @@ export class NgoSignUpComponent implements OnInit {
 
   user?: SocialUser;
 
+  countries: string[] = [];
+
   constructor(
       private ngoRegistrationService: NgoRegistrationService,
       private userService: UserService,
@@ -54,6 +57,11 @@ export class NgoSignUpComponent implements OnInit {
       private authService: SocialAuthService,
       private loginService: LoginService
   ) {
+    this.apiService.get('ngos/filteroptions/').subscribe((data: NgoFilterOptions) => {
+      const filterOptions = Utils.mapDataToNgoFilterOptions(data);
+      this.countries = filterOptions.countries.values;
+      console.log(this.countries)
+    });
   }
 
   ngOnInit(): void {
