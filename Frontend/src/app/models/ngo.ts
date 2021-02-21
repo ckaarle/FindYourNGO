@@ -126,3 +126,19 @@ export interface NgoCoordinates {
   name: string;
   trustworthiness: number;
 }
+
+export interface NgoCluster {
+  id: number;
+  lat_min: number;
+  lat_max: number;
+  lon_min: number;
+  lon_max: number;
+}
+
+export interface NgoLink {
+  id1: number;
+  id2: number;
+  link_count: number;
+}
+
+
