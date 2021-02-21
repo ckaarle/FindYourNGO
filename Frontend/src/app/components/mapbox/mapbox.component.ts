@@ -77,9 +77,10 @@ export class MapboxComponent {
       });
     });
     this.mapboxService.getNgoLinks(ngoCluster).subscribe((linkData: NgoLink[]) => {
-        /*linkData.forEach((link: NgoLink) => {
+        console.log("Link data: ", linkData);
+        linkData.forEach((link: NgoLink) => {
           this.addLink(link);
-        });*/
+        });
     });
   }
 
@@ -115,23 +116,30 @@ export class MapboxComponent {
 
   addLink(link: NgoLink): void {
     const cluster: any[] = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'clusters'});
-    const clusterOrigin = cluster.filter(feature => feature.properties.id === link.id1)[0];
-    const clusterDestination = cluster.filter(feature => feature.properties.id === link.id2)[0];
-    const origin = turf.point(clusterOrigin.geometry.coordinates);
-    const destination = turf.point(clusterDestination.coordinates);
+    console.log("Clusters: ", cluster);
+    console.log("Link: ", link);
+    const clusterOrigin = cluster.filter(feature => feature.id === link.id1)[0];
+    console.log("Cluster origin: ", clusterOrigin);
+    const clusterDestination = cluster.filter(feature => feature.id === link.id2)[0];
+    console.log("Cluster dest: ", clusterDestination);
 
-    const curvedLine = turf.greatCircle(origin, destination, {properties: {/*TODO*/}});
+    if (clusterOrigin && clusterDestination) {
+        const origin = turf.point(clusterOrigin.geometry.coordinates);
+        const destination = turf.point(clusterDestination.coordinates);
 
-    const route = {
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates: [origin, destination],
-      }
-    };
-    route.geometry.coordinates = curvedLine.geometry.coordinates;
-    this.multiLinkSource.data.features.push(route);
+        const curvedLine = turf.greatCircle(origin, destination, {properties: {/*TODO*/}});
+
+        const route = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'LineString',
+                coordinates: [origin, destination],
+            }
+        };
+        route.geometry.coordinates = curvedLine.geometry.coordinates;
+        this.multiLinkSource.data.features.push(route);
+    }
   }
 
   private initialiseMap(): void {

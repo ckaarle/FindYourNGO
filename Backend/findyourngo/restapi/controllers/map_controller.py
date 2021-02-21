@@ -2,6 +2,10 @@ import requests
 
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view
+from urllib.parse import unquote_plus
+from rest_framework.parsers import JSONParser
+
+import json
 
 from findyourngo.restapi.models import Ngo, NgoConnection, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoPlotSerializer, NgoLinkSerializer
@@ -9,13 +13,13 @@ from findyourngo.restapi.serializers.ngo_serializer import NgoPlotSerializer, Ng
 
 @api_view(['GET'])
 def get_plots(request) -> JsonResponse:
-    plot_serializer = NgoPlotSerializer(Ngo.objects.all(), many=True)
+    plot_serializer = NgoPlotSerializer(Ngo.objects.all()[:200], many=True)
     return JsonResponse(plot_serializer.data, safe=False)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_links(request) -> JsonResponse:
-    clusters = request.query_params.get('clusters', None)
+    clusters = JSONParser().parse(request)['clusters']
     if clusters:
         ngo_links = get_links_between_ngos(clusters, Ngo.objects.all(), NgoConnection.objects.all())
         return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in ngo_links.items()],
@@ -28,8 +32,8 @@ def get_links(request) -> JsonResponse:
 def get_links_between_ngos(clusters, ngos, connections):
     clustered_ngos: {int: int} = {}
     for ngo in ngos:
-        lat = ngo.contact.address.latitude
-        long = ngo.contact.address.longitude
+            lat = float(ngo.contact.address.latitude)
+            long = float(ngo.contact.address.longitude)
         if not (lat and long):
             print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
             continue
