@@ -307,4 +307,4 @@ class NgoPlotSerializer(serializers.ModelSerializer):
 class NgoLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = NgoConnection
-        fields = ['id', 'connected_ngo_id', 'reporter_id'
+        fields = ['id', 'connected_ngo_id', 'reporter_id']

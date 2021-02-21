@@ -2,10 +2,7 @@ import requests
 
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view
-from urllib.parse import unquote_plus
 from rest_framework.parsers import JSONParser
-
-import json
 
 from findyourngo.restapi.models import Ngo, NgoConnection, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoPlotSerializer, NgoLinkSerializer
@@ -32,11 +29,12 @@ def get_links(request) -> JsonResponse:
 def get_links_between_ngos(clusters, ngos, connections):
     clustered_ngos: {int: int} = {}
     for ngo in ngos:
-            lat = float(ngo.contact.address.latitude)
-            long = float(ngo.contact.address.longitude)
+        lat = float(ngo.contact.address.latitude)
+        long = float(ngo.contact.address.longitude)
         if not (lat and long):
             print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
             continue
+
         for cluster in clusters:
             if float(cluster['lat_min']) <= lat <= float(cluster['lat_max']) \
                     and float(cluster['lng_min']) <= long <= float(cluster['lng_max']):
