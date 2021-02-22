@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 
 from findyourngo.restapi.models import Ngo, NgoConnection, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoPlotSerializer, NgoLinkSerializer
+from findyourngo.restapi.map_utils import get_links_between_ngos
 
 
 @api_view(['GET'])
@@ -24,45 +25,7 @@ def get_links(request) -> JsonResponse:
                             safe=False)
 
     link_serializer = NgoLinkSerializer(NgoConnection.objects.all(), many=True)
-
     return JsonResponse(link_serializer.data, safe=False)
-
-
-def get_links_between_ngos(clusters, ngos, connections):
-    clustered_ngos: {int: int} = {}
-    for ngo in ngos:
-        lat = ngo.contact.address.latitude
-        long = ngo.contact.address.longitude
-        if not (lat and long) or lat == '""' or long == '""':
-            print(f'Ngo {ngo.name} has no registered coordinates! Excluding from calculation')
-            continue
-
-        for cluster in clusters:
-            if float(cluster['lat_min']) <= float(lat) <= float(cluster['lat_max']) \
-                    and float(cluster['lng_min']) <= float(long) <= float(cluster['lng_max']):
-                clustered_ngos[ngo.id] = int(cluster['id'])
-                break
-        else:
-            print(f'Ngo {ngo.name} in {lat}, {long} could not be assigned to any cluster')
-
-    link_count = {}
-    for cluster1 in clusters:
-        for cluster2 in clusters:
-            if int(cluster1['id']) < int(cluster2['id']):
-                link_count[(int(cluster1['id']), int(cluster2['id']))] = 0
-    print(link_count)
-    for connection in connections:
-        rep_id = int(connection.reporter_id)
-        con_id = int(connection.connected_ngo_id)
-        if rep_id < con_id and rep_id in clustered_ngos and con_id in clustered_ngos \
-                and clustered_ngos[rep_id] != clustered_ngos[con_id]:
-            print('Cluster 1: ', rep_id)
-            print('Cluster 2: ', con_id)
-            print(rep_id < con_id)
-            cluster1 = clustered_ngos[rep_id]
-            cluster2 = clustered_ngos[con_id]
-            link_count[(cluster1, cluster2)] += 1
-    return link_count
 
 
 @api_view(['GET'])

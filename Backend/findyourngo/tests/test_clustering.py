@@ -1,6 +1,6 @@
 from collections import namedtuple
 from django.test import TestCase
-from findyourngo.restapi.controllers.map_controller import get_links_between_ngos
+from findyourngo.restapi.map_utils import get_links_between_ngos
 
 
 def ngo(id, lat, long):
