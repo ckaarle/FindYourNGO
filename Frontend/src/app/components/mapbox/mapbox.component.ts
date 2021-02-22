@@ -14,6 +14,7 @@ import {AnySourceData} from 'mapbox-gl';
 
 export class MapboxComponent {
   map: mapboxgl.Map;
+
   style = 'mapbox://styles/mapbox/dark-v10';
   lat = 48.137154;
   lng = 11.576124;
@@ -24,16 +25,12 @@ export class MapboxComponent {
   ngos: {[id: number]: NgoCoordinates} = {};
 
   mapMarkers = {};
-  multiLinkSource = {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: [] as object[],
-    }
-  };
+  multiLinkSource = {};
 
   constructor(private mapboxService: MapboxService) {
     this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
+    this.multiLinkSource = { type: 'FeatureCollection', features: []};
+    this.mapMarkers = { type: 'FeatureCollection', features: []};
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmluZHlvdXJuZ28iLCJhIjoiY2tsM3l2azAzMWpqZzJ2bGI2a2JzNzl0OSJ9.hFUVv4mpv0ySKsCecmuKtQ';
 
@@ -62,25 +59,30 @@ export class MapboxComponent {
   }
 
   generateCoordinateRanges(): void {
-    this.multiLinkSource.data.features = [];
-
+    this.multiLinkSource.features = [];
+    this.map.getSource('multiple-link-source').setData(this.multiLinkSource);
     const ngoCluster: NgoCluster[] = [];
     let cluster: any[] = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'clusters'});
-    cluster = cluster.filter((c) => c.id);
+    cluster = cluster.filter((c, index, self) => c.id && self.findIndex(item => item.id === c.id) === index);
     cluster.forEach((c: any) => {
-      ngoCluster.push({
-         id: c.id,
-         lat_min: c.geometry.coordinates[0] - 50,
-         lat_max: c.geometry.coordinates[0] + 50,
-         lng_min: c.geometry.coordinates[1] - 50,
-         lng_max: c.geometry.coordinates[1] + 50
-      });
-    });
-    this.mapboxService.getNgoLinks(ngoCluster).subscribe((linkData: NgoLink[]) => {
-        console.log("Link data: ", linkData);
-        linkData.forEach((link: NgoLink) => {
-          this.addLink(link);
+        const pixelCoords = this.map.project(c.geometry.coordinates);
+        const minPoint = this.map.unproject({x: pixelCoords.x - 50, y: pixelCoords.y - 50});
+        const maxPoint = this.map.unproject({x: pixelCoords.x + 50, y: pixelCoords.y + 50});
+
+        ngoCluster.push({
+            id: c.id,
+            lat_min: minPoint.lat,
+            lat_max: maxPoint.lat,
+            lng_min: minPoint.lng,
+            lng_max: maxPoint.lng
         });
+    });
+
+    this.mapboxService.getNgoLinks(ngoCluster).subscribe((linkData: NgoLink[]) => {
+        linkData.forEach((link: NgoLink) => {
+          this.addLink(link, cluster);
+        });
+        this.map.getSource('multiple-link-source').setData(this.multiLinkSource);
     });
   }
 
@@ -90,13 +92,9 @@ export class MapboxComponent {
   }
 
   addMarker(): void {
-    const geoPoints = {
-      type: 'FeatureCollection',
-      features: []
-    };
-
+    const geoPoints: any[] = [];
     Object.entries(this.ngos).map(ngo => ngo[1]).forEach((ngoCoordinate: NgoCoordinates) => {
-        geoPoints.features.push(
+        geoPoints.push(
             {
                 type: 'Feature',
                 properties: {
@@ -111,52 +109,59 @@ export class MapboxComponent {
             }
         );
     });
-    this.mapMarkers = geoPoints;
+    this.mapMarkers.features = geoPoints;
   }
 
-  addLink(link: NgoLink): void {
-    const cluster: any[] = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'clusters'});
-    console.log("Clusters: ", cluster);
-    console.log("Link: ", link);
-    const clusterOrigin = cluster.filter(feature => feature.id === link.id1)[0];
-    console.log("Cluster origin: ", clusterOrigin);
-    const clusterDestination = cluster.filter(feature => feature.id === link.id2)[0];
-    console.log("Cluster dest: ", clusterDestination);
+  addLink(link: NgoLink, cluster: any[]): void {
+    const clusterOrigin = cluster.filter(c => c.id === link.id1)[0];
+    const clusterDestination = cluster.filter(c => c.id === link.id2)[0];
 
     if (clusterOrigin && clusterDestination) {
         const origin = turf.point(clusterOrigin.geometry.coordinates);
-        const destination = turf.point(clusterDestination.coordinates);
+        const destination = turf.point(clusterDestination.geometry.coordinates);
 
-        const curvedLine = turf.greatCircle(origin, destination, {properties: {/*TODO*/}});
+        const curvedLine = turf.greatCircle(origin, destination);
 
         const route = {
             type: 'Feature',
-            properties: {},
+            properties: {linkCount: link.link_count},
             geometry: {
                 type: 'LineString',
-                coordinates: [origin, destination],
+                coordinates: curvedLine.geometry.coordinates
             }
         };
-        route.geometry.coordinates = curvedLine.geometry.coordinates;
-        this.multiLinkSource.data.features.push(route);
+        this.multiLinkSource.features.push(route);
     }
   }
 
   private initialiseMap(): void {
     this.map.on('load', () => {
       this.addMapCluster();
-      this.generateCoordinateRanges();
-      this.map.addSource('multiple-link-source', this.multiLinkSource as AnySourceData);
+      this.addLinkLayer();
+    });
+  }
+
+  addLinkLayer(): void {
+      this.map.addSource('multiple-link-source', {
+          type: 'geojson',
+          data: this.multiLinkSource,
+      });
+
       this.map.addLayer({
-        id: 'multiple-link-source',
+        id: 'multiple-link-layer',
         source: 'multiple-link-source',
         type: 'line',
         paint: {
-            'line-width': 3,
+            'line-width': 1,
             'line-color': this.color,
         }
       });
-    });
+
+      this.map.once('idle', async (e) => { // when all features (suche as clusters) have loaded
+          this.generateCoordinateRanges();
+      });
+
+      this.addLinkLayerEvents();
   }
 
   addMapCluster(): void {
@@ -216,8 +221,12 @@ export class MapboxComponent {
   addMapClusterEvents(): void {
     this.registerPointClick();
     this.registerClusterClick();
-    this.registerHovering();
+    this.registerHovering('clusters');
     this.registerZooming();
+  }
+
+  addLinkLayerEvents(): void {
+      this.registerHovering('multiple-link-layer');
   }
 
   registerPointClick(): void {
@@ -244,9 +253,11 @@ export class MapboxComponent {
       const coordinates = e.features[0].geometry.coordinates.slice();
 
       const pointsInCluster = this.mapMarkers.features.filter((f: any) => {
-        const pointPixels = this.map.project(f.geometry.coordinates);
-        const pixelDistance = Math.sqrt(Math.pow(e.point.x - pointPixels.x, 2) + Math.pow(e.point.y - pointPixels.y, 2));
-        return Math.abs(pixelDistance) <= 50;
+          if (f.geometry.coordinates[0] !== '""' || f.geometry.coordinates[1] !== '""') {
+              const pointPixels = this.map.project(f.geometry.coordinates);
+              const pixelDistance = Math.sqrt(Math.pow(e.point.x - pointPixels.x, 2) + Math.pow(e.point.y - pointPixels.y, 2));
+              return Math.abs(pixelDistance) <= 50;
+          }
       });
 
       let twSum = 0;
@@ -255,7 +266,7 @@ export class MapboxComponent {
       const avgTw = twSum / pointsInCluster.length;
 
       const highestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? prev : current).properties;
-      const lowestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue < current.twValue) ? prev : current).properties;
+      const lowestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? current : prev).properties;
 
       const highestTW = {name: highestNGO.name, twValue: highestNGO.twValue};
       const lowestTW = {name: lowestNGO.name, twValue: lowestNGO.twValue};
@@ -275,19 +286,34 @@ export class MapboxComponent {
     });
   }
 
-  registerHovering(): void {
-    this.map.on('mouseenter', 'clusters', () => {
+  registerHovering(layerId: string): void {
+    let tooltip: any;
+    this.map.on('mouseenter', layerId, e => {
       this.map.getCanvas().style.cursor = 'pointer';
+      tooltip = layerId === 'multiple-link-layer' ? this.registerLineHover(e) : undefined;
     });
 
-    this.map.on('mouseleave', 'clusters', () => {
+    this.map.on('mouseleave', layerId, () => {
       this.map.getCanvas().style.cursor = '';
+      tooltip ? tooltip.remove() : undefined;
     });
   }
 
   registerZooming(): void {
-    this.map.on('zoomend', () => {
+    this.map.on('zoomend', 'clusters', () => {
       this.generateCoordinateRanges();
     });
+  }
+
+  registerLineHover(feature): any {
+      const linkCount = feature.features[0].properties.linkCount;
+
+      return new mapboxgl.Popup()
+          .setLngLat(feature.lngLat)
+          .setHTML(
+               `Link count: ${linkCount}` +
+              `<br>`
+          )
+          .addTo(this.map);
   }
 }
