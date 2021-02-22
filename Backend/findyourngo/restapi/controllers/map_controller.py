@@ -21,8 +21,8 @@ def get_links(request) -> JsonResponse:
     clusters = JSONParser().parse(request)['clusters']
     if clusters:
         ngo_links = get_links_between_ngos(clusters, Ngo.objects.all(), NgoConnection.objects.all())
-        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in ngo_links.items()],
-                            safe=False)
+        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in
+                             ngo_links.items() if count > 0], safe=False)
 
     link_serializer = NgoLinkSerializer(NgoConnection.objects.all(), many=True)
     return JsonResponse(link_serializer.data, safe=False)

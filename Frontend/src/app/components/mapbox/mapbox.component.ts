@@ -71,8 +71,8 @@ export class MapboxComponent {
 
         ngoCluster.push({
             id: c.id,
-            lat_min: minPoint.lat,
-            lat_max: maxPoint.lat,
+            lat_min: maxPoint.lat, // latitude uses reversed values
+            lat_max: minPoint.lat,
             lng_min: minPoint.lng,
             lng_max: maxPoint.lng
         });

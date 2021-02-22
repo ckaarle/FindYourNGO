@@ -1,5 +1,6 @@
+from unittest import TestCase
+
 from collections import namedtuple
-from django.test import TestCase
 from findyourngo.restapi.map_utils import get_links_between_ngos
 
 
