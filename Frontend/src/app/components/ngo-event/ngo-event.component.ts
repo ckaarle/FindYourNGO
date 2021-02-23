@@ -53,7 +53,6 @@ export class NgoEventComponent {
   createEvent(): void {
     const eventVars = this.eventForm.value;
     eventVars.collaborators = this.inviteeIds;
-    console.log(eventVars);
     this.apiService.post('events/create/', eventVars).subscribe(
         data => this.updateEvents());
     this.eventForm.reset();

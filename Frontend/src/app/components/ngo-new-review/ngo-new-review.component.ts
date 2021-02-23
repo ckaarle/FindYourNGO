@@ -38,7 +38,6 @@ export class NgoNewReviewComponent implements OnInit {
     if (this.reviewId != null) {
       this.ratingService.getUserReview(this.reviewId).subscribe(
           (review) => {
-            console.log(review);
             this.reviewText = review.text;
             this.reviewId = review.id;
             this.reviewRating = review.rating;

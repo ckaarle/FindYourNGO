@@ -51,6 +51,8 @@ class NgoAddress(models.Model):
     postcode = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
+    latitude = models.CharField(max_length=200)
+    longitude = models.CharField(max_length=200)
 
 
 class NgoRepresentative(models.Model):
@@ -118,6 +120,8 @@ class Ngo(models.Model):
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
     number_of_reviews = models.IntegerField(default=0)
+
+    confirmed = models.BooleanField(default=True)
 
 
 class NgoAccount(models.Model):

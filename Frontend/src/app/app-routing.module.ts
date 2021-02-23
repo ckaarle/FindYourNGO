@@ -9,6 +9,8 @@ import {SearchScreenComponent} from './screens/search-screen/search-screen.compo
 import {NgoNewReviewComponent} from './components/ngo-new-review/ngo-new-review.component';
 import {NgoDetailItemComponent} from './components/ngo-detail-item/ngo-detail-item.component';
 import {AboutComponent} from './screens/about/about.component';
+import {MapboxComponent} from './components/mapbox/mapbox.component';
+import {NgoSignUpComponent} from './components/ngo-sign-up/ngo-sign-up.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/overview', pathMatch: 'full'},
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'map', component: MapScreenComponent, data: {title: 'Map'}},
   {path: 'newReview/:ngoId', component: NgoNewReviewComponent},
   {path: 'detailView/:id', component: NgoDetailItemComponent},
-  {path: 'about', component: AboutComponent, data: {title: 'About'}}
+  {path: 'about', component: AboutComponent, data: {title: 'About'}},
+  {path: 'mapbox', component: MapboxComponent},
+  {path: 'registerNgo', component: NgoSignUpComponent}
 ];
 
 @NgModule({

@@ -46,7 +46,6 @@ In case of incompatible migrations / an out-of-date state of the database, it ca
 	
 
 In case this does not fix the problem, you can reset the entire database:
-- delete all model classes in models.py
 - manually drop all restapi-tables in the database (!! only the tables starting with restapi_ !!)
 - reset migrations as described above
 - run makemigrations, migrate to let it detect that the database is clean
@@ -95,3 +94,5 @@ Please refer to [this](./Backend/findyourngo/README.md) document.
 ## References
 
 https://unstats.un.org/unsd/methodology/m49/overview has been used to categorize ngos to correct countries, regions and sub-regions.
+
+https://www.kaggle.com/paultimothymooney/latitude-and-longitude-for-every-country-and-state was used and modified to get coordinates for countries (modifications are the capitalized cells).

@@ -1,7 +1,9 @@
+import random
+
 from rest_framework import serializers
 from django.db.models import Prefetch
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
-    NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoAccreditation, NgoBranch, NgoCountry, NgoTopic, NgoType
+    NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoAccreditation, NgoBranch, NgoCountry, NgoTopic, NgoType, NgoConnection
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -265,3 +267,44 @@ def update_ngo_types(ngo_stats: NgoStats, ngo_update):
         else:
             new_type = NgoType.objects.create(type=updated_type)
             ngo_stats.type_of_organization.add(new_type)
+   
+coordinates = {}
+with open('findyourngo/data_import/coordinates.csv', 'r') as f:
+    for line in f:
+        props = line.upper().split(',')
+        coordinates[props[3].strip()] = (props[1], props[2])
+
+
+class NgoPlotSerializer(serializers.ModelSerializer):
+    coordinates = serializers.SerializerMethodField()
+
+    trustworthiness = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='total_tw_score',
+        source='tw_score'
+    )
+
+    def get_coordinates(self, obj):
+        address = obj.contact.address
+        lat = address.latitude
+        long = address.longitude
+        if lat and long:
+            return lat, long
+
+        lat = float(coordinates[address.country.name][0]) + random.uniform(-2.0, 2.0)
+        long = float(coordinates[address.country.name][1]) + random.uniform(-2.0, 2.0)
+        # save lat and long after assigning it randomly
+        address.latitude = lat
+        address.longitude = long
+        address.save()
+        return lat, long
+
+    class Meta:
+        model = Ngo
+        fields = ['id', 'name', 'coordinates', 'trustworthiness']
+
+
+class NgoLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NgoConnection
+        fields = ['id', 'connected_ngo_id', 'reporter_id']

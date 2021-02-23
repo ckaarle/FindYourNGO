@@ -59,10 +59,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {NgoEventOverviewComponent} from './components/ngo-event-overview/ngo-event-overview.component';
 import {UserOptionsComponent} from './components/user-options/user-options.component';
+import { MapboxComponent } from './components/mapbox/mapbox.component';
 import {Utils} from './services/utils';
 import { AboutComponent } from './screens/about/about.component';
 import { NgoTwHistoryComponent } from './components/ngo-tw-history/ngo-tw-history.component';
 import {NgxEchartsModule} from 'ngx-echarts';
+import { NgoSignUpComponent } from './components/ngo-sign-up/ngo-sign-up.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -127,7 +129,9 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     NgoEventOverviewComponent,
     UserOptionsComponent,
     AboutComponent,
+    MapboxComponent,
     NgoTwHistoryComponent,
+    NgoSignUpComponent,
   ],
   exports: [
     MatTabsModule,
