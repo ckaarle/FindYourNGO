@@ -10,6 +10,7 @@ import {NgoNewReviewComponent} from './components/ngo-new-review/ngo-new-review.
 import {NgoDetailItemComponent} from './components/ngo-detail-item/ngo-detail-item.component';
 import {AboutComponent} from './screens/about/about.component';
 import {MapboxComponent} from './components/mapbox/mapbox.component';
+import {NgoSignUpComponent} from './components/ngo-sign-up/ngo-sign-up.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/overview', pathMatch: 'full'},
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: 'newReview/:ngoId', component: NgoNewReviewComponent},
   {path: 'detailView/:id', component: NgoDetailItemComponent},
   {path: 'about', component: AboutComponent, data: {title: 'About'}},
-  {path: 'mapbox', component: MapboxComponent}
+  {path: 'mapbox', component: MapboxComponent},
+  {path: 'registerNgo', component: NgoSignUpComponent}
 ];
 
 @NgModule({

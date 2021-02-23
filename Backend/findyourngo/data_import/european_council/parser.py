@@ -162,10 +162,12 @@ def _extract_hard_facts(data: Any, idx: int) -> HardFacts:
     else:
         founding_year_string = data['yearFoundation']
         if founding_year_string:
-            if founding_year_string == '2006, re-registered in 2019':
-                founding_year_string = '2006'
-            founding_year = int(founding_year_string)
-            if founding_year < 1700:
+            try:
+                founding_year = int(founding_year_string)
+                if founding_year < 1700:
+                    founding_year = None
+            except ValueError:
+                print(f'Found non integer founding year: {founding_year_string}')
                 founding_year = None
         else:
             founding_year = None

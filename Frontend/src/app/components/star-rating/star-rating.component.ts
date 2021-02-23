@@ -30,12 +30,11 @@ export class StarRatingComponent implements OnInit {
 
   setValue(value: number): void {
     this.value = value;
-    console.log('NEW RATING VALUE IS', value)
     this.hasHalfStar = this.valueFormatter.hasHalfStar(this.value);
     this.cd.detectChanges();
   }
 
-  resetStarRating() {
+  resetStarRating(): void {
     this.value = 0;
     this.hasHalfStar = false;
     this.editable = false;

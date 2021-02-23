@@ -205,7 +205,6 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
   }
 
   showDetail(overviewItem: NgoOverviewItem): void {
-    console.log(this.selectedFilters);
     this.router.navigate(['/detailView', overviewItem.id, {
       currentPage: this.currentPageNumber,
       filter: this.filterActive,

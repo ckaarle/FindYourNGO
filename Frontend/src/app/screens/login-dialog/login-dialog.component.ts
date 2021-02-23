@@ -1,25 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
-import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { ApiService } from '../../services/api.service';
 import { Names } from '../../models/ngo';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {LoginService} from '../../services/login.service';
 
 @Component({
   selector: 'app-login-dialog',
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss']
 })
-export class LoginDialogComponent implements OnInit, OnDestroy {
+export class LoginDialogComponent implements OnInit {
 
   user?: SocialUser;
-  endpoint?: string;
   isNgo: boolean;
   query: any;
   names: string[] = [];
@@ -28,12 +28,13 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   status = '';
   userForm = new FormGroup({
     username: new FormControl(''),
-    email: new FormControl(''),
+    email: new FormControl('', Validators.email),
     password: new FormControl(''),
   });
 
   constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private authService: SocialAuthService,
-              private apiService: ApiService, private userService: UserService, private snackBar: MatSnackBar) {
+              private apiService: ApiService, private userService: UserService, private snackBar: MatSnackBar,
+              private router: Router, private loginService: LoginService) {
     this.isNgo = false;
 
     this.apiService.get('names').subscribe((data: Names) =>
@@ -41,11 +42,9 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
           map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
 
     this.authService.authState.subscribe((user) => {
-      this.user = user;
       this.updateQuery();
-      if (this.endpoint) {
-        this.userService.socialLogin({token: this.user?.authToken}, this.endpoint, this.query);
-      }
+      this.user = user;
+      this.loginService.trySocialLogin(this.query, this.user?.authToken);
     });
 
     this.userService.user.subscribe((user: SocialUser) => {
@@ -68,19 +67,15 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   }
 
   signInWithGoogle(): void {
-    this.endpoint = 'google/';
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    this.loginService.googleLogin();
   }
 
   signInWithFB(): void {
-    this.endpoint = 'facebook/';
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    this.loginService.facebookLogin();
   }
 
   signOut(): void {
-    if (this.user) {
-      this.authService.signOut();
-    }
+    this.loginService.signOut(this.user);
   }
 
   submit(): void {
@@ -115,19 +110,21 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.endpoint = '';
-  }
-
   private showUserLoginFeedback(errorMessage: string): void {
     if (errorMessage === '') {
       return;
     }
 
     const userMessage = 'Error: ' + errorMessage;
-    this.snackBar.open(userMessage, null, {
+    this.snackBar.open(userMessage, '', {
       duration: 3000,
       panelClass: ['login-snackbar']
     });
+  }
+
+  registerNewNgo($event: MouseEvent): void {
+    $event.stopPropagation();
+    this.dialogRef.close(this.user?.photoUrl);
+    this.router.navigate(['registerNgo']);
   }
 }

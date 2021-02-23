@@ -154,4 +154,10 @@ export interface NgoLink {
   link_count: number;
 }
 
-
+export interface NewNgo {
+  ngoName: string;
+  ngoCountry: string;
+  representativeFirstName: string;
+  representativeLastName: string;
+  representativeEmail: string;
+}

@@ -20,7 +20,7 @@ class TWUpdater:
         self.store_daily_tw()
 
     def store_daily_tw(self) -> None:
-        for ngo in Ngo.objects.all():
+        for ngo in Ngo.objects.filter(confirmed=True):
             ngo_tw_score = ngo.tw_score
 
             if not ngo_tw_score.tw_series.filter(date=datetime.today()).exists():
@@ -32,7 +32,7 @@ class TWUpdater:
                     ngo_tw_score.tw_series.add(daily_tw)
 
     def _calculate_tw_without_pagerank(self) -> None:
-        for ngo in Ngo.objects.all():
+        for ngo in Ngo.objects.filter(confirmed=True):
             self._calculate_tw_without_pagerank_for_ngo(ngo)
 
     def _calculate_tw_without_pagerank_for_ngo(self, ngo: Ngo) -> None:
@@ -58,7 +58,7 @@ class TWUpdater:
         ngo_tw_score.save()
 
     def _add_pagerank(self) -> None:
-        ngos = Ngo.objects.all()
+        ngos = Ngo.objects.filter(confirmed=True)
         pagerank = PageRank(ngos).personalized_pagerank()
 
         if pagerank is not None:

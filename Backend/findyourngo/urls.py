@@ -42,7 +42,8 @@ urlpatterns = [
     path('dataGenerate', views.dataGenerate, name='dataGenerate'),
     path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
-    url(r'idNames', ngo_controller.ngo_short_list),
+    url(r'idNames$', ngo_controller.ngo_short_list),
+    url(r'idNamesFull$', ngo_controller.ngo_short_list_all),
     url(r'^ngoDetailItem/$', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
@@ -76,4 +77,5 @@ urlpatterns = [
     path('map/plots', map_controller.get_plots),
     path('map/links', map_controller.get_links),
     path('map/update', map_controller.update_geo_locations)
+    url(r'^registerNgo', ngo_controller.register_ngo)
 ]
