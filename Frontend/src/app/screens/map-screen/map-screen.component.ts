@@ -1,24 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FilterService} from '../../services/filter.service';
-import {NgoSortingSelection} from '../../models/ngo';
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../../services/api.service';
 
 @Component({
   selector: 'app-map-screen',
   templateUrl: './map-screen.component.html',
   styleUrls: ['./map-screen.component.scss']
 })
-export class MapScreenComponent implements OnInit, OnDestroy {
+export class MapScreenComponent implements OnInit {
 
-  constructor(private filter: FilterService) { }
+  constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    const selectedSorting: NgoSortingSelection = {keyToSort: 'Name', orderToSort: 'asc'};
-    this.filter.editSelectedFilters({}, selectedSorting);
-    this.filter.applyFilter({}, selectedSorting).subscribe(data => {
-        this.filter.displayFilteredNgoItems(data);
-    });
-  }
+  ngOnInit(): void {}
 }

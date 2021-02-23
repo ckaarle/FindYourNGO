@@ -132,6 +132,28 @@ export interface NgoEvent {
     tags: string;
 }
 
+export interface NgoCoordinates {
+  id: number;
+  longitude: number;
+  latitude: number;
+  name: string;
+  trustworthiness: number;
+}
+
+export interface NgoCluster {
+  id: number;
+  lat_min: number;
+  lat_max: number;
+  lng_min: number;
+  lng_max: number;
+}
+
+export interface NgoLink {
+  id1: number;
+  id2: number;
+  link_count: number;
+}
+
 export interface NewNgo {
   ngoName: string;
   ngoCountry: string;

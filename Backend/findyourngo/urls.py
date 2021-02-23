@@ -18,8 +18,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
 
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller,\
-    rating_controller, connection_controller, event_controller, favourite_controller
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, \
+    rating_controller, connection_controller, event_controller, favourite_controller, map_controller
 from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
@@ -74,5 +74,8 @@ urlpatterns = [
     url(r'^userFavourite$', favourite_controller.user_favourite),
     url(r'^userFavourites$', favourite_controller.user_favourites),
     url(r'^userFavouriteEvents', favourite_controller.favourite_events),
+    path('map/plots', map_controller.get_plots),
+    path('map/links', map_controller.get_links),
+    path('map/update', map_controller.update_geo_locations)
     url(r'^registerNgo', ngo_controller.register_ngo)
 ]
