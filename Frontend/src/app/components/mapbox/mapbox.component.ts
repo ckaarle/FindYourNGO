@@ -78,6 +78,19 @@ export class MapboxComponent {
         });
     });
 
+    let singleMarkers = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'unclustered-point'});
+    singleMarkers = singleMarkers.filter((m, index, self) => !m.id && self.findIndex(item => item.properties.id === m.properties.id) === index);
+    singleMarkers.forEach((m: any) => {
+
+        ngoCluster.push({
+            id: m.properties.id,
+            lat_min: m.geometry.coordinates[0],
+            lat_max: m.geometry.coordinates[0],
+            lng_min: m.geometry.coordinates[1],
+            lng_max: m.geometry.coordinates[1]
+        });
+    });
+
     this.mapboxService.getNgoLinks(ngoCluster).subscribe((linkData: NgoLink[]) => {
         linkData.forEach((link: NgoLink) => {
           this.addLink(link, cluster);
@@ -98,7 +111,8 @@ export class MapboxComponent {
             {
                 type: 'Feature',
                 properties: {
-                    id: ngoCoordinate.id,
+                    id: -ngoCoordinate.id,
+                    ngo_id: ngoCoordinate.id,
                     name: ngoCoordinate.name,
                     twValue: ngoCoordinate.trustworthiness
                 },
@@ -136,8 +150,8 @@ export class MapboxComponent {
 
   private initialiseMap(): void {
     this.map.on('load', () => {
-      this.addMapCluster();
       this.addLinkLayer();
+      this.addMapCluster();
     });
   }
 
@@ -242,7 +256,7 @@ export class MapboxComponent {
       new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(
-              name + '<br>TW value: ' + twValue
+              name + '<br>TW score: ' + twValue
           )
           .addTo(this.map);
     });
@@ -265,8 +279,8 @@ export class MapboxComponent {
       pointsInCluster.forEach((feature: any) => twSum += feature.properties.twValue);
       const avgTw = twSum / pointsInCluster.length;
 
-      const highestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? prev : current).properties;
-      const lowestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? current : prev).properties;
+      const highestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? current : prev).properties;
+      const lowestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? prev : current).properties;
 
       const highestTW = {name: highestNGO.name, twValue: highestNGO.twValue};
       const lowestTW = {name: lowestNGO.name, twValue: lowestNGO.twValue};
@@ -275,12 +289,14 @@ export class MapboxComponent {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
+      const twScoreDescription = highestTW.twValue !== lowestTW.twValue ?
+              `<br>Highest TW score: ${highestTW.name} (${highestTW.twValue})` +
+              `<br>Lowest TW score: ${lowestTW.name} (${lowestTW.twValue})` : '';
+
       new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(
-              `Average TW value in this cluster: ${avgTw}` +
-              `<br>Highest TW value: ${highestTW.name} (${highestTW.twValue})` +
-              `<br>Lowest TW value: ${lowestTW.name} (${lowestTW.twValue})`
+              `Average TW score in this cluster: ${avgTw}` + `${twScoreDescription}`
           )
           .addTo(this.map);
     });
@@ -300,7 +316,7 @@ export class MapboxComponent {
   }
 
   registerZooming(): void {
-    this.map.on('zoomend', 'clusters', () => {
+    this.map.on('moveend', 'clusters', () => {
       this.generateCoordinateRanges();
     });
   }
