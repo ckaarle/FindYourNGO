@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_data:/var/lib/potgresql/data
+  web:
+    build: ./Backend
+    command: bash -c "python manage.py process_tasks &
+                      gunicorn findyourngo.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - ./Backend:/code
+    expose:
+      - 8000
+    depends_on:
+      - db
+  node:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.prod
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 80:4200
+  nginx:
+    build: ./Backend/nginx
+    ports:
+      - 8000:80
+    depends_on:
+      - web
+  master:
+    image: locustio/locust
+    ports:
+     - 8089:8089
+    volumes:
+      - ./PerformanceTests:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://master:8089
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./PerformanceTests:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
