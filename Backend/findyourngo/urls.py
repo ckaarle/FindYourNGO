@@ -76,6 +76,6 @@ urlpatterns = [
     url(r'^userFavouriteEvents', favourite_controller.favourite_events),
     path('map/plots', map_controller.get_plots),
     path('map/links', map_controller.get_links),
-    path('map/update', map_controller.update_geo_locations)
+    path('map/update', map_controller.update_geo_locations),
     url(r'^registerNgo', ngo_controller.register_ngo)
 ]
