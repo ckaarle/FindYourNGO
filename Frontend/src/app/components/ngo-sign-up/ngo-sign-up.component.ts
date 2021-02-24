@@ -69,7 +69,7 @@ export class NgoSignUpComponent implements OnInit {
         this.showErrorMessage();
       }
     });
-    this.userService.$lastErrorMessage.subscribe(errorMessage => this.$errorMessage.next(errorMessage));
+    this.userService.$lastErrorMessage.subscribe(error => this.$errorMessage.next(error['error'])); // TODO check this
 
     this.apiService.get('idNamesFull').subscribe((data: NgoOverviewItem[]) => {
       this.allNgoNames.next(data.map(ngo => ngo.name));

@@ -129,6 +129,14 @@ class RefreshView(APIView):
         return Response({'access_token': str(refresh_token.access_token)})
 
 
+def is_ngo_account_confirmed(user):
+    try:
+        account = NgoAccount.objects.get(user=user)
+        return account.ngo.confirmed
+    except NgoAccount.DoesNotExist:
+        return True
+
+
 def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
@@ -161,6 +169,15 @@ def create_user(data, ngo_name, mode=None):
         if ngo_name:
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
+
+
+    if mode == 'login' and not user.is_active:
+        error = {
+            'error': 'Your account has not been confirmed yet.',
+            'ngo_account_confirmed': is_ngo_account_confirmed(user)
+        }
+
+        return Response(error, status=401)
 
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)
