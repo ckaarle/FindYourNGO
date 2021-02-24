@@ -288,7 +288,7 @@ class NgoPlotSerializer(serializers.ModelSerializer):
         address = obj.contact.address
         lat = address.latitude
         long = address.longitude
-        if lat and long:
+        if lat and long and lat != '""' and long != '""':
             return lat, long
 
         lat = float(coordinates[address.country.name][0]) + random.uniform(-2.0, 2.0)

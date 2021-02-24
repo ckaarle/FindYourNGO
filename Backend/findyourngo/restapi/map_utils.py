@@ -3,6 +3,9 @@ def get_links_between_ngos(clusters, ngos, connections):
     without_coordinates = 0
     unassigned = 0
     for ngo in ngos:
+        if ngo.contact.address is None:
+            without_coordinates += 1
+            continue
         lat = ngo.contact.address.latitude
         long = ngo.contact.address.longitude
         if not (lat and lat != '""' and long and long != '""'):
