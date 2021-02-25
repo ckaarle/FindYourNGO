@@ -162,6 +162,8 @@ def create_user(data, ngo_name, mode=None):
         user.email = data.get('email')
         user.save()
         if ngo_name:
+            user.is_active = False
+            user.save()
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
 
