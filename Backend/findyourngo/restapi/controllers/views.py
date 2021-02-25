@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from findyourngo.data_import.data_importer import run_initial_data_import
+from findyourngo.data_import.data_generator import generate_data
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
@@ -41,7 +42,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    initial_import_necessary = run_initial_data_import()
+    initial_import_necessary = run_initial_data_import(request)
     if initial_import_necessary:
         return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
     else:
@@ -55,6 +56,10 @@ def clearDatabase(request):
     return HttpResponse('Database has been cleared')
 
 
+def dataGenerate(request):
+    generate_data()
+    return HttpResponse('Data generation complete')
+
 def clearBackgroundTasks(request):
     cursor = connection.cursor()
     cursor.execute(delete_background_tasks_query)
@@ -67,9 +72,14 @@ def twUpdate(request):
     return HttpResponse('TW updated with PageRank')
 
 
+def storeDailyTw(request):
+    TWUpdater().store_daily_tw()
+    return HttpResponse('Daily TW stored')
+
+
 # request is a necessary positional parameter for the framework call
 def name_list(request):
-    result = list(map(lambda ngo: ngo['name'], Ngo.objects.all().order_by('name').values()))
+    result = list(map(lambda ngo: ngo['name'], Ngo.objects.filter(confirmed=True).order_by('name').values()))
     return JsonResponse({'names': result})
 
 
@@ -153,7 +163,6 @@ def create_user(data, ngo_name, mode=None):
             user.save()
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
-            print(list(NgoAccount.objects.all()))
 
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)

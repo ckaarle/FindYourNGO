@@ -51,6 +51,8 @@ class NgoAddress(models.Model):
     postcode = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     country = models.ForeignKey(NgoCountry, null=True, on_delete=models.SET_NULL)
+    latitude = models.CharField(max_length=200)
+    longitude = models.CharField(max_length=200)
 
 
 class NgoRepresentative(models.Model):
@@ -83,6 +85,11 @@ class NgoStats(models.Model):
     yearly_income = models.CharField(max_length=200)
 
 
+class NgoTWDataPoint(models.Model):
+    daily_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
+    date = models.DateField()
+
+
 class NgoTWScore(models.Model):
     total_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
     base_tw_score = models.FloatField(validators=[MinValueValidator(TW_MIN_VALUE), MaxValueValidator(TW_MAX_VALUE)])
@@ -92,6 +99,7 @@ class NgoTWScore(models.Model):
     ecosoc_score = models.FloatField(default=0)
     pagerank_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(PAGERANK_MAX_BOOST)])
     ngo_account_score = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(NGO_ACCOUNT_BOOST)])
+    tw_series = models.ManyToManyField(NgoTWDataPoint)
 
 
 class Ngo(models.Model):
@@ -112,6 +120,8 @@ class Ngo(models.Model):
     tw_score = models.ForeignKey(NgoTWScore, on_delete=models.PROTECT)
 
     number_of_reviews = models.IntegerField(default=0)
+
+    confirmed = models.BooleanField(default=True)
 
 
 class NgoAccount(models.Model):

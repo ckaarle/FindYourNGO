@@ -22,7 +22,7 @@ class NgoFilter:
         return query_set
 
     def _add_all_filters(self) -> QuerySet:
-        query_set = Ngo.objects.all()
+        query_set = Ngo.objects.filter(confirmed=True)
         query_set = query_set.filter(self._filter_name_condition)
         query_set = query_set.filter(self._filter_branches_condition)
         query_set = query_set.filter(self._filter_regions_condition)

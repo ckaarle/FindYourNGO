@@ -29,21 +29,11 @@ Storing these individual factors enables offering a detailed history of the trus
 - whether or not the NGO is registered with us
 
 
-## What additional features could potentially be used in the future?
-- use more of the accreditations listed in the database
-- query [UN ECOSOC](https://esango.un.org/civilsociety/displayConsultativeStatusSearch.do?method=search&sessionCheck=false)
-for more accreditation information (also lists other accreditations)
-- user ratings
-- reported scandals
-- NGO size (members, staff; could disadvantage smaller NGOs)
-- age of NGO
-
 ## What are the requirements to currently receive an optimal trustworthiness score? 
 
 - listed by one credible source
 - listed by all data sources
 - ECOSOC/ILO/Commonwealth Foundation (CF) accredited
-- PageRank TODO
 
 
 ## What is the current score distribution?
@@ -244,6 +234,6 @@ During the initial data import, the score will be calculated for each NGO. There
  score for all NGOs in the database if necessary (e.g. if the score calculation was modified).
  
 The score is recalculated for a single NGO, when a new user rating is saved to the database and when an existing user
- rating is updated or deleted. In the future, a recalculation of the score for each NGO will be performed automatically
+ rating is updated or deleted. Also, a recalculation of the score for each NGO is performed automatically
  in fixed intervals. This ensures, that the scores will be kept up-to-date, even if no changes are being made to 
  to specific NGOs, which would trigger a single recalculation.

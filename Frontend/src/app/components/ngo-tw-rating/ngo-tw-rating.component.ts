@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RatingService} from '../../services/rating.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'ngo-tw-rating',
@@ -14,7 +15,7 @@ export class NgoTwRatingComponent implements OnInit {
 
   @Input() ngoId: number = 1;
 
-  constructor(private ratingService: RatingService) {
+  constructor(private ratingService: RatingService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -36,4 +37,7 @@ export class NgoTwRatingComponent implements OnInit {
     });
   }
 
+  showInformation(): void {
+    this.router.navigate(['/about'], {fragment: 'tw-explanation'});
+  }
 }

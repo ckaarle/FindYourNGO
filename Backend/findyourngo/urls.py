@@ -18,8 +18,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers
 
-from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller,\
-    rating_controller, connection_controller, event_controller, favourite_controller
+from findyourngo.restapi.controllers import views, ngo_controller, ngo_overview_controller, ngo_filter_controller, \
+    rating_controller, connection_controller, event_controller, favourite_controller, map_controller
 from findyourngo.restapi.tasks.background_tasks import start_background_tasks
 
 router = routers.DefaultRouter()
@@ -39,10 +39,12 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dataImport', views.dataImport, name='dataImport'),
     path('clearDatabase', views.clearDatabase, name='clearDatabase'),
+    path('dataGenerate', views.dataGenerate, name='dataGenerate'),
     path('clearBackgroundTasks', views.clearBackgroundTasks, name="clearBackgroundTasks"),
     url(r'^ngos$', ngo_controller.ngo_list),
-    url(r'idNames', ngo_controller.ngo_short_list),
-    url(r'^ngoDetailItem', ngo_controller.ngo_detail),
+    url(r'idNames$', ngo_controller.ngo_short_list),
+    url(r'idNamesFull$', ngo_controller.ngo_short_list_all),
+    url(r'^ngoDetailItem/$', ngo_controller.ngo_detail),
     url(r'^ngos/filteroptions/$', ngo_filter_controller.ngo_filter_options),
     url(r'^ngos/filter/$', ngo_filter_controller.filter_options),
     url(r'^ngoOverviewItems$', ngo_overview_controller.NgoOverviewItemList.as_view()),
@@ -50,7 +52,9 @@ urlpatterns = [
     url(r'^twRating', rating_controller.tw_rating),
     url(r'^userReviewsForNgo', rating_controller.userReviews),
     url(r'^review', rating_controller.review),
+    url(r'^twHistory', rating_controller.tw_history),
     path('twUpdate', views.twUpdate),
+    path('storeDailyTw', views.storeDailyTw),
     url(r'names', views.name_list),
     url('test/', views.TestView.as_view(), name='test'),
     path('connections/', connection_controller.view_connections),
@@ -70,4 +74,8 @@ urlpatterns = [
     url(r'^userFavourite$', favourite_controller.user_favourite),
     url(r'^userFavourites$', favourite_controller.user_favourites),
     url(r'^userFavouriteEvents', favourite_controller.favourite_events),
+    path('map/plots', map_controller.get_plots),
+    path('map/links', map_controller.get_links),
+    path('map/update', map_controller.update_geo_locations),
+    url(r'^registerNgo', ngo_controller.register_ngo)
 ]

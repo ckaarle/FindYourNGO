@@ -1,8 +1,34 @@
 .tw-rating {
+  width: 100%;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .rating-header {
   margin-left: 4px;
+}
+
+.info-icon {
+  color: var(--primary-color);
+  padding-left: 16px;
+  cursor: pointer;
+}
+
+.rating {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 32px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+
+  ngo-rating-table {
+    width: 35%;
+  }
+
+  ngo-tw-history {
+    width: 55%;
+  }
 }

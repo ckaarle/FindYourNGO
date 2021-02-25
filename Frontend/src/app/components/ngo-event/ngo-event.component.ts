@@ -41,17 +41,18 @@ export class NgoEventComponent {
   });
 
   constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {
-    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));  // TODO: This is a hack until ngodetail item does not return undefined
+    // TODO: This is a hack until ngodetail item does not return undefined
+    this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));
     this.updateEvents();
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
-          map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value.toLowerCase()) && ngo.id !== this.currentNgoId))));
+        map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())
+          && ngo.id !== this.currentNgoId && !this.inviteeIds.some(x => x === ngo.id)))));
   }
 
   createEvent(): void {
     const eventVars = this.eventForm.value;
     eventVars.collaborators = this.inviteeIds;
-    console.log(eventVars);
     this.apiService.post('events/create/', eventVars).subscribe(
         data => this.updateEvents());
     this.eventForm.reset();
@@ -96,5 +97,13 @@ export class NgoEventComponent {
 
   ngoName(ngo: NgoOverviewItem): string {
     return ngo?.name;
+  }
+
+  removeInvitee(invitee: any): void {
+    const index = this.inviteeNames.indexOf(invitee);
+    if (index >= 0) {
+      this.inviteeNames.splice(index, 1);
+      this.inviteeIds.splice(index, 1);
+    }
   }
 }

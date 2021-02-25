@@ -4,6 +4,7 @@ export interface NgoDetailItem {
   id: number;
   name: string;
   acronym: string;
+  metaData: any;
   description: NgoDetailItemDescription;
   fieldOfActivity: NgoDetailItemFieldOfActivity;
   stats: NgoDetailItemStats;
@@ -17,14 +18,26 @@ export interface NgoDetailItemRating {
 }
 
 export interface NgoDetailItemContact {
-  address: { displayName: string, values: string };
+  address: { displayName: string, values: {
+    street: string;
+    postcode: string;
+    city: string;
+    country: string;
+  }};
   ngoPhoneNumber: { displayName: string, values: string };
   ngoEmail: { displayName: string, values: string };
-  representative?: { displayName: string, values: string };
+  representative?: { displayName: string, values: {
+    representativeFirstName: string;
+    representativeLastName: string;
+    representativeEmail: string;
+  }};
 }
 
 export interface NgoDetailItemStats {
-  president?: { displayName: string, values: string };
+  president?: { displayName: string, values: {
+    presidentFirstName: string;
+    presidentLastName: string;
+  }};
   foundingYear: { displayName: string, values: number };
   staffNumber: { displayName: string, values: number };
   memberNumber: { displayName: string, values: number };
@@ -117,4 +130,34 @@ export interface NgoEvent {
     organizer: NgoShortItem;
     description: string;
     tags: string;
+}
+
+export interface NgoCoordinates {
+  id: number;
+  longitude: number;
+  latitude: number;
+  name: string;
+  trustworthiness: number;
+}
+
+export interface NgoCluster {
+  id: number;
+  lat_min: number;
+  lat_max: number;
+  lng_min: number;
+  lng_max: number;
+}
+
+export interface NgoLink {
+  id1: number;
+  id2: number;
+  link_count: number;
+}
+
+export interface NewNgo {
+  ngoName: string;
+  ngoCountry: string;
+  representativeFirstName: string;
+  representativeLastName: string;
+  representativeEmail: string;
 }

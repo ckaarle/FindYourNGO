@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {BehaviorSubject, interval} from 'rxjs';
+import {BehaviorSubject, interval, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {SocialUser} from "angularx-social-login";
+import {SocialUser} from 'angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,8 @@ export class UserService {
   // error messages received from the login attempt
   public errors: any = [];
 
+  public $lastErrorMessage = new BehaviorSubject<string>('');
+
   constructor(private httpClient: HttpClient) {
     this.user = new BehaviorSubject<SocialUser>({} as SocialUser);
     this.userid = new BehaviorSubject<number>(-1);
@@ -34,7 +36,7 @@ export class UserService {
     this.token = localStorage.getItem('token');
     const expiration = localStorage.getItem('token-expiration');
     if (this.token && expiration) {
-      if (Date.parse(expiration) - 120000 < Date.now()) {
+      if (Date.parse(expiration) + 120000 > Date.now()) {
         this.refreshToken();
       }
       interval(120000).subscribe(x => this.refreshToken());
@@ -79,6 +81,7 @@ export class UserService {
       },
       err => {
         this.errors = err.error;
+        this.$lastErrorMessage.next(err.error.error);
       }
     );
   }
@@ -92,6 +95,7 @@ export class UserService {
       },
       err => {
         this.errors = err.error;
+        this.signOut();
       }
     );
   }
@@ -102,12 +106,13 @@ export class UserService {
     this.userid.next(-1);
     this.username.next('');
     this.ngoid.next(-1);
-    this.user.next({} as SocialUser)
+    this.user.next({} as SocialUser);
     localStorage.removeItem('refresh-token');
     localStorage.removeItem('token');
     localStorage.removeItem('token-expiration');
     localStorage.removeItem('username');
     localStorage.removeItem('ngoid');
+    localStorage.removeItem('userid');
   }
 
   private updateData(token: string): void {
@@ -122,5 +127,4 @@ export class UserService {
     this.userid.next(tokenDecoded.user_id);
     localStorage.setItem('userid', tokenDecoded.user_id);
   }
-
 }
