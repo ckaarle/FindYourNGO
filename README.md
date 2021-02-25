@@ -2,6 +2,7 @@
 
 ## Quick Start
 - check setup guide to get up the database
+- run `docker-compose -f docker-compose.prod.yml up --scale worker=4` to start the system in production mode
 - run docker-compose up (-d) in the root folder
 - localhost:8000 should be usable immediately (this is where the API lives)
 - localhost (:80) will take a while to run
@@ -94,5 +95,4 @@ Please refer to [this](./Backend/findyourngo/README.md) document.
 ## References
 
 https://unstats.un.org/unsd/methodology/m49/overview has been used to categorize ngos to correct countries, regions and sub-regions.
-
 https://www.kaggle.com/paultimothymooney/latitude-and-longitude-for-every-country-and-state was used and modified to get coordinates for countries (modifications are the capitalized cells).
