@@ -371,6 +371,13 @@ def demo_setup(request):
 
     greenpeace = Ngo.objects.get(name='GREENPEACE INTERNATIONAL')
 
+    greenpeace_user = User.objects.get(username='greenpeace')
+
+    NgoAccount.objects.create(
+        user=greenpeace_user,
+        ngo=greenpeace
+    )
+
     NgoConnection.objects.create(
         reporter=greenpeace,
         connected_ngo=ngo_350,
@@ -402,6 +409,13 @@ def demo_setup(request):
     # European Environmental Bureau
 
     bureau = Ngo.objects.get(name='EUROPEAN ENVIRONMENTAL BUREAU')
+
+    bureau_user = User.objects.get(username='bureau')
+
+    NgoAccount.objects.create(
+        user=bureau_user,
+        ngo=bureau
+    )
 
     NgoEvent.objects.create(
         name='Fund raiser',
