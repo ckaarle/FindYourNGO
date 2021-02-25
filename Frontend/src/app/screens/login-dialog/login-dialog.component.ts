@@ -28,7 +28,7 @@ export class LoginDialogComponent implements OnInit {
   status = '';
   userForm = new FormGroup({
     username: new FormControl(''),
-    email: new FormControl('', Validators.email),
+    email: new FormControl(''),
     password: new FormControl(''),
   });
 
