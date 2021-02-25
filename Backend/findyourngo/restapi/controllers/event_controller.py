@@ -11,11 +11,12 @@ from findyourngo.restapi.serializers.ngo_serializer import NgoEventSerializer
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def view_events(request) -> JsonResponse:
     collaborator_id = request.query_params.get('collaborator_id')
     ngo_events = NgoEvent.objects.filter(
-        ngoeventcollaborator__collaborator_id=collaborator_id, ngoeventcollaborator__pending=False)
+        ngoeventcollaborator__collaborator_id=collaborator_id, ngoeventcollaborator__pending=False).union(
+        NgoEvent.objects.filter(organizer_id=collaborator_id)
+    )
     event_serializer = NgoEventSerializer(ngo_events, many=True)
     return JsonResponse(event_serializer.data, safe=False)
 
