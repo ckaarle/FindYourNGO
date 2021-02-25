@@ -11,9 +11,7 @@ from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMe
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 from findyourngo.restapi.utils.email_util import send_email
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-
-
-SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
+from findyourngo.trustworthiness_calculator.trustworthiness_constants import SELF_REPORTED_DATA_SOURCE
 
 
 @api_view(['GET', 'POST', 'DELETE'])

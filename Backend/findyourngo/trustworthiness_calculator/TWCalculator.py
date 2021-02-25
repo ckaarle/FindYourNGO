@@ -2,10 +2,9 @@ import decimal
 from typing import Iterable
 from django.db.models import Sum, Q
 
-from findyourngo.restapi.controllers.ngo_controller import SELF_REPORTED_DATA_SOURCE
 from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation, NgoReview, NgoAccount
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import RAW_SCORE_MIN_VALUE, RAW_SCORE_MAX_VALUE, \
-    TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS
+    TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS, SELF_REPORTED_DATA_SOURCE
 from findyourngo.type_variables import TWScore
 
 
