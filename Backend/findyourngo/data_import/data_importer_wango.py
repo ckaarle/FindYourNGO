@@ -1,9 +1,12 @@
 import shutil
-from findyourngo.restapi.models import Ngo, NgoAccreditation, NgoMetaData, NgoAddress, NgoContact, NgoDataSource
+from findyourngo.restapi.models import Ngo, NgoAccreditation, NgoMetaData, NgoAddress, NgoContact, NgoDataSource, \
+    NgoCountry
 from findyourngo.data_import.data_importer import update_ngo_tw_score, _get_ngo_tw_score
 
 
 def import_wango_general_data(source):
+    countries = []
+    guessed_countries = []
     with open('/tmp/results.txt', encoding='utf-8') as results:
         line_num = 0
         for line in results:
@@ -16,16 +19,29 @@ def import_wango_general_data(source):
                     country, city, street = parse_address(line)
                 if line_num % 2 == 0:  # update ngo
                     if name is None:
-                        print(f"No name found in line {line_num-1} '{line}'")
+                        print(f'No name found in line {line_num-1} "{line}"')
                         continue
+                    try:
+                        country = fix_country(country)
+                        if country == '' or country is None:
+                            country = guess_country(city)
+                            if country != '' and country is not None:
+                                guessed_countries.append((city, country))
+                        country = NgoCountry.objects.get(name=country)
+                    except:
+                        if country not in countries:
+                            countries.append(f'{line_num}:{country}')
+                        country = None
                     create_or_update_ngo(name, source, acronym, country, city, street)
-                    if city is None:
-                        print(f"No city found in line {line_num} '{line}'")
             except Exception as e:
-                print(f"Failure in line {line_num} '{line}': {e}")
+                print(f'Failure in line {line_num} "{line}": {e}')
+    print(f'Following {len(countries)} countries not found: {countries}')
+    print(f'Following {len(guessed_countries)} countries were guessed using cities: {guessed_countries}')
 
 
 def import_wango_accredited_data(source, accreditation):
+    countries = []
+    guessed_countries = []
     with open('/tmp/certified_results.txt', encoding='utf-8') as certified_results:
         line_num = 0
         for line in certified_results:
@@ -40,14 +56,25 @@ def import_wango_accredited_data(source, accreditation):
                     email = parse_email(line)
                 if line_num % 3 == 0:  # update ngo
                     if name is None:
-                        print(f"No name found in line {line_num-2} '{line}'")
+                        print(f'No name found in line {line_num-2} "{line}"')
                         continue
+                    try:
+                        country = fix_country(country)
+                        if country == '' or None:
+                            country = guess_country(city)
+                            if country != '' and country is not None:
+                                guessed_countries.append((city, country))
+                        country = NgoCountry.objects.get(name=country)
+                    except:
+                        if country not in countries:
+                            countries.append(f'{line_num}:{country}')
+                        country = None
                     create_or_update_ngo(name, source, acronym, country, city, street,
                                          email=email, accreditation=accreditation)
-                    if city is None:
-                        print(f"No city found in line {line_num} '{line}'")
             except Exception as e:
-                print(f"Failure in line {line}: {e}")
+                print(f'Failure in line {line}: {e}')
+    print(f'Following {len(countries)} countries (accredited) not found: {countries}')
+    print(f'Following {len(guessed_countries)} countries were guessed using cities: {guessed_countries}')
 
 
 def parse_name(name) -> (str, str):
@@ -86,6 +113,69 @@ def parse_address(address) -> (str, str, str):
         city = address.pop()
         street = ', '.join(address)
     return country.upper(), city, street
+
+
+def fix_country(country):
+    countries = {
+        'UNITED STATES': 'UNITED STATES OF AMERICA',
+        'USA': 'UNITED STATES OF AMERICA',
+        'UNTIED STATES': 'UNITED STATES OF AMERICA',
+        'UNITED KINGDOM': 'UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND',
+        'UK': 'UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND',
+        "COTE D'IVOIRE": 'CÔTE D’IVOIRE',
+        'MACEDONIA': 'NORTH MACEDONIA',
+        'OCCUPIED PALESTINIAN TERRITORY': 'STATE OF PALESTINE',
+        'PALESTINE': 'STATE OF PALESTINE',
+        'PALESTINIAN AUTHORITY': 'STATE OF PALESTINE',
+        'HONG KONG SPECIAL ADMINISTRATIVE REGION OF CHINA': 'CHINA',
+        'MACAO SPECIAL ADMINISTRATIVE REGION OF CHINA': 'CHINA',
+        'TAIWAN': 'CHINA',
+        'NETHERLANDS ANTILLES': 'NETHERLANDS',
+        'LIBYAN ARAB JAMAHIRIYA': 'LIBYA',
+        'CZECH REPUBLIC': 'CZECHIA',
+        'VIETNAM': 'VIET NAM',
+        'RUSSIA': 'RUSSIAN FEDERATION',
+        'VENEZUELA': 'VENEZUELA (BOLIVARIAN REPUBLIC OF)',
+        'MOLDOVA': 'REPUBLIC OF MOLDOVA',
+        'SWAZILAND': 'ESWATINI',
+        'VIRGIN ISLANDS': 'UNITED STATES VIRGIN ISLANDS',
+        'IRAN': 'IRAN (ISLAMIC REPUBLIC OF)',
+        'BOLIVIA': 'BOLIVIA (PLURINATIONAL STATE OF)',
+        'BOLIVIA (MOZAMBIQUE)': 'BOLIVIA (PLURINATIONAL STATE OF)',
+        'ANTIGUA & BARBUDA': 'ANTIGUA AND BARBUDA',
+        'BOSNIA & HERZEGOVINA': 'BOSNIA AND HERZEGOVINA',
+        'YUGOSLAVIA': '',  # Yugoslavia does not exist -> 7 possible countries
+        'EAST TIMOR': 'TIMOR-LESTE',
+        'LAO PDR': "LAO PEOPLE'S DEMOCRATIC REPUBLIC",
+        'MARIANA ISLANDS': 'NORTHERN MARIANA ISLANDS',
+        'FALKLAND ISLANDS': 'FALKLAND ISLANDS (MALVINAS)',
+        'KOSOVO': 'SERBIA',
+        'ST. KITTS & NEVIS': 'SAINT KITTS AND NEVIS',
+        'ST. LUCIA': 'SAINT LUCIA',
+        'SYRIA': 'SYRIAN ARAB REPUBLIC',
+        'LEEWARD ISLANDS': 'ANGUILLA',
+        'EASTERN AND SOUTHERN EUROPE': '',  # This is not a country
+    }
+    if country in countries:
+        return countries[country]
+    return country
+
+
+def guess_country(city):
+    addresses = NgoAddress.objects.filter(city=city)
+    if addresses.count() == 0:
+        print(f'The city {city} could not be assigned because it was never encountered')
+        return ''
+    max_count = 0
+    for country in NgoAddress.objects.filter(city=city).values_list('country__name').distinct():
+        country = country[0]
+        filtered_addresses = NgoAddress.objects.filter(city=city, country__name=country)
+        if filtered_addresses.count() > addresses.count() * 0.8:
+            return country
+        if filtered_addresses.count() > max_count:
+            max_count = filtered_addresses.count()
+    percentage = max_count / addresses.count()
+    print(f'The city {city} could not be assigned. Maximum matches: {max_count} of {addresses.count()} => {percentage}')
 
 
 def parse_email(email) -> str:
