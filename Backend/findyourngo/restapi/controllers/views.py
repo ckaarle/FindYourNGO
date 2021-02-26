@@ -23,7 +23,7 @@ from findyourngo.data_import.db_sql_queries import delete_all_query, delete_back
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoAccount, NgoFavourites, NgoEvent, NgoReview, NgoTWDataPoint, \
-    NgoConnection
+    NgoConnection, NgoPendingConnection
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -397,18 +397,10 @@ def demo_setup(request):
         ngo=greenpeace
     )
 
-    NgoConnection.objects.create(
-        reporter=greenpeace,
-        connected_ngo=ngo_350,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
-    )
-
-    NgoConnection.objects.create(
+    NgoPendingConnection.objects.create(
         reporter=ngo_350,
         connected_ngo=greenpeace,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
+        report_date=datetime(2020, 12, 12)
     )
 
     NgoConnection.objects.create(
