@@ -23,6 +23,7 @@ export class LoginDialogComponent implements OnInit {
   isNgo: boolean;
   query: any;
   names: string[] = [];
+  // @ts-ignore
   $names: Observable<string[]> | undefined;
   ngoControl = new FormControl();
   status = '';
