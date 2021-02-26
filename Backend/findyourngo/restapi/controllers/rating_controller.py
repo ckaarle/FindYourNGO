@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.http.response import JsonResponse
 
 from django.contrib.auth.models import User
@@ -13,6 +11,8 @@ from findyourngo.data_import.data_importer import update_ngo_tw_score
 
 from datetime import datetime
 
+from findyourngo.trustworthiness_calculator.utils import round_to_two_decimal_places
+
 
 @api_view(['GET'])
 def tw_rating(request) -> JsonResponse:
@@ -25,7 +25,7 @@ def tw_rating(request) -> JsonResponse:
 
     reviews = NgoReview.objects.filter(ngo=ngo)
 
-    total_tw = ngo.tw_score.total_tw_score
+    total_tw = round_to_two_decimal_places(ngo.tw_score.total_tw_score)
 
     total_review_number = len(reviews)
     reviews_by_rating = {
@@ -98,7 +98,8 @@ def generate_missing_data_points(tw_data_points):
     last_result = result[len(result)-1]
     today_date = datetime.today().date()
     while today_date > last_result.date:
-        last_result = NgoTWDataPoint(date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(), daily_tw_score=last_result.daily_tw_score)
+        daily_tw_score = round_to_two_decimal_places(last_result.daily_tw_score)
+        last_result = NgoTWDataPoint(date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(), daily_tw_score=daily_tw_score)
         result.append(last_result)
     return result
 
