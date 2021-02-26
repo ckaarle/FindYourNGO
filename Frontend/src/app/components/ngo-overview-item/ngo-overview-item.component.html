@@ -24,7 +24,8 @@
             matTooltip="For more information on the trustworthiness score please refer to the About page."
         ></star-rating>
         <div class="rating-values">
-          <div class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness}}</div>
+          <div
+              class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness  | number:'1.0-2'}}</div>
           <div class="rating-values-amount">( {{ngoOverviewItem.amount}} )</div>
         </div>
       </div>
