@@ -1,31 +1,38 @@
-<div class="content" fxLayoutGap="16px grid" fxLayout="row wrap">
-  <mat-drawer #filterSelectionDrawer class="filter-drawer" mode="over" fxFlex="500px"
-              fxFlex.xs="100%" fxFlex.sm="33%">
-    <ngo-filter-selection [filterOptions]="filterOptions"
-                          [filterSelection]="selectedFilters"
-                          [sortingOptions]="sortingOptions"
-                          [sortingSelection]="selectedSorting"
-                          (closeFilterSelectionDrawer)="filterSelectionDrawer.close()"></ngo-filter-selection>
-  </mat-drawer>
+<div class="content">
+  <div class="grid-container" fxLayoutGap="16px grid" fxLayout="row wrap">
+    <mat-menu class="filter-drawer" #filterSelectionDrawer="matMenu" yPosition="below"
+              [overlapTrigger]="false" fxFlex="500px" fxFlex.xs="100%" fxFlex.sm="33%">
+      <ngo-filter-selection [filterOptions]="filterOptions"
+                            [filterSelection]="selectedFilters"
+                            [sortingOptions]="sortingOptions"
+                            [sortingSelection]="selectedSorting"
+                            (closeFilterSelectionDrawer)="filterSelectionDrawer.close()">
+      </ngo-filter-selection>
+    </mat-menu>
+    <!--mat-menu #filterSelectionDrawer  mode="over" >
 
-  <div class="filter-bar">
-    <ngo-filter *ngIf="filterOptions || sortingOptions"
-                [filterOptions]="filterOptions"
-                [filterSelection]="selectedFilters"
-                [sortingOptions]="sortingOptions"
-                [sortingSelection]="selectedSorting"
-                [totalAmountOfNgos]="totalAmountOverviewItems"
-                (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
-  </div>
+    </mat-menu-->
 
-  <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
-       *ngFor="let overviewItem of overviewItems"
-       (click)="filterSelectionDrawer.close()">
-    <ngo-overview-item [ngoOverviewItem]="overviewItem"
-                       [editableRating]="false"
-                       [userFavourite]="userFavourites.includes(overviewItem.id)"
-                       (click)="showDetail(overviewItem)"></ngo-overview-item>
-    <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
+    <div class="filter-bar">
+      <ngo-filter *ngIf="filterOptions || sortingOptions"
+                  [filterOptions]="filterOptions"
+                  [filterSelection]="selectedFilters"
+                  [sortingOptions]="sortingOptions"
+                  [sortingSelection]="selectedSorting"
+                  [totalAmountOfNgos]="totalAmountOverviewItems"
+                  [filterSelectionDrawer]="filterSelectionDrawer"
+                  (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
+    </div>
+
+    <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
+         *ngFor="let overviewItem of overviewItems"
+         (click)="filterSelectionDrawer.close()">
+      <ngo-overview-item [ngoOverviewItem]="overviewItem"
+                         [editableRating]="false"
+                         [userFavourite]="userFavourites.includes(overviewItem.id)"
+                         (click)="showDetail(overviewItem)"></ngo-overview-item>
+      <mat-spinner *ngIf="loadingNgoOverviewItems"></mat-spinner>
+    </div>
   </div>
   <div class="buttonBar">
     <button mat-button class="button"

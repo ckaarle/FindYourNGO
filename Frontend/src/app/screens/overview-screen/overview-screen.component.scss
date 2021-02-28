@@ -1,8 +1,7 @@
 .buttonBar {
   display: flex;
   justify-content: center;
-  margin: 0 100px 0 0;
-  width: 100%;
+  padding-top: 32px;
 }
 
 .button {
@@ -25,18 +24,20 @@ ngo-overview-item {
 }
 .content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 
   .filter-drawer {
     position: absolute;
     height: fit-content;
-    top: 64px;
-    left: 0
+    top: 50px !important;
+    left: 0 !important;
   }
 
   .filter-bar {
     width: 90%;
-    margin: 16px 0;
+    padding: 16px 32px 32px !important;
   }
 
   mat-spinner {

@@ -9,6 +9,7 @@ import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MediaService} from '../../services/media.service';
 
 
 export interface NgoContentContainer {
@@ -51,7 +52,7 @@ export class NgoDetailItemComponent {
       private favouriteService: FavouriteService,
       private location: Location,
       public userService: UserService,
-      ) {
+      public media: MediaService) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
     this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));

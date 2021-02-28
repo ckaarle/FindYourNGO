@@ -48,6 +48,8 @@
 
             .title {
               width: 20%;
+              min-width: 120px;
+              padding-right: 16px;
               font-weight: 400;
               font-size: var(--font-size-medium);
             }

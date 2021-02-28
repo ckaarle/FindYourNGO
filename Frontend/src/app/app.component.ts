@@ -11,11 +11,12 @@ import {UserService} from './services/user.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  screens = ['Overview', 'Favourites', 'About'];
+  screens = ['Overview', 'About', 'Favourites', 'Map'];
   activeScreen = this.screens[0];
   currentTitle: string = 'Find your NGO';
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService, private titleService: Title, public userService: UserService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, public media: MediaService,
+              private titleService: Title, public userService: UserService) {
     this.init();
   }
 

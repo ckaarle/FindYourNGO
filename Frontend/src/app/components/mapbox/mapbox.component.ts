@@ -18,7 +18,7 @@ export class MapboxComponent {
   style = 'mapbox://styles/mapbox/dark-v10';
   lat = 48.137154;
   lng = 11.576124;
-  zoom = 1.0;
+  zoom = 2.0;
 
   color = '#fffff';
 

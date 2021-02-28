@@ -17,18 +17,22 @@
 .rating {
   display: flex;
   flex-direction: row;
-  margin-bottom: 32px;
 }
 
 .stats {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 
   ngo-rating-table {
     width: 35%;
+    min-width: 200px;
+    margin-top: 32px;
   }
 
   ngo-tw-history {
     width: 55%;
+    min-width: 200px;
+    margin-top: 32px;
   }
 }

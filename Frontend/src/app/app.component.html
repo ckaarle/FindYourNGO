@@ -1,10 +1,11 @@
 <mat-sidenav-container>
 
   <!-- sidenav for mobile -->
-  <mat-sidenav #sidenav class="sidenav" mode="over">
+  <mat-sidenav #sidenav class="sidenav" mode="over" position="end">
     <mat-nav-list>
       <div class="sidenav-head">
         <mat-list-item class="sidenav-item" routerLink="/" (click)="sidenav.close()">
+          <img class="logo" src="assets/img/logo_yellow2.png" alt="Logo" style="margin: auto"/>
         </mat-list-item>
       </div>
       <mat-accordion>
@@ -12,7 +13,7 @@
                        [routerLink]="getRouterLink(screen)"
                        routerLinkActive="active" (click)="sidenav.close()">
           <mat-icon color="primary">{{getScreenIcon(screen)}}</mat-icon>
-          <span class="sidenav-label">{{screen}}</span>
+          <span class="sidenav-label">{{screen.toUpperCase()}}</span>
           <mat-divider></mat-divider>
         </mat-list-item>
       </mat-accordion>
@@ -20,56 +21,64 @@
   </mat-sidenav>
 
   <!-- navbar -->
-  <mat-toolbar color="primary" class="navbar">
+  <mat-toolbar class="navbar">
     <mat-toolbar-row class="navbar-row"
                      [ngClass]="{'mobile': media?.isMobile(), 'desktop': media?.isDesktop()}">
 
+      <img class="logo" src="assets/img/logo_yellow2.png" alt="Logo" style="margin: 3px" routerLink="/"/>
+
       <!-- mobile navbar -->
-      <ng-container class="mobile-navbar" *ngIf="media?.isMobile()">
+      <div class="mobile-navbar" *ngIf="media?.isMobile()">
+        <span class="navbar-label" (click)="sidenav.toggle()">{{ currentTitle.toUpperCase()
+        || 'FIND YOUR NGO' }}</span>
         <button mobile-menu-icon mat-icon-button (click)="sidenav.toggle()">
-          <mat-icon class="navbar-label">menu</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
-        <span class="navbar-label" (click)="sidenav.toggle()">{{ currentTitle
-        || 'Find your NGO' }}</span>
-      </ng-container>
+      </div>
 
       <!-- desktop navbar -->
-      <ng-container class="desktop-navbar" *ngIf="media?.isDesktop()">
+      <div class="desktop-navbar" *ngIf="media?.isDesktop()">
         <nav mat-tab-nav-bar>
           <a mat-tab-link (click)="activeScreen = screens[0]"
-             [active]="activeScreen == screens[0]" [routerLink]="getRouterLink(screens[0])">
-            <span class="navbar-label">{{screens[0]}}</span>
+             [active]="activeScreen == screens[0]" [routerLink]="getRouterLink(screens[0])"
+             [ngClass]="{'active': activeScreen == screens[0]}">
+            <span class="navbar-label">{{screens[0].toUpperCase()}}</span>
           </a>
 
           <a mat-tab-link (click)="activeScreen = screens[1]"
-             [active]="activeScreen == screens[1]" [routerLink]="getRouterLink(screens[1])">
-            <span class="navbar-label">{{screens[1]}}</span>
+             [active]="activeScreen == screens[1]" [routerLink]="getRouterLink(screens[1])"
+             [ngClass]="{'active': activeScreen == screens[1]}">
+            <span class="navbar-label">{{screens[1].toUpperCase()}}</span>
           </a>
 
-          <img src="assets/img/logo_red2.svg" alt="Logo" style="margin: 3px"/>
-          
           <a mat-tab-link (click)="activeScreen = screens[2]"
-             [active]="activeScreen == screens[2]" [routerLink]="getRouterLink(screens[2])">
-            <span class="navbar-label">{{screens[2]}}</span>
+             [active]="activeScreen == screens[2]" [routerLink]="getRouterLink(screens[2])"
+             [ngClass]="{'active': activeScreen == screens[2]}">
+            <span class="navbar-label">{{screens[2].toUpperCase()}}</span>
           </a>
+
+          <a mat-tab-link (click)="activeScreen = screens[3]"
+             [active]="activeScreen == screens[3]" [routerLink]="getRouterLink(screens[3])"
+             [ngClass]="{'active': activeScreen == screens[3]}">
+            <span class="navbar-label">{{screens[3].toUpperCase()}}</span>
+          </a>
+
+          <div class="user-options">
+            <mat-menu #userOptions="matMenu" yPosition="below" [overlapTrigger]="false">
+              <user-options></user-options>
+            </mat-menu>
+            <div class="user-options-button" [matMenuTriggerFor]="userOptions">
+              <img *ngIf="userService.user?.value?.photoUrl" [src]="userService.user?.value?.photoUrl">
+              <mat-icon class="logged-in"
+                        *ngIf="!userService.user?.value?.photoUrl && userService.userid?.value !== -1">
+                account_circle
+              </mat-icon>
+              <mat-icon class="logged-out" *ngIf="userService.userid?.value === -1">account_circle
+              </mat-icon>
+            </div>
+          </div>
         </nav>
-      </ng-container>
-
-      <div class="user-options">
-        <mat-menu #userOptions="matMenu" yPosition="below" [overlapTrigger]="false">
-          <user-options></user-options>
-        </mat-menu>
-        <div class="user-options-button" [matMenuTriggerFor]="userOptions">
-          <img *ngIf="userService.user?.value?.photoUrl" [src]="userService.user?.value?.photoUrl">
-          <mat-icon class="logged-in"
-                    *ngIf="!userService.user?.value?.photoUrl && userService.userid?.value !== -1">
-            account_circle
-          </mat-icon>
-          <mat-icon class="logged-out" *ngIf="userService.userid?.value === -1">account_circle
-          </mat-icon>
-        </div>
       </div>
-
     </mat-toolbar-row>
 
   </mat-toolbar>
@@ -80,8 +89,7 @@
   </main>
 
 
-  <button *ngIf="getCurrentRoute() != '/search'" class="search" routerLink="/search" mat-fab
-          mat-accent>
+  <button *ngIf="getCurrentRoute() != '/search'" (click)="activeScreen = ''" class="search" routerLink="/search" mat-fab mat-accent>
     <mat-icon>search</mat-icon>
   </button>
 </mat-sidenav-container>

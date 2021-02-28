@@ -12,6 +12,8 @@ h4 {
   font-style: italic;
 }
 
-.calendar-button {
-  margin-bottom: 20px;
+.action-bar {
+  display: flex;
+  padding: 16px 32px 32px !important;
+  justify-content: flex-end;
 }
