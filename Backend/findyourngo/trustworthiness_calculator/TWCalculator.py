@@ -44,7 +44,8 @@ class TWCalculator:
             wce_score: float,
             ngo_account_score: float,
     ) -> float:
-        return number_data_sources_score + credible_source_score + ecosoc_score + ngo_account_score + wce_score
+        return max(number_data_sources_score + ngo_account_score, credible_source_score) \
+               + max(wce_score + ngo_account_score, ecosoc_score)
 
     def calculate_base_tw_from_partial_scores(
             self,

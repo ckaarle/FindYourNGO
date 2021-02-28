@@ -24,7 +24,8 @@ Storing these individual factors enables offering a detailed history of the trus
 
 - credibility of data source(s)
 - number of data sources
-- [ECOSOC](https://csonet.org/?menu=100) accreditation 
+- [ECOSOC](https://csonet.org/?menu=100) accreditation
+- [WCE](https://www.wango.org/codeofethics.aspx) accreditation
 - PageRank
 - whether or not the NGO is registered with us
 
@@ -40,12 +41,12 @@ Storing these individual factors enables offering a detailed history of the trus
 calculated without user comments and without NGO connections
 | Score | # NGOs |
 | ----- | ------: |
-| 0 | 649 |
-| 1 | 0 |
+| 0 | 54626 |
+| 1 | 10 |
 | 2 | 0 |
-| 3 | 273 |
-| 4 | 41 |
-| 5 | 0 |
+| 3 | 285 |
+| 4 | 0 |
+| 5 | 42 |
 
 
 ## How is the score calculated?
@@ -70,19 +71,20 @@ The following factors will be used to calculate the raw base tw score:
 
 | Factor                | Value                        | current max. value |Reasoning |
 | --------------------- | ----------------------------- | -------- | --------- |
-| # data sources        | 1 per source | 2 | |
-| one credible source   | (# data sources overall) * 2 + 1  | 5 | one credible source > all (less) credible sources combined + ECOSOC |
-| ECOSOC/ILO/CF              | # data sources overall | 2 | ECOSOC/ILO/CF does not hold as much meaning without a credible source |
-| NGOAccount | 1 | 1 | since we will have to verify the account, it should be a significant boost |
+| # data sources        | 1 per source | 3 | |
+| one credible source   | (# data sources overall) * 2 + 1  | 7 | one credible source > all (less) credible sources combined + ECOSOC |
+| ECOSOC/ILO/CF         | # data sources overall | 3 | ECOSOC/ILO/CF does not hold as much meaning without a credible source |
+| WCE                   | 1 | 1 | A somewhat less trustworthy accreditation compared to ECOSOC/ILO/CF
+| NGOAccount | 1.5 | 1.5 | since we will have to verify the account, it should be a significant boost |
 
 
-score_raw_base(NGO) = (# data sources listing NGO) + (credible_source(NGO)) + ECOSOC_ILO_CF(NGO) + NGOAccount(NGO)
+score_raw_base(NGO) = max(# data sources + NGOAccount, one credible source) + max(WCE + NGOAccount, ECOSOC/ILO/CF)
 
 Since the score has to be scaled into the range [0..5], use the following [formula](https://stats.stackexchange.com/questions/281162/scale-a-number-between-a-range/281164) to achieve this:
 
 | Variable | Value | Description |
 | -------- | ----- | ----------- |
-| r<sub>min</sub> | 1 | min. value of raw base TW score (i.e. one data source and nothing else) |
+| r<sub>min</sub> | 1 / (# data sources overall) | min. value of raw base TW score (i.e. one data source and nothing else) |
 | r <sub>max</sub> | 10 | max. value of raw base TW score |
 | t<sub>min</sub> | 0 | min. value of TW score |
 | t<sub>max</sub> | 5 | max. value of TW score |
