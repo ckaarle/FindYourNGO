@@ -88,6 +88,6 @@ export class FilterService {
       filter: this.filterActive,
       filterSelection: JSON.stringify(this.selectedFilters),
       sortingSelection: JSON.stringify(this.selectedSorting),
-    }]);
+    }]).then(() => window.location.reload());
   }
 }
