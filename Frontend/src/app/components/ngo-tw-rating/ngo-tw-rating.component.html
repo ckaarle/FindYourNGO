@@ -3,7 +3,9 @@
   <div class="tw-rating"
        fxFlex.xs="100%">
     <div class="rating">
-      <star-rating [value]="totalTrustworthiness - 1" [editable]="false"></star-rating>
+      <star-rating [value]="totalTrustworthiness - 1"
+                   [editable]="false"
+                   [amount]="amount"></star-rating>
       <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
     </div>
 
