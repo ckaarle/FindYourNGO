@@ -37,6 +37,10 @@
     font-size: var(--font-size-medium);
     padding-top: 32px;
 
+    &:first-child {
+      padding-top: 0;
+    }
+
     .mat-icon {
       color: var(--primary-color);
       padding-right: 16px;

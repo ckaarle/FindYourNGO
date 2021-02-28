@@ -68,7 +68,7 @@ class NgoFilter:
 
     @property
     def _filter_ecosoc_condition(self) -> Q:
-        if self._filter_config.use_ecosoc:
+        if self._filter_config.use_accreditations:
             return reduce(operator.or_, [Q(accreditations__accreditation__icontains=acc) for acc in VALID_ACCREDITATIONS])
         else:
             return self._default_condition

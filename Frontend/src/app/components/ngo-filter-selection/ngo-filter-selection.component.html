@@ -1,5 +1,8 @@
-<div class="filter-option-container" (keydown.enter)="applyFilter()" tabindex="0">
+<div class="filter-option-container" (keydown.enter)="applyFilter()" tabindex="0" (click) = "$event.stopPropagation()">
     <h1>Filters</h1>
+    <button mat-icon-button class="filter-apply" (click)="applyFilter()">
+        <mat-icon>filter_list</mat-icon>
+    </button>
 
     <div class="sorting-option-item" *ngIf="sortingOptions">
         <div class="sorting-label">Sort NGOs by ...</div>
@@ -54,7 +57,6 @@
             </div>
         </div>
     </div>
-    <button class="filter-apply" (click)="applyFilter()" mat-button>Apply filter</button>
 </div>
 
 <ng-template #filterOptionItem let-filterOption="filterOption" let-key="key">

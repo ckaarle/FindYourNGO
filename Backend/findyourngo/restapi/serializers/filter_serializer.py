@@ -11,8 +11,8 @@ def filter_object():
             'regions': regions(),
             'sub_regions': sub_regions(),
             'topics': topics(),
-            'hasEcosoc': False,
-            'isCredible': False,
+            'hasAccreditations': False,
+            'fromCredibleDataSource': False,
             'countries': hq_countries(),
             'cities': hq_cities(),
             'contactOptionPresent': False,
@@ -76,8 +76,8 @@ class FilterSerializer(serializers.Serializer):
     branches = serializers.ListField(required=False)
     regions = serializers.ListField(required=False)
     topics = serializers.ListField(required=False)
-    hasEcosoc = serializers.BooleanField(required=False)
-    isCredible = serializers.BooleanField(required=False)
+    hasAccreditations = serializers.BooleanField(required=False)
+    fromCredibleDataSource = serializers.BooleanField(required=False)
     countries = serializers.ListField(required=False)
     cities = serializers.ListField(required=False)
     contactOptionPresent = serializers.BooleanField(required=False)
@@ -91,8 +91,8 @@ class FilterSerializer(serializers.Serializer):
         branches = validated_data.get('branches')
         regions = validated_data.get('regions')
         topics = validated_data.get('topics')
-        use_ecosoc = validated_data.get('hasEcosoc')
-        use_credible_source = validated_data.get('isCredible')
+        use_accreditations = validated_data.get('hasAccreditations')
+        use_credible_source = validated_data.get('fromCredibleDataSource')
         hq_countries = validated_data.get('countries')
         hq_cities = validated_data.get('cities')
         use_contact_possible = validated_data.get('contactOptionPresent')
@@ -105,7 +105,7 @@ class FilterSerializer(serializers.Serializer):
             branches,
             regions,
             topics,
-            use_ecosoc,
+            use_accreditations,
             use_credible_source,
             hq_countries,
             hq_cities,

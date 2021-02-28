@@ -163,6 +163,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FilterService,
     ValueTransformerPipe,
     TypeEvaluatorPipe,
+    MatMenuModule,
     Utils
   ]
 })
