@@ -62,7 +62,7 @@
     </button>
   </mat-chip-list>
 
-  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount && totalAmountOfNgos.totalAmount !== totalAmountOfNgos.currentAmount"
+  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount"
        class="currently-filtered-items">
       {{totalAmountOfNgos.currentAmount}} of {{totalAmountOfNgos.totalAmount}} NGOs displayed.
   </div>

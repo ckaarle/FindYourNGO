@@ -10,6 +10,7 @@ import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {MediaService} from '../../services/media.service';
+import {FilteredNgosCount} from '../../screens/overview-screen/overview-screen.component';
 
 
 export interface NgoContentContainer {
@@ -37,6 +38,7 @@ export class NgoDetailItemComponent {
 
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
+  totalAmount: FilteredNgosCount = {};
 
   // @ts-ignore
   sortingSelection: NgoSortingSelection = {};
@@ -66,12 +68,16 @@ export class NgoDetailItemComponent {
 
     const filterActive = this.route.snapshot.paramMap.get('filter');
     const filterSelection = this.route.snapshot.paramMap.get('filterSelection');
+    const totalAmount = this.route.snapshot.paramMap.get('totalAmount');
 
     if (filterActive != null) {
       this.filter = filterActive.toLowerCase() === 'true';
     }
     if (filterSelection != null) {
       this.filterSelection = JSON.parse(filterSelection);
+    }
+    if (totalAmount != null) {
+      this.totalAmount = JSON.parse(totalAmount);
     }
 
     const sortingSelection = this.route.snapshot.paramMap.get('sortingSelection');
@@ -136,7 +142,8 @@ export class NgoDetailItemComponent {
         startPage: this.previousPageNumber,
         filter: this.filter,
         filterSelection: JSON.stringify(this.filterSelection),
-        sortingSelection: JSON.stringify(this.sortingSelection)
+        sortingSelection: JSON.stringify(this.sortingSelection),
+        totalAmount: JSON.stringify(this.totalAmount)
       }]);
     }
     else {

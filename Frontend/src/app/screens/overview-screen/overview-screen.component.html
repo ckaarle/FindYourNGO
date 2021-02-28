@@ -5,8 +5,7 @@
       <ngo-filter-selection [filterOptions]="filterOptions"
                             [filterSelection]="selectedFilters"
                             [sortingOptions]="sortingOptions"
-                            [sortingSelection]="selectedSorting"
-                            (closeFilterSelectionDrawer)="filterSelectionDrawer.close()">
+                            [sortingSelection]="selectedSorting">
       </ngo-filter-selection>
     </mat-menu>
     <!--mat-menu #filterSelectionDrawer  mode="over" >
@@ -20,8 +19,7 @@
                   [sortingOptions]="sortingOptions"
                   [sortingSelection]="selectedSorting"
                   [totalAmountOfNgos]="totalAmountOverviewItems"
-                  [filterSelectionDrawer]="filterSelectionDrawer"
-                  (openFilterSelectionDrawer)="filterSelectionDrawer.toggle()"></ngo-filter>
+                  [filterSelectionDrawer]="filterSelectionDrawer"></ngo-filter>
     </div>
 
     <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
