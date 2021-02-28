@@ -250,7 +250,7 @@ def update_ngo_topics(ngo: Ngo, ngo_update):
     updated_topics = ngo_update['topics']
     for topic in updated_topics:
         if NgoTopic.objects.filter(topic=topic).exists():
-            existing_topic = NgoTopic.objects.get(topic=topic).first()
+            existing_topic = NgoTopic.objects.filter(topic=topic).first()
             ngo.topics.add(existing_topic)
         else:
             new_topic = NgoTopic.objects.create(topic=topic)
@@ -262,7 +262,7 @@ def update_ngo_types(ngo_stats: NgoStats, ngo_update):
     updated_types = ngo_update['typeOfOrganization']
     for updated_type in updated_types:
         if NgoType.objects.filter(type=updated_type).exists():
-            existing_type = NgoType.objects.get(type=updated_type).first()
+            existing_type = NgoType.objects.filter(type=updated_type).first()
             ngo_stats.type_of_organization.add(existing_type)
         else:
             new_type = NgoType.objects.create(type=updated_type)
