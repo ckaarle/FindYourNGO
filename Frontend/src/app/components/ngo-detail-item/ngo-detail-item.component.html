@@ -20,13 +20,8 @@
       <div>
         <div class="ngo-rating">
           <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
-                       [editable]="false"></star-rating>
-
-          <div class="rating-values">
-            <div
-                class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values | number:'1.0-2'}}</div>
-            <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
-          </div>
+                       [editable]="false"
+                       [amount]="ngoDetailItem?.rating.amount.values"></star-rating>
 
           <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
 
@@ -71,7 +66,10 @@
               </div>
             </div>
 
-            <ngo-rating *ngIf="ngoDetailItem && !editMode" [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
+            <ngo-rating *ngIf="ngoDetailItem && !editMode"
+                        [ngoId]="ngoDetailItem.id"
+                        [ngoName]="ngoDetailItem.name"
+                        [amount]="ngoDetailItem.rating.amount.values"></ngo-rating>
 
             <form class="edit-form" [formGroup]="ngoForm" *ngIf="editMode" fxLayoutGap="50px grid" fxLayout="row wrap">
               <div class="edit-container" *ngFor="let formField of ngoForm.value | keyvalue; trackBy:trackByFn" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">

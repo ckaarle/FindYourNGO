@@ -16,6 +16,7 @@ export class NgoRatingComponent implements OnInit {
 
   @Input() ngoId: number = 0;
   @Input() ngoName: string = '';
+  @Input() amount: number = 0;
 
   reviews: TwReviews = EMPTY_TW_REVIEWS;
 

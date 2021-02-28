@@ -8,12 +8,12 @@ import {Router} from '@angular/router';
   styleUrls: ['./ngo-tw-rating.component.scss']
 })
 export class NgoTwRatingComponent implements OnInit {
-
   totalTrustworthiness: number = 0;
   totalReviewNumber: number = 0;
   reviewNumberIndexedByRating: number[] = [];
 
   @Input() ngoId: number = 1;
+  @Input() amount: number = 0;
 
   constructor(private ratingService: RatingService, private router: Router) {
   }
