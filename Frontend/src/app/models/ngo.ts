@@ -85,8 +85,8 @@ export interface NgoFilterOptions {
   typeOfOrganization: { values: string[], displayName?: string, icon?: string };
   workingLanguages: { values: string[], displayName?: string, icon?: string };
   funding: { values: string[], displayName?: string, icon?: string };
-  hasEcosoc: { values: boolean, displayName?: string, icon?: string };
-  isCredible: { values: boolean, displayName?: string, icon?: string };
+  hasAccreditations: { values: boolean, displayName?: string, icon?: string };
+  fromCredibleDataSource: { values: boolean, displayName?: string, icon?: string };
   trustworthiness: { values: number, displayName?: string, icon?: string };
   countries: { values: string[], displayName?: string, icon?: string };
   cities: { values: {[index: string]: string[]}, displayName?: string, icon?: string };

@@ -14,7 +14,7 @@ export class NgoFilterSelectionComponent {
   @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
   @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  credibility: string[] = ['trustworthiness', 'isCredible', 'hasEcosoc'];
+  credibility: string[] = ['trustworthiness', 'fromCredibleDataSource', 'hasAccreditations'];
   hqDetails: string[] = ['countries', 'cities', 'workingLanguages', 'contactOptionPresent'];
   ngoDetails: string[] = ['branches', 'topics', 'typeOfOrganization', 'funding'];
 
