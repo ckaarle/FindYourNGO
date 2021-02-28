@@ -11,7 +11,7 @@ from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def view_connections(request) -> JsonResponse:
     try:
         requested_ngo = request.query_params.get('requested_ngo')
