@@ -64,6 +64,10 @@ html, body {
   font-size: var(--font-size-normal);
   line-height: var(--line-height-normal);
   color: var(--primary-contrast-bw);
+  *:focus {
+    outline: none;
+    border: 0;
+ }
 }
 
 /* width */
