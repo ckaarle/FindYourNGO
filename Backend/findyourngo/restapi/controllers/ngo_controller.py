@@ -43,7 +43,6 @@ def ngo_detail(request):
         try:
             update_ngo_instance(ngo, ngo_data)
             ngo_serializer = NgoSerializer(ngo)
-            TWUpdater.update_single_ngo(ngo)
             return JsonResponse(ngo_serializer.data, status=status.HTTP_201_CREATED)
         except Exception:
             return JsonResponse({'error': 'Ngo could not be updated.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -51,6 +50,9 @@ def ngo_detail(request):
     elif request.method == 'DELETE':
         ngo.delete()
         return JsonResponse({'message': 'Ngo was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        TWUpdater.update_single_ngo(ngo)
 
 
 @api_view(['GET'])

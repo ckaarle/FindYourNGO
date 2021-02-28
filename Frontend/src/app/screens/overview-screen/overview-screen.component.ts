@@ -91,6 +91,12 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       this.selectedSorting = JSON.parse(sortingSelection);
     }
 
+    const totalAmount = this.route.snapshot.paramMap.get('totalAmount');
+    if (!this.isNull(totalAmount)) {
+      // @ts-ignore
+      this.totalAmountOverviewItems = JSON.parse(totalAmount);
+    }
+
     if (!this.isNull(sortingSelection) || !this.isNull(filterSelection)) {
       this.filter.editSelectedFilters(this.selectedFilters, this.selectedSorting);
     }
@@ -210,6 +216,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
       filter: this.filterActive,
       filterSelection: JSON.stringify(this.selectedFilters),
       sortingSelection: JSON.stringify(this.selectedSorting),
+      totalAmount: JSON.stringify(this.totalAmountOverviewItems),
       pageBeforePaginated: true,
     }]);
   }

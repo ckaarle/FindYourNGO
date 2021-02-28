@@ -12,7 +12,6 @@ export class NgoFilterSelectionComponent {
   @Input() filterSelection: NgoFilterSelection = {} as NgoFilterSelection;
   @Input() sortingOptions: string[] = [];
   @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
-  @Output() closeFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   credibility: string[] = ['trustworthiness', 'fromCredibleDataSource', 'hasAccreditations'];
   hqDetails: string[] = ['countries', 'cities', 'workingLanguages', 'contactOptionPresent'];
@@ -31,13 +30,8 @@ export class NgoFilterSelectionComponent {
     }
   }
 
-  closeFilterSelection(): void {
-    this.closeFilterSelectionDrawer.emit(true);
-  }
-
   applyFilter(): void {
     this.filter.editSelectedFilters(this.filterSelection, this.sortingSelection);
-    this.closeFilterSelection();
     this.filter.applyFilter(this.filterSelection, this.sortingSelection).subscribe(data => {
       this.filter.displayFilteredNgoItems(data);
     });
