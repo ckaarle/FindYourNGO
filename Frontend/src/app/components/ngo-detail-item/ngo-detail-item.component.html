@@ -1,5 +1,7 @@
 <div class="back-button">
-  <button mat-button (click)="back()">Back</button>
+  <button mat-icon-button (click)="back()">
+    <mat-icon>arrow_back_ios_new</mat-icon>
+  </button>
 </div>
 <div class="card">
   <mat-card class="ngo-detail-item" fxFlex="1000px" fxFlex.xs="100%" fxFlex.sm="100%">
@@ -18,13 +20,8 @@
       <div>
         <div class="ngo-rating">
           <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
-                       [editable]="false"></star-rating>
-
-          <div class="rating-values">
-            <div
-                class="rating-values-trustworthinesss">{{ngoDetailItem?.rating.trustworthiness.values}}</div>
-            <div class="rating-values-amount">( {{ngoDetailItem?.rating.amount.values}} )</div>
-          </div>
+                       [editable]="false"
+                       [amount]="ngoDetailItem?.rating.amount.values"></star-rating>
 
           <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
 
@@ -54,28 +51,25 @@
                 <mat-icon *ngIf="containerHasValues(ngoContentContainer)">{{ngoContentContainer.icon}}</mat-icon>
                 <div class="content-column" *ngIf="containerHasValues(ngoContentContainer)">
                   <div *ngFor="let ngoTitle of ngoContentContainer.values | keyvalue">
-                    <div class="title-row" *ngIf="titleRowHasValues($any(ngoTitle.value).values)">
-                      <span class="title">{{$any(ngoTitle.value).displayName}}</span>
-                      <span class="content"
-                            *ngIf="ngoTitle.value.displayName !== 'Representative'
-                            && ngoTitle.value.displayName !== 'Address'
-                            && ngoTitle.value.displayName !== 'President'">{{$any(ngoTitle.value).values}}</span>
-                      <span class="content" *ngIf="ngoTitle.value.displayName === 'Representative' && ngoTitle.value.values">
-                        {{utils.getRepresentativeValue(ngoTitle.value.values)}}
-                      </span>
-                      <span class="content" *ngIf="ngoTitle.value.displayName === 'Address'">
-                        {{utils.getAddressValue(ngoTitle.value.values)}}
-                      </span>
-                      <span class="content" *ngIf="ngoTitle.value.displayName === 'President'">
-                        {{utils.getPresidentValue(ngoTitle.value.values)}}
-                      </span>
+                    <div *ngIf="media?.isDesktop()">
+                      <ng-container [ngTemplateOutlet]="fullRow"
+                        [ngTemplateOutletContext]="{ngoTitle: ngoTitle}">
+                      </ng-container>
+                    </div>
+                    <div *ngIf="media?.isMobile()">
+                      <ng-container [ngTemplateOutlet]="slimRow"
+                        [ngTemplateOutletContext]="{ngoTitle: ngoTitle}">
+                      </ng-container>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <ngo-rating *ngIf="ngoDetailItem && !editMode" [ngoId]="ngoDetailItem.id" [ngoName]="ngoDetailItem.name"></ngo-rating>
+            <ngo-rating *ngIf="ngoDetailItem && !editMode"
+                        [ngoId]="ngoDetailItem.id"
+                        [ngoName]="ngoDetailItem.name"
+                        [amount]="ngoDetailItem.rating.amount.values"></ngo-rating>
 
             <form class="edit-form" [formGroup]="ngoForm" *ngIf="editMode" fxLayoutGap="50px grid" fxLayout="row wrap">
               <div class="edit-container" *ngFor="let formField of ngoForm.value | keyvalue; trackBy:trackByFn" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
@@ -119,3 +113,43 @@
   </mat-card>
 </div>
 
+<ng-template #fullRow let-ngoTitle="ngoTitle">
+  <div class="title-row" *ngIf="titleRowHasValues($any(ngoTitle.value).values)">
+    <span class="title">{{$any(ngoTitle.value).displayName}}</span>
+    <span class="content"
+          *ngIf="ngoTitle.value.displayName !== 'Representative'
+          && ngoTitle.value.displayName !== 'Address'
+          && ngoTitle.value.displayName !== 'President'">{{$any(ngoTitle.value).values}}</span>
+    <span class="content" *ngIf="ngoTitle.value.displayName === 'Representative' && ngoTitle.value.values">
+      {{utils.getRepresentativeValue(ngoTitle.value.values)}}
+    </span>
+    <span class="content" *ngIf="ngoTitle.value.displayName === 'Address'">
+      {{utils.getAddressValue(ngoTitle.value.values)}}
+    </span>
+    <span class="content" *ngIf="ngoTitle.value.displayName === 'President'">
+      {{utils.getPresidentValue(ngoTitle.value.values)}}
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #slimRow let-ngoTitle="ngoTitle">
+  <div class="title-row" *ngIf="titleRowHasValues($any(ngoTitle.value).values)">
+    <span class="title" style="width:0; min-width:0"></span>
+    <span class="content" style="width:100%"
+          *ngIf="ngoTitle.value.displayName !== 'Representative'
+          && ngoTitle.value.displayName !== 'Address'
+          && ngoTitle.value.displayName !== 'President'">{{$any(ngoTitle.value).values}}</span>
+    <span class="content" style="width:100%"
+          *ngIf="ngoTitle.value.displayName === 'Representative' && ngoTitle.value.values">
+      {{utils.getRepresentativeValue(ngoTitle.value.values)}}
+    </span>
+    <span class="content" style="width:100%"
+          *ngIf="ngoTitle.value.displayName === 'Address'">
+      {{utils.getAddressValue(ngoTitle.value.values)}}
+    </span>
+    <span class="content" style="width:100%"
+          *ngIf="ngoTitle.value.displayName === 'President'">
+      {{utils.getPresidentValue(ngoTitle.value.values)}}
+    </span>
+  </div>
+</ng-template>

@@ -11,9 +11,7 @@ from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMe
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 from findyourngo.restapi.utils.email_util import send_email
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-
-
-SELF_REPORTED_DATA_SOURCE = 'self-reported and confirmed'
+from findyourngo.trustworthiness_calculator.trustworthiness_constants import SELF_REPORTED_DATA_SOURCE
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -45,7 +43,6 @@ def ngo_detail(request):
         try:
             update_ngo_instance(ngo, ngo_data)
             ngo_serializer = NgoSerializer(ngo)
-            TWUpdater.update_single_ngo(ngo)
             return JsonResponse(ngo_serializer.data, status=status.HTTP_201_CREATED)
         except Exception:
             return JsonResponse({'error': 'Ngo could not be updated.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -53,6 +50,9 @@ def ngo_detail(request):
     elif request.method == 'DELETE':
         ngo.delete()
         return JsonResponse({'message': 'Ngo was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        TWUpdater.update_single_ngo(ngo)
 
 
 @api_view(['GET'])

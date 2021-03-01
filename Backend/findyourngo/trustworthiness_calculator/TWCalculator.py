@@ -1,10 +1,10 @@
-import decimal
 from typing import Iterable
 from django.db.models import Sum
 
 from findyourngo.restapi.models import NgoTWScore, NgoDataSource, NgoMetaData, NgoAccreditation, NgoReview, NgoAccount
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import RAW_SCORE_MIN_VALUE, RAW_SCORE_MAX_VALUE, \
-    TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS
+    TW_MIN_VALUE, TW_MAX_VALUE, VALID_ACCREDITATIONS, SELF_REPORTED_DATA_SOURCE
+from findyourngo.trustworthiness_calculator.utils import round_value
 from findyourngo.type_variables import TWScore
 
 
@@ -97,7 +97,7 @@ class TWCalculator:
 
         score = raw_score_scaled * range_of_target_interval + TW_MIN_VALUE
 
-        return self._round(score)
+        return round_value(score)
 
     def _restrict_to_allowed_score_range_base(self, base_raw_score: float) -> TWScore:
         raw_score_scaled_around_zero = (base_raw_score - self._raw_score_min_value) / (self._raw_score_max_value - self._raw_score_min_value)
@@ -105,10 +105,10 @@ class TWCalculator:
 
         score = raw_score_scaled_around_zero * range_of_target_interval + TW_MIN_VALUE
 
-        return self._round(score)
+        return round_value(score)
 
     def _data_source_count(self) -> int:
-        return NgoDataSource.objects.count()
+        return NgoDataSource.objects.exclude(source=SELF_REPORTED_DATA_SOURCE).count()
 
     def _total_review_count(self) -> int:
         return NgoReview.objects.count()
@@ -118,12 +118,6 @@ class TWCalculator:
 
     def _review_rating_sum(self, ngo_id: int) -> int:
         return NgoReview.objects.filter(ngo=ngo_id).aggregate(sum=Sum('rating'))['sum'] or 0
-
-    # why is this function necessary when the python-native round() function exists?
-    # since Python 3, this function implements banker's rounding:
-    # round(0.5) == 0, round(1.5) == 2
-    def _round(self, value: float) -> float:
-        return float(decimal.Decimal(value).quantize(decimal.Decimal('.1'), rounding=decimal.ROUND_HALF_UP))
 
     def calculate_ngo_account_score(self, ngo_id) -> float:
         accounts = NgoAccount.objects.filter(ngo_id=ngo_id, user__is_active=True)

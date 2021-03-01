@@ -47,18 +47,6 @@ mat-card-subtitle {
   align-items: center;
   padding: 5px 0 0 0;
   min-height: 24px;
-
-  .rating-values {
-    display: flex;
-    flex-direction: row;
-    font-size: var(--font-size-small);
-    padding-left: 5px;
-
-    .rating-values-amount {
-      padding-left: 5px;
-      font-weight: 500;
-    }
-  }
 }
 
 .icon {

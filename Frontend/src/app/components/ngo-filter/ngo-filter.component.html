@@ -1,6 +1,6 @@
 <div class="filter-options">
   <mat-chip-list #chipList>
-    <button class="filter-select" (click)="openFilterSelection($event)" mat-icon-button>
+    <button class="filter-select" [matMenuTriggerFor]="filterSelectionDrawer" mat-icon-button>
       <mat-icon>tune</mat-icon>
     </button>
 
@@ -62,7 +62,7 @@
     </button>
   </mat-chip-list>
 
-  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount && totalAmountOfNgos.totalAmount !== totalAmountOfNgos.currentAmount"
+  <div *ngIf="totalAmountOfNgos.totalAmount && totalAmountOfNgos.currentAmount"
        class="currently-filtered-items">
       {{totalAmountOfNgos.currentAmount}} of {{totalAmountOfNgos.totalAmount}} NGOs displayed.
   </div>

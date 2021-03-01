@@ -2,9 +2,10 @@
   <mat-card-title>Your review for {{ngoName}}</mat-card-title>
   <mat-card-content>
     <div class="rating">
-      <star-rating #starRatingComponent [editable]="true" [value]="0"></star-rating>
+      <star-rating #starRatingComponent [editable]="true"
+                   [value]="0"
+                   [withoutAmount]="true"></star-rating>
     </div>
-
     <mat-form-field [style.width.%]="100" appearance="fill" style="width: 300px">
       <textarea matInput placeholder="Add your review ..."
                 [(ngModel)]="reviewText"></textarea>

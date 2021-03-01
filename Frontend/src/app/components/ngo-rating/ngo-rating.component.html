@@ -1,7 +1,9 @@
 <div class="rating-content">
   <div class="rating-header">
     <h4>Trustworthiness</h4>
-    <ngo-tw-rating [ngoId]="ngoId"></ngo-tw-rating>
+    <ngo-tw-rating
+            [ngoId]="ngoId"
+            [amount]="amount"></ngo-tw-rating>
   </div>
   <div class="rating-header" fxLayout="row wrap"
        fxLayoutAlign="space-between end">
@@ -9,7 +11,7 @@
       Reviews</h4>
     <button mat-button *ngIf="!ownUserReview"
             (click)="writeNewReview()"
-            fxFlex.xs="100%" fxFlex.sm="25%">Write a
+            fxFlex.xs="100%">Write a
       review
     </button>
   </div>

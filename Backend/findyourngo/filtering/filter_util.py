@@ -9,7 +9,7 @@ class FilterConfig:
             branches_to_include: List[str] = None,
             regions_to_include: List[str] = None,
             topics_to_include: List[str] = None,
-            use_ecosoc: bool = False,
+            use_accreditations: bool = False,
             use_credible_source: bool = False,
             hq_country_to_include: List[str] = None,
             hq_city_to_include: str = '',
@@ -29,7 +29,7 @@ class FilterConfig:
         self.branches_to_include = branches_to_include if branches_to_include is not None else []
         self.regions_to_include = regions_to_include if regions_to_include is not None else []
         self.topics_to_include = topics_to_include if topics_to_include is not None else []
-        self.use_ecosoc = use_ecosoc
+        self.use_accreditations = use_accreditations
         self.use_credible_source = use_credible_source
         self.hq_country_to_include = hq_country_to_include if hq_country_to_include is not None else []
         self.hq_city_to_include = hq_city_to_include if hq_city_to_include is not None else []

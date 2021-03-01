@@ -7,10 +7,10 @@
 </div>
 
 <div *ngIf="userLoggedIn">
-  <div>
-    <h1>My favourite NGOs</h1>
-    <span fxFlex></span>
-    <button mat-button (click)="openCalendar()" class="calendar-button">Upcoming Events</button>
+  <div class="action-bar">
+    <button mat-icon-button (click)="openCalendar()" class="calendar-button">
+      <mat-icon>event</mat-icon>
+    </button>
   </div>
 
   <div *ngIf="overviewItems.length === 0">
@@ -24,7 +24,6 @@
                          [editableRating]="false"
                          [userFavourite]="userFavourites.includes(overviewItem.id)"
                          (click)="showDetail(overviewItem)" class="pointer"></ngo-overview-item>
-
     </div>
   </div>
 </div>

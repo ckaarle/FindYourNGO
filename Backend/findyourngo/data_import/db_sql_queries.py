@@ -1,5 +1,7 @@
 delete_all_query = '''
     DELETE FROM restapi_ngo_topics;
+    DELETE FROM restapi_ngoeventcollaborator;
+    DELETE FROM restapi_ngoevent;
     DELETE FROM restapi_ngotopic;
     DELETE FROM restapi_ngo_branches;
     DELETE FROM restapi_ngo_accreditations;

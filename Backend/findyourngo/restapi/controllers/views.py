@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 
 from django.contrib.auth.base_user import BaseUserManager
@@ -21,7 +23,8 @@ from findyourngo.data_import.data_generator import generate_data
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-from findyourngo.restapi.models import Ngo, NgoAccount
+from findyourngo.restapi.models import Ngo, NgoAccount, NgoFavourites, NgoEvent, NgoReview, NgoTWDataPoint, \
+    NgoConnection, NgoPendingConnection
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -131,6 +134,14 @@ class RefreshView(APIView):
         return Response({'access_token': str(refresh_token.access_token)})
 
 
+def is_ngo_account_confirmed(user):
+    try:
+        account = NgoAccount.objects.get(user=user)
+        return account.ngo.confirmed
+    except NgoAccount.DoesNotExist:
+        return True
+
+
 def create_user(data, ngo_name, mode=None):
     # create user if user does not exist
     try:
@@ -161,8 +172,19 @@ def create_user(data, ngo_name, mode=None):
         user.email = data.get('email')
         user.save()
         if ngo_name:
+            user.is_active = False
+            user.save()
             ngo = Ngo.objects.get(name=ngo_name)
             NgoAccount.objects.create(user=user, ngo=ngo)
+
+
+    if mode == 'login' and not user.is_active:
+        error = {
+            'error': 'Your account has not been confirmed yet.',
+            'ngo_account_confirmed': is_ngo_account_confirmed(user)
+        }
+
+        return Response(error, status=401)
 
     if mode == 'login' and not check_password(data['password'], user.password):
         return Response({'error': 'User credentials incorrect'}, status=401)
@@ -191,3 +213,248 @@ class TestView(APIView):
         if request.user.id == to_check:
             return JsonResponse({'success': f'User {request.user.username} was verified!'})
         return JsonResponse({'error': f'User was {request.user.id} but the request was for {to_check}'})
+
+
+def demo_setup(request):
+    user = User.objects.get(username='testUser')
+
+    ngo_350 = Ngo.objects.get(name='350.ORG')
+    ngo_1001 = Ngo.objects.get(name='1001 FONTAINES')
+    ngo_anesvad = Ngo.objects.get(name='ANESVAD')
+    ngo_change = Ngo.objects.get(name='INITIATIVES OF CHANGE-INTERNATIONAL')
+
+    # favourites
+
+    faves = NgoFavourites.objects.create(
+        user=user,
+    )
+    faves.favourite_ngo.add(ngo_350)
+    faves.favourite_ngo.add(ngo_1001)
+    faves.favourite_ngo.add(ngo_anesvad)
+    faves.favourite_ngo.add(ngo_change)
+
+    # events
+
+    NgoEvent.objects.create(
+        name='Fund raiser',
+        start_date=datetime(2021, 3, 7),
+        end_date=datetime(2021, 3, 7),
+        organizer=ngo_350,
+        description='This is a fund raiser.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Summit',
+        start_date=datetime(2021, 3, 9),
+        end_date=datetime(2021, 3, 11),
+        organizer=ngo_350,
+        description='This is a summit.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Meeting with Pert',
+        start_date=datetime(2021, 3, 10),
+        end_date=datetime(2021, 3, 10),
+        organizer=ngo_change,
+        description='This is a meeting',
+        tags=''
+    )
+
+    # AMNESTY
+
+    amnesty = Ngo.objects.get(name='AMNESTY INTERNATIONAL')
+    user_1 = User.objects.get(pk=10)
+    user_2 = User.objects.get(pk=11)
+    user_3 = User.objects.get(pk=19)
+
+    NgoReview.objects.create(
+        ngo=amnesty,
+        reviewer=user_1,
+        create_date=datetime(2020, 11, 2),
+        last_edited=datetime(2020, 11, 2),
+        text='makes a difference',
+        rating=3
+    )
+
+    NgoReview.objects.create(
+        ngo=amnesty,
+        reviewer=user_2,
+        create_date=datetime(2020, 12, 21),
+        last_edited=datetime(2020, 12, 21),
+        text='treats interns badly',
+        rating=2
+    )
+
+    NgoReview.objects.create(
+        ngo=amnesty,
+        reviewer=user_3,
+        create_date=datetime(2021, 1, 2),
+        last_edited=datetime(2021, 2, 4),
+        text='I read a lot about scandals, but my experiences were okay.',
+        rating=2
+    )
+
+    point_1 = NgoTWDataPoint.objects.create(
+        daily_tw_score=1.8,
+        date=datetime(2020, 11, 1)
+    )
+
+    point_2 = NgoTWDataPoint.objects.create(
+        daily_tw_score=2.3,
+        date=datetime(2020, 11, 15)
+    )
+
+    point_3 = NgoTWDataPoint.objects.create(
+        daily_tw_score=2.8,
+        date=datetime(2020, 12, 15)
+    )
+
+    point_4 = NgoTWDataPoint.objects.create(
+        daily_tw_score=3.6,
+        date=datetime(2020, 12, 31)
+    )
+
+    point_5 = NgoTWDataPoint.objects.create(
+        daily_tw_score=2.1,
+        date=datetime(2021, 1, 10)
+    )
+
+    amnesty.tw_score.tw_series.add(point_1)
+    amnesty.tw_score.tw_series.add(point_2)
+    amnesty.tw_score.tw_series.add(point_3)
+    amnesty.tw_score.tw_series.add(point_4)
+    amnesty.tw_score.tw_series.add(point_5)
+
+    NgoEvent.objects.create(
+        name='Fund raiser',
+        start_date=datetime(2021, 3, 7),
+        end_date=datetime(2021, 3, 7),
+        organizer=amnesty,
+        description='This is a fund raiser.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Summit',
+        start_date=datetime(2021, 3, 9),
+        end_date=datetime(2021, 3, 11),
+        organizer=amnesty,
+        description='This is a summit.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Meeting with Pert',
+        start_date=datetime(2021, 3, 10),
+        end_date=datetime(2021, 3, 10),
+        organizer=amnesty,
+        description='This is a meeting',
+        tags=''
+    )
+
+    NgoConnection.objects.create(
+        reporter=amnesty,
+        connected_ngo=ngo_350,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+    NgoConnection.objects.create(
+        reporter=ngo_350,
+        connected_ngo=amnesty,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+    NgoConnection.objects.create(
+        reporter=amnesty,
+        connected_ngo=ngo_change,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+    NgoConnection.objects.create(
+        reporter=ngo_change,
+        connected_ngo=amnesty,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+
+    # Greenpeace
+
+    try:
+        Ngo.objects.get(name='GREENPEACE').delete()
+    except:
+        pass
+
+    greenpeace = Ngo.objects.get(name='GREENPEACE INTERNATIONAL')
+
+    greenpeace_user = User.objects.get(username='greenpeace')
+
+    NgoAccount.objects.create(
+        user=greenpeace_user,
+        ngo=greenpeace
+    )
+
+    NgoPendingConnection.objects.create(
+        reporter=ngo_350,
+        connected_ngo=greenpeace,
+        report_date=datetime(2020, 12, 12)
+    )
+
+    NgoConnection.objects.create(
+        reporter=greenpeace,
+        connected_ngo=ngo_change,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+    NgoConnection.objects.create(
+        reporter=ngo_change,
+        connected_ngo=greenpeace,
+        report_date=datetime(2021, 1, 1),
+        approval_date=datetime(2021, 1, 1)
+    )
+
+    # European Environmental Bureau
+
+    bureau = Ngo.objects.get(name='EUROPEAN ENVIRONMENTAL BUREAU')
+
+    bureau_user = User.objects.get(username='bureau')
+
+    NgoAccount.objects.create(
+        user=bureau_user,
+        ngo=bureau
+    )
+
+    NgoEvent.objects.create(
+        name='Fund raiser',
+        start_date=datetime(2021, 3, 7),
+        end_date=datetime(2021, 3, 7),
+        organizer=bureau,
+        description='This is a fund raiser.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Summit',
+        start_date=datetime(2021, 3, 9),
+        end_date=datetime(2021, 3, 11),
+        organizer=bureau,
+        description='This is a summit.',
+        tags=''
+    )
+
+    NgoEvent.objects.create(
+        name='Meeting with Pert',
+        start_date=datetime(2021, 3, 10),
+        end_date=datetime(2021, 3, 10),
+        organizer=bureau,
+        description='This is a meeting',
+        tags=''
+    )
+
+    return JsonResponse({'Result': 'Demo data was generated'})

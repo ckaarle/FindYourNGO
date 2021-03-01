@@ -23,12 +23,13 @@ export class LoginDialogComponent implements OnInit {
   isNgo: boolean;
   query: any;
   names: string[] = [];
-  $names: Observable<string[]>;
+  // @ts-ignore
+  $names: Observable<string[]> | undefined;
   ngoControl = new FormControl();
   status = '';
   userForm = new FormGroup({
     username: new FormControl(''),
-    email: new FormControl('', Validators.email),
+    email: new FormControl(''),
     password: new FormControl(''),
   });
 
@@ -63,7 +64,7 @@ export class LoginDialogComponent implements OnInit {
       this.userService.user.next(user);
     });
 
-    this.userService.$lastErrorMessage.subscribe(errorMessage => this.showUserLoginFeedback(errorMessage));
+    this.userService.$lastErrorMessage.subscribe(error => this.showUserLoginFeedback(error));
   }
 
   signInWithGoogle(): void {
@@ -110,12 +111,17 @@ export class LoginDialogComponent implements OnInit {
     }
   }
 
-  private showUserLoginFeedback(errorMessage: string): void {
-    if (errorMessage === '') {
+  private showUserLoginFeedback(error: any): void {
+    if (!error || error.error === '') {
       return;
     }
 
-    const userMessage = 'Error: ' + errorMessage;
+    let userMessage = 'Error: ' + error.error;
+
+    if (error.ngo_account_confirmed) {
+      userMessage += ' The representative of your NGO should have received an email with further instructions.';
+    }
+
     this.snackBar.open(userMessage, '', {
       duration: 3000,
       panelClass: ['login-snackbar']

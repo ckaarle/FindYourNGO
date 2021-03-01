@@ -25,7 +25,7 @@ export class UserService {
   // error messages received from the login attempt
   public errors: any = [];
 
-  public $lastErrorMessage = new BehaviorSubject<string>('');
+  public $lastErrorMessage = new BehaviorSubject<any>(null);
 
   constructor(private httpClient: HttpClient) {
     this.user = new BehaviorSubject<SocialUser>({} as SocialUser);
@@ -81,7 +81,7 @@ export class UserService {
       },
       err => {
         this.errors = err.error;
-        this.$lastErrorMessage.next(err.error.error);
+        this.$lastErrorMessage.next(err.error);
       }
     );
   }

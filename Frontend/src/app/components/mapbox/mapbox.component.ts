@@ -18,7 +18,7 @@ export class MapboxComponent {
   style = 'mapbox://styles/mapbox/dark-v10';
   lat = 48.137154;
   lng = 11.576124;
-  zoom = 1.0;
+  zoom = 2.0;
 
   color = '#fffff';
 
@@ -114,7 +114,7 @@ export class MapboxComponent {
                     id: -ngoCoordinate.id,
                     ngo_id: ngoCoordinate.id,
                     name: ngoCoordinate.name,
-                    twValue: ngoCoordinate.trustworthiness
+                    twValue: +ngoCoordinate.trustworthiness.toFixed(2)
                 },
                 geometry: {
                     type: 'Point',
@@ -277,13 +277,13 @@ export class MapboxComponent {
       let twSum = 0;
 
       pointsInCluster.forEach((feature: any) => twSum += feature.properties.twValue);
-      const avgTw = twSum / pointsInCluster.length;
+      const avgTw = +(twSum / pointsInCluster.length).toFixed(2);
 
       const highestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? current : prev).properties;
       const lowestNGO = pointsInCluster.reduce((prev, current) => (prev.twValue > current.twValue) ? prev : current).properties;
 
-      const highestTW = {name: highestNGO.name, twValue: highestNGO.twValue};
-      const lowestTW = {name: lowestNGO.name, twValue: lowestNGO.twValue};
+      const highestTW = {name: highestNGO.name, twValue: +highestNGO.twValue.toFixed(2)};
+      const lowestTW = {name: lowestNGO.name, twValue: +lowestNGO.twValue.toFixed(2)};
 
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;

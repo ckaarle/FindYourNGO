@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgoFilterOptions, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
 import {FilteredNgosCount} from '../../screens/overview-screen/overview-screen.component';
+import {MatMenu} from '@angular/material/menu';
 
 @Component({
   selector: 'ngo-filter',
@@ -14,6 +15,7 @@ export class NgoFilterComponent {
   @Input() sortingOptions: string[] = [];
   @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
   @Input() totalAmountOfNgos: FilteredNgosCount = {} as FilteredNgosCount;
+  @Input() filterSelectionDrawer: MatMenu;
   @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
   filterUpdated: boolean = false;
 

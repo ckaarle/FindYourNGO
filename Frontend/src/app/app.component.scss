@@ -1,5 +1,6 @@
-mat-sidenav-container, mat-sidenav-content, mat-sidenav {
+.mat-sidenav-container {
   height: 100%;
+  background-color: var(--background-contrast-color-05);
 }
 
 .sidenav {
@@ -24,8 +25,14 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
 }
 
 .navbar {
-  height: 80px;
+  height: 50px;
   border: unset;
+  background-color: white;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
+
+  &.mat-toolbar-multiple-rows {
+    min-height: 0;
+  }
 
   .navbar-label {
     overflow: hidden;
@@ -38,54 +45,53 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
   .navbar-row {
     display: flex;
     flex-direction: row;
-    height: 100%;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+    justify-content: space-between;
+    height: 50px;
 
-    &.mobile {
-      justify-content: flex-start;
+    .mobile-navbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: fit-content;
 
-      .mobile-navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
+      .navbar-label {
+        color: var(--primary-color);
+        font-size: var(--font-size-normal);
+      }
+
+      button {
+        background-color: transparent;
+        box-shadow: none;
       }
     }
 
-    &.desktop {
-      justify-content: center;
-
-      .desktop-navbar {
-        display: flex;
-        border: unset;
-        justify-content: space-around;
-        overflow: hidden;
-        height: 64px;
-      }
+    .logo {
+      height: 44px;
+      cursor: pointer;
     }
 
     .user-options {
       display: flex;
-      position: absolute;
-      right: 32px;
+      padding-left: 24px;
 
       .user-options-button {
-        height: 40px;
-        width: 40px;
+        height: 24px;
+        width: 24px;
         cursor: pointer;
+        align-self: center;
 
         img {
-          width: 40px;
+          height: 40px;
           border-radius: 50%;
           box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
         }
 
         .logged-in, .logged-out {
           color: whitesmoke;
-          width: 40px;
-          height: 40px;
-          line-height: 40px;
-          font-size: 40px;
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
+          font-size: 24px;
           border-radius: 50%;
           box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
         }
@@ -95,25 +101,42 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
         }
 
         .logged-out {
-          background-color: lightgrey;
+          background-color: var(--primary-contrast-bw);
         }
       }
     }
 
     .mat-tab-nav-bar {
-      width: 40%;
       border-bottom: none;
     }
 
+    ::ng-deep .mat-tab-links {
+      justify-content: flex-end !important;
+    }
+
+    .mat-tab-link {
+      align-self: center;
+      height: var(--line-height-big);
+      min-width: 0;
+      font-size: var(--font-size-normal);
+      border-right: solid var(--background-contrast-color-10) 1px;
+
+      &.active {
+        span {
+          color: var(--primary-color);
+        }
+      }
+    }
+
+    ::ng-deep .mat-ink-bar {
+      display: none;
+    }
   }
 }
 
-.mat-tab-link {
-  align-self: center;
-}
-
 main {
-  padding: 16px 32px;
+  padding: 32px 32px;
+  height: calc(100% - 50px - 2 * 32px);
 }
 
 .search {

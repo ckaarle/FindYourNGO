@@ -21,12 +21,8 @@
         <star-rating
             [value]="ngoOverviewItem.trustworthiness - 1"
             [editable]="editableRating"
-            matTooltip="For more information on the trustworthiness score please refer to the About page."
-        ></star-rating>
-        <div class="rating-values">
-          <div class="rating-values-trustworthinesss">{{ngoOverviewItem.trustworthiness}}</div>
-          <div class="rating-values-amount">( {{ngoOverviewItem.amount}} )</div>
-        </div>
+            [amount]="ngoOverviewItem.amount"
+            matTooltip="For more information on the trustworthiness score please refer to the About page."></star-rating>
       </div>
     </mat-card-content>
   </mat-card>

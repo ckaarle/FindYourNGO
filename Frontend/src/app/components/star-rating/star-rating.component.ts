@@ -14,6 +14,8 @@ export class StarRatingComponent implements OnInit {
 
   @Input() value: number = 0;
   @Input() editable: boolean = false;
+  @Input() amount: number = 0;
+  @Input() withoutAmount: boolean = false;
 
   constructor(private valueFormatter: ValueTransformerPipe, private cd: ChangeDetectorRef) {
   }
