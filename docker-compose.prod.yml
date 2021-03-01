@@ -44,5 +44,3 @@ services:
 volumes:
   findyourngoprodvolume:
     external: True
-  static_volume:
-  media_volume:

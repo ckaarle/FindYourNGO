@@ -2,6 +2,7 @@
 
 ## Quick Start
 - check setup guide to get up the database
+- add Frontend/src/environments/environment.ts file with your access token for mapbox as shown below
 - run `ng build --prod --output-path ../Backend/nginx/dist` in the frontend folder to prepare the production frontend for nginx
 - (if you don't have angular externally, run `ng build --prod --output-path dist` in node service in the regular docker-compose file and move the folder to ../Backend/nginx/dist)
 - run `docker-compose -f docker-compose.prod.yml up --build --scale worker=4` to start the system in production mode
@@ -14,6 +15,16 @@ Refer to https://docs.docker.com/compose/django/ for a quick overview of how the
 RestAPI guide: https://www.django-rest-framework.org/tutorial/quickstart/
 
 django-admin can be used inside the cli with docker-compose exec web /bin/bash
+
+
+## Frontend/src/environments/environment.ts
+export const environment = {
+  production: false,
+
+  mapbox: {
+    accessToken: 'ADD YOUR SECRET TOKEN HERE'
+  }
+};
 
 
 ## Setup Guide

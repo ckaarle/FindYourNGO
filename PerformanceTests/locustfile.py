@@ -10,6 +10,5 @@ class NgoUser(FastHttpUser):
     def hello_world(self):
         self.client.get("/ngoOverviewItems")
 
-    def on_start(self):
-        pass
-        #self.client.post("/login", json={"username":"a", "password":"a"})
+    # def on_start(self):
+        # self.client.post("/login", json={"username":"a", "password":"a"})
