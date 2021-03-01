@@ -10,7 +10,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - postgres_data:/var/lib/potgresql/data
+      - findyourngoprodvolume:/var/lib/potgresql/data
   web:
     build: ./Backend
     command: bash -c "python manage.py process_tasks &
@@ -21,18 +21,11 @@ services:
       - 8000
     depends_on:
       - db
-  node:
-    build:
-      context: ./Frontend
-      dockerfile: Dockerfile.prod
-    environment:
-      - NODE_ENV=production
-    ports:
-      - 80:4200
   nginx:
     build: ./Backend/nginx
     ports:
-      - 8000:80
+      - 80:80
+      - 8000:8000
     depends_on:
       - web
   master:
@@ -49,6 +42,7 @@ services:
     command: -f /mnt/locust/locustfile.py --worker --master-host master
 
 volumes:
-  postgres_data:
+  findyourngoprodvolume:
+    external: True
   static_volume:
   media_volume:

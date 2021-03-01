@@ -2,8 +2,10 @@
 
 ## Quick Start
 - check setup guide to get up the database
-- run `docker-compose -f docker-compose.prod.yml up --scale worker=4` to start the system in production mode
-- run docker-compose up (-d) in the root folder
+- run `ng build --prod --output-path ../Backend/nginx/dist` in the frontend folder to prepare the production frontend for nginx
+- (if you don't have angular externally, run `ng build --prod --output-path dist` in node service in the regular docker-compose file and move the folder to ../Backend/nginx/dist)
+- run `docker-compose -f docker-compose.prod.yml up --build --scale worker=4` to start the system in production mode
+- run docker-compose up (-d) in the root folder for development
 - localhost:8000 should be usable immediately (this is where the API lives)
 - localhost (:80) will take a while to run
 
