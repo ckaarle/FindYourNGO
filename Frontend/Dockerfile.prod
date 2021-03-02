@@ -1,6 +1,0 @@
-FROM node:14
-RUN npm install -g @angular/cli
-WORKDIR /home/node/app/src
-COPY . /home/node/app/src
-RUN npm install
-ENTRYPOINT ng serve --host 0.0.0.0

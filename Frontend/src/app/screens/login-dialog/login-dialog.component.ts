@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { ApiService } from '../../services/api.service';
 import { Names } from '../../models/ngo';
@@ -17,7 +17,7 @@ import {LoginService} from '../../services/login.service';
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss']
 })
-export class LoginDialogComponent implements OnInit {
+export class LoginDialogComponent implements OnInit, OnDestroy {
 
   user?: SocialUser;
   isNgo: boolean;
@@ -54,7 +54,7 @@ export class LoginDialogComponent implements OnInit {
 
     this.userService.userid.subscribe((id: number) => {
      if (id !== -1) {  // The dialog is automatically closed if a user is signed in
-        this.dialogRef.close(this.user?.photoUrl);  // and it returns the photo url if there is one
+        this.dialogRef.close();
       }
     });
   }
@@ -77,6 +77,7 @@ export class LoginDialogComponent implements OnInit {
 
   signOut(): void {
     this.loginService.signOut(this.user);
+    this.user = undefined;
   }
 
   submit(): void {
@@ -87,6 +88,7 @@ export class LoginDialogComponent implements OnInit {
     if (this.status === 'login') {
       this.userService.login(this.userForm.value);
     }
+    this.signOut();
   }
 
   checkNgo($event: MatCheckboxChange): void {
@@ -130,7 +132,11 @@ export class LoginDialogComponent implements OnInit {
 
   registerNewNgo($event: MouseEvent): void {
     $event.stopPropagation();
-    this.dialogRef.close(this.user?.photoUrl);
+    this.dialogRef.close();
     this.router.navigate(['registerNgo']);
+  }
+
+  ngOnDestroy(): void {
+    this.signOut();
   }
 }
