@@ -225,9 +225,13 @@ def demo_setup(request):
 
     # favourites
 
-    faves = NgoFavourites.objects.create(
-        user=user,
-    )
+    try:
+        faves = NgoFavourites.objects.create(
+            user=user,
+        )
+    except Exception:
+        faves = NgoFavourites.objects.get(user=user)
+
     faves.favourite_ngo.add(ngo_350)
     faves.favourite_ngo.add(ngo_1001)
     faves.favourite_ngo.add(ngo_anesvad)
