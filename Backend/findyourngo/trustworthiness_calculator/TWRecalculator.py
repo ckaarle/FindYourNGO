@@ -4,6 +4,7 @@ from findyourngo.restapi.models import Ngo
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_MAX_VALUE, PAGERANK_SCORE_MAX_VALUE, \
     PAGERANK_SCORE_MIN_VALUE
+from findyourngo.trustworthiness_calculator.utils import round_value
 
 
 class TWRecalculator(TWCalculator):
@@ -40,4 +41,4 @@ class TWRecalculator(TWCalculator):
 
         score = raw_score_scaled_around_zero * range_of_target_interval + PAGERANK_SCORE_MIN_VALUE
 
-        return self._round(score)
+        return round_value(score)
