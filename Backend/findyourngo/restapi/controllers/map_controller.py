@@ -1,3 +1,5 @@
+import random
+
 import requests
 
 from django.http.response import JsonResponse
@@ -11,7 +13,9 @@ from findyourngo.restapi.map_utils import get_links_between_ngos
 
 @api_view(['GET'])
 def get_plots(request) -> JsonResponse:
-    plot_serializer = NgoPlotSerializer(Ngo.objects.filter(confirmed=True), many=True)
+    plot_serializer = NgoPlotSerializer(Ngo.objects.filter(
+        confirmed=True, contact__address__country__isnull=False
+    ).select_related('contact__address'), many=True)
     result = [plot for plot in plot_serializer.data if plot['coordinates'][0] != '""' and plot['coordinates'][1] != '""']
     return JsonResponse(result, safe=False)
 
@@ -35,6 +39,7 @@ def update_geo_locations(request) -> JsonResponse:
     # If you want to refresh all addresses, use the following method
     # for address in NgoAddress.objects.all():
     #     geo_locate_single_address(address)
+    assign_probable_locations()
     return JsonResponse({'success': 'NGOs relocated successfully'})
 
 
@@ -82,3 +87,27 @@ def geo_locate_single_address(address: NgoAddress):
         address.latitude = location['lat']
         address.longitude = location['lng']
         address.save()
+
+
+def assign_probable_locations():
+    coordinates = {}
+    with open('findyourngo/data_import/coordinates.csv', 'r') as f:
+        for line in f:
+            props = line.upper().split(',')
+            coordinates[props[3].strip()] = (props[1], props[2])
+
+    ngos = Ngo.objects.filter(confirmed=True, contact__address__country__isnull=False, contact__address__latitude=''
+                              ).select_related('contact__address')
+
+    for ngo in ngos:
+        lat = ngo.address.latitude
+        long = ngo.address.longitude
+        if lat and long and lat != '""' and long != '""':
+            return lat, long
+
+        lat = float(coordinates[ngo.address.country.name][0]) + random.uniform(-2.0, 2.0)
+        long = float(coordinates[ngo.address.country.name][1]) + random.uniform(-2.0, 2.0)
+        # save lat and long after assigning it randomly
+        ngo.address.latitude = lat
+        ngo.address.longitude = long
+        ngo.address.save()

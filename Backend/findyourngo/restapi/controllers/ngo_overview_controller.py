@@ -2,7 +2,7 @@ from typing import Any
 
 from django.http.response import JsonResponse
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 
 from findyourngo.restapi.models import Ngo
 from findyourngo.restapi.paginators.NgoOverviewItemListPaginator import NgoOverviewItemListPaginator
@@ -10,6 +10,9 @@ from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewI
 
 
 class NgoOverviewItemList(GenericAPIView):
+
+    def get_authenticators(self):
+        return []
 
     def get(self, request: Any) -> JsonResponse:
         paginator = NgoOverviewItemListPaginator()
@@ -24,6 +27,7 @@ class NgoOverviewItemList(GenericAPIView):
 
 
 @api_view(['GET'])
+@authentication_classes([])
 def ngo_overview_items_amount(request: Any):
     ngo_count = Ngo.objects.filter(confirmed=True).count()
     return JsonResponse({'count': ngo_count})

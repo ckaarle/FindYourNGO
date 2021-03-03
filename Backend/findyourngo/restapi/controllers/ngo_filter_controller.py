@@ -3,7 +3,7 @@ from typing import Any
 from django.db.models import QuerySet
 from django.http.response import JsonResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 from urllib.parse import unquote_plus
 import json
 
@@ -14,7 +14,9 @@ from findyourngo.restapi.serializers.ngo_overview_serializer import NgoOverviewI
 
 MAX_PAGE_SIZE = 20
 
+
 @api_view(['GET'])
+@authentication_classes([])
 def ngo_filter_options(request: Any) -> JsonResponse:
     return JsonResponse(filter_object())
 

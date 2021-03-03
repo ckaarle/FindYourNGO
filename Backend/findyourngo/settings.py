@@ -137,7 +137,8 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost'
+    'http://localhost',
+    'http://localhost:4200',
 ]
 
 SIMPLE_JWT = {
