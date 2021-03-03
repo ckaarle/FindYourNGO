@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {NgoFilterOptions, NgoFilterSelection, NgoSortingSelection} from 'src/app/models/ngo';
 import { FilterService } from 'src/app/services/filter.service';
+import {MatMenu} from '@angular/material/menu';
 
 @Component({
   selector: 'ngo-filter-selection',

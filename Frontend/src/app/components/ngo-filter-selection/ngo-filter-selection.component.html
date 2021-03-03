@@ -1,10 +1,10 @@
-<div class="filter-option-container" (keydown.enter)="applyFilter()" tabindex="0" (click) = "$event.stopPropagation()">
+<div class="filter-option-container" (keydown.enter)="applyFilter()" tabindex="0">
     <h1>Filters</h1>
     <button mat-icon-button class="filter-apply" (click)="applyFilter()">
         <mat-icon>filter_list</mat-icon>
     </button>
 
-    <div class="sorting-option-item" *ngIf="sortingOptions">
+    <div class="sorting-option-item" *ngIf="sortingOptions" (click)="$event.stopPropagation()">
         <div class="sorting-label">Sort NGOs by ...</div>
         <mat-icon *ngIf="sortingSelection.orderToSort === 'asc'" (click)="changeSorting(sortingSelection.keyToSort, 'desc')">arrow_circle_down</mat-icon>
         <mat-icon *ngIf="sortingSelection.orderToSort === 'desc'" (click)="changeSorting(sortingSelection.keyToSort, 'asc')">arrow_circle_up</mat-icon>
@@ -17,7 +17,7 @@
     </div>
     <mat-divider></mat-divider>
 
-    <div *ngIf="filterOptions">
+    <div *ngIf="filterOptions" (click)="$event.stopPropagation()">
         <h2>Ngo-Details</h2>
         <div class="filter-option-category">
             <div class="filter-option-item" *ngFor="let ngoDetailOption of ngoDetails">

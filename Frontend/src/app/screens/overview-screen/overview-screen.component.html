@@ -8,9 +8,6 @@
                             [sortingSelection]="selectedSorting">
       </ngo-filter-selection>
     </mat-menu>
-    <!--mat-menu #filterSelectionDrawer  mode="over" >
-
-    </mat-menu-->
 
     <div class="filter-bar">
       <ngo-filter *ngIf="filterOptions || sortingOptions"
@@ -23,8 +20,7 @@
     </div>
 
     <div class="overview-grid" fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="75%"
-         *ngFor="let overviewItem of overviewItems"
-         (click)="filterSelectionDrawer.close()">
+         *ngFor="let overviewItem of overviewItems">
       <ngo-overview-item [ngoOverviewItem]="overviewItem"
                          [editableRating]="false"
                          [userFavourite]="userFavourites.includes(overviewItem.id)"

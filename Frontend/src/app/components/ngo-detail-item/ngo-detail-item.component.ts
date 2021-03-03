@@ -38,7 +38,7 @@ export class NgoDetailItemComponent {
 
   filter: boolean = false;
   filterSelection: NgoFilterSelection = {};
-  totalAmount: FilteredNgosCount = {};
+  totalAmount: FilteredNgosCount = {} as FilteredNgosCount;
 
   // @ts-ignore
   sortingSelection: NgoSortingSelection = {};

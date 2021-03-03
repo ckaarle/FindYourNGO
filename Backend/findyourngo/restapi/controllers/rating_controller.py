@@ -236,5 +236,5 @@ def tw_history(request) -> JsonResponse:
         tw_data_points = ngo.tw_score.tw_series.all()
         complete_tw_data_points = generate_missing_data_points(tw_data_points) if len(tw_data_points) > 0 else tw_data_points
         return JsonResponse(convert_data_points(complete_tw_data_points), safe=False)
-    except BaseException:
-        return JsonResponse({'error': f'No data points for ngo {ngo_id}'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+    except:
+        return JsonResponse([], safe=False)
