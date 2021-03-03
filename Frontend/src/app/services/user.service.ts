@@ -69,14 +69,16 @@ export class UserService {
   private userPost(user: object, endpoint: string, query?: any): void {
     this.httpClient.post(endpoint, user, {params: query}).subscribe(
         (data: any) => {
-        localStorage.setItem('refresh-token', data.refresh_token);
-        this.updateData(data.access_token);
-        localStorage.setItem('token', data.access_token);
-        this.username.next(data.username);
-        localStorage.setItem('username', this.username.value);
-        this.ngoid.next(data.ngo_id);
-        if (this.ngoid.value !== -1) {
-          localStorage.setItem('ngoid', String(this.ngoid.value));
+        if (data.access_token) {
+          localStorage.setItem('refresh-token', data.refresh_token);
+          this.updateData(data.access_token);
+          localStorage.setItem('token', data.access_token);
+          this.username.next(data.username);
+          localStorage.setItem('username', this.username.value);
+          this.ngoid.next(data.ngo_id);
+          if (this.ngoid.value !== -1) {
+            localStorage.setItem('ngoid', String(this.ngoid.value));
+          }
         }
       },
       err => {
