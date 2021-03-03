@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../services/api.service';
 import {Utils} from '../../services/utils';
 import {BehaviorSubject} from 'rxjs';
-import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
 import {FavouriteService} from '../../services/favourite.service';
 import {UserService} from '../../services/user.service';
 import {Location} from '@angular/common';
@@ -36,16 +36,16 @@ export class NgoDetailItemComponent {
 
   previousPageNumber: null | number = null;
 
-  filter: boolean = false;
+  filter = false;
   filterSelection: NgoFilterSelection = {};
-  totalAmount: FilteredNgosCount = {};
+  totalAmount: FilteredNgosCount = {currentAmount: 0, totalAmount: 0};
 
   // @ts-ignore
   sortingSelection: NgoSortingSelection = {};
 
-  userFavourite: boolean = true;
+  userFavourite = true;
 
-  pageBeforePaginated: boolean = true;
+  pageBeforePaginated = true;
 
   constructor(
       private route: ActivatedRoute,
@@ -57,7 +57,9 @@ export class NgoDetailItemComponent {
       public media: MediaService) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
-    this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
+    if (this.userService.ngoid.value !== -1) {
+      this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
+    }
     // @ts-ignore
     this.refreshNgoDetailItem(id);
 
