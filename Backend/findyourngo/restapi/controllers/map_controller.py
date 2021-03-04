@@ -105,9 +105,9 @@ def assign_probable_locations():
         if lat and long and lat != '""' and long != '""':
             return lat, long
 
-        lat = float(coordinates[ngo.address.country.name][0]) + random.uniform(-2.0, 2.0)
-        long = float(coordinates[ngo.address.country.name][1]) + random.uniform(-2.0, 2.0)
+        lat = float(coordinates[ngo.contact.address.country.name][0]) + random.uniform(-2.0, 2.0)
+        long = float(coordinates[ngo.contact.address.country.name][1]) + random.uniform(-2.0, 2.0)
         # save lat and long after assigning it randomly
-        ngo.address.latitude = lat
-        ngo.address.longitude = long
-        ngo.address.save()
+        ngo.contact.address.latitude = lat
+        ngo.contact.address.longitude = long
+        ngo.contact.address.save()
