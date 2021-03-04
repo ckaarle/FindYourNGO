@@ -20,7 +20,7 @@ export class MapboxComponent {
   lng = 11.576124;
   zoom = 2.0;
 
-  color = '#fffff';
+  color = '#ffffff';
 
   ngos: {[id: number]: NgoCoordinates} = {};
 
@@ -167,7 +167,7 @@ export class MapboxComponent {
         type: 'line',
         paint: {
             'line-width': 1,
-            'line-color': this.color,
+            'line-color': '#c62828',
         }
       });
 
