@@ -31,7 +31,7 @@ export class ApiService {
   }
 
   private authHeader(): HttpHeaders {
-    if (this.userService.token) {
+    if (this.userService.token && this.userService.userid.value > -1) {
       return new HttpHeaders({Authorization: 'Bearer ' + this.userService.token});
     }
     return new HttpHeaders({});

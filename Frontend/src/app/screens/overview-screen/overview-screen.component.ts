@@ -62,7 +62,7 @@ export class OverviewScreenComponent extends PaginationComponent implements OnIn
     this.subscribeSelectedFilterChanges();
 
     this.userService.userid.subscribe(newValue => {
-      if (newValue === -1) {
+      if (!newValue || newValue === -1) {
         this.userFavourites = [];
       } else {
         this.loadFavouriteNgos();

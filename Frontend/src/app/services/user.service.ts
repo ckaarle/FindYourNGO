@@ -40,7 +40,7 @@ export class UserService {
         this.refreshToken();
       }
       interval(120000).subscribe(x => this.refreshToken());
-      this.userid.next(Number(localStorage.getItem('userid')));
+      this.userid.next(Number(localStorage.getItem('userid')) ?? -1);
       this.username.next(localStorage.getItem('username') as string);
       const ngoid = Number(localStorage.getItem('ngoid'));
       if (ngoid) {
@@ -126,7 +126,7 @@ export class UserService {
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
     this.tokenExpires = new Date(tokenDecoded.exp * 1000);
     localStorage.setItem('token-expiration', String(this.tokenExpires));
-    this.userid.next(tokenDecoded.user_id);
+    this.userid.next(tokenDecoded.user_id  ?? -1);
     localStorage.setItem('userid', tokenDecoded.user_id);
   }
 }
