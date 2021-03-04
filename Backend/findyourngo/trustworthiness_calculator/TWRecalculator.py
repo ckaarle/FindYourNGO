@@ -29,7 +29,8 @@ class TWRecalculator(TWCalculator):
         score_unscaled = pagerank[ngo.name] * pagerank_raw_factor
         score_scaled = self._scale_pagerank_score(score_unscaled, pagerank_raw_factor)
 
-        score_factored = score_scaled / (TW_MAX_VALUE / (TW_MAX_VALUE - ngo.tw_score.total_tw_score))
+        scale_factor = (TW_MAX_VALUE / (TW_MAX_VALUE - ngo.tw_score.total_tw_score)) if ngo.tw_score.total_tw_score != TW_MAX_VALUE else TW_MAX_VALUE
+        score_factored = score_scaled / scale_factor
 
         return score_factored
 
