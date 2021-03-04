@@ -100,8 +100,8 @@ def assign_probable_locations():
                               ).select_related('contact__address')
 
     for ngo in ngos:
-        lat = ngo.address.latitude
-        long = ngo.address.longitude
+        lat = ngo.contact.address.latitude
+        long = ngo.contact.address.longitude
         if lat and long and lat != '""' and long != '""':
             return lat, long
 
