@@ -122,12 +122,6 @@ html, body {
   min-width: 250px;
 }
 
-span, p {
-  &:not(.mat-raised-button.mat-accent) {
-    color: var(--primary-contrast-bw);
-  }
-}
-
 .mat-raised-button,
 .mat-button,
 .mat-icon-button {

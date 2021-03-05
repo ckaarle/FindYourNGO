@@ -30,16 +30,15 @@
 }
 
 .connections-wrapper {
+  &:not(:first-child) {
+    padding-top: 32px;
+  }
+
   .title {
     display: flex;
     align-items: center;
     font-weight: 400;
     font-size: var(--font-size-medium);
-    padding-top: 32px;
-
-    &:first-child {
-      padding-top: 0;
-    }
 
     .mat-icon {
       color: var(--primary-color);

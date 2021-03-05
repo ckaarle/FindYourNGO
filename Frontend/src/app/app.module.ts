@@ -6,7 +6,6 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
 import {SharedModule} from './shared.module';
-import {MatMenuModule} from "@angular/material/menu";
 
 
 @NgModule({

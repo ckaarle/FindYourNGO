@@ -15,8 +15,7 @@ export class NgoFilterComponent {
   @Input() sortingOptions: string[] = [];
   @Input() sortingSelection: NgoSortingSelection = {} as NgoSortingSelection;
   @Input() totalAmountOfNgos: FilteredNgosCount = {} as FilteredNgosCount;
-  @Input() filterSelectionDrawer: MatMenu;
-  @Output() openFilterSelectionDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() filterSelectionDrawer: MatMenu = {} as MatMenu;
   filterUpdated: boolean = false;
 
   constructor(private filter: FilterService) {
@@ -42,15 +41,6 @@ export class NgoFilterComponent {
   removeValue(keyOption: any): void {
     delete this.filterSelection[keyOption];
     this.applyFilter();
-  }
-
-  openFilterSelection(event: MouseEvent): void {
-    if (event.buttons === 0 && event.clientX === 0 && event.clientY === 0) {
-      // triggered by hitting enter key in the filter selection drawer ...
-      return;
-    }
-
-    this.openFilterSelectionDrawer.emit(true);
   }
 
   applyFilter(): void {
