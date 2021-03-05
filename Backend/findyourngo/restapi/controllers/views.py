@@ -17,9 +17,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from findyourngo.data_import.data_importer import run_initial_data_import
-from findyourngo.data_import.data_importer import update_ngo_tw_score, run_initial_data_import
-from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.data_generator import generate_data
+from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
@@ -269,9 +268,9 @@ def demo_setup(request):
     # AMNESTY
 
     amnesty = Ngo.objects.get(name='AMNESTY INTERNATIONAL')
-    user_1 = User.objects.get(pk=10)
-    user_2 = User.objects.get(pk=11)
-    user_3 = User.objects.get(pk=19)
+    user_1 = User.objects.get(pk=34) # TODO create if not exists, go by username
+    user_2 = User.objects.get(pk=35)
+    user_3 = User.objects.get(pk=36)
 
     NgoReview.objects.create(
         ngo=amnesty,
