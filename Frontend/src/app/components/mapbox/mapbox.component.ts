@@ -20,15 +20,12 @@ export class MapboxComponent {
   lng = 11.576124;
   zoom = 2.0;
 
-  color = '#ffffff';
-
   ngos: {[id: number]: NgoCoordinates} = {};
 
   mapMarkers = {};
   multiLinkSource = {};
 
   constructor(private mapboxService: MapboxService) {
-    this.color = getComputedStyle(document.body).getPropertyValue('--secondary-color');
     this.multiLinkSource = { type: 'FeatureCollection', features: []};
     this.mapMarkers = { type: 'FeatureCollection', features: []};
 
