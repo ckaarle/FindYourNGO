@@ -25,10 +25,10 @@ export class UserService {
   // error messages received from the login attempt
   public errors: any = [];
 
-  public $lastErrorMessage = new BehaviorSubject<any>(null);
+  public $lastErrorMessage = new BehaviorSubject<any>('');
 
   constructor(private httpClient: HttpClient) {
-    this.user = new BehaviorSubject<SocialUser>({} as SocialUser);
+    this.user = new BehaviorSubject<SocialUser>(undefined);
     this.userid = new BehaviorSubject<number>(-1);
     this.username = new BehaviorSubject<string>('');
     this.ngoid = new BehaviorSubject<number>(-1);
@@ -46,6 +46,9 @@ export class UserService {
       if (ngoid) {
         this.ngoid.next(ngoid);
       }
+    }
+    if (!this.userid || this.userid.value === -1) {
+      this.signOut();
     }
   }
 
@@ -108,7 +111,7 @@ export class UserService {
     this.userid.next(-1);
     this.username.next('');
     this.ngoid.next(-1);
-    this.user.next({} as SocialUser);
+    this.user.next(undefined);
     localStorage.removeItem('refresh-token');
     localStorage.removeItem('token');
     localStorage.removeItem('token-expiration');

@@ -128,6 +128,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
       duration: 3000,
       panelClass: ['login-snackbar']
     });
+
+    this.userService.$lastErrorMessage.next('');
   }
 
   registerNewNgo($event: MouseEvent): void {
