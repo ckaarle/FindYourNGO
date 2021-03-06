@@ -61,18 +61,18 @@ export class UserService {
     this.userPost(user, this.url('users/login/'));
   }
 
-  public register(user: object, query?: any): void {
-    this.userPost(user, this.url('users/register/'), query);
+  public register(user: object, query?: any, withoutLogin?: boolean): void {
+    this.userPost(user, this.url('users/register/'), query, withoutLogin);
   }
 
   public socialLogin(token: object, endpoint: string, query?: any): void {
     this.userPost(token, this.url(endpoint), query);
   }
 
-  private userPost(user: object, endpoint: string, query?: any): void {
+  private userPost(user: object, endpoint: string, query?: any, withoutLogin?: boolean): void {
     this.httpClient.post(endpoint, user, {params: query}).subscribe(
         (data: any) => {
-        if (data.access_token) {
+        if ((withoutLogin == null || !withoutLogin) && data.access_token) {
           localStorage.setItem('refresh-token', data.refresh_token);
           this.updateData(data.access_token);
           localStorage.setItem('token', data.access_token);
@@ -82,6 +82,9 @@ export class UserService {
           if (this.ngoid.value !== -1) {
             localStorage.setItem('ngoid', String(this.ngoid.value));
           }
+        }
+        if (withoutLogin) {
+          this.userid.next(-2);  // Use -2 to signal that the login dialog should close without logging a user
         }
       },
       err => {

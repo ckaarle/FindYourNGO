@@ -83,7 +83,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   submit(): void {
     if (this.status === 'register') {
       this.updateQuery();
-      this.userService.register(this.userForm.value, this.query);
+      this.userService.register(this.userForm.value, this.query, this.isNgo);
     }
     if (this.status === 'login') {
       this.userService.login(this.userForm.value);
@@ -140,5 +140,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.signOut();
+    if (this.status === 'register' && this.isNgo) {
+      this.userService.signOut();  // Logged in user value should be changed back to -1 with this call
+    }
   }
 }

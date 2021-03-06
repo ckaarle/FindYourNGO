@@ -117,7 +117,7 @@ export class NgoSignUpComponent implements OnInit {
       this.loginService.facebookLogin();
     } else {
       const query = this.getQuery();
-      this.userService.register(this.group.get('userForm')?.value, query);
+      this.userService.register(this.group.get('userForm')?.value, query, true);
     }
   }
 
