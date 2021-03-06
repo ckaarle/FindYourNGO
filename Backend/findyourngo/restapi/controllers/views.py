@@ -46,7 +46,9 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 def dataImport(request):
     data_import_necessary = run_initial_data_import(request)
+    print(f'initial import finished, import necessary: {data_import_necessary}')
     if data_import_necessary:
+        print('Starting Wango import')
         run_wango_data_import()
         return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
     else:
@@ -268,9 +270,9 @@ def demo_setup(request):
     # AMNESTY
 
     amnesty = Ngo.objects.get(name='AMNESTY INTERNATIONAL')
-    user_1 = User.objects.get(pk=34) # TODO create if not exists, go by username
-    user_2 = User.objects.get(pk=35)
-    user_3 = User.objects.get(pk=36)
+    user_1 = User.objects.get(pk=2)
+    user_2 = User.objects.get(pk=3)
+    user_3 = User.objects.get(pk=4)
 
     NgoReview.objects.create(
         ngo=amnesty,
@@ -357,33 +359,45 @@ def demo_setup(request):
         tags=''
     )
 
-    NgoConnection.objects.create(
-        reporter=amnesty,
-        connected_ngo=ngo_350,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
-    )
+    try:
+        NgoConnection.objects.create(
+            reporter=amnesty,
+            connected_ngo=ngo_350,
+            report_date=datetime(2021, 1, 1),
+            approval_date=datetime(2021, 1, 1)
+        )
+    except:
+        pass
 
-    NgoConnection.objects.create(
-        reporter=ngo_350,
-        connected_ngo=amnesty,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
-    )
+    try:
+        NgoConnection.objects.create(
+            reporter=ngo_350,
+            connected_ngo=amnesty,
+            report_date=datetime(2021, 1, 1),
+            approval_date=datetime(2021, 1, 1)
+        )
+    except:
+        pass
 
-    NgoConnection.objects.create(
-        reporter=amnesty,
-        connected_ngo=ngo_change,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
-    )
+    try:
+        NgoConnection.objects.create(
+            reporter=amnesty,
+            connected_ngo=ngo_change,
+            report_date=datetime(2021, 1, 1),
+            approval_date=datetime(2021, 1, 1)
+        )
+    except:
+        pass
 
-    NgoConnection.objects.create(
-        reporter=ngo_change,
-        connected_ngo=amnesty,
-        report_date=datetime(2021, 1, 1),
-        approval_date=datetime(2021, 1, 1)
-    )
+    try:
+        NgoConnection.objects.create(
+            reporter=ngo_change,
+            connected_ngo=amnesty,
+            report_date=datetime(2021, 1, 1),
+            approval_date=datetime(2021, 1, 1)
+        )
+    except:
+        pass
 
 
     # Greenpeace

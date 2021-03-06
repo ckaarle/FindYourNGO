@@ -162,8 +162,8 @@ def review(request) -> JsonResponse:
         review.delete()
         ngo = Ngo.objects.get(pk=review.ngo.id)
         ngo.number_of_reviews -= 1
-        ngo.save()
         update_ngo_tw_score(ngo)
+        ngo.save()
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
