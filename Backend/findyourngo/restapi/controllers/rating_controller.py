@@ -11,6 +11,7 @@ from findyourngo.data_import.data_importer import update_ngo_tw_score
 
 from datetime import datetime
 
+from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.trustworthiness_calculator.utils import round_to_two_decimal_places
 
 
@@ -162,7 +163,7 @@ def review(request) -> JsonResponse:
         review.delete()
         ngo = Ngo.objects.get(pk=review.ngo.id)
         ngo.number_of_reviews -= 1
-        update_ngo_tw_score(ngo)
+        TWUpdater()._calculate_tw_without_pagerank_for_ngo(ngo)
         ngo.save()
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
