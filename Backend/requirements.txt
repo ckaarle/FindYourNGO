@@ -11,3 +11,4 @@ pytest-django
 djangorestframework_simplejwt
 requests
 django-background-tasks
+django-autocomplete-light

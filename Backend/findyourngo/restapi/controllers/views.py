@@ -16,6 +16,8 @@ from rest_framework.views import APIView
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from dal import autocomplete
+
 from findyourngo.data_import.data_importer import run_initial_data_import
 from findyourngo.data_import.data_generator import generate_data
 from findyourngo.data_import.data_importer_wango import run_wango_data_import
@@ -461,3 +463,20 @@ def demo_setup(request):
     )
 
     return JsonResponse({'Result': 'Demo data was generated'})
+
+
+class NgoAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Ngo.objects.none()
+
+        qs = Ngo.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+
+    def get_result_label(self, item):
+        return item.name
