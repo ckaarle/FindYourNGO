@@ -19,9 +19,9 @@
       <h2 *ngIf="ngoDetailItem?.acronym">{{ngoDetailItem.acronym}}</h2>
       <div>
         <div class="ngo-rating">
-          <star-rating [value]="ngoDetailItem?.rating.trustworthiness.values - 1"
+          <star-rating [value]="ngoDetailItem?.rating?.trustworthiness.values - 1"
                        [editable]="false"
-                       [amount]="ngoDetailItem?.rating.amount.values"></star-rating>
+                       [amount]="ngoDetailItem?.rating?.amount.values"></star-rating>
 
           <mat-icon class="info-icon" (click)="showInformation()">info</mat-icon>
 
@@ -69,7 +69,7 @@
             <ngo-rating *ngIf="ngoDetailItem && !editMode"
                         [ngoId]="ngoDetailItem.id"
                         [ngoName]="ngoDetailItem.name"
-                        [amount]="ngoDetailItem.rating.amount.values"></ngo-rating>
+                        [amount]="ngoDetailItem.rating?.amount.values"></ngo-rating>
 
             <form class="edit-form" [formGroup]="ngoForm" *ngIf="editMode" fxLayoutGap="50px grid" fxLayout="row wrap">
               <div class="edit-container" *ngFor="let formField of ngoForm.value | keyvalue; trackBy:trackByFn" fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">

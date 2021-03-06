@@ -25,10 +25,10 @@ export class UserService {
   // error messages received from the login attempt
   public errors: any = [];
 
-  public $lastErrorMessage = new BehaviorSubject<any>(null);
+  public $lastErrorMessage = new BehaviorSubject<any>('');
 
   constructor(private httpClient: HttpClient) {
-    this.user = new BehaviorSubject<SocialUser>({} as SocialUser);
+    this.user = new BehaviorSubject<SocialUser>(undefined);
     this.userid = new BehaviorSubject<number>(-1);
     this.username = new BehaviorSubject<string>('');
     this.ngoid = new BehaviorSubject<number>(-1);
@@ -40,12 +40,15 @@ export class UserService {
         this.refreshToken();
       }
       interval(120000).subscribe(x => this.refreshToken());
-      this.userid.next(Number(localStorage.getItem('userid')));
+      this.userid.next(Number(localStorage.getItem('userid')) ?? -1);
       this.username.next(localStorage.getItem('username') as string);
       const ngoid = Number(localStorage.getItem('ngoid'));
       if (ngoid) {
         this.ngoid.next(ngoid);
       }
+    }
+    if (!this.userid || this.userid.value === -1) {
+      this.signOut();
     }
   }
 
@@ -108,7 +111,7 @@ export class UserService {
     this.userid.next(-1);
     this.username.next('');
     this.ngoid.next(-1);
-    this.user.next({} as SocialUser);
+    this.user.next(undefined);
     localStorage.removeItem('refresh-token');
     localStorage.removeItem('token');
     localStorage.removeItem('token-expiration');
@@ -126,7 +129,7 @@ export class UserService {
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
     this.tokenExpires = new Date(tokenDecoded.exp * 1000);
     localStorage.setItem('token-expiration', String(this.tokenExpires));
-    this.userid.next(tokenDecoded.user_id);
+    this.userid.next(tokenDecoded.user_id  ?? -1);
     localStorage.setItem('userid', tokenDecoded.user_id);
   }
 }

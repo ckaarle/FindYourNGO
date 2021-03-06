@@ -224,15 +224,18 @@ def create_or_update_ngo(name, source, acronym, country, city, street, email=Non
     if ngo.contact.address is None:
         if street:
             ngo.contact.address = NgoAddress.objects.create(country=country, city=city, street=street)
-        if city:
+        elif city:
             ngo.contact.address = NgoAddress.objects.create(country=country, city=city)
         else:
             ngo.contact.address = NgoAddress.objects.create(country=country)
+        ngo.contact.save()
     if email and ngo.contact.ngo_email is None:
         ngo.contact.ngo_email = email
+        ngo.contact.save()
         update_ngo_tw_score(ngo)
     if accreditation:
         ngo.accreditations.add(accreditation)
+    ngo.save()
 
 
 def run_wango_data_import() -> bool:

@@ -26,3 +26,6 @@ Backend/findyourngo/restapi/tasks/__pycache__
 Backend/findyourngo/restapi/migrations/0002_auto_20210208_1420.py
 Backend/findyourngo/restapi/utils/__pycache__
 Backend/findyourngo/restapi/migrations/0001_initial.py
+Backend/nginx/dist/assets
+Backend/nginx/dist
+PerformanceTests/__pycache__

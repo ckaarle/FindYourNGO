@@ -4,7 +4,7 @@ from findyourngo.restapi.models import Ngo
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import TW_MAX_VALUE, PAGERANK_SCORE_MAX_VALUE, \
     PAGERANK_SCORE_MIN_VALUE
-from findyourngo.trustworthiness_calculator.utils import round_value
+from findyourngo.trustworthiness_calculator.utils import round_value, round_to_two_decimal_places
 
 
 class TWRecalculator(TWCalculator):
@@ -20,7 +20,7 @@ class TWRecalculator(TWCalculator):
 
         tw_score = ngo.tw_score.total_tw_score + pagerank_score
         tw_score_scaled = min(TW_MAX_VALUE, tw_score)
-        ngo.tw_score.total_tw_score = tw_score_scaled
+        ngo.tw_score.total_tw_score = round_to_two_decimal_places(tw_score_scaled)
         ngo.tw_score.save()
 
     def _calculate_pagerank_factor(self, ngo: Ngo, pagerank: Dict[str, float]):
@@ -29,7 +29,8 @@ class TWRecalculator(TWCalculator):
         score_unscaled = pagerank[ngo.name] * pagerank_raw_factor
         score_scaled = self._scale_pagerank_score(score_unscaled, pagerank_raw_factor)
 
-        score_factored = score_scaled / (TW_MAX_VALUE / (TW_MAX_VALUE - ngo.tw_score.total_tw_score))
+        scale_factor = (TW_MAX_VALUE / (TW_MAX_VALUE - ngo.tw_score.total_tw_score)) if ngo.tw_score.total_tw_score != TW_MAX_VALUE else TW_MAX_VALUE
+        score_factored = score_scaled / scale_factor
 
         return score_factored
 

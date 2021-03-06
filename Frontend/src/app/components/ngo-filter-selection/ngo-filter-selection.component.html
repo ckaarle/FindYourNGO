@@ -17,7 +17,7 @@
     </div>
     <mat-divider></mat-divider>
 
-    <div *ngIf="filterOptions" (click)="$event.stopPropagation()">
+    <div *ngIf="filterOptions">
         <h2>Ngo-Details</h2>
         <div class="filter-option-category">
             <div class="filter-option-item" *ngFor="let ngoDetailOption of ngoDetails">
@@ -60,7 +60,9 @@
 </div>
 
 <ng-template #filterOptionItem let-filterOption="filterOption" let-key="key">
-    <mat-form-field *ngIf="!(filterOption.values | typeEvaluator: 'isBoolean')" ngDefaultControl appearance="standard">
+    <mat-form-field *ngIf="!(filterOption.values | typeEvaluator: 'isBoolean')"
+                    ngDefaultControl appearance="standard"
+                    (click)="$event.stopPropagation()">
         <mat-label>{{filterOption.displayName}}</mat-label>
 
         <input *ngIf="!(filterOption.values)" matInput
@@ -87,5 +89,8 @@
 
     </mat-form-field>
 
-    <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'" (change)="addValue(key, $event.checked)" [checked]="filterSelection[key]">{{key}}</mat-checkbox>
+    <mat-checkbox *ngIf="filterOption.values | typeEvaluator: 'isBoolean'"
+                  (click)="$event.stopPropagation()"
+                  (change)="addValue(key, $event.checked)"
+                  [checked]="filterSelection[key]">{{key}}</mat-checkbox>
 </ng-template>

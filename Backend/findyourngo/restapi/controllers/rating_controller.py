@@ -162,8 +162,8 @@ def review(request) -> JsonResponse:
         review.delete()
         ngo = Ngo.objects.get(pk=review.ngo.id)
         ngo.number_of_reviews -= 1
-        ngo.save()
         update_ngo_tw_score(ngo)
+        ngo.save()
         return JsonResponse({'message': 'Review was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -233,8 +233,9 @@ def tw_history(request) -> JsonResponse:
 
     try:
         ngo = Ngo.objects.get(pk=ngo_id)
-        tw_data_points = ngo.tw_score.tw_series.all()
+        tw_data_points = ngo.tw_score.tw_series.order_by('date').all()
         complete_tw_data_points = generate_missing_data_points(tw_data_points) if len(tw_data_points) > 0 else tw_data_points
         return JsonResponse(convert_data_points(complete_tw_data_points), safe=False)
     except:
         return JsonResponse([], safe=False)
+

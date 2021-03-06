@@ -25,7 +25,12 @@ export class NgoConnectionComponent {
   constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, public filter: FilterService) {
     // TODO: This is a hack until ngodetail item does not return undefined
     this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));
-    this.updateConnections();
+    if (this.currentNgoId !== this.userService.ngoid.value) {
+      this.apiService.get(`connections`, {requested_ngo: this.currentNgoId}).subscribe(
+      (data: NgoOverviewItem[]) => this.connections = data);
+    } else {
+      this.updateConnections();
+    }
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
         map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())

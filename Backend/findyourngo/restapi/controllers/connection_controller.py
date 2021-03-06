@@ -3,7 +3,7 @@ from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework import status
 
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 
 from findyourngo.restapi.models import NgoPendingConnection, NgoConnection, NgoAccount, Ngo
@@ -11,7 +11,6 @@ from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
 def view_connections(request) -> JsonResponse:
     try:
         requested_ngo = request.query_params.get('requested_ngo')

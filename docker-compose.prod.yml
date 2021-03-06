@@ -14,7 +14,7 @@ services:
   web:
     build: ./Backend
     command: bash -c "python manage.py process_tasks &
-                      gunicorn findyourngo.wsgi:application --bind 0.0.0.0:8000"
+                      gunicorn findyourngo.wsgi:application --bind web:8000 -t 300 -w 4"
     volumes:
       - ./Backend:/code
     expose:

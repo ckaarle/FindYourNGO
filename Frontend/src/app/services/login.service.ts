@@ -10,6 +10,7 @@ export class LoginService implements OnDestroy {
   endpoint?: string;
 
   constructor(private userService: UserService, private authService: SocialAuthService) {
+    this.endpoint = '';
   }
 
   ngOnDestroy(): void {

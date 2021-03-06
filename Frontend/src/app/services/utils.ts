@@ -51,25 +51,25 @@ export class Utils {
             metaData: ngoDetailItem.metaData,
             description: {
                 aim: {displayName: 'Description', values: ngoDetailItem.aim},
-                typeOfOrganization: {displayName: 'Organization type', values: ngoDetailItem.stats.typeOfOrganization},
+                typeOfOrganization: {displayName: 'Organization type', values: ngoDetailItem.stats?.typeOfOrganization},
                 website: {displayName: 'Website', values: ngoDetailItem.contact.website}
             },
             fieldOfActivity: {
                 topics: {displayName: 'Topics', values: ngoDetailItem.topics},
                 activities: {displayName: 'Activities', values: ngoDetailItem.activities},
                 branches: {displayName: 'Branches', values: ngoDetailItem.branches},
-                workingLanguages: {displayName: 'Working languages', values: ngoDetailItem.stats.workingLanguages}
+                workingLanguages: {displayName: 'Working languages', values: ngoDetailItem.stats?.workingLanguages}
             },
             stats: {
                 president: {displayName: 'President', values: {
-                    presidentFirstName: ngoDetailItem.stats.presidentFirstName,
-                    presidentLastName: ngoDetailItem.stats.presidentLastName
+                    presidentFirstName: ngoDetailItem.stats?.presidentFirstName,
+                    presidentLastName: ngoDetailItem.stats?.presidentLastName
                 }},
-                foundingYear: {displayName: 'Founding year', values: ngoDetailItem.stats.foundingYear},
-                staffNumber: {displayName: 'Staff number', values: ngoDetailItem.stats.staffNumber},
-                memberNumber: {displayName: 'Member number', values: ngoDetailItem.stats.memberNumber},
-                yearlyIncome: {displayName: 'Yearly income', values: ngoDetailItem.stats.yearlyIncome},
-                funding: {displayName: 'Funding', values: ngoDetailItem.stats.funding},
+                foundingYear: {displayName: 'Founding year', values: ngoDetailItem.stats?.foundingYear},
+                staffNumber: {displayName: 'Staff number', values: ngoDetailItem.stats?.staffNumber},
+                memberNumber: {displayName: 'Member number', values: ngoDetailItem.stats?.memberNumber},
+                yearlyIncome: {displayName: 'Yearly income', values: ngoDetailItem.stats?.yearlyIncome},
+                funding: {displayName: 'Funding', values: ngoDetailItem.stats?.funding},
                 accreditations: {displayName: 'Accreditations', values: ngoDetailItem.accreditations}
             },
             contact: {

@@ -5,6 +5,8 @@ from findyourngo.trustworthiness_calculator.TWRecalculator import TWRecalculator
 
 from datetime import datetime
 
+from findyourngo.trustworthiness_calculator.utils import round_to_two_decimal_places
+
 
 class TWUpdater:
 
@@ -55,8 +57,8 @@ class TWUpdater:
 
         ngo_tw_score.base_tw_score = tw_calculator.calculate_base_tw_from_ngo_tw_score(ngo_tw_score)
         ngo_tw_score.user_tw_score = tw_calculator.calculate_user_tw_from_ngo_id(ngo.id)
-        ngo_tw_score.total_tw_score = tw_calculator.calculate_tw_from_ngo_tw_scores(ngo.id, ngo_tw_score,
-                                                                                    user_tw_factor)
+        ngo_tw_score.total_tw_score = round_to_two_decimal_places(tw_calculator.calculate_tw_from_ngo_tw_scores(ngo.id, ngo_tw_score,
+                                                                                    user_tw_factor))
         ngo_tw_score.save()
 
     def _add_pagerank(self) -> None:

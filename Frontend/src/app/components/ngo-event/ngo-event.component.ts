@@ -1,6 +1,6 @@
-import {Component, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import {ActivatedRoute, UrlSerializer} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {NgoOverviewItem} from '../../models/ngo';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -40,10 +40,14 @@ export class NgoEventComponent {
     tags: new FormControl(null),
   });
 
-  constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {
+  constructor(public apiService: ApiService, public userService: UserService, private route: ActivatedRoute) {
     // TODO: This is a hack until ngodetail item does not return undefined
     this.currentNgoId = Number(this.route.snapshot.paramMap.get('id'));
-    this.updateEvents();
+    if (this.currentNgoId !== this.userService.ngoid.value) {
+      this.getEvents();
+    } else {
+      this.updateEvents();
+    }
     this.apiService.get('idNames').subscribe((data: NgoOverviewItem[]) =>
       this.$allNgos = this.ngoControl.valueChanges.pipe(startWith(''),
         map(value => data.filter(ngo => ngo.name.toLowerCase().includes(value?.toString().toLowerCase())
@@ -86,13 +90,17 @@ export class NgoEventComponent {
   }
 
   updateEvents(): void {
+    this.apiService.get(`events/invitations`).subscribe(
+      (data: NgoEvent[]) => this.invitations = data);
+    this.getEvents();
+  }
+
+  getEvents(): void {
     this.apiService.get(`events`, {collaborator_id: this.currentNgoId}).subscribe(
       (data: NgoEvent[]) => {
         this.currentEvents = data.filter(event => Date.parse(event.end_date.toString()) > Date.now());
         this.pastEvents = data.filter(event => Date.parse(event.end_date.toString()) < Date.now());
       });
-    this.apiService.get(`events/invitations`).subscribe(
-      (data: NgoEvent[]) => this.invitations = data);
   }
 
   ngoName(ngo: NgoOverviewItem): string {
