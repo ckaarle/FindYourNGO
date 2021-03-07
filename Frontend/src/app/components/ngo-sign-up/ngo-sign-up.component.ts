@@ -126,6 +126,10 @@ export class NgoSignUpComponent implements OnInit {
   }
 
   private showErrorMessage(): void {
+    if (this.$errorMessage.getValue() === '') {
+      return;
+    }
+
     this.snackBar.open(this.$errorMessage.getValue(), '', {
       duration: 3000,
       panelClass: ['login-snackbar']
