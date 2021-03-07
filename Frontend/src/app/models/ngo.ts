@@ -149,8 +149,8 @@ export interface NgoCluster {
 }
 
 export interface NgoLink {
-  id1: number;
-  id2: number;
+  origin: number[];
+  destination: number[];
   link_count: number;
 }
 

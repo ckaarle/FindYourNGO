@@ -123,26 +123,21 @@ export class MapboxComponent {
     this.mapMarkers.features = geoPoints;
   }
 
-  addLink(link: NgoLink, cluster: any[]): void {
-    const clusterOrigin = cluster.filter(c => c.id === link.id1)[0];
-    const clusterDestination = cluster.filter(c => c.id === link.id2)[0];
+  addLink(link: NgoLink): void {
+    const origin = turf.point(link.origin);
+    const destination = turf.point(link.destination);
 
-    if (clusterOrigin && clusterDestination) {
-        const origin = turf.point(clusterOrigin.geometry.coordinates);
-        const destination = turf.point(clusterDestination.geometry.coordinates);
+    const curvedLine = turf.greatCircle(origin, destination);
 
-        const curvedLine = turf.greatCircle(origin, destination);
-
-        const route = {
-            type: 'Feature',
-            properties: {linkCount: link.link_count},
-            geometry: {
-                type: 'LineString',
-                coordinates: curvedLine.geometry.coordinates
-            }
-        };
-        this.multiLinkSource.features.push(route);
-    }
+    const route = {
+        type: 'Feature',
+        properties: {linkCount: link.link_count},
+        geometry: {
+            type: 'LineString',
+            coordinates: curvedLine.geometry.coordinates
+        }
+    };
+    this.multiLinkSource.features.push(route);
   }
 
   private initialiseMap(): void {
