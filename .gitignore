@@ -29,3 +29,4 @@ Backend/findyourngo/restapi/migrations/0001_initial.py
 Backend/nginx/dist/assets
 Backend/nginx/dist
 PerformanceTests/__pycache__
+Backend/nginx/static_files
