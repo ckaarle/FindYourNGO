@@ -92,12 +92,7 @@ class TWCalculator:
 
     def _restrict_to_allowed_score_range_user(self, sum_commenter_ratings: int, amount_commenter_ratings: int) -> float:
         user_raw_score = sum_commenter_ratings / amount_commenter_ratings
-        raw_score_scaled = user_raw_score / (amount_commenter_ratings * TW_MAX_VALUE)
-        range_of_target_interval = TW_MAX_VALUE - TW_MIN_VALUE
-
-        score = raw_score_scaled * range_of_target_interval + TW_MIN_VALUE
-
-        return round_value(score)
+        return round_value(user_raw_score)
 
     def _restrict_to_allowed_score_range_base(self, base_raw_score: float) -> TWScore:
         raw_score_scaled_around_zero = (base_raw_score - self._raw_score_min_value) / (self._raw_score_max_value - self._raw_score_min_value)
