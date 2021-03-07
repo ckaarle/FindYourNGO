@@ -76,15 +76,16 @@ export class MapboxComponent {
     });
 
     let singleMarkers = this.map.querySourceFeatures('markerPointData', {sourceLayer: 'unclustered-point'});
-    singleMarkers = singleMarkers.filter((m, index, self) => !m.id && self.findIndex(item => item.properties.id === m.properties.id) === index);
+    singleMarkers = singleMarkers.filter((m, index, self)
+        => !m.id && self.findIndex(item => item.properties.id === m.properties.id) === index);
     singleMarkers.forEach((m: any) => {
 
         ngoCluster.push({
             id: m.properties.id,
-            lat_min: m.geometry.coordinates[0],
-            lat_max: m.geometry.coordinates[0],
-            lng_min: m.geometry.coordinates[1],
-            lng_max: m.geometry.coordinates[1]
+            lat_min: m.geometry.coordinates[1],
+            lat_max: m.geometry.coordinates[1],
+            lng_min: m.geometry.coordinates[0],
+            lng_max: m.geometry.coordinates[0]
         });
     });
 
@@ -303,12 +304,13 @@ export class MapboxComponent {
 
     this.map.on('mouseleave', layerId, () => {
       this.map.getCanvas().style.cursor = '';
+        // tslint:disable-next-line:no-unused-expression
       tooltip ? tooltip.remove() : undefined;
     });
   }
 
   registerZooming(): void {
-    this.map.on('moveend', 'clusters', () => {
+    this.map.on('moveend', () => {
       this.generateCoordinateRanges();
     });
   }

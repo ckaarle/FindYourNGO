@@ -34,7 +34,8 @@ class TWUpdater:
                     ngo_tw_score.tw_series.add(daily_tw)
 
     def _calculate_tw_without_pagerank(self) -> None:
-        for ngo in Ngo.objects.filter(confirmed=True):
+        for ngo in Ngo.objects.filter(confirmed=True).select_related('meta_data', 'tw_score')\
+                .prefetch_related('accreditations', 'meta_data__info_source'):
             self._calculate_tw_without_pagerank_for_ngo(ngo)
 
     def _calculate_tw_without_pagerank_for_ngo(self, ngo: Ngo) -> None:
@@ -63,7 +64,7 @@ class TWUpdater:
         ngo_tw_score.save()
 
     def _add_pagerank(self) -> None:
-        ngos = Ngo.objects.filter(confirmed=True)
+        ngos = Ngo.objects.filter(confirmed=True).select_related('tw_score')
         pagerank = PageRank(ngos).personalized_pagerank()
 
         if pagerank is not None:

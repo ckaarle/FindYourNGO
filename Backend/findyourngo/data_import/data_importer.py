@@ -7,7 +7,7 @@ from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccreditatio
     NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore, NgoCountry
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
-from findyourngo.restapi.controllers.map_controller import update_geo_locations
+from findyourngo.restapi.controllers.map_controller import update_geo_locations_logic
 
 
 def _invalid_country(country: str) -> bool:
@@ -851,7 +851,7 @@ def import_countries():
     NgoCountry.objects.bulk_create(countries)
 
 
-def run_initial_data_import(request) -> bool:
+def run_initial_data_import() -> bool:
     print('TRYING TO IMPORT DATA')
     if database_not_empty():
         return False
@@ -906,7 +906,7 @@ def run_initial_data_import(request) -> bool:
         update_ngo_tw_score(ngo)
         ngo.save()
 
-    update_geo_locations(request)
+    update_geo_locations_logic()
 
 
     print('DATA IMPORT (NgoAdvisor) FINISHED')
@@ -924,4 +924,4 @@ def run_initial_data_import(request) -> bool:
 
 
 def database_not_empty() -> bool:
-    return Ngo.objects.all()
+    return NgoCountry.objects.all()

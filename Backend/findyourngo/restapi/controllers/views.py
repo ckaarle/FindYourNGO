@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from background_task import background
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password, check_password
@@ -18,10 +19,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from dal import autocomplete
 
-from findyourngo.data_import.data_importer import run_initial_data_import
+from findyourngo.data_import.data_importer import run_initial_data_import, database_not_empty
 from findyourngo.data_import.data_generator import generate_data
 from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
+from findyourngo.restapi.controllers.map_controller import assign_probable_locations
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoAccount, NgoFavourites, NgoEvent, NgoReview, NgoTWDataPoint, \
@@ -47,14 +49,22 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def dataImport(request):
-    data_import_necessary = run_initial_data_import(request)
-    print(f'initial import finished, import necessary: {data_import_necessary}')
-    if data_import_necessary:
-        print('Starting Wango import')
-        run_wango_data_import()
-        return HttpResponse('Data import finished successfully. Please refer to the backend console output for logs.')
-    else:
+    if database_not_empty():
         return HttpResponse('Data import not necessary')
+    else:
+        backgroundDataImport()
+        return HttpResponse('Data import started as a background task')
+
+
+@background
+def backgroundDataImport():
+    run_initial_data_import()
+    print(f'Initial import finished, starting Wango import')
+    run_wango_data_import()
+    print('Assigning probable locations to NGOs')
+    assign_probable_locations()
+    print('Data import finished in background task:', datetime.now())
+
 
 
 def clearDatabase(request):
@@ -68,6 +78,7 @@ def dataGenerate(request):
     generate_data()
     return HttpResponse('Data generation complete')
 
+
 def clearBackgroundTasks(request):
     cursor = connection.cursor()
     cursor.execute(delete_background_tasks_query)
@@ -76,8 +87,14 @@ def clearBackgroundTasks(request):
 
 
 def twUpdate(request):
+    backgroundTwUpdate()
+    return HttpResponse('TW update with PageRank started as a background task')
+
+
+@background
+def backgroundTwUpdate():
     TWUpdater().update()
-    return HttpResponse('TW updated with PageRank')
+    print('TW update finished in background task:', datetime.now())
 
 
 def storeDailyTw(request):

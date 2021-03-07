@@ -49,7 +49,6 @@ export class NgoRatingComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
 
       if (this.userService.userid.getValue() === -1) {
-        console.log('User Login Dialog was exited. Aborting.');
         return;
       }
 

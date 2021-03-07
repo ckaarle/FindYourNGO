@@ -25,8 +25,10 @@ def get_links(request) -> JsonResponse:
     clusters = JSONParser().parse(request)['clusters']
     if clusters:
         ngo_links = get_links_between_ngos(
-            clusters, Ngo.objects.filter(confirmed=True, connected_ngo__isnull=False).distinct().select_related('contact__address'), NgoConnection.objects.all())
-        return JsonResponse([{'id1': c1, 'id2': c2, 'link_count': count} for ((c1, c2), count) in
+            clusters, Ngo.objects.filter(confirmed=True, connected_ngo__isnull=False).distinct().select_related('contact__address'),
+            NgoConnection.objects.all().select_related(
+                'connected_ngo__contact__address', 'reporter__contact__address'))
+        return JsonResponse([{'origin': c1, 'destination': c2, 'link_count': count} for ((c1, c2), count) in
                              ngo_links.items() if count > 0], safe=False)
 
     link_serializer = NgoLinkSerializer(NgoConnection.objects.all(), many=True)
@@ -35,12 +37,16 @@ def get_links(request) -> JsonResponse:
 
 @api_view(['GET'])
 def update_geo_locations(request) -> JsonResponse:
+    update_geo_locations_logic()
+    return JsonResponse({'success': 'NGOs relocated successfully'})
+
+
+def update_geo_locations_logic():
     reuse_csv_data()
     # If you want to refresh all addresses, use the following method
     # for address in NgoAddress.objects.all():
     #     geo_locate_single_address(address)
     assign_probable_locations()
-    return JsonResponse({'success': 'NGOs relocated successfully'})
 
 
 def reuse_csv_data():
@@ -105,8 +111,8 @@ def assign_probable_locations():
         if lat and long and lat != '""' and long != '""':
             return lat, long
 
-        lat = float(coordinates[ngo.contact.address.country.name][0]) + random.uniform(-2.0, 2.0)
-        long = float(coordinates[ngo.contact.address.country.name][1]) + random.uniform(-2.0, 2.0)
+        lat = float(coordinates[ngo.contact.address.country.name][0]) + random.uniform(-0.05, 0.05)
+        long = float(coordinates[ngo.contact.address.country.name][1]) + random.uniform(-0.05, 0.05)
         # save lat and long after assigning it randomly
         ngo.contact.address.latitude = lat
         ngo.contact.address.longitude = long

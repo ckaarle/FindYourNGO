@@ -13,19 +13,21 @@ class TWCalculator:
     def __init__(self) -> None:
         self._raw_score_min_value = RAW_SCORE_MIN_VALUE
         self._raw_score_max_value = RAW_SCORE_MAX_VALUE
+        self._data_source_count = NgoDataSource.objects.exclude(source=SELF_REPORTED_DATA_SOURCE).count()
+        self._total_review_count = NgoReview.objects.count()
 
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
         return len(meta_data.info_source.all())
 
     def calculate_data_source_credibility_score(self, meta_data: NgoMetaData) -> TWScore:
         if meta_data.info_source.filter(credible=True):
-            return self._data_source_count() * 2 + 1
+            return self._data_source_count * 2 + 1
         else:
             return 0
 
     def calculate_ecosoc_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
         if any(filter(lambda acc: self._contains_valid_accreditation(acc.accreditation.upper()), accreditations)):
-            return self._data_source_count()
+            return self._data_source_count
         return 0
 
     def calculate_wce_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
@@ -84,7 +86,7 @@ class TWCalculator:
             return base_tw * (1 - user_tw_factor) + user_tw * user_tw_factor
 
     def calculate_user_tw_factor(self, ngo_id: int) -> float:
-        total_reviews = self._total_review_count()
+        total_reviews = self._total_review_count
         if total_reviews == 0:
             return 0
         ngo_reviews = self._review_count(ngo_id)
@@ -101,12 +103,6 @@ class TWCalculator:
         score = raw_score_scaled_around_zero * range_of_target_interval + TW_MIN_VALUE
 
         return round_value(score)
-
-    def _data_source_count(self) -> int:
-        return NgoDataSource.objects.exclude(source=SELF_REPORTED_DATA_SOURCE).count()
-
-    def _total_review_count(self) -> int:
-        return NgoReview.objects.count()
 
     def _review_count(self, ngo_id: int) -> int:
         return NgoReview.objects.filter(ngo=ngo_id).count()

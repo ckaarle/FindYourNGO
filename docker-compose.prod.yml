@@ -17,6 +17,7 @@ services:
                       gunicorn findyourngo.wsgi:application --bind web:8000 -t 300 -w 4"
     volumes:
       - ./Backend:/code
+      - ./Crawler/wango:/wango
     expose:
       - 8000
     depends_on:

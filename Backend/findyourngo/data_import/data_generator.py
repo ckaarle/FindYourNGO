@@ -25,7 +25,7 @@ def generate_data():
         all_ngos += list(ngos)[:ngo_count]
         for i in range(min(ngo_count, 5)):
             main_ngo: Ngo = ngos[i]
-            for other_ngo in random.sample(list(ngos), int(ngo_count * 0.1 * (5 - i))):
+            for other_ngo in random.sample(list(ngos), int(ngo_count * 0.01 * (5 - i))):
                 if main_ngo != other_ngo:
                     create_connection(main_ngo.id, other_ngo.id)
                     create_connection(other_ngo.id, main_ngo.id)
@@ -34,7 +34,7 @@ def generate_data():
         ngos = Ngo.objects.filter(contact__address__country__sub_region=sub_region, confirmed=True).order_by('-tw_score__total_tw_score')
         for i in range(min(ngos.count(), 3)):
             main_ngo: Ngo = ngos[i]
-            for other_ngo in random.sample(all_ngos, int(len(all_ngos) * 0.1 * (5 - i))):
+            for other_ngo in random.sample(all_ngos, int(len(all_ngos) * 0.01 * (5 - i))):
                 if main_ngo != other_ngo:
                     create_connection(main_ngo.id, other_ngo.id)
                     create_connection(other_ngo.id, main_ngo.id)
