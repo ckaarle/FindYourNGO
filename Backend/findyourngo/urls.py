@@ -79,4 +79,5 @@ urlpatterns = [
     path('map/update', map_controller.update_geo_locations),
     url(r'^registerNgo', ngo_controller.register_ngo),
     url(r'^demoSetup$', views.demo_setup),
+    url(r'^ngo-autocomplete/$', views.NgoAutocomplete.as_view(), name='ngo-autocomplete'),
 ]
