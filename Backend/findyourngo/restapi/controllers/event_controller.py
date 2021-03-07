@@ -62,8 +62,7 @@ def create_event(request) -> JsonResponse:
 
         return JsonResponse({'success': 'Event created successfully'})
 
-    except Exception as e:
-        print(e)
+    except Exception:
         return JsonResponse({'error': 'Event creation failed'})
 
 
@@ -72,15 +71,18 @@ def create_event(request) -> JsonResponse:
 def delete_event(request) -> JsonResponse:
     try:
         founder_id = NgoAccount.objects.get(user__id=request.user.id).ngo.id
-        event_id = request.query_params.get('event_id')
+        event_request = JSONParser().parse(request)
+        event_id = event_request['event_id']
         event = NgoEvent.objects.get(id=event_id)
-        if founder_id != event.organizer:
+
+        if founder_id != event.organizer.id:
             return forbidden_response()
 
         event.delete()
         return JsonResponse({'success': 'Event deleted successfully'})
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return JsonResponse({'error': 'Event deletion failed'})
 
 

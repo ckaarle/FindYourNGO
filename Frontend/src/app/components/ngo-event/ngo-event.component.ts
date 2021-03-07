@@ -114,4 +114,9 @@ export class NgoEventComponent {
       this.inviteeIds.splice(index, 1);
     }
   }
+
+  delete(id: number): void {
+    this.apiService.post('events/delete/', {event_id: id}, {}).subscribe(data =>
+    this.updateEvents());
+  }
 }

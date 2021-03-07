@@ -61,12 +61,12 @@ form {
       box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);;
 
       .mat-icon {
-          font-size: var(--font-size-medium);
-          height: var(--font-size-medium);
-          width: var(--font-size-medium);
-          line-height: var(--font-size-medium);
-          margin-right: 8px;
-          color: var(--primary-color);
+        font-size: var(--font-size-medium);
+        height: var(--font-size-medium);
+        width: var(--font-size-medium);
+        line-height: var(--font-size-medium);
+        margin-right: 8px;
+        color: var(--primary-color);
       }
 
       mat-label {
@@ -148,4 +148,9 @@ form {
     font-style: italic;
     margin: 0 0 16px 16px;
   }
+}
+
+.delete-icon {
+  color: var(--primary-color) !important;
+  font-size: var(--font-size-normal) !important;
 }
