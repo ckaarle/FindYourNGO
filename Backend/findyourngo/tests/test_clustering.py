@@ -4,7 +4,7 @@ from collections import namedtuple
 from findyourngo.restapi.map_utils import get_links_between_ngos
 
 
-def ngo(id, lat, long):
+def ngo(id, long, lat):
     Ngo = namedtuple('Ngo', ['id', 'name', 'contact'])
     Contact = namedtuple('Contact', ['address'])
     Address = namedtuple('Address', ['latitude', 'longitude'])
@@ -20,8 +20,8 @@ def create_connections(pairs: [(int, int)]):
     return connections
 
 
-def cluster(id, lat_min, lat_max, lng_min, lng_max):
-    return {'id': id, 'lat_min': lat_min, 'lat_max': lat_max, 'lng_min': lng_min, 'lng_max': lng_max}
+def cluster(c_id, lng_min, lng_max, lat_min, lat_max):
+    return {'id': c_id, 'lng_min': lng_min, 'lng_max': lng_max, 'lat_min': lat_min, 'lat_max': lat_max}
 
 
 def common_body(clusters):
@@ -49,16 +49,16 @@ class TestClusteringMethods(TestCase):
         result = common_body(clusters)
 
         expected_links = {
-            (0, 1): 2,
+            ((5, 5), (15, 5)): 2,
         }
-        self.assertEqual(result, expected_links)
+        self.assertEqual(expected_links, result)
 
     def test_no_clusters(self):
         # request object should never send None to this function
         result = common_body([])
 
         expected_links = {}
-        self.assertEqual(result, expected_links)
+        self.assertEqual(expected_links, result)
 
     def test_empty_clusters(self):
         clusters = [
@@ -69,9 +69,9 @@ class TestClusteringMethods(TestCase):
         result = common_body(clusters)
 
         expected_links = {
-            (0, 1): 0,
+            ((0, 0), (0, 0)): 0,
         }
-        self.assertEqual(result, expected_links)
+        self.assertEqual(expected_links, result)
 
     def test_intersecting_clusters(self):
         clusters = [
@@ -82,6 +82,6 @@ class TestClusteringMethods(TestCase):
         result = common_body(clusters)
 
         expected_links = {
-            (0, 1): 0,
+            ((10, 5), (15, 5)): 0,
         }
-        self.assertEqual(result, expected_links)
+        self.assertEqual(expected_links, result)
