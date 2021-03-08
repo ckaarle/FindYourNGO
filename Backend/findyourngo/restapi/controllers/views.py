@@ -25,6 +25,7 @@ from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.controllers.map_controller import assign_probable_locations
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoAccount, NgoFavourites, NgoEvent, NgoReview, NgoTWDataPoint, \
     NgoConnection, NgoPendingConnection
@@ -560,3 +561,14 @@ class NgoAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_result_label(self, item):
         return item.name
+
+
+def update_acc(request):
+    acc_calculator = AccreditationCalculator()
+    for ngo in Ngo.objects.filter(confirmed=True):
+        valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics(ngo)
+        ngo.has_valid_accreditations = valid_acc
+        ngo.has_wce = wce
+        ngo.save()
+
+    return JsonResponse({'Result': 'Accreditations and WCE calculated'})
