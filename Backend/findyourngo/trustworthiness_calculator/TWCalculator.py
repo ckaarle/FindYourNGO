@@ -16,6 +16,8 @@ class TWCalculator:
         self._data_source_count = NgoDataSource.objects.exclude(source=SELF_REPORTED_DATA_SOURCE).count()
         self._total_review_count = NgoReview.objects.count()
 
+        self.reviews_for_ngo_id = {}
+
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
         return len(meta_data.info_source.all())
 
@@ -105,10 +107,16 @@ class TWCalculator:
         return round_value(score)
 
     def _review_count(self, ngo_id: int) -> int:
-        return NgoReview.objects.filter(ngo=ngo_id).count()
+        if not ngo_id in self.reviews_for_ngo_id.keys():
+            self.reviews_for_ngo_id[ngo_id] = NgoReview.objects.filter(ngo=ngo_id)
+        reviews = self.reviews_for_ngo_id[ngo_id]
+        return reviews.count()
 
     def _review_rating_sum(self, ngo_id: int) -> int:
-        return NgoReview.objects.filter(ngo=ngo_id).aggregate(sum=Sum('rating'))['sum'] or 0
+        if not ngo_id in self.reviews_for_ngo_id.keys():
+            self.reviews_for_ngo_id[ngo_id] = NgoReview.objects.filter(ngo=ngo_id)
+        reviews = self.reviews_for_ngo_id[ngo_id]
+        return reviews.aggregate(sum=Sum('rating'))['sum'] or 0
 
     def calculate_ngo_account_score(self, ngo_id) -> float:
         accounts = NgoAccount.objects.filter(ngo_id=ngo_id, user__is_active=True)
