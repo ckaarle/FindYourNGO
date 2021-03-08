@@ -17,6 +17,7 @@ class TWCalculator:
         self._total_review_count = NgoReview.objects.count()
 
         self.reviews_for_ngo_id = {}
+        self.review_count_for_ngo_id = {}
 
     def calculate_number_of_data_source_score(self, meta_data: NgoMetaData) -> TWScore:
         return len(meta_data.info_source.all())
@@ -72,7 +73,7 @@ class TWCalculator:
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_user_tw_from_ngo_id(self, ngo_id: int) -> TWScore:
-        amount_review_ratings = self._review_count(ngo_id)
+        amount_review_ratings = self.review_count_for_ngo_id[ngo_id]
         if amount_review_ratings == 0:
             return 0
         else:
@@ -82,7 +83,7 @@ class TWCalculator:
     def calculate_tw_from_ngo_tw_scores(self, ngo_id: int, ngo_tw_score: NgoTWScore, user_tw_factor) -> TWScore:
         base_tw = ngo_tw_score.base_tw_score
         user_tw = ngo_tw_score.user_tw_score
-        if self._review_count(ngo_id) == 0:
+        if self.review_count_for_ngo_id[ngo_id] == 0:
             return base_tw
         else:
             return base_tw * (1 - user_tw_factor) + user_tw * user_tw_factor
@@ -91,7 +92,7 @@ class TWCalculator:
         total_reviews = self._total_review_count
         if total_reviews == 0:
             return 0
-        ngo_reviews = self._review_count(ngo_id)
+        ngo_reviews = self.review_count_for_ngo_id[ngo_id]
         return ngo_reviews / total_reviews
 
     def _restrict_to_allowed_score_range_user(self, sum_commenter_ratings: int, amount_commenter_ratings: int) -> float:
@@ -106,19 +107,18 @@ class TWCalculator:
 
         return round_value(score)
 
-    def _review_count(self, ngo_id: int) -> int:
+    def _setup_ngo_reviews(self, ngo_id):
         if not ngo_id in self.reviews_for_ngo_id.keys():
             self.reviews_for_ngo_id[ngo_id] = NgoReview.objects.filter(ngo=ngo_id)
-        reviews = self.reviews_for_ngo_id[ngo_id]
-        return reviews.count()
+            self.review_count_for_ngo_id[ngo_id] = self.reviews_for_ngo_id[ngo_id].count()
 
     def _review_rating_sum(self, ngo_id: int) -> int:
-        if not ngo_id in self.reviews_for_ngo_id.keys():
-            self.reviews_for_ngo_id[ngo_id] = NgoReview.objects.filter(ngo=ngo_id)
+        self._setup_ngo_reviews(ngo_id)
         reviews = self.reviews_for_ngo_id[ngo_id]
         return reviews.aggregate(sum=Sum('rating'))['sum'] or 0
 
     def calculate_ngo_account_score(self, ngo_id) -> float:
+        # TODO
         accounts = NgoAccount.objects.filter(ngo_id=ngo_id, user__is_active=True)
 
         if len(accounts) > 0:
