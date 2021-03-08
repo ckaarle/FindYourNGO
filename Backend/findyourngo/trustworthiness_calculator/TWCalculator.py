@@ -28,18 +28,15 @@ class TWCalculator:
         else:
             return 0
 
-    def calculate_ecosoc_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
-        if any(filter(lambda acc: self._contains_valid_accreditation(acc.accreditation.upper()), accreditations)):
+    def calculate_ecosoc_score(self, has_valid_accreditations) -> TWScore:
+        if has_valid_accreditations:
             return self._data_source_count
         return 0
 
-    def calculate_wce_score(self, accreditations: Iterable[NgoAccreditation]) -> TWScore:
-        if any(filter(lambda acc: 'WCE' in acc.accreditation.upper(), accreditations)):
+    def calculate_wce_score(self, has_wce) -> TWScore:
+        if has_wce:
             return 1
         return 0
-
-    def _contains_valid_accreditation(self, accreditations):
-        return any(acc in accreditations for acc in VALID_ACCREDITATIONS)
 
     def _calculate_raw_base_score(
             self,

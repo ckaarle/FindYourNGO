@@ -124,6 +124,8 @@ class Ngo(models.Model):
 
     confirmed = models.BooleanField(default=True)
     has_ngo_account = models.BooleanField(default=False)
+    has_valid_accreditations = models.BooleanField(default=False)
+    has_wce = models.BooleanField(default=False)
 
 
 class NgoAccount(models.Model):

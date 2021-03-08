@@ -55,8 +55,8 @@ class TWUpdater:
         accreditations = ngo.accreditations.all()
         number_data_sources_score = self.tw_calculator.calculate_number_of_data_source_score(ngo.meta_data)
         credible_source_score = self.tw_calculator.calculate_data_source_credibility_score(ngo.meta_data)
-        ecosoc_score = self.tw_calculator.calculate_ecosoc_score(accreditations)
-        wce_score = self.tw_calculator.calculate_wce_score(accreditations)
+        ecosoc_score = self.tw_calculator.calculate_ecosoc_score(ngo.has_valid_accreditations)
+        wce_score = self.tw_calculator.calculate_wce_score(ngo.has_wce)
         ngo_account_score = self.tw_calculator.calculate_ngo_account_score(ngo.has_ngo_account)
 
         user_tw_factor = self.tw_calculator.calculate_user_tw_factor(ngo.id)
