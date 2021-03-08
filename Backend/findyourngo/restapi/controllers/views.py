@@ -140,7 +140,6 @@ class FacebookView(APIView):
         }  # validate the token
         r = requests.get('https://graph.facebook.com/me', params=payload)
         data = json.loads(r.text)
-        print(data)
 
         if 'error' in data:
             content = {'message': 'wrong facebook token / this facebook token is already expired.'}
@@ -229,7 +228,6 @@ class TestView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        print(request)
         to_check = request.data.get('user_id')
         if request.user.id == to_check:
             return JsonResponse({'success': f'User {request.user.username} was verified!'})

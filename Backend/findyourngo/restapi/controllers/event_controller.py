@@ -81,8 +81,7 @@ def delete_event(request) -> JsonResponse:
         event.delete()
         return JsonResponse({'success': 'Event deleted successfully'})
 
-    except Exception as e:
-        print(e)
+    except:
         return JsonResponse({'error': 'Event deletion failed'})
 
 
@@ -123,8 +122,7 @@ def accept_event(request) -> JsonResponse:
         create_connection(collaborator_id, event.organizer_id)
         return JsonResponse({'success': 'Invitation accepted'})
 
-    except Exception as e:
-        print(e)
+    except:
         return JsonResponse({'error': 'Invitation could not be accepted'})
 
 

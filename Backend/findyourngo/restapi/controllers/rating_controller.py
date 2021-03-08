@@ -90,7 +90,6 @@ def generate_missing_data_points(tw_data_points):
         else:
             last_result = result[len(result)-1]
             while data_point.date > last_result.date and data_point.date.day - last_result.date.day > 1:
-                print(last_result.date.month, ' ', last_result.date.day)
                 last_result = NgoTWDataPoint(
                     date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(),
                     daily_tw_score=last_result.daily_tw_score)
