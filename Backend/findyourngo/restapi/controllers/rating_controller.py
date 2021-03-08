@@ -90,6 +90,7 @@ def generate_missing_data_points(tw_data_points):
         else:
             last_result = result[len(result)-1]
             while data_point.date > last_result.date and data_point.date.day - last_result.date.day > 1:
+                print(last_result.date.month, ' ', last_result.date.day)
                 last_result = NgoTWDataPoint(
                     date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(),
                     daily_tw_score=last_result.daily_tw_score)
@@ -100,7 +101,17 @@ def generate_missing_data_points(tw_data_points):
     today_date = datetime.today().date()
     while today_date > last_result.date:
         daily_tw_score = round_to_two_decimal_places(last_result.daily_tw_score)
-        last_result = NgoTWDataPoint(date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(), daily_tw_score=daily_tw_score)
+        try:
+            last_result = NgoTWDataPoint(date=datetime(last_result.date.year, last_result.date.month, last_result.date.day + 1).date(), daily_tw_score=daily_tw_score)
+        except:
+            try:
+                last_result = NgoTWDataPoint(
+                    date=datetime(last_result.date.year, last_result.date.month + 1, 1).date(),
+                    daily_tw_score=daily_tw_score)
+            except:
+                last_result = NgoTWDataPoint(
+                    date=datetime(last_result.date.year + 1, 1, 1).date(),
+                    daily_tw_score=daily_tw_score)
         result.append(last_result)
     return result
 
@@ -230,7 +241,7 @@ def user_review_present(request) -> JsonResponse:
 
 @api_view(['GET'])
 def tw_history(request) -> JsonResponse:
-    ngo_id = request.query_params.get('ngoId')
+    ngo_id = request.query_para
 
     try:
         ngo = Ngo.objects.get(pk=ngo_id)
