@@ -17,8 +17,11 @@ class TWUpdater:
         self._calculate_tw_without_pagerank_for_ngo(ngo)
 
     def update(self) -> None:
+        print(f'Start TW update in updater: {datetime.now()}')
         self._calculate_tw_without_pagerank()
+        print(f'Before pagerank: {datetime.now()}')
         self._add_pagerank()
+        print(f'After pagerank: {datetime.now()}')
 
     def store(self) -> None:
         self.update()
