@@ -498,51 +498,6 @@ def demo_setup(request):
         tags=''
     )
 
-    # NgoReview.objects.create(
-    #     ngo=bureau,
-    #     reviewer=user_2,
-    #     create_date=datetime(2020, 12, 21),
-    #     last_edited=datetime(2020, 12, 21),
-    #     text='treats interns badly',
-    #     rating=2
-    # )
-    #
-    # NgoReview.objects.create(
-    #     ngo=bureau,
-    #     reviewer=user_3,
-    #     create_date=datetime(2021, 1, 2),
-    #     last_edited=datetime(2021, 2, 4),
-    #     text='I read a lot about scandals, but my experiences were okay.',
-    #     rating=2
-    # )
-    #
-    # NgoReview.objects.create(
-    #     ngo=greenpeace,
-    #     reviewer=user_1,
-    #     create_date=datetime(2020, 11, 2),
-    #     last_edited=datetime(2020, 11, 2),
-    #     text='makes a difference',
-    #     rating=3
-    # )
-    #
-    # NgoReview.objects.create(
-    #     ngo=greenpeace,
-    #     reviewer=user_2,
-    #     create_date=datetime(2020, 12, 21),
-    #     last_edited=datetime(2020, 12, 21),
-    #     text='treats interns badly',
-    #     rating=2
-    # )
-    #
-    # NgoReview.objects.create(
-    #     ngo=greenpeace,
-    #     reviewer=user_3,
-    #     create_date=datetime(2021, 1, 2),
-    #     last_edited=datetime(2021, 2, 4),
-    #     text='I read a lot about scandals, but my experiences were okay.',
-    #     rating=2
-    # )
-
     return JsonResponse({'Result': 'Demo data was generated'})
 
 
