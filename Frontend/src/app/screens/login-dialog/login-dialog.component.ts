@@ -81,10 +81,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    console.log('METHOD CALLED');
     if (this.status === 'register') {
       this.updateQuery();
-      console.log('IS NGO ', this.isNgo);
       this.userService.register(this.userForm.value, this.query, this.isNgo);
     }
     if (this.status === 'login') {
