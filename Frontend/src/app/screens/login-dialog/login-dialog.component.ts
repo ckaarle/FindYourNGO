@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SocialAuthService, SocialUser } from 'angularx-social-login';
-import { ApiService } from '../../services/api.service';
-import { Names } from '../../models/ngo';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { Observable } from 'rxjs';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
-import { MatDialogRef } from '@angular/material/dialog';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {SocialAuthService, SocialUser} from 'angularx-social-login';
+import {ApiService} from '../../services/api.service';
+import {Names} from '../../models/ngo';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {Observable} from 'rxjs';
+import {FormControl, FormGroup} from '@angular/forms';
+import {map, startWith} from 'rxjs/operators';
+import {MatDialogRef} from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
@@ -39,8 +39,8 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     this.isNgo = false;
 
     this.apiService.get('names').subscribe((data: Names) =>
-      this.$names = this.ngoControl.valueChanges.pipe(startWith(''),
-          map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
+        this.$names = this.ngoControl.valueChanges.pipe(startWith(''),
+            map(value => data.names.filter(name => name.toLowerCase().includes(value.toLowerCase())))));
 
     this.authService.authState.subscribe((user) => {
       this.updateQuery();
@@ -53,7 +53,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     });
 
     this.userService.userid.subscribe((id: number) => {
-     if (id >= 0) {  // The dialog is automatically closed if a user is signed in
+      if (id !== -1) {  // The dialog is automatically closed if a user is signed in
         this.dialogRef.close();
       }
     });
@@ -81,8 +81,10 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
+    console.log('METHOD CALLED');
     if (this.status === 'register') {
       this.updateQuery();
+      console.log('IS NGO ', this.isNgo);
       this.userService.register(this.userForm.value, this.query, this.isNgo);
     }
     if (this.status === 'login') {
@@ -98,8 +100,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   updateQuery(): void {
     if (!this.isNgo) {
       this.query = null;
-    }
-    else {
+    } else {
       this.query = {ngo_name: this.ngoControl.value};
     }
   }
@@ -107,8 +108,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
   updateForm(status: string): void {
     if (status === this.status) {
       this.status = '';
-    }
-    else {
+    } else {
       this.status = status;
     }
   }
