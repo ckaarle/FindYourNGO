@@ -85,15 +85,6 @@ export class NgoSignUpComponent implements OnInit {
     });
 
     this.userService.user.subscribe(user => this.user = user);
-
-    this.userService.username.subscribe(next => {
-      if (next !== '') {
-        if (this.$errorMessage.getValue() === '') {
-          this.registrationSuccessful = true;
-        }
-        this.loginService.fullSignOut(this.user);
-      }
-    });
   }
 
   submit(): void {
@@ -103,6 +94,7 @@ export class NgoSignUpComponent implements OnInit {
 
     this.ngoRegistrationService.registerNewNgo(newNgo).subscribe((result: any) => {
           this.registerUser();
+          this.registrationSuccessful = true;
         },
         (error: any) => {
           const userMessage = error.error.error;
@@ -126,7 +118,7 @@ export class NgoSignUpComponent implements OnInit {
   }
 
   private showErrorMessage(): void {
-    if (this.$errorMessage.getValue() === '') {
+    if (!this.$errorMessage.getValue() || this.$errorMessage.getValue().trim() === '') {
       return;
     }
 

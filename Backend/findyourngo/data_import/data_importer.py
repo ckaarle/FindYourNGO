@@ -5,6 +5,7 @@ from findyourngo.data_import.InfoClasses import Info
 from findyourngo.data_import.european_council.parser import parse_european_council
 from findyourngo.restapi.models import Ngo, NgoBranch, NgoTopic, NgoAccreditation, NgoDataSource, NgoMetaData, \
     NgoAddress, NgoRepresentative, NgoContact, NgoStats, NgoType, NgoTWScore, NgoCountry
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.controllers.map_controller import update_geo_locations_logic
@@ -445,7 +446,7 @@ def convert_ngo(
         Ngo.objects.get(name=name, acronym=acronym)
         #print(f'XXXXXXXXXXXXXXXXXXXXXXXX --- Ngo with name {name} and acronym {acronym} already in database -- skipping')
     except:
-        tw_score = _get_ngo_tw_score(accreditation, meta_data)
+        tw_score = _get_ngo_tw_score(meta_data)
 
         ngo = Ngo.objects.create(
             name=name,
@@ -469,12 +470,12 @@ def convert_ngo(
     return ngo
 
 
-def _get_ngo_tw_score(accreditation: Iterable[NgoAccreditation], meta_data: NgoMetaData) -> NgoTWScore:
+def _get_ngo_tw_score(meta_data: NgoMetaData) -> NgoTWScore:
     tw_calculator = TWCalculator()
     number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(meta_data)
     credible_source_score = tw_calculator.calculate_data_source_credibility_score(meta_data)
-    ecosoc_score = tw_calculator.calculate_ecosoc_score(accreditation)
-    wce_score = tw_calculator.calculate_wce_score(accreditation)
+    ecosoc_score = tw_calculator.calculate_ecosoc_score(False) # update later during import
+    wce_score = tw_calculator.calculate_wce_score(False)
     # no ngo accounts assumed to exist during data import
     total_score = tw_calculator.calculate_base_tw_from_partial_scores(number_data_sources_score, credible_source_score,
                                                                       ecosoc_score, wce_score)
@@ -509,6 +510,7 @@ def convert_to_model_classes(infos: List[Info], data_source: str, source_credibl
         before = Ngo.objects.all()
         len_before = len(before)
         ngo = convert_ngo(info, branch, topic, accreditation, meta_data, contact, stats)
+
         after = Ngo.objects.all()
 
         assert len_before + 1 == len(after)
@@ -902,7 +904,14 @@ def run_initial_data_import() -> bool:
     print(f'Updating the TW score, since it depends on # data sources, which might have changed after the initial import')
     all_ngo_entries = Ngo.objects.all()
 
+    acc_calculator = AccreditationCalculator()
+
     for ngo in all_ngo_entries:
+        valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics(ngo)
+        ngo.has_valid_accreditations = valid_acc
+        ngo.has_wce = wce
+        ngo.save()
+
         update_ngo_tw_score(ngo)
         ngo.save()
 

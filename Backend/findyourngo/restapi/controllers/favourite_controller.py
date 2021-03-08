@@ -49,8 +49,7 @@ def user_favourite(request) -> JsonResponse:
 
                 ngo_favourite.favourite_ngo.add(ngo)
                 ngo_favourite.save()
-            except Exception as e:
-                print(e)
+            except:
                 return JsonResponse({'error': 'NGO could not be favourited.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             try:
@@ -82,8 +81,7 @@ def user_favourites(request) -> JsonResponse:
         ngo_overview_item_serializer = NgoOverviewItemSerializer(favourite_ngos, many=True)
 
         return JsonResponse(ngo_overview_item_serializer.data, safe=False, status=status.HTTP_200_OK)
-    except Exception as e:
-        print(e)
+    except:
         return JsonResponse([], safe=False)
 
 

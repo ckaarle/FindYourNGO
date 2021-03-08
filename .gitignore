@@ -30,3 +30,4 @@ Backend/nginx/dist/assets
 Backend/nginx/dist
 PerformanceTests/__pycache__
 Backend/nginx/static_files
+Backend/findyourngo/restapi/migrations/0002_auto_20210308_1056.py

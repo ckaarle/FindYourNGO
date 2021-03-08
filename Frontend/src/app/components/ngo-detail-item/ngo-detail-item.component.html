@@ -27,7 +27,7 @@
 
         </div>
         <span fxFlex></span>
-        <div *ngIf="userService.ngoid.value !== -1">
+        <div *ngIf="userService.ngoid.value >= 0">
           <button class="invisible action-button">
             <mat-icon *ngIf="$ngoRelation.value === 'self' && !editMode && editModeEnabled" class="action-icon" (click)="startEditMode()">create</mat-icon>
             <mat-icon *ngIf="$ngoRelation.value === 'self' && editMode" class="action-icon" (click)="submit()">edit_off</mat-icon>

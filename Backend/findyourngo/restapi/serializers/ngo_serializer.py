@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.db.models import Prefetch
 from findyourngo.restapi.models import Ngo, NgoAddress, NgoContact, NgoDataSource, NgoRepresentative, NgoMetaData, \
     NgoStats, NgoTWScore, NgoReview, NgoEvent, NgoAccreditation, NgoBranch, NgoCountry, NgoTopic, NgoType, NgoConnection
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 
 
 class NgoDataSourceSerializer(serializers.ModelSerializer):
@@ -166,6 +167,12 @@ def update_ngo_instance(ngo: Ngo, ngo_update):
     update_ngo_accreditations(ngo, ngo_update)
     update_ngo_branches(ngo, ngo_update)
     update_ngo_topics(ngo, ngo_update)
+
+    acc_calculator = AccreditationCalculator()
+    valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics((ngo))
+    ngo.has_valid_accreditations = valid_acc
+    ngo.has_wce = wce
+
     ngo.save()
 
 

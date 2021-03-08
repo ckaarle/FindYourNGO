@@ -25,6 +25,7 @@ from findyourngo.data_import.data_importer_wango import run_wango_data_import
 from findyourngo.data_import.db_sql_queries import delete_all_query, delete_background_tasks_query
 from findyourngo.restapi.controllers.map_controller import assign_probable_locations
 from findyourngo.restapi.serializers.serializers import UserSerializer, GroupSerializer
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.restapi.models import Ngo, NgoAccount, NgoFavourites, NgoEvent, NgoReview, NgoTWDataPoint, \
     NgoConnection, NgoPendingConnection
@@ -139,7 +140,6 @@ class FacebookView(APIView):
         }  # validate the token
         r = requests.get('https://graph.facebook.com/me', params=payload)
         data = json.loads(r.text)
-        print(data)
 
         if 'error' in data:
             content = {'message': 'wrong facebook token / this facebook token is already expired.'}
@@ -228,7 +228,6 @@ class TestView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        print(request)
         to_check = request.data.get('user_id')
         if request.user.id == to_check:
             return JsonResponse({'success': f'User {request.user.username} was verified!'})
@@ -435,6 +434,8 @@ def demo_setup(request):
         ngo=greenpeace
     )
 
+    greenpeace.has_ngo_account = True
+
     NgoPendingConnection.objects.create(
         reporter=ngo_350,
         connected_ngo=greenpeace,
@@ -466,6 +467,8 @@ def demo_setup(request):
         ngo=bureau
     )
 
+    bureau.has_ngo_account = True
+
     NgoEvent.objects.create(
         name='Fund raiser',
         start_date=datetime(2021, 3, 7),
@@ -493,51 +496,6 @@ def demo_setup(request):
         tags=''
     )
 
-    NgoReview.objects.create(
-        ngo=bureau,
-        reviewer=user_2,
-        create_date=datetime(2020, 12, 21),
-        last_edited=datetime(2020, 12, 21),
-        text='treats interns badly',
-        rating=2
-    )
-
-    NgoReview.objects.create(
-        ngo=bureau,
-        reviewer=user_3,
-        create_date=datetime(2021, 1, 2),
-        last_edited=datetime(2021, 2, 4),
-        text='I read a lot about scandals, but my experiences were okay.',
-        rating=2
-    )
-
-    NgoReview.objects.create(
-        ngo=greenpeace,
-        reviewer=user_1,
-        create_date=datetime(2020, 11, 2),
-        last_edited=datetime(2020, 11, 2),
-        text='makes a difference',
-        rating=3
-    )
-
-    NgoReview.objects.create(
-        ngo=greenpeace,
-        reviewer=user_2,
-        create_date=datetime(2020, 12, 21),
-        last_edited=datetime(2020, 12, 21),
-        text='treats interns badly',
-        rating=2
-    )
-
-    NgoReview.objects.create(
-        ngo=greenpeace,
-        reviewer=user_3,
-        create_date=datetime(2021, 1, 2),
-        last_edited=datetime(2021, 2, 4),
-        text='I read a lot about scandals, but my experiences were okay.',
-        rating=2
-    )
-
     return JsonResponse({'Result': 'Demo data was generated'})
 
 
@@ -556,3 +514,14 @@ class NgoAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_result_label(self, item):
         return item.name
+
+
+def update_acc(request):
+    acc_calculator = AccreditationCalculator()
+    for ngo in Ngo.objects.filter(confirmed=True):
+        valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics(ngo)
+        ngo.has_valid_accreditations = valid_acc
+        ngo.has_wce = wce
+        ngo.save()
+
+    return JsonResponse({'Result': 'Accreditations and WCE calculated'})

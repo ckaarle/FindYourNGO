@@ -237,5 +237,11 @@ During the initial data import, the score will be calculated for each NGO. There
  
 The score is recalculated for a single NGO, when a new user rating is saved to the database and when an existing user
  rating is updated or deleted. Also, a recalculation of the score for each NGO is performed automatically
- in fixed intervals. This ensures, that the scores will be kept up-to-date, even if no changes are being made to 
+ in fixed intervals. This ensures that the scores will be kept up-to-date, even if no changes are being made to 
  to specific NGOs, which would trigger a single recalculation.
+ 
+ Updating the TW scores at fixed intervals serves a data obfuscation purpose: We do not want the users to know the details of
+ the TW score calculation to avoid them optimizing for it. If all NGOs received a TW update once a single NGO's data changes,
+ the user who made the change might be able to infer our calculation based on what they changed and what happens to other NGOs'
+ TW score. Updating only the changed NGO immediately and all others a while later, makes this more difficult, since in the meantime
+ a lot of other things could have changed as well.

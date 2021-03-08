@@ -57,7 +57,7 @@ export class NgoDetailItemComponent {
       public media: MediaService) {
     const id = this.route.snapshot.paramMap.get('id');
     this.$ngoId.next(Number(id));
-    if (this.userService.ngoid.value !== -1) {
+    if (this.userService.ngoid.value >= 0) {
       this.apiService.get(`connections/${id}`).subscribe(data => this.$ngoRelation.next(data.type));
     }
     // @ts-ignore

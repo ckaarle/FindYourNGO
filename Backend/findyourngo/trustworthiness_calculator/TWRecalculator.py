@@ -9,10 +9,10 @@ from findyourngo.trustworthiness_calculator.utils import round_value, round_to_t
 
 class TWRecalculator(TWCalculator):
 
-    def recalculate_with_pagerank(self, ngos: Iterable[Ngo], pagerank: Dict[str, float]) -> None:
-        for ngo in ngos:
-            if ngo.name in pagerank.keys():
-                self._update_tw_with_pagerank(ngo, pagerank)
+    def recalculate_with_pagerank(self, ngos, pagerank: Dict[str, float]) -> None:
+        relevant_ngos = ngos.filter(name__in=pagerank.keys())
+        for ngo in relevant_ngos:
+            self._update_tw_with_pagerank(ngo, pagerank)
 
     def _update_tw_with_pagerank(self, ngo: Ngo, pagerank: Dict[str, float]) -> None:
         pagerank_score = self._calculate_pagerank_factor(ngo, pagerank)

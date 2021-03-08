@@ -80,4 +80,5 @@ urlpatterns = [
     url(r'^registerNgo', ngo_controller.register_ngo),
     url(r'^demoSetup$', views.demo_setup),
     url(r'^ngo-autocomplete/$', views.NgoAutocomplete.as_view(), name='ngo-autocomplete'),
+    url(r'updateAcc', views.update_acc)
 ]

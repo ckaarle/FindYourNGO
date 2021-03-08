@@ -2,6 +2,7 @@ import shutil
 from findyourngo.restapi.models import Ngo, NgoAccreditation, NgoMetaData, NgoAddress, NgoContact, NgoDataSource, \
     NgoCountry
 from findyourngo.data_import.data_importer import update_ngo_tw_score, _get_ngo_tw_score
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 
 
 def import_wango_general_data(source):
@@ -214,7 +215,7 @@ def create_or_update_ngo(name, source, acronym, country, city, street, email=Non
     else:
         meta_data = NgoMetaData.objects.create()
         meta_data.info_source.add(source)
-        tw_score = _get_ngo_tw_score([], meta_data)
+        tw_score = _get_ngo_tw_score(meta_data)
         if acronym:
             ngo = Ngo.objects.create(name=name, acronym=acronym, meta_data=meta_data, tw_score=tw_score)
         else:
@@ -252,7 +253,15 @@ def run_wango_data_import() -> bool:
 
     print(f'Updating the TW score, since it depends on # data sources, which might have changed after the initial import')
     all_ngo_entries = Ngo.objects.all()
+
+    acc_calculator = AccreditationCalculator()
+
     for ngo in all_ngo_entries:
+        valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics(ngo)
+        ngo.has_valid_accreditations = valid_acc
+        ngo.has_wce = wce
+        ngo.save()
+
         update_ngo_tw_score(ngo)
         ngo.save()
     return True

@@ -10,6 +10,7 @@ from findyourngo.restapi.models import Ngo, NgoCountry, NgoRepresentative, NgoMe
     NgoTWScore, NgoAddress
 from findyourngo.restapi.serializers.ngo_serializer import NgoSerializer, NgoShortSerializer, update_ngo_instance
 from findyourngo.restapi.utils.email_util import send_email
+from findyourngo.trustworthiness_calculator.AccreditationCalculator import AccreditationCalculator
 from findyourngo.trustworthiness_calculator.TWUpdater import TWUpdater
 from findyourngo.trustworthiness_calculator.trustworthiness_constants import SELF_REPORTED_DATA_SOURCE
 
@@ -72,7 +73,6 @@ def ngo_short_list_all(request):
 @api_view(['POST'])
 def register_ngo(request) -> JsonResponse:
     new_ngo_request = JSONParser().parse(request)
-    print(new_ngo_request)
     new_ngo_request = new_ngo_request['ngo']
 
     ngo_name = new_ngo_request['ngoName']
@@ -131,7 +131,7 @@ def register_ngo(request) -> JsonResponse:
         user_tw_score=0
     )
 
-    Ngo.objects.create(
+    ngo = Ngo.objects.create(
         name=ngo_name,
         acronym='',
         aim='',
@@ -141,6 +141,14 @@ def register_ngo(request) -> JsonResponse:
         tw_score=tw_score,
         confirmed=False,
     )
+
+    acc_calculator = AccreditationCalculator()
+    valid_acc, wce = acc_calculator.has_valid_accreditation_and_wango_code_of_ethics((ngo))
+    ngo.has_valid_accreditations = valid_acc
+    ngo.has_wce = wce
+    ngo.save()
+
+    # TW will be calculated once the NGO is confirmed (pagerank only looks at confirmed NGOs to reduce computing time)
 
     send_email(
         'NGO Registration Find your Ngo',

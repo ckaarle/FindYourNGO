@@ -255,34 +255,6 @@ def test_pagerank_with_fraudulent_ngo_connections():
     plt.show()
 
 
-def test_default_personalized_pagerank_with_ngos_cancel_subgraph():
-    pr = PageRankWithSubgraphsDefaultPersonalizationTest(ngos_with_subgraph, cancel_subgraph=True)
-    pr.draw_graph()
-
-    ppr = pr.personalized_pagerank()
-    pprint.pprint(ppr)
-
-    assert ppr['a'] == 0.09214658850314891 # essentially the same as without subgraph
-    assert ppr['b'] == 0.09214658850314891
-    assert ppr['c'] == 0.09214658850314891
-    assert ppr['d'] == 0.09214658850314891
-
-    assert ppr['e'] == 0.2126454214506791
-    assert ppr['f'] == 0.055997082439816076
-    assert ppr['g'] == 0.055997082439816076
-
-    assert ppr['h'] == 0.3067424545321898
-
-    # fraudulent subgraph
-    # tiny scores
-    assert ppr['i'] == 7.901281225791675e-06
-    assert ppr['j'] == 7.901281225791675e-06
-    assert ppr['k'] == 7.901281225791675e-06
-    assert ppr['l'] == 7.901281225791675e-06
-
-    plt.show()
-
-
 def test_default_personalized_pagerank_with_ngos_reduce_subgraph():
     pr = PageRankWithSubgraphsDefaultPersonalizationTest(ngos_with_subgraph, cancel_subgraph=False)
     pr.draw_graph()
@@ -290,23 +262,23 @@ def test_default_personalized_pagerank_with_ngos_reduce_subgraph():
     ppr = pr.personalized_pagerank()
     pprint.pprint(ppr)
 
-    assert ppr['a'] == 0.08190798131958271 # similar to without subgraph
-    assert ppr['b'] == 0.08190798131958271
-    assert ppr['c'] == 0.08190798131958271
-    assert ppr['d'] == 0.08190798131958271
+    assert ppr['a'] == 0.09190852886920517 # similar to without subgraph
+    assert ppr['b'] == 0.09190852886920517
+    assert ppr['c'] == 0.09190852886920517
+    assert ppr['d'] == 0.09190852886920517
 
-    assert ppr['e'] == 0.18901790963480697
-    assert ppr['f'] == 0.04977513570708415
-    assert ppr['g'] == 0.04977513570708415
+    assert ppr['e'] == 0.21542177175607552
+    assert ppr['f'] == 0.04653216603094387
+    assert ppr['g'] == 0.04653216603094387
 
-    assert ppr['h'] == 0.2726596198165738
+    assert ppr['h'] == 0.30309787343504085
 
     # fraudulent subgraph
     # small(er) scores
-    assert ppr['i'] == 0.027785068464029936 # down from 0.0833...
-    assert ppr['j'] == 0.027785068464029936
-    assert ppr['k'] == 0.027785068464029936
-    assert ppr['l'] == 0.027785068464029936
+    assert ppr['i'] == 0.005616170819173685 # down from 0.0833...
+    assert ppr['j'] == 0.00477478281591386
+    assert ppr['k'] == 0.005616170819173685
+    assert ppr['l'] == 0.00477478281591386
 
     plt.show()
 
