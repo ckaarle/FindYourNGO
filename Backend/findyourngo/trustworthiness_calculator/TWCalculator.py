@@ -70,6 +70,7 @@ class TWCalculator:
         return self._restrict_to_allowed_score_range_base(raw_score)
 
     def calculate_user_tw_from_ngo_id(self, ngo_id: int) -> TWScore:
+        self._setup_ngo_reviews(ngo_id)
         amount_review_ratings = self.review_count_for_ngo_id[ngo_id]
         if amount_review_ratings == 0:
             return 0
@@ -78,6 +79,7 @@ class TWCalculator:
             return self._restrict_to_allowed_score_range_user(sum_review_ratings, amount_review_ratings)
 
     def calculate_tw_from_ngo_tw_scores(self, ngo_id: int, ngo_tw_score: NgoTWScore, user_tw_factor) -> TWScore:
+        self._setup_ngo_reviews(ngo_id)
         base_tw = ngo_tw_score.base_tw_score
         user_tw = ngo_tw_score.user_tw_score
         if self.review_count_for_ngo_id[ngo_id] == 0:
@@ -86,6 +88,7 @@ class TWCalculator:
             return base_tw * (1 - user_tw_factor) + user_tw * user_tw_factor
 
     def calculate_user_tw_factor(self, ngo_id: int) -> float:
+        self._setup_ngo_reviews(ngo_id)
         total_reviews = self._total_review_count
         if total_reviews == 0:
             return 0
