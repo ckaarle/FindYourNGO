@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from findyourngo.restapi.models import Ngo, NgoTWDataPoint
 from findyourngo.trustworthiness_calculator.Pagerank import PageRank
 from findyourngo.trustworthiness_calculator.TWCalculator import TWCalculator
@@ -18,9 +20,9 @@ class TWUpdater:
 
     def update(self) -> None:
         print(f'Start TW update in updater: {datetime.now()}')
-        self._calculate_tw_without_pagerank()
+        ngos = self._calculate_tw_without_pagerank()
         print(f'Before pagerank: {datetime.now()}')
-        self._add_pagerank()
+        self._add_pagerank(ngos)
         print(f'After pagerank: {datetime.now()}')
 
     def store(self) -> None:
@@ -39,10 +41,13 @@ class TWUpdater:
                                                              date=datetime.today())
                     ngo_tw_score.tw_series.add(daily_tw)
 
-    def _calculate_tw_without_pagerank(self) -> None:
-        for ngo in Ngo.objects.filter(confirmed=True).select_related('meta_data', 'tw_score')\
-                .prefetch_related('accreditations', 'meta_data__info_source'):
+    def _calculate_tw_without_pagerank(self) -> Iterable[Ngo]:
+        ngos = Ngo.objects.filter(confirmed=True).select_related('meta_data', 'tw_score')\
+                .prefetch_related('accreditations', 'meta_data__info_source')
+        for ngo in ngos:
             self._calculate_tw_without_pagerank_for_ngo(ngo)
+
+        return ngos
 
     def _calculate_tw_without_pagerank_for_ngo(self, ngo: Ngo) -> None:
         ngo_tw_score = ngo.tw_score
@@ -68,8 +73,7 @@ class TWUpdater:
                                                                                     user_tw_factor))
         ngo_tw_score.save()
 
-    def _add_pagerank(self) -> None:
-        ngos = Ngo.objects.filter(confirmed=True).select_related('tw_score')
+    def _add_pagerank(self, ngos) -> None:
         pagerank = PageRank(ngos).personalized_pagerank()
 
         if pagerank is not None:
