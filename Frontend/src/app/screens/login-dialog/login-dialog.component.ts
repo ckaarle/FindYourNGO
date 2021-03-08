@@ -53,7 +53,7 @@ export class LoginDialogComponent implements OnInit, OnDestroy {
     });
 
     this.userService.userid.subscribe((id: number) => {
-     if (id !== -1) {  // The dialog is automatically closed if a user is signed in
+     if (id >= 0) {  // The dialog is automatically closed if a user is signed in
         this.dialogRef.close();
       }
     });

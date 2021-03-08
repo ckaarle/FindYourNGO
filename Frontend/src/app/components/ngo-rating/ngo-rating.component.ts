@@ -41,14 +41,14 @@ export class NgoRatingComponent implements OnInit {
   }
 
   private isOwnUserId(userId: number): boolean {
-    return userId !== -1 && userId === this.userService.userid.getValue();
+    return userId >= 0 && userId === this.userService.userid.getValue();
   }
 
   writeNewReview(): void {
     const dialogRef = this.dialog.open(LoginDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
 
-      if (this.userService.userid.getValue() === -1) {
+      if (this.userService.userid.getValue() < 0) {
         return;
       }
 
