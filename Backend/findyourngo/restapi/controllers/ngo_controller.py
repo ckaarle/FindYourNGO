@@ -73,7 +73,6 @@ def ngo_short_list_all(request):
 @api_view(['POST'])
 def register_ngo(request) -> JsonResponse:
     new_ngo_request = JSONParser().parse(request)
-    print(new_ngo_request)
     new_ngo_request = new_ngo_request['ngo']
 
     ngo_name = new_ngo_request['ngoName']
