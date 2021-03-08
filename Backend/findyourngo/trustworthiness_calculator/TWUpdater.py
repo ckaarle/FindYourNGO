@@ -10,6 +10,9 @@ from findyourngo.trustworthiness_calculator.utils import round_to_two_decimal_pl
 
 class TWUpdater:
 
+    def __init__(self):
+        self.tw_calculator = TWCalculator()
+
     def update_single_ngo(self, ngo: Ngo) -> None:
         self._calculate_tw_without_pagerank_for_ngo(ngo)
 
@@ -40,16 +43,15 @@ class TWUpdater:
 
     def _calculate_tw_without_pagerank_for_ngo(self, ngo: Ngo) -> None:
         ngo_tw_score = ngo.tw_score
-        tw_calculator = TWCalculator()
 
         accreditations = ngo.accreditations.all()
-        number_data_sources_score = tw_calculator.calculate_number_of_data_source_score(ngo.meta_data)
-        credible_source_score = tw_calculator.calculate_data_source_credibility_score(ngo.meta_data)
-        ecosoc_score = tw_calculator.calculate_ecosoc_score(accreditations)
-        wce_score = tw_calculator.calculate_wce_score(accreditations)
-        ngo_account_score = tw_calculator.calculate_ngo_account_score(ngo.id)
+        number_data_sources_score = self.tw_calculator.calculate_number_of_data_source_score(ngo.meta_data)
+        credible_source_score = self.tw_calculator.calculate_data_source_credibility_score(ngo.meta_data)
+        ecosoc_score = self.tw_calculator.calculate_ecosoc_score(accreditations)
+        wce_score = self.tw_calculator.calculate_wce_score(accreditations)
+        ngo_account_score = self.tw_calculator.calculate_ngo_account_score(ngo.id)
 
-        user_tw_factor = tw_calculator.calculate_user_tw_factor(ngo.id)
+        user_tw_factor = self.tw_calculator.calculate_user_tw_factor(ngo.id)
 
         ngo_tw_score.number_data_sources_score = number_data_sources_score
         ngo_tw_score.credible_source_score = credible_source_score
@@ -57,9 +59,9 @@ class TWUpdater:
         ngo_tw_score.wce_score = wce_score
         ngo_tw_score.ngo_account_score = ngo_account_score
 
-        ngo_tw_score.base_tw_score = tw_calculator.calculate_base_tw_from_ngo_tw_score(ngo_tw_score)
-        ngo_tw_score.user_tw_score = tw_calculator.calculate_user_tw_from_ngo_id(ngo.id)
-        ngo_tw_score.total_tw_score = round_to_two_decimal_places(tw_calculator.calculate_tw_from_ngo_tw_scores(ngo.id, ngo_tw_score,
+        ngo_tw_score.base_tw_score = self.tw_calculator.calculate_base_tw_from_ngo_tw_score(ngo_tw_score)
+        ngo_tw_score.user_tw_score = self.tw_calculator.calculate_user_tw_from_ngo_id(ngo.id)
+        ngo_tw_score.total_tw_score = round_to_two_decimal_places(self.tw_calculator.calculate_tw_from_ngo_tw_scores(ngo.id, ngo_tw_score,
                                                                                     user_tw_factor))
         ngo_tw_score.save()
 
