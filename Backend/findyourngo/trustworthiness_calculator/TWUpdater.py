@@ -19,11 +19,8 @@ class TWUpdater:
         self._calculate_tw_without_pagerank_for_ngo(ngo)
 
     def update(self) -> None:
-        print(f'Start TW update in updater: {datetime.now()}')
         ngos = self._calculate_tw_without_pagerank()
-        print(f'Before pagerank: {datetime.now()}')
         self._add_pagerank(ngos)
-        print(f'After pagerank: {datetime.now()}')
 
     def store(self) -> None:
         self.update()
@@ -75,8 +72,6 @@ class TWUpdater:
 
     def _add_pagerank(self, ngos) -> None:
         pagerank = PageRank(ngos).personalized_pagerank()
-        print(f'pagerank calculated: {datetime.now()}')
 
         if pagerank is not None:
             TWRecalculator().recalculate_with_pagerank(ngos, pagerank)
-            print(f'pagerank added to calculation: {datetime.now()}')
