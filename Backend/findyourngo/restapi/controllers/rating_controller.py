@@ -241,7 +241,7 @@ def user_review_present(request) -> JsonResponse:
 
 @api_view(['GET'])
 def tw_history(request) -> JsonResponse:
-    ngo_id = request.query_para
+    ngo_id = request.query_params.get('ngoId')
 
     try:
         ngo = Ngo.objects.get(pk=ngo_id)
