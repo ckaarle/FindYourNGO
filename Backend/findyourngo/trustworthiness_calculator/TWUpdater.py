@@ -75,6 +75,8 @@ class TWUpdater:
 
     def _add_pagerank(self, ngos) -> None:
         pagerank = PageRank(ngos).personalized_pagerank()
+        print(f'pagerank calculated: {datetime.now()}')
 
         if pagerank is not None:
             TWRecalculator().recalculate_with_pagerank(ngos, pagerank)
+            print(f'pagerank added to calculation: {datetime.now()}')
