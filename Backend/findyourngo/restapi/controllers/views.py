@@ -435,6 +435,8 @@ def demo_setup(request):
         ngo=greenpeace
     )
 
+    greenpeace.has_ngo_account = True
+
     NgoPendingConnection.objects.create(
         reporter=ngo_350,
         connected_ngo=greenpeace,
@@ -465,6 +467,8 @@ def demo_setup(request):
         user=bureau_user,
         ngo=bureau
     )
+
+    bureau.has_ngo_account = True
 
     NgoEvent.objects.create(
         name='Fund raiser',

@@ -117,11 +117,8 @@ class TWCalculator:
         reviews = self.reviews_for_ngo_id[ngo_id]
         return reviews.aggregate(sum=Sum('rating'))['sum'] or 0
 
-    def calculate_ngo_account_score(self, ngo_id) -> float:
-        # TODO
-        accounts = NgoAccount.objects.filter(ngo_id=ngo_id, user__is_active=True)
-
-        if len(accounts) > 0:
+    def calculate_ngo_account_score(self, has_ngo_account) -> float:
+        if has_ngo_account:
             return 1
         else:
             return 0

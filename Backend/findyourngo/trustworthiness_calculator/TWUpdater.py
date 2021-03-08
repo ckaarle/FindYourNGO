@@ -57,7 +57,7 @@ class TWUpdater:
         credible_source_score = self.tw_calculator.calculate_data_source_credibility_score(ngo.meta_data)
         ecosoc_score = self.tw_calculator.calculate_ecosoc_score(accreditations)
         wce_score = self.tw_calculator.calculate_wce_score(accreditations)
-        ngo_account_score = self.tw_calculator.calculate_ngo_account_score(ngo.id)
+        ngo_account_score = self.tw_calculator.calculate_ngo_account_score(ngo.has_ngo_account)
 
         user_tw_factor = self.tw_calculator.calculate_user_tw_factor(ngo.id)
 

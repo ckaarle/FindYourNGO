@@ -123,6 +123,7 @@ class Ngo(models.Model):
     number_of_reviews = models.IntegerField(default=0)
 
     confirmed = models.BooleanField(default=True)
+    has_ngo_account = models.BooleanField(default=False)
 
 
 class NgoAccount(models.Model):

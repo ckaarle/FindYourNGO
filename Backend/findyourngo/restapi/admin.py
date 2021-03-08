@@ -32,10 +32,12 @@ class UserAdmin(BaseUserAdmin):
     def save_formset(self, request, form, formset, change):
         try:
             prev_ngo = NgoAccount.objects.get(user_id=formset.instance).ngo
+            prev_ngo.has_ngo_account = True
 
             if not prev_ngo.confirmed:
                 prev_ngo.confirmed = True
-                prev_ngo.save()
+
+            prev_ngo.save()
             TWUpdater().update_single_ngo(prev_ngo)
         except:
             print(f'User {formset.instance} previously represented no NGO!')
