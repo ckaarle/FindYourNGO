@@ -78,7 +78,7 @@ export class UserService {
           localStorage.setItem('token', data.access_token);
           this.username.next(data.username);
           localStorage.setItem('username', this.username.value);
-          this.ngoid.next(data.congo_id);
+          this.ngoid.next(data.ngo_id);
           if (this.ngoid.value >= 0) {
             localStorage.setItem('ngoid', String(this.ngoid.value));
           }
